@@ -130,7 +130,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "2PW,1O";
+                return "2PWT,1O";
             }
         }
     }

@@ -71,7 +71,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "2PW,8VP";
+                return "2PWT,8VP";
             }
         }
     }

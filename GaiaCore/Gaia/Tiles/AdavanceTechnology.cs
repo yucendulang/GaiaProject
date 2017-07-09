@@ -30,9 +30,6 @@ namespace GaiaCore.Gaia.Tiles
                 new ATT13(),
                 new ATT14(),
                 new ATT15(),
-                new ATT16(),
-                new ATT17(),
-                new ATT18()
             };
 
             var result = new List<AdavanceTechnology>();
@@ -83,7 +80,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "Act:1TF";
+                return "M>>3VP";
             }
         }
     }
@@ -93,7 +90,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "M>>3VP";
+                return "TC>>3VP";
             }
         }
     }
@@ -103,7 +100,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "TC>>3VP";
+                return "RA>>2VP";
             }
         }
     }
@@ -113,7 +110,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "RA>>2VP";
+                return "pass-vp:AL*3";
             }
         }
     }
@@ -123,7 +120,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "pass-vp:AL*3";
+                return "pass-vp:P_type*1";
             }
         }
     }
@@ -133,7 +130,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "pass-vp:P_type*3";
+                return "pass-vp:RL*2";
             }
         }
     }
@@ -143,7 +140,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "pass-vp:TC*3";
+                return "1SC->1O";
             }
         }
     }
@@ -153,7 +150,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "pass-vp:RL*2";
+                return "1M->2VP";
             }
         }
     }
@@ -163,7 +160,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "1SC->1O";
+                return "1TC->4VP";
             }
         }
     }
@@ -173,7 +170,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "1P_type->1Q";
+                return "1G->2VP";
             }
         }
     }
@@ -183,41 +180,11 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "1M->2VP";
-            }
-        }
-    }
-    public class ATT15 : AdavanceTechnology
-    {
-        public override string desc
-        {
-            get
-            {
-                return "1TC->4VP";
-            }
-        }
-    }
-    public class ATT16 : AdavanceTechnology
-    {
-        public override string desc
-        {
-            get
-            {
-                return "1G->2VP";
-            }
-        }
-    }
-    public class ATT17 : AdavanceTechnology
-    {
-        public override string desc
-        {
-            get
-            {
                 return "1SC->2VP";
             }
         }
     }
-    public class ATT18 : AdavanceTechnology
+    public class ATT15 : AdavanceTechnology
     {
         public override string desc
         {
