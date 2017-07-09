@@ -1,0 +1,34 @@
+﻿@model GaiaProject2.Gaia.Map
+
+@{
+
+}
+<script type='text/javascript' language='javascript' src='~/js/site.js'></script>
+<h2>Gaia</h2>
+
+<canvas id="myCanvas" width="1080" height="900" style="border:1px solid #c3c3c3;">
+    Your browser does not support the canvas element.
+</canvas>
+@for (var i = 0; i < 20; i++)
+{
+    @for (int j = 0; j < 15; j++)
+    {
+        @if (Model.HexArray[i, j] != null)
+        {
+            <p>@Model.HexArray[i, j].OGTerrain.ToString()</p>
+        }
+
+    }
+}
+<script type="text/javascript">
+    var c = document.getElementById("myCanvas");
+    var cxt = c.getContext("2d");
+    var model = @Html.Raw(Json.Serialize(Model));
+    console.log("js start");
+    DrawMap();
+
+
+
+</script>
+
+<p>Use this area to provide additional information.</p>
