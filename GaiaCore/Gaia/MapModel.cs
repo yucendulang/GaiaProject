@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GaiaCore.Gaia.Faction;
 
 namespace GaiaProject2.Gaia
 {

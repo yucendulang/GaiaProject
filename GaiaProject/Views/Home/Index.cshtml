@@ -10,7 +10,11 @@
     Your browser does not support the canvas element.
 </canvas>
 
-
+<h1>Faction</h1>
+@foreach (var item in Model.FactionList)
+{
+    <p>Credit: @item.Credit</p>
+}
 <h1>Round Booster</h1>
 @foreach (var item in Model.RBTList)
 {
@@ -46,6 +50,8 @@
 {
     <p>@item.GetType().Name @item.desc</p>
 }
+
+<p>@Model.GameLog</p>
 
 
 

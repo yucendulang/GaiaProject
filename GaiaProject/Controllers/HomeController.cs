@@ -12,6 +12,7 @@ namespace GaiaProject.Controllers
         public IActionResult Index()
         {
             var game = new GaiaGame();
+            game.ProcessSyntax("Default Game", out string log);
             return View(game);
         }
 

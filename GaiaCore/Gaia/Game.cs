@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GaiaCore.Util;
+using GaiaCore.Gaia.Faction;
 
 namespace GaiaProject2.Gaia
 {
@@ -26,6 +27,7 @@ namespace GaiaProject2.Gaia
             RBTList = (from items in RBTMgr.GetRandomList(4+3) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();
             ALTList = ALTMgr.GetList();
             AllianceTileForKnowledge = ALTList.RandomRemove();
+            GameLog += "Game Start";
         }
         public void GetGameView()
         {
@@ -47,7 +49,12 @@ namespace GaiaProject2.Gaia
         }
         private void GameStart()
         {
-
+            GameLog += "Default Game";
+            FactionList.Add(new Faction());
+            FactionList.Add(new Faction());
+            FactionList.Add(new Faction());
+            FactionList.Add(new Faction());
+            GameLog += "Setup Four Faction";
         }
         /// <summary>
         /// 在游戏开始的时候实例化一个Map
@@ -90,6 +97,7 @@ namespace GaiaProject2.Gaia
         /// </summary>
         public List<AllianceTile> ALTList { set; get; }
         public AllianceTile AllianceTileForKnowledge { set; get; }
+        public string GameLog { set; get; }
 
 
     }
