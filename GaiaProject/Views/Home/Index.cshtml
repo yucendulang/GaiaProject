@@ -1,4 +1,4 @@
-﻿@model GaiaProject2.Gaia.Map
+﻿@model GaiaProject2.Gaia.GaiaGame
 
 @{
 
@@ -9,17 +9,46 @@
 <canvas id="myCanvas" width="1080" height="900" style="border:1px solid #c3c3c3;">
     Your browser does not support the canvas element.
 </canvas>
-@for (var i = 0; i < 20; i++)
-{
-    @for (int j = 0; j < 15; j++)
-    {
-        @if (Model.HexArray[i, j] != null)
-        {
-            <p>@Model.HexArray[i, j].OGTerrain.ToString()</p>
-        }
 
-    }
+
+<h1>Round Booster</h1>
+@foreach (var item in Model.RBTList)
+{
+    <p>@item.desc</p>
 }
+<h1>Advance Tech</h1>
+@foreach(var item in Model.ATTList)
+{
+    <p>@item.desc</p>
+}
+<h1>Standard Tech For 6</h1>
+@foreach (var item in Model.STT6List)
+{
+    <p>@item.desc</p>
+}
+<h1>Standard Tech For 3</h1>
+@foreach (var item in Model.STT3List)
+{
+    <p>@item.desc</p>
+}
+<h1>Round Score</h1>
+@foreach (var item in Model.RSTList)
+{
+    <p>@item.desc</p>
+}
+<h1>Final Score</h1>
+@foreach (var item in Model.FSTList)
+{
+    <p>@item.desc</p>
+}
+<h1>Alliance Tile</h1>
+@foreach (var item in Model.ALTList)
+{
+    <p>@item.desc</p>
+}
+
+
+
 <script type="text/javascript">
     var c = document.getElementById("myCanvas");
     var cxt = c.getContext("2d");
@@ -30,5 +59,3 @@
 
 
 </script>
-
-<p>Use this area to provide additional information.</p>

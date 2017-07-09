@@ -11,9 +11,8 @@ namespace GaiaProject.Controllers
     {
         public IActionResult Index()
         {
-
-            var map = MapMgr.GetRandomMap();
-            return View(map);
+            var game = new GaiaGame();
+            return View(game);
         }
 
         public IActionResult About()
@@ -33,13 +32,6 @@ namespace GaiaProject.Controllers
         public IActionResult Error()
         {
             return View();
-        }
-
-        public IActionResult Gaia()
-        {
-            
-            var map = MapMgr.GetRandomMap();
-            return View(map);
         }
     }
 }

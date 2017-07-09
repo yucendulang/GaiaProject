@@ -5,7 +5,8 @@ var hex_height = hex_size * 1.5;
 
 function DrawMap() {
     console.log("DrawMap");
-    var array = model["hexArray"];
+    console.log(model);
+    var array = model["map"]["hexArray"];
     console.log(array);
     for (var i = 0; i < 20; i++) {
         for (var j = 0; j < 20; j++) {
