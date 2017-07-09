@@ -169,11 +169,10 @@ namespace GaiaProject2.Gaia
             {
                 { 6,2},{ 7,17},{2,5},{3,15},{10,4},{11,14 }
             };
-            var random = new Random();
 
             centerTuple.ForEach(x =>
             {
-                var index = random.Next(randomList.Count);
+                var index = RandomInstance.Next(randomList.Count);
                 result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato());
                 randomList.RemoveAt(index);
             });

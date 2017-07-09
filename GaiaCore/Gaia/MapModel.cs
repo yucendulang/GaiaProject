@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GaiaCore.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -100,8 +101,7 @@ namespace GaiaProject2.Gaia
 
         public SpaceSector RandomRotato()
         {
-            var seed = new Random();
-            for (int i = 0; i < seed.Next(6); i++)
+            for (int i = 0; i < RandomInstance.Next(6); i++)
             {
                 Rotate();
             }

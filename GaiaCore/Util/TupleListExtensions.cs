@@ -22,7 +22,7 @@ namespace GaiaCore.Util
             {
                 return default(T);
             }
-            var i=(new Random()).Next(list.Count);
+            var i=RandomInstance.Next(list.Count);
             var result = list[i];
             list.RemoveAt(i);
             return result;

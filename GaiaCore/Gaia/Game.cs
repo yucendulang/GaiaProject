@@ -17,13 +17,13 @@ namespace GaiaProject2.Gaia
             Map = MapMgr.GetRandomMap();
             GameStatus = new GameStatus();
             FactionList = new List<Faction>();
-            ATTList = ATTMgr.GetRandomList(6);
+            ATTList= (from items in ATTMgr.GetRandomList(6) orderby items.GetType().Name.Remove(0,3).ParseToInt(-1) select items).ToList();
             STT6List = STTMgr.GetRandomList(6);
-            STT3List = STTMgr.GetOtherList(STT6List);
+            STT3List = (from items in STTMgr.GetOtherList(STT6List) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList(); 
             RSTList = RSTMgr.GetRandomList(6);
             FSTList = new List<FinalScoring>();
             FSTList.Add(new FST1());
-            RBTList = RBTMgr.GetRandomList(4+3);
+            RBTList = (from items in RBTMgr.GetRandomList(4+3) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();
             ALTList = ALTMgr.GetList();
             AllianceTileForKnowledge = ALTList.RandomRemove();
         }
