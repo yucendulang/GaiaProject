@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GaiaCore.Util;
 
 namespace GaiaProject2.Gaia
 {
     public static class MapMgr
     {
+
         static List<SpaceSector> ssl;
         static MapMgr()
         {
@@ -143,7 +145,14 @@ namespace GaiaProject2.Gaia
             {
                 hexList.Add(item.Select(y => new TerrenHex(y)).ToList());
             }
-            return hexList.Select(x => new SpaceSector(x)).ToList();
+            var result = hexList.Select(x => new SpaceSector(x)).ToList();
+            for (int i = 0; i < result.Count; i++)
+            {
+                result[i].Name = i.ToString("D2");
+                result[i].TerranHexArray.ForEach(x => x.SpaceSectorName = result[i].Name);
+            }
+
+            return result;
         }
         public static Map GetRandomMap()
         {
@@ -152,41 +161,154 @@ namespace GaiaProject2.Gaia
             result.AddSpaceSector(6, 7, ssl[1]);
             result.AddSpaceSector(7, 12, ssl[2]);
             result.AddSpaceSector(10, 9, ssl[3]);
-            result.AddSpaceSector(6, 2, ssl[4]);
-            result.AddSpaceSector(7, 17, ssl[5]);
-            result.AddSpaceSector(2, 5, ssl[6]);
-            result.AddSpaceSector(3, 15, ssl[7]);
-            result.AddSpaceSector(10, 4, ssl[8]);
-            result.AddSpaceSector(11, 14, ssl[9]);
+            var randomList = new List<SpaceSector>()
+            {
+                ssl[4],ssl[5],ssl[6],ssl[7],ssl[8],ssl[9]
+            };
+            var centerTuple = new List<Tuple<int, int>>()
+            {
+                { 6,2},{ 7,17},{2,5},{3,15},{10,4},{11,14 }
+            };
+            var random = new Random();
+
+            centerTuple.ForEach(x =>
+            {
+                var index = random.Next(randomList.Count);
+                result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato());
+                randomList.RemoveAt(index);
+            });
+            System.Diagnostics.Debug.WriteLine(randomList.Count);
             return result;
         }
     }
 
     public class Map
     {
-        public TerrenHex[,] HexArray = new TerrenHex[20,20];
+        public const int m_mapWidth = 20;
+        public const int m_mapHeight = 20;
+        public TerrenHex[,] HexArray = new TerrenHex[m_mapWidth, m_mapHeight];
         public void AddSpaceSector(int x, int y, SpaceSector ss)
         {
+
+            List<Tuple<int, int>> hexList = GetHexList(x, y);
+            for (int j = 0; j < ss.TerranHexArray.Count; j++)
+            {
+                HexArray[hexList[j].Item1, hexList[j].Item2] = ss.TerranHexArray[j];
+            }
+            if (!ValidateMap(hexList))
+            {
+                //System.Diagnostics.Debug.WriteLine("发现不合法");
+                AddSpaceSector(x, y, ss.RandomRotato());
+            }
+        }
+
+        private bool ValidateMap(List<Tuple<int, int>> hexList)
+        {
+            foreach (var item in hexList)
+            {
+                if (!IsOneHexValidate(item.Item1, item.Item2))
+                {
+                    System.Diagnostics.Debug.WriteLine(string.Format("发现不合法{0} {1}", item.Item1, item.Item2));
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool IsOneHexValidate(int item1, int item2)
+        {
+            if (HexArray[item1, item2] == null)
+            {
+                return false;
+            }
+            if (HexArray[item1, item2].OGTerrain == Terrain.Empty)
+            {
+                return true;
+            }
+            var i = item2 % 2 == 0 ? 0 : 1;
+            if (IsTwoHexColorSame(item1 - 1, item2, item1, item2))
+            {
+                return false;
+            }
+            if (IsTwoHexColorSame(item1 - 1 + i, item2 + 1, item1, item2))
+            {
+                return false;
+            }
+            if (IsTwoHexColorSame(item1 - 1 + i, item2 - 1, item1, item2))
+            {
+                return false;
+            }
+            if (IsTwoHexColorSame(item1 + i, item2 + 1, item1, item2))
+            {
+                return false;
+            }
+            if (IsTwoHexColorSame(item1 + i, item2 - 1, item1, item2))
+            {
+                return false;
+            }
+            if (IsTwoHexColorSame(item1 + 1, item2, item1, item2))
+            {
+                return false;
+            }
+            return true;
+        }
+        /// <summary>
+        /// x为周边点 x2为中心点保证有效
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        private bool IsTwoHexColorSame(int x, int y, int x2, int y2)
+        {
+
+            if (x < 0 || y < 0||x>=m_mapWidth||y>=m_mapHeight)
+                return false;
+            if (HexArray[x, y] == null)
+                return false;
+            if (HexArray[x, y].SpaceSectorName.Equals(HexArray[x2, y2].SpaceSectorName))
+                return false;
+            if (HexArray[x, y].OGTerrain == HexArray[x2, y2].OGTerrain)
+                return true;
+            else
+            {
+                return false;
+            }
+        }
+
+
+
+        /// <summary>
+        /// 根据中心点算出要操作的Hex块
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        private static List<Tuple<int, int>> GetHexList(int x, int y)
+        {
             var i = y % 2 == 0 ? 0 : 1;
-            HexArray[x - 2, y] = ss.TerranHexArray[0];
-            HexArray[x - 2 + i, y - 1] = ss.TerranHexArray[1];
-            HexArray[x - 2 + i, y + 1] = ss.TerranHexArray[2];
-            HexArray[x - 1, y - 2] = ss.TerranHexArray[3];
-            HexArray[x - 1, y] = ss.TerranHexArray[4];
-            HexArray[x - 1, y + 2] = ss.TerranHexArray[5];
-            HexArray[x - 1 + i, y - 1] = ss.TerranHexArray[6];
-            HexArray[x - 1 + i, y + 1] = ss.TerranHexArray[7];
-            HexArray[x, y - 2] = ss.TerranHexArray[8];
-            HexArray[x, y] = ss.TerranHexArray[9];
-            HexArray[x, y + 2] = ss.TerranHexArray[10];
-            HexArray[x + i, y - 1] = ss.TerranHexArray[11];
-            HexArray[x + i, y + 1] = ss.TerranHexArray[12];
-            HexArray[x + 1, y - 2] = ss.TerranHexArray[13];
-            HexArray[x + 1, y] = ss.TerranHexArray[14];
-            HexArray[x + 1, y + 2] = ss.TerranHexArray[15];
-            HexArray[x + 1 + i, y - 1] = ss.TerranHexArray[16];
-            HexArray[x + 1 + i, y + 1] = ss.TerranHexArray[17];
-            HexArray[x + 2, y] = ss.TerranHexArray[18];
+            return new List<Tuple<int, int>>()
+            {
+                {x - 2, y},
+                {x - 2 +i, y - 1},
+                {x - 2 +i, y + 1},
+                {x - 1, y - 2},
+                {x - 1, y},
+                {x - 1, y + 2},
+                {x - 1 + i, y - 1},
+                {x - 1 + i, y + 1},
+                {x, y - 2},
+                {x, y},
+                {x, y + 2},
+                {x + i, y - 1} ,
+                {x + i, y + 1} ,
+                {x + 1, y - 2} ,
+                {x + 1, y} ,
+                {x + 1, y + 2},
+                {x + 1 + i, y - 1},
+                {x + 1 + i, y + 1},
+                {x + 2, y},
+            };
         }
     }
 }

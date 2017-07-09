@@ -15,10 +15,11 @@ namespace GaiaProject2.Gaia
     /// </summary>
     public class TerrenHex
     {
-        public TerrenHex(Terrain t)
+        public TerrenHex(Terrain t,bool isCenter=false)
         {
             OGTerrain = t;
             TFTerrain = t;
+            IsCenter = isCenter;
         }
 
         /// <summary>
@@ -30,9 +31,9 @@ namespace GaiaProject2.Gaia
         /// </summary>
         public Terrain TFTerrain { set; get; }
         /// <summary>
-        /// 属于哪个大板块
+        /// 属于哪个大板块的名字
         /// </summary>
-        public SpaceSector SpaceSector { set; get; }
+        public string SpaceSectorName { set; get; }
         /// <summary>
         /// 属于哪个种族
         /// </summary>
@@ -41,25 +42,71 @@ namespace GaiaProject2.Gaia
         /// 对外展示的坐标名
         /// </summary>
         public string Name { set; get; }
+        /// <summary>
+        /// 是否是SpaceSector的中心点
+        /// </summary>
+        public bool IsCenter { set; get; }
     }
     /// <summary>
     /// Space Sector 含义参照说明书 共计十块
     /// </summary>
     public class SpaceSector
     {
-        public SpaceSector(List<TerrenHex> TerranHexArray)
+        public SpaceSector(List<TerrenHex> terranHexArray)
         {
-            if (TerranHexArray.Count != 19)
+            if (terranHexArray.Count != 19)
             {
                 throw new Exception("构造函数Hex数量不对");
             }
-            if(TerranHexArray.Exists(x => x.OGTerrain == Terrain.NA))
+            if(terranHexArray.Exists(x => x.OGTerrain == Terrain.NA))
             {
                 throw new Exception("存在未初始化的地形");
             }
-            this.TerranHexArray = TerranHexArray;           
+            TerranHexArray = terranHexArray;
+            TerranHexArray[9].IsCenter = true;
+            
         }
-        public List<TerrenHex> TerranHexArray { get; }
+        public List<TerrenHex> TerranHexArray { set; get; }
+        /// <summary>
+        /// SpaceSector的名字
+        /// </summary>
+        public string Name { set; get; }
+
+        public  SpaceSector Rotate()
+        {
+            var newTHA = new List<TerrenHex>();
+            newTHA.Add(TerranHexArray[3]);
+            newTHA.Add(TerranHexArray[8]);
+            newTHA.Add(TerranHexArray[1]);
+            newTHA.Add(TerranHexArray[13]);
+            newTHA.Add(TerranHexArray[6]);
+            newTHA.Add(TerranHexArray[0]);
+            newTHA.Add(TerranHexArray[11]);
+            newTHA.Add(TerranHexArray[4]);
+            newTHA.Add(TerranHexArray[16]);
+            newTHA.Add(TerranHexArray[9]);
+            newTHA.Add(TerranHexArray[2]);
+            newTHA.Add(TerranHexArray[14]);
+            newTHA.Add(TerranHexArray[7]);
+            newTHA.Add(TerranHexArray[18]);
+            newTHA.Add(TerranHexArray[12]);
+            newTHA.Add(TerranHexArray[5]);
+            newTHA.Add(TerranHexArray[17]);
+            newTHA.Add(TerranHexArray[10]);
+            newTHA.Add(TerranHexArray[15]);
+            TerranHexArray = newTHA;
+            return this;
+        }
+
+        public SpaceSector RandomRotato()
+        {
+            var seed = new Random();
+            for (int i = 0; i < seed.Next(6); i++)
+            {
+                Rotate();
+            }
+            return this;
+        }
     }
 
     public enum Terrain
