@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GaiaCore.Util;
 
-namespace GaiaProject2.Gaia
+namespace GaiaCore.Gaia
 {
     public static class MapMgr
     {

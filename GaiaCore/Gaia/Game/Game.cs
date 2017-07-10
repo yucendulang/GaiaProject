@@ -1,12 +1,8 @@
 ﻿using GaiaCore.Gaia.Tiles;
-using System;
+using GaiaCore.Util;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using GaiaCore.Util;
-using GaiaCore.Gaia.Faction;
-
-namespace GaiaProject2.Gaia
+namespace GaiaCore.Gaia
 {
     /// <summary>
     /// 每一局游戏实例化一个Game

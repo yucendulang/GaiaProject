@@ -1,4 +1,4 @@
-﻿namespace GaiaProject2.Gaia
+﻿namespace GaiaCore.Gaia
 {
     public class GameStatus
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GaiaCore.Gaia.Faction
+namespace GaiaCore.Gaia
 {
     public class Faction
     {

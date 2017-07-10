@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GaiaCore.Gaia.Faction;
+using GaiaCore.Gaia;
 
-namespace GaiaProject2.Gaia
+namespace GaiaCore.Gaia
 {
     class MapModel
     {

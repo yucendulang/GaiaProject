@@ -1,0 +1,67 @@
+﻿@model GaiaCore.Gaia.GaiaGame
+
+@{
+
+}
+<script type='text/javascript' language='javascript' src='~/js/site.js'></script>
+<h2>Gaia</h2>
+
+<canvas id="myCanvas" width="1080" height="900" style="border:1px solid #c3c3c3;">
+    Your browser does not support the canvas element.
+</canvas>
+
+<h1>Faction</h1>
+@foreach (var item in Model.FactionList)
+{
+    <p>Credit: @item.Credit</p>
+}
+<h1>Round Booster</h1>
+@foreach (var item in Model.RBTList)
+{
+    <p>@item.GetType().Name @item.desc</p>
+}
+<h1>Advance Tech</h1>
+@foreach (var item in Model.ATTList)
+{
+    <p>@item.GetType().Name @item.desc</p>
+}
+<h1>Standard Tech For 6</h1>
+@foreach (var item in Model.STT6List)
+{
+    <p>@item.GetType().Name @item.desc</p>
+}
+<h1>Standard Tech For 3</h1>
+@foreach (var item in Model.STT3List)
+{
+    <p>@item.GetType().Name @item.desc</p>
+}
+<h1>Round Score</h1>
+@for (int i = 0; i < Model.RSTList.Count; i++)
+{
+    <p>Round @i @Model.RSTList[i].desc</p>
+}
+<h1>Final Score</h1>
+@foreach (var item in Model.FSTList)
+{
+    <p>@item.GetType().Name @item.desc</p>
+}
+<h1>Alliance Tile</h1>
+@foreach (var item in Model.ALTList)
+{
+    <p>@item.GetType().Name @item.desc</p>
+}
+
+<p>@Model.GameLog</p>
+
+
+
+<script type="text/javascript">
+    var c = document.getElementById("myCanvas");
+    var cxt = c.getContext("2d");
+    var model = @Html.Raw(Json.Serialize(Model));
+    console.log("js start");
+    DrawMap();
+
+
+
+</script>
