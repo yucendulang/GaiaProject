@@ -7,7 +7,7 @@ namespace GaiaCore.Gaia.Tiles
 {
     public static class RBTMgr
     {
-        public static List<RoundBooster> GetRandomList(int n)
+        public static List<RoundBooster> GetRandomList(int n,Random random)
         {
             var list = new List<RoundBooster>()
             {
@@ -25,7 +25,7 @@ namespace GaiaCore.Gaia.Tiles
             var result = new List<RoundBooster>();
             for (int i = 0; i < n; i++)
             {
-                result.Add(list.RandomRemove());
+                result.Add(list.RandomRemove(random));
             }
             return result;
         }

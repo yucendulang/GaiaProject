@@ -41,16 +41,29 @@ namespace GaiaProject.Controllers
             return View();
         }
 
-        public IActionResult NewGame()
+        public IActionResult NewGame(string name)
         {
-            GameMgr.CreateNewGame(System.Guid.NewGuid().ToString(), out GaiaGame result);
-            GameMgr.BakeDictionary();
+            if (string.IsNullOrEmpty(name))
+            {
+                name = Guid.NewGuid().ToString();
+            }
+            GameMgr.CreateNewGame(name, out GaiaGame result);
             return View(result);
         }
 
-        public IActionResult BackData()
+        public IActionResult BackupData()
         {
-            GameMgr.BakeDictionary();
+            GameMgr.BackupDictionary();
+            return View();
+        }
+        public IActionResult RestoreData(string filename)
+        {
+            ViewData["nameList"] = string.Join(",", GameMgr.RestoreDictionary(filename));
+            return View();
+        }
+        public IActionResult GetAllGame()
+        {
+            ViewData["nameList"] = string.Join(",", GameMgr.GetAllGame());
             return View();
         }
     }

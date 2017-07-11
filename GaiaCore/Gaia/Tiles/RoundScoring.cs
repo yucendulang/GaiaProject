@@ -7,7 +7,7 @@ namespace GaiaCore.Gaia.Tiles
 {
     public static class RSTMgr
     {
-        public static List<RoundScoring> GetRandomList(int n)
+        public static List<RoundScoring> GetRandomList(int n,Random random)
         {
             var list = new List<RoundScoring>()
             {
@@ -22,7 +22,7 @@ namespace GaiaCore.Gaia.Tiles
             var result = new List<RoundScoring>();
             for (int i = 0; i < n; i++)
             {
-                result.Add(list.RandomRemove());
+                result.Add(list.RandomRemove(random));
             }
             return result;
         }

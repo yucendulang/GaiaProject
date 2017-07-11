@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GaiaCore.Gaia;
+using Newtonsoft.Json;
 
 namespace GaiaCore.Gaia
 {
@@ -15,6 +16,7 @@ namespace GaiaCore.Gaia
     /// <summary>
     /// 代表一个最小单元地块 包括了地形 归属 属于哪个Space Sector
     /// </summary>
+    [JsonObject(MemberSerialization.OptIn)]
     public class TerrenHex
     {
         public TerrenHex(Terrain t,bool isCenter=false)
@@ -27,6 +29,7 @@ namespace GaiaCore.Gaia
         /// <summary>
         /// Origin的地形
         /// </summary>
+        [JsonProperty]
         public Terrain OGTerrain { set; get; }
         /// <summary>
         /// Transformation的地形
@@ -35,6 +38,7 @@ namespace GaiaCore.Gaia
         /// <summary>
         /// 属于哪个大板块的名字
         /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string SpaceSectorName { set; get; }
         /// <summary>
         /// 属于哪个种族
@@ -47,6 +51,7 @@ namespace GaiaCore.Gaia
         /// <summary>
         /// 是否是SpaceSector的中心点
         /// </summary>
+        [JsonProperty]
         public bool IsCenter { set; get; }
     }
     /// <summary>
@@ -96,17 +101,19 @@ namespace GaiaCore.Gaia
             newTHA.Add(TerranHexArray[17]);
             newTHA.Add(TerranHexArray[10]);
             newTHA.Add(TerranHexArray[15]);
-            TerranHexArray = newTHA;
-            return this;
+            return new SpaceSector(newTHA);
         }
 
-        public SpaceSector RandomRotato()
+        public SpaceSector RandomRotato(Random random)
         {
-            for (int i = 0; i < RandomInstance.Next(6); i++)
+            var time = random.Next(6);
+            System.Diagnostics.Debug.WriteLine("Time is "+time);
+            SpaceSector result=this;
+            for (int i = 0; i < time; i++)
             {
-                Rotate();
+                result=result.Rotate();
             }
-            return this;
+            return result;
         }
     }
 

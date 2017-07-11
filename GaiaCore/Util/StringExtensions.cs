@@ -16,6 +16,18 @@ namespace GaiaCore.Util
             {
                 return defaultValue;
             }
-        } 
+        }
+        
+        public static string AddEnter(this string source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+            else
+            {
+                return source + "\r\n";
+            }
+        }
     }
 }

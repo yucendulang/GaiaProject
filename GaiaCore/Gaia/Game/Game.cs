@@ -1,40 +1,32 @@
 ﻿using GaiaCore.Gaia.Tiles;
 using GaiaCore.Util;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+
 namespace GaiaCore.Gaia
 {
     /// <summary>
     /// 每一局游戏实例化一个Game
     /// </summary>
+    [JsonObject(MemberSerialization.OptIn)]
     public class GaiaGame
     {
         public GaiaGame()
         {
-            Map = MapMgr.GetRandomMap();
             GameStatus = new GameStatus();
             FactionList = new List<Faction>();
-            ATTList= (from items in ATTMgr.GetRandomList(6) orderby items.GetType().Name.Remove(0,3).ParseToInt(-1) select items).ToList();
-            STT6List = STTMgr.GetRandomList(6);
-            STT3List = (from items in STTMgr.GetOtherList(STT6List) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList(); 
-            RSTList = RSTMgr.GetRandomList(6);
-            FSTList = new List<FinalScoring>();
-            FSTList.Add(new FST1());
-            RBTList = (from items in RBTMgr.GetRandomList(4+3) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();
-            ALTList = ALTMgr.GetList();
-            AllianceTileForKnowledge = ALTList.RandomRemove();
-            GameLog += "Game Start";
-        }
-        public void GetGameView()
-        {
-
         }
         public bool ProcessSyntax(string syntax, out string log)
         {
             log = string.Empty;
-            if ("Default Game".Equals(syntax))
+
+            if (GameSyntax.setupGameRegex.IsMatch(syntax))
             {
-                GameStart();
+                var seed = syntax.Substring(GameSyntax.setupGame.Length).ParseToInt(0);
+                GameStart(syntax, seed);
                 return true;
             }
             else
@@ -43,23 +35,39 @@ namespace GaiaCore.Gaia
                 return false;
             }
         }
-        private void GameStart()
+        private void GameStart(string syntax, int i = 0)
         {
-            GameLog += "Default Game";
-            FactionList.Add(new Faction());
-            FactionList.Add(new Faction());
-            FactionList.Add(new Faction());
-            FactionList.Add(new Faction());
-            GameLog += "Setup Four Faction";
+            Seed = i == 0 ? RandomInstance.Next(int.MaxValue) : i;
+            var random = new Random(Seed);
+            Map = MapMgr.GetRandomMap(random);
+            ATTList = (from items in ATTMgr.GetRandomList(6, random) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();
+            STT6List = STTMgr.GetRandomList(6, random);
+            STT3List = (from items in STTMgr.GetOtherList(STT6List) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();
+            RSTList = RSTMgr.GetRandomList(6, random);
+            FSTList = new List<FinalScoring>();
+            FSTList.Add(new FST1());
+            RBTList = (from items in RBTMgr.GetRandomList(4 + 3, random) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();
+            ALTList = ALTMgr.GetList();
+            AllianceTileForKnowledge = ALTList.RandomRemove(random);
+            UserActionLog += syntax.AddEnter();
         }
-        /// <summary>
-        /// 在游戏开始的时候实例化一个Map
-        /// </summary>
-        public Map Map { set; get; }
+        private void SetupPlayer()
+        {
+            FactionList.Add(new Faction());
+            FactionList.Add(new Faction());
+            FactionList.Add(new Faction());
+            FactionList.Add(new Faction());
+        }
         /// <summary>
         /// 实例化四个玩家
         /// </summary>
         public List<Faction> FactionList { set; get; }
+        #region 存档需要save的内容
+        [JsonProperty]
+        /// <summary>
+        /// 在游戏开始的时候实例化一个Map
+        /// </summary>
+        public Map Map { set; get; }
         /// <summary>
         /// 游戏的一些公共状态包括现在第几轮轮到哪个玩家行动等等
         /// </summary>
@@ -93,8 +101,10 @@ namespace GaiaCore.Gaia
         /// </summary>
         public List<AllianceTile> ALTList { set; get; }
         public AllianceTile AllianceTileForKnowledge { set; get; }
-        public string GameLog { set; get; }
-
-
+        [JsonProperty]
+        public string UserActionLog { set; get; }
+        [JsonProperty]
+        public int Seed { set; get; }
+        #endregion
     }
 }

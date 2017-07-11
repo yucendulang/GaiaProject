@@ -154,13 +154,13 @@ namespace GaiaCore.Gaia
 
             return result;
         }
-        public static Map GetRandomMap()
+        public static Map GetRandomMap(Random random)
         {
             var result = new Map();
-            result.AddSpaceSector(3, 10, ssl[0]);
-            result.AddSpaceSector(6, 7, ssl[1]);
-            result.AddSpaceSector(7, 12, ssl[2]);
-            result.AddSpaceSector(10, 9, ssl[3]);
+            result.AddSpaceSector(3, 10, ssl[0],random);
+            result.AddSpaceSector(6, 7, ssl[1], random);
+            result.AddSpaceSector(7, 12, ssl[2], random);
+            result.AddSpaceSector(10, 9, ssl[3], random);
             var randomList = new List<SpaceSector>()
             {
                 ssl[4],ssl[5],ssl[6],ssl[7],ssl[8],ssl[9]
@@ -172,8 +172,9 @@ namespace GaiaCore.Gaia
 
             centerTuple.ForEach(x =>
             {
-                var index = RandomInstance.Next(randomList.Count);
-                result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato());
+                var index = random.Next(randomList.Count);
+                System.Diagnostics.Debug.WriteLine("index is "+index);
+                result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random), random);
                 randomList.RemoveAt(index);
             });
             System.Diagnostics.Debug.WriteLine(randomList.Count);
@@ -186,7 +187,7 @@ namespace GaiaCore.Gaia
         public const int m_mapWidth = 20;
         public const int m_mapHeight = 20;
         public TerrenHex[,] HexArray = new TerrenHex[m_mapWidth, m_mapHeight];
-        public void AddSpaceSector(int x, int y, SpaceSector ss)
+        public void AddSpaceSector(int x, int y, SpaceSector ss,Random random)
         {
 
             List<Tuple<int, int>> hexList = GetHexList(x, y);
@@ -197,7 +198,7 @@ namespace GaiaCore.Gaia
             if (!ValidateMap(hexList))
             {
                 //System.Diagnostics.Debug.WriteLine("发现不合法");
-                AddSpaceSector(x, y, ss.RandomRotato());
+                AddSpaceSector(x, y, ss.RandomRotato(random),random);
             }
         }
 

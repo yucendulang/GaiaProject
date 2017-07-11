@@ -11,7 +11,7 @@ namespace GaiaCore.Gaia.Tiles
         /// 获取随机N个ATT板块
         /// </summary>
         /// <param name="i"></param>
-        public static List<AdavanceTechnology> GetRandomList(int n)
+        public static List<AdavanceTechnology> GetRandomList(int n,Random random)
         {
             var list = new List<AdavanceTechnology>()
             {
@@ -35,7 +35,7 @@ namespace GaiaCore.Gaia.Tiles
             var result = new List<AdavanceTechnology>();
             for(int i = 0; i < n; i++)
             {
-                result.Add(list.RandomRemove());
+                result.Add(list.RandomRemove(random));
             }
             return result;
         }
