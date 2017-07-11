@@ -95,9 +95,9 @@ namespace GaiaCore.Gaia
         {
             get
             {
-                if (!Directory.Exists(BackupDataPath))
+                if (!Directory.Exists("backupdata"))
                 {
-                    Directory.CreateDirectory(BackupDataPath);
+                    Directory.CreateDirectory("backupdata");
                 }
                 return System.IO.Path.Combine(Directory.GetCurrentDirectory(), "backupdata");
             }
