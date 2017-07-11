@@ -87,6 +87,10 @@ namespace GaiaCore.Gaia
 
         public static IEnumerable<string> GetAllBackupDataName()
         {
+            if (!Directory.Exists(BackupDataPath))
+            {
+                Directory.CreateDirectory(BackupDataPath);
+            }
             var d = new DirectoryInfo(BackupDataPath);
             return from p in d.EnumerateFiles() select p.Name;
         }
