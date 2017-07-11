@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GaiaCore.Gaia;
+using GaiaProject.Models.HomeViewModels;
 
 namespace GaiaProject.Controllers
 {
@@ -24,7 +25,7 @@ namespace GaiaProject.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] =string.Join("\r\n", GameMgr.GetAllBackupDataName());
 
             return View();
         }
@@ -40,15 +41,22 @@ namespace GaiaProject.Controllers
         {
             return View();
         }
-
-        public IActionResult NewGame(string name)
+        // POST: /Home/NewGame
+        [HttpPost]
+        public IActionResult NewGame(NewGameViewModel model)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(model.Name))
             {
-                name = Guid.NewGuid().ToString();
+                model.Name = Guid.NewGuid().ToString();
             }
-            GameMgr.CreateNewGame(name, out GaiaGame result);
-            return View(result);
+            GameMgr.CreateNewGame(model.Name, out GaiaGame result);
+            return View(model);
+        }
+        // GET: /Home/NewGame
+        [HttpGet]
+        public IActionResult NewGame()
+        {
+            return View();
         }
 
         public IActionResult BackupData()

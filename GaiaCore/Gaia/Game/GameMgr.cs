@@ -85,6 +85,12 @@ namespace GaiaCore.Gaia
             return m_dic.Keys;
         }
 
+        public static IEnumerable<string> GetAllBackupDataName()
+        {
+            var d = new DirectoryInfo(BackupDataPath);
+            return from p in d.EnumerateFiles() select p.Name;
+        }
+
         private static string BackupDataPath
         {
             get
