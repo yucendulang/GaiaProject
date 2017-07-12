@@ -23,6 +23,7 @@ namespace GaiaProject.Controllers
             var task =_userManager.GetUserAsync(HttpContext.User);
 
             ViewData["Message"] = task.Result.UserName;
+            ViewData["GameList"]=GameMgr.GetAllGame(task.Result.UserName);
             return View();
         }
 
@@ -69,6 +70,18 @@ namespace GaiaProject.Controllers
             var gg = GameMgr.GetGameByName(id);
             return View(gg);
         }
+        [HttpPost]
+        public IActionResult SyntaxGame(string name,string syntax)
+        {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(syntax))
+            {
+                return Redirect("/home/index");
+            }
+            GameMgr.GetGameByName(name).ProcessSyntax(syntax,out string log);
+
+            return Redirect("/home/viewgame/"+name);
+        }
+
         #region 管理工具
         public IActionResult BackupData()
         {

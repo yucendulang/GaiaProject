@@ -4,58 +4,70 @@
 
 }
 <script type='text/javascript' language='javascript' src='~/js/site.js'></script>
-<h2>Gaia</h2>
 
-<canvas id="myCanvas" width="1080" height="900" style="border:1px solid #c3c3c3;">
-    Your browser does not support the canvas element.
-</canvas>
+<form asp-controller="Home" asp-action="SyntaxGame" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+    <label class="col-md-1 control-label">syntax</label>
+    <div class="col-md-4">
+        <input name="syntax" class="form-control" />
+    </div>
+    <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden"/>
+    @*<div class="col-md-1">
+        <button type="button" class="btn btn-default">Preview</button>
+    </div>*@
+    <div class="col-md-1">
+        <button type="submit" class="btn btn-default">Save</button>
+    </div>
+</form>
+    <canvas id="myCanvas" width="950" height="740" style="border:1px solid #c3c3c3;">
+        Your browser does not support the canvas element.
+    </canvas>
 
-<h1>Faction</h1>
-@foreach (var item in Model.FactionList)
-{
-    <p>Credit: @item.Credit</p>
-}
-<h1>Round Booster</h1>
-@foreach (var item in Model.RBTList)
-{
-    <p>@item.GetType().Name @item.desc</p>
-}
-<h1>Advance Tech</h1>
-@foreach (var item in Model.ATTList)
-{
-    <p>@item.GetType().Name @item.desc</p>
-}
-<h1>Standard Tech For 6</h1>
-@foreach (var item in Model.STT6List)
-{
-    <p>@item.GetType().Name @item.desc</p>
-}
-<h1>Standard Tech For 3</h1>
-@foreach (var item in Model.STT3List)
-{
-    <p>@item.GetType().Name @item.desc</p>
-}
-<h1>Round Score</h1>
-@for (int i = 0; i < Model.RSTList.Count; i++)
-{
-    <p>Round @i @Model.RSTList[i].desc</p>
-}
-<h1>Final Score</h1>
-@foreach (var item in Model.FSTList)
-{
-    <p>@item.GetType().Name @item.desc</p>
-}
-<h1>Alliance Tile</h1>
-@foreach (var item in Model.ALTList)
-{
-    <p>@item.GetType().Name @item.desc</p>
-}
-<p>LogHistory</p>
-<p>@Model.UserActionLog</p>
+    <h1>Faction</h1>
+    @foreach (var item in Model.FactionList)
+    {
+        <p>Credit: @item.Credit</p>
+    }
+    <h1>Round Booster</h1>
+    @foreach (var item in Model.RBTList)
+    {
+        <p>@item.GetType().Name @item.desc</p>
+    }
+    <h1>Advance Tech</h1>
+    @foreach (var item in Model.ATTList)
+    {
+        <p>@item.GetType().Name @item.desc</p>
+    }
+    <h1>Standard Tech For 6</h1>
+    @foreach (var item in Model.STT6List)
+    {
+        <p>@item.GetType().Name @item.desc</p>
+    }
+    <h1>Standard Tech For 3</h1>
+    @foreach (var item in Model.STT3List)
+    {
+        <p>@item.GetType().Name @item.desc</p>
+    }
+    <h1>Round Score</h1>
+    @for (int i = 0; i < Model.RSTList.Count; i++)
+    {
+        <p>Round @i @Model.RSTList[i].desc</p>
+    }
+    <h1>Final Score</h1>
+    @foreach (var item in Model.FSTList)
+    {
+        <p>@item.GetType().Name @item.desc</p>
+    }
+    <h1>Alliance Tile</h1>
+    @foreach (var item in Model.ALTList)
+    {
+        <p>@item.GetType().Name @item.desc</p>
+    }
+    <p>LogHistory</p>
+    <p>@Model.UserActionLog</p>
 
 
 
-<script type="text/javascript">
+    <script type="text/javascript">
     var c = document.getElementById("myCanvas");
     var cxt = c.getContext("2d");
     var model = @Html.Raw(Json.Serialize(Model));
@@ -64,4 +76,4 @@
 
 
 
-</script>
+    </script>

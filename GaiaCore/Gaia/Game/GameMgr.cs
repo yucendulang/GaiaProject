@@ -35,6 +35,10 @@ namespace GaiaCore.Gaia
 
         public static GaiaGame GetGameByName(string name)
         {
+            if (name == null)
+            {
+                return null;
+            }
             if (m_dic.ContainsKey(name))
             {
                 return m_dic[name];
@@ -45,9 +49,18 @@ namespace GaiaCore.Gaia
             }
         }
 
-        public static IEnumerable<string> GetAllGame()
+        public static IEnumerable<string> GetAllGame(string userName=null)
         {
-            return m_dic.Keys;
+            if (string.IsNullOrEmpty(userName))
+            {
+                return m_dic.Keys;
+            }
+            else
+            {
+                var result=from p in m_dic where p.Value.Username.Contains(userName) select p.Key;
+                return result;
+            }
+            
         }
 
         public static bool BackupDictionary()
