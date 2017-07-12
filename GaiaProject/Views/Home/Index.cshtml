@@ -1,9 +1,17 @@
-﻿@inject SignInManager<ApplicationUser> SignInManager
+﻿
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <a href="/home/NewGame">创建新游戏</a>
-
+    <p>@ViewData["Message"]</p>
+    <p href="/home/NewGame">创建新游戏</p>
+    @if (UserManager.GetUserName(User).Equals("yucenyucen@126.com"))
+    {
+        <p href="/home/BackupData">备份所有游戏</p>
+        <p href="/home/RestoreData">恢复所有游戏</p>
+        <p href="/home/GetAllGame">获取所有游戏列表</p>
+    }
 }
 else
 {

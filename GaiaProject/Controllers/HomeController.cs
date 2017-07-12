@@ -5,27 +5,30 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GaiaCore.Gaia;
 using GaiaProject.Models.HomeViewModels;
+using Microsoft.AspNetCore.Identity;
+using GaiaProject.Models;
 
 namespace GaiaProject.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly UserManager<ApplicationUser> _userManager;
+        public HomeController(
+            UserManager<ApplicationUser> userManager)
+        {
+            _userManager = userManager;
+        }
         public IActionResult Index()
         {
-            ViewData["Message"] = "Index";
-            return View();
-        }
+            var task =_userManager.GetUserAsync(HttpContext.User);
 
-        public IActionResult Game()
-        {
-            var game = new GaiaGame();
-            game.ProcessSyntax("Default Game", out string log);
-            return View(game);
+            ViewData["Message"] = task.Result.UserName;
+            return View();
         }
 
         public IActionResult About()
         {
-            ViewData["Message"] =string.Join("\r\n", GameMgr.GetAllBackupDataName());
+            ViewData["Message"] = string.Join("\r\n", GameMgr.GetAllBackupDataName());
 
             return View();
         }
@@ -33,7 +36,7 @@ namespace GaiaProject.Controllers
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
-
+            ViewData["nameList"] = string.Join(",", GameMgr.GetAllGame());
             return View();
         }
 
@@ -49,7 +52,9 @@ namespace GaiaProject.Controllers
             {
                 model.Name = Guid.NewGuid().ToString();
             }
-            GameMgr.CreateNewGame(model.Name, out GaiaGame result);
+            string[] username = new string[] { model.Player1, model.Player2, model.Player3, model.Player4 };
+            GameMgr.CreateNewGame(model.Name, username, out GaiaGame result);
+            ViewData["ReturnUrl"] = "/Home/ViewGame/" + model.Name;
             return View(model);
         }
         // GET: /Home/NewGame
@@ -59,6 +64,12 @@ namespace GaiaProject.Controllers
             return View();
         }
 
+        public IActionResult ViewGame(string id)
+        {
+            var gg = GameMgr.GetGameByName(id);
+            return View(gg);
+        }
+        #region 管理工具
         public IActionResult BackupData()
         {
             GameMgr.BackupDictionary();
@@ -74,5 +85,6 @@ namespace GaiaProject.Controllers
             ViewData["nameList"] = string.Join(",", GameMgr.GetAllGame());
             return View();
         }
+        #endregion
     }
 }

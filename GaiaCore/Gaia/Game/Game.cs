@@ -14,10 +14,11 @@ namespace GaiaCore.Gaia
     [JsonObject(MemberSerialization.OptIn)]
     public class GaiaGame
     {
-        public GaiaGame()
+        public GaiaGame(string[] username)
         {
             GameStatus = new GameStatus();
             FactionList = new List<Faction>();
+            Username = username;
         }
         public bool ProcessSyntax(string syntax, out string log)
         {
@@ -105,6 +106,8 @@ namespace GaiaCore.Gaia
         public string UserActionLog { set; get; }
         [JsonProperty]
         public int Seed { set; get; }
+        [JsonProperty]
+        public string[] Username { set; get; }
         #endregion
     }
 }

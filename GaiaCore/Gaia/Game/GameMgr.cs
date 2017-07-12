@@ -16,7 +16,7 @@ namespace GaiaCore.Gaia
         {
             m_dic = new Dictionary<string, GaiaGame>();
         }
-        public static bool CreateNewGame(string name,out GaiaGame result,int seed=0)
+        public static bool CreateNewGame(string name, string[] username,out GaiaGame result,int seed=0)
         {
             if (m_dic.ContainsKey(name))
             {
@@ -26,7 +26,7 @@ namespace GaiaCore.Gaia
             else
             {
                 seed = seed == 0 ? RandomInstance.Next(int.MaxValue) : seed;
-                result = new GaiaGame();
+                result = new GaiaGame(username);
                 result.ProcessSyntax(GameSyntax.setupGame+ seed, out string log);
                 m_dic.Add(name, result);
                 return true;
@@ -53,7 +53,7 @@ namespace GaiaCore.Gaia
         public static bool BackupDictionary()
         {
             JsonSerializerSettings jsetting = new JsonSerializerSettings();
-            jsetting.ContractResolver = new LimitPropsContractResolver(new string[] { "UserActionLog"});
+            jsetting.ContractResolver = new LimitPropsContractResolver(new string[] { "UserActionLog", "Username" });
             var str=JsonConvert.SerializeObject(m_dic,Formatting.Indented, jsetting);
             var logPath = System.IO.Path.Combine(BackupDataPath, DateTime.Now.ToString("yyyyMMddhhmmss")+".txt");
             var logWriter=System.IO.File.CreateText(logPath);
@@ -75,7 +75,7 @@ namespace GaiaCore.Gaia
             m_dic = new Dictionary<string, GaiaGame>();
             foreach (var item in temp)
             {
-                var gg = new GaiaGame();
+                var gg = new GaiaGame(item.Value.Username);
                 foreach(var str in item.Value.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     gg.ProcessSyntax(str,out string log);
