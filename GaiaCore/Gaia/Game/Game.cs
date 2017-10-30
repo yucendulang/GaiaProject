@@ -23,6 +23,7 @@ namespace GaiaCore.Gaia
         public bool ProcessSyntax(string syntax, out string log)
         {
             log = string.Empty;
+            syntax = syntax.ToLower();
 
             if (GameSyntax.setupGameRegex.IsMatch(syntax))
             {
@@ -30,12 +31,60 @@ namespace GaiaCore.Gaia
                 GameStart(syntax, seed);
                 return true;
             }
+            else if (GameSyntax.factionSelectionRegex.IsMatch(syntax))
+            {
+                var faction = syntax.Substring(GameSyntax.factionSelection.Length + 1);
+                if (Enum.TryParse(faction, true, out FactionName result))
+                {
+                    SetupFaction(result);
+                    return true;
+                }
+                else
+                {
+                    log = "FactionName is wrong";
+                    return false;
+                }
+            }
             else
             {
                 log = "Syntax is wrong";
                 return false;
             }
         }
+
+        public void ProcessSyntax(string syntax)
+        {
+            if(ProcessSyntax(syntax,out string log))
+            {
+                UserActionLog += syntax.AddEnter();
+            }
+        }
+
+        private void SetupFaction(FactionName faction)
+        {
+            switch (faction)
+            {
+                case FactionName.Ambas:
+                    FactionList.Add(new Faction());
+                    break;
+                case FactionName.BalTak:
+                    FactionList.Add(new Faction());
+                    break;
+                case FactionName.Firaks:
+                    FactionList.Add(new Faction());
+                    break;
+                case FactionName.Geoden:
+                    FactionList.Add(new Faction());
+                    break;
+                case FactionName.Gleen:
+                    FactionList.Add(new Faction());
+                    break;
+                default:
+                    FactionList.Add(new Faction());
+                    break;
+            };
+        }
+
         private void GameStart(string syntax, int i = 0)
         {
             Seed = i == 0 ? RandomInstance.Next(int.MaxValue) : i;
@@ -50,7 +99,6 @@ namespace GaiaCore.Gaia
             RBTList = (from items in RBTMgr.GetRandomList(4 + 3, random) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();
             ALTList = ALTMgr.GetList();
             AllianceTileForKnowledge = ALTList.RandomRemove(random);
-            UserActionLog += syntax.AddEnter();
         }
         private void SetupPlayer()
         {

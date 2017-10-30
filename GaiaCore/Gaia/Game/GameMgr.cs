@@ -27,7 +27,7 @@ namespace GaiaCore.Gaia
             {
                 seed = seed == 0 ? RandomInstance.Next(int.MaxValue) : seed;
                 result = new GaiaGame(username);
-                result.ProcessSyntax(GameSyntax.setupGame+ seed, out string log);
+                result.ProcessSyntax(GameSyntax.setupGame+ seed);
                 m_dic.Add(name, result);
                 return true;
             }           
@@ -91,7 +91,7 @@ namespace GaiaCore.Gaia
                 var gg = new GaiaGame(item.Value.Username);
                 foreach(var str in item.Value.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    gg.ProcessSyntax(str,out string log);
+                    gg.ProcessSyntax(str);
                 }
                 m_dic.Add(item.Key, gg);
             }

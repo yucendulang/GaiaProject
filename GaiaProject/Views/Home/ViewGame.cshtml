@@ -63,7 +63,10 @@
         <p>@item.GetType().Name @item.desc</p>
     }
     <p>LogHistory</p>
-    <p>@Model.UserActionLog</p>
+    @foreach (var item in Model.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
+    {
+        <p>@item</p>
+    }
 
 
 

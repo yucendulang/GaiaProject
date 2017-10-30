@@ -24,6 +24,8 @@ namespace GaiaProject.Controllers
 
             ViewData["Message"] = task.Result.UserName;
             ViewData["GameList"]=GameMgr.GetAllGame(task.Result.UserName);
+            //ViewData["Message"] = @"yucenyucen@126.com";
+            //ViewData["GameList"] = GameMgr.GetAllGame(@"yucenyucen@126.com");
             return View();
         }
 
@@ -77,7 +79,7 @@ namespace GaiaProject.Controllers
             {
                 return Redirect("/home/index");
             }
-            GameMgr.GetGameByName(name).ProcessSyntax(syntax,out string log);
+            GameMgr.GetGameByName(name).ProcessSyntax(syntax);
 
             return Redirect("/home/viewgame/"+name);
         }
