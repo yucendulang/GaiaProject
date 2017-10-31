@@ -7,8 +7,9 @@ namespace GaiaCore.Gaia
 {
     public class Faction
     {
-        public Faction()
+        public Faction(FactionName name)
         {
+            FactionName = name;
             m_credit = 15;
             m_knowledge = 3;
             m_ore = 4;
@@ -44,6 +45,7 @@ namespace GaiaCore.Gaia
             }
             StrongHold=new StrongHold();
         }
+        public FactionName FactionName { get; }
         private int m_credit;
         private int m_ore;
         private int m_knowledge;
@@ -218,7 +220,7 @@ namespace GaiaCore.Gaia
         }
     }
 
-    enum FactionName
+    public enum FactionName
     {
         Lantida,
         Terraner,

@@ -6,10 +6,14 @@
 {
     <p>@ViewData["Message"]</p>
     <p><a href="/home/NewGame">创建新游戏</a></p>
-    @foreach (var item in (IEnumerable<string>)ViewData["GameList"])
+    @if (ViewData["GameList"] != null)
     {
-        <li><a href="/home/ViewGame/@item">@item</a></li>
+        @foreach (var item in (IEnumerable<string>)ViewData["GameList"])
+        {
+            <li><a href="/home/ViewGame/@item">@item</a></li>
+        }
     }
+
     @if (UserManager.GetUserName(User).Equals("yucenyucen@126.com"))
     {
         <p><a href="/home/BackupData">备份所有游戏</a></p>

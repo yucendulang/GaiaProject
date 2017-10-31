@@ -4,9 +4,14 @@
 
 }
 <script type='text/javascript' language='javascript' src='~/js/site.js'></script>
+@if (ViewData["log"] != null)
+{
+    <p>@ViewData["log"]</p>
+}
+<form asp-controller="Home" asp-action="ViewGame" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+    <div asp-validation-summary="All" class="text-danger"></div>
 
-<form asp-controller="Home" asp-action="SyntaxGame" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-    <label class="col-md-1 control-label">syntax</label>
+    <label class="col-md-1 control-label">syntax</label> 
     <div class="col-md-4">
         <input name="syntax" class="form-control" />
     </div>

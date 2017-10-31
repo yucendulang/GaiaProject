@@ -21,9 +21,13 @@ namespace GaiaProject.Controllers
         public IActionResult Index()
         {
             var task =_userManager.GetUserAsync(HttpContext.User);
-
-            ViewData["Message"] = task.Result.UserName;
-            ViewData["GameList"]=GameMgr.GetAllGame(task.Result.UserName);
+            Task[] taskarray = new Task[] { task};
+            Task.WaitAll(taskarray, millisecondsTimeout:1000);
+            if (task.Result != null)
+            {
+                ViewData["Message"] = task.Result.UserName;
+                ViewData["GameList"] = GameMgr.GetAllGame(task.Result.UserName);
+            }
             //ViewData["Message"] = @"yucenyucen@126.com";
             //ViewData["GameList"] = GameMgr.GetAllGame(@"yucenyucen@126.com");
             return View();
@@ -69,6 +73,7 @@ namespace GaiaProject.Controllers
 
         public IActionResult ViewGame(string id)
         {
+            ModelState.AddModelError(string.Empty, "Test Fail");
             var gg = GameMgr.GetGameByName(id);
             return View(gg);
         }
@@ -79,9 +84,26 @@ namespace GaiaProject.Controllers
             {
                 return Redirect("/home/index");
             }
-            GameMgr.GetGameByName(name).ProcessSyntax(syntax);
+            GameMgr.GetGameByName(name).Syntax(syntax,out string log);
+            //ViewData["log"] = log;
 
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return Redirect("/home/viewgame/"+name);
+            //return View();
+        }
+
+        [HttpPost]
+        public IActionResult ViewGame(string name, string syntax)
+        {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(syntax))
+            {
+                return View(GameMgr.GetGameByName(name));
+            }
+            GameMgr.GetGameByName(name).Syntax(syntax, out string log);
+            //ViewData["log"] = log;
+
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            return View(GameMgr.GetGameByName(name));
         }
 
         #region 管理工具

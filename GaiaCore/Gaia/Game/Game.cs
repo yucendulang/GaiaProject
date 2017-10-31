@@ -36,7 +36,16 @@ namespace GaiaCore.Gaia
                 var faction = syntax.Substring(GameSyntax.factionSelection.Length + 1);
                 if (Enum.TryParse(faction, true, out FactionName result))
                 {
-                    SetupFaction(result);
+                    if (!FactionList.Exists(x => x.FactionName == result))
+                    {
+                        SetupFaction(result);
+                    }
+                    else
+                    {
+                        log = "FactionName has been choosen!";
+                        return false;
+                    }
+                  
                     return true;
                 }
                 else
@@ -52,9 +61,9 @@ namespace GaiaCore.Gaia
             }
         }
 
-        public void ProcessSyntax(string syntax)
+        public void Syntax(string syntax,out string log)
         {
-            if(ProcessSyntax(syntax,out string log))
+            if(ProcessSyntax(syntax,out log))
             {
                 UserActionLog += syntax.AddEnter();
             }
@@ -65,22 +74,22 @@ namespace GaiaCore.Gaia
             switch (faction)
             {
                 case FactionName.Ambas:
-                    FactionList.Add(new Faction());
+                    FactionList.Add(new Faction(faction));
                     break;
                 case FactionName.BalTak:
-                    FactionList.Add(new Faction());
+                    FactionList.Add(new Faction(faction));
                     break;
                 case FactionName.Firaks:
-                    FactionList.Add(new Faction());
+                    FactionList.Add(new Faction(faction));
                     break;
                 case FactionName.Geoden:
-                    FactionList.Add(new Faction());
+                    FactionList.Add(new Faction(faction));
                     break;
                 case FactionName.Gleen:
-                    FactionList.Add(new Faction());
+                    FactionList.Add(new Faction(faction));
                     break;
                 default:
-                    FactionList.Add(new Faction());
+                    FactionList.Add(new Faction(faction));
                     break;
             };
         }
@@ -102,10 +111,6 @@ namespace GaiaCore.Gaia
         }
         private void SetupPlayer()
         {
-            FactionList.Add(new Faction());
-            FactionList.Add(new Faction());
-            FactionList.Add(new Faction());
-            FactionList.Add(new Faction());
         }
         /// <summary>
         /// 实例化四个玩家
