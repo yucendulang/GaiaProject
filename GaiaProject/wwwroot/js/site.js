@@ -5,9 +5,9 @@ var hex_height = hex_size * 1.5;
 
 function DrawMap() {
     console.log("DrawMap");
-    console.log(model);
+    //console.log(model);
     var array = model["map"]["hexArray"];
-    console.log(array);
+    //console.log(array);
     for (var i = 0; i < 20; i++) {
         for (var j = 0; j < 20; j++) {
 
@@ -21,9 +21,9 @@ function DrawMap() {
 
 
 function DrawOneHex(ctx, col, row, color,isCenter,hex) {
-    console.log("DrawHex");
+    //console.log("DrawHex");
     var loc = hexCenter(col, row)
-    console.log(loc[0], loc[1]);
+    //console.log(loc[0], loc[1]);
 
     var x = loc[0] + Math.sin(Math.PI / 6) * hex_size;
     var y = loc[1] - Math.cos(Math.PI / 6) * hex_size;
@@ -31,10 +31,11 @@ function DrawOneHex(ctx, col, row, color,isCenter,hex) {
     if (isCenter) {
         textSpaceSectorCenterName(ctx, loc[0], loc[1], hex.spaceSectorName)
     }
-    textHexName(ctx, loc[0], loc[1],row+" "+col)
+    textHexName(ctx, loc[0], loc[1], String.fromCharCode(65 + row) + col)
 
 }
-function textHexName(ctx, row, col,name) {
+function textHexName(ctx, row, col, name) {
+    console.log("textHexName" +row + col + name);
     ctx.beginPath();
     cxt.font = "15px Verdana";
     cxt.fillStyle = "White";
@@ -52,7 +53,7 @@ function textSpaceSectorCenterName(ctx, row, col, name) {
 }
 
 function hexCenter(row, col) {
-    console.log("hexCenter");
+    //console.log("hexCenter");
     var y_offset = 0;
 
     var x_offset = row % 2 ? hex_width / 2 : 0;
@@ -62,7 +63,7 @@ function hexCenter(row, col) {
 }
 
 function makeHexPath(ctx, x, y, size, color) {
-    console.log("makeHexPath",x,y,size,color);
+    //console.log("makeHexPath",x,y,size,color);
     var angle = 0;
 
     ctx.beginPath();

@@ -1,0 +1,228 @@
+﻿# Random setup
+delete bon9
+
+# Faction selection
+setup Nomads
+setup Auren
+setup Swarmlings
+setup Alchemists
+setup Engineers
+
+score SCORE4, SCORE2, SCORE8, SCORE7, SCORE6, SCORE5
+
+# Initial dwellings
+Nomads: Build A5
+Auren: Build F4
+Swarmlings: Build H4
+Alchemists: Build E5
+Engineers: Build E7. Build C5
+Alchemists: Build E10
+Swarmlings: Build G6
+Auren: Build F2
+Nomads: Build B4. Build G7
+
+# Bonus tiles in reverse order
+Engineers: +Bon1
+Alchemists: +Bon6
+Swarmlings: +Bon8
+Auren: +Bon2
+Nomads: +Bon5
+
+# Round 1:
+
+# Round 1 income 
+Nomads: income
+Auren: income
+Swarmlings: income
+Alchemists: income
+Engineers: income
+
+start
+
+# Round 1, Turn 1:
+Nomads: Burn 4. Action ACT4
+Auren: Upgrade F4 to TP
+Engineers: Leech 1
+Swarmlings: Upgrade G6 to TP
+Nomads: Leech 1
+Alchemists: Upgrade E10 to TP
+Engineers: Burn 4. Action ACT5. Build D7
+Alchemists: Leech 2
+
+# Round 1, Turn 2:
+
+Nomads: Upgrade G7 to TP
+Swarmlings: Leech 2
+Auren: Upgrade F4 to SH. +FAV6
+Engineers: Leech 1
+Swarmlings: Dig 2. Build H8
+Nomads: Leech 2
+Alchemists: Burn 4. Action ACT3
+Engineers: Action BON1. Build E9
+Alchemists: Leech 2
+
+# Round 1, Turn 3:
+Nomads: Upgrade G7 to SH.
+Swarmlings: Leech 3
+Auren: Action ACTA. +2FIRE
+Swarmlings: Send P to FIRE
+Alchemists: Dig 1. Build F7
+Nomads: Leech 3
+Engineers: Upgrade E9 to TP
+
+# Round 1, Turn 4:
+
+Nomads: Action ACTN. Build C4
+Auren: Action BON2. +FIRE
+Swarmlings: Pass Bon3. 
+Alchemists: Upgrade E10 to SH
+Engineers: Leech 3
+Engineers: Upgrade E9 to TE. +FAV7
+Alchemists: Leech 1
+
+# Round 1, Turn 5:
+Nomads: Pass Bon4
+Auren: Action FAV6. +FIRE
+Alchemists: Action ACT6. Transform D8 to black. Transform E11 to black
+Engineers: Burn 3. Action ACT1. Bridge E9:D6. 
+
+# Round 1, Turn 6:
+Auren: Burn 3. Action ACT2
+Alchemists: Pass Bon5
+Engineers: Pass Bon6
+
+# Round 1. Turn 7
+
+Auren: send p to FIRE
+
+# Round 1. Turn 8
+
+Auren: Pass Bon1
+
+# Round 2 Income
+
+Nomads: income
+Auren: income
+Swarmlings: income
+Alchemists: income
+Engineers: income
+
+start
+
+# Round 2. Turn 1
+
+Swarmlings: Action ACT3
+Alchemists: Action ACT2
+Engineers: dig 1. Build D6
+Nomads: Leech 1
+Nomads: Build E8
+Engineers: Leech 1
+Auren: Action ACTA. +2AIR
+
+# Round 2. Turn 2
+Swarmlings: Upgrade G6 to SH
+Nomads: Leech 3
+Alchemists: Leech 1
+Alchemists: send p to air
+Engineers: Build F6
+Alchemists: Leech 4
+Nomads: Action ACTN. Build D5
+Engineers: Leech 1
+Auren: Action FAV6. +AIR
+
+# Round 2. Turn 3
+Swarmlings: Burn 3. Action ACT5. Build I11.
+Alchemists: Build D8
+Engineers: Leech 1
+Engineers: send p to earth
+Nomads: Action ACT4
+Auren: Burn 3. Action ACT1. Bridge F4:G3
+
+# Round 2. Turn 4
+Swarmlings: Build I10
+Alchemists: Build E11
+Engineers: Pass Bon2
+Nomads: Pass Bon7
+Auren: Build G3
+
+# Round 2. Turn 5
+Swarmlings: Action ACTS. Upgrade I11 to TP. +TW5
+Alchemists: Upgrade D8 to TP. +TW2
+Engineers: Leech 1
+Auren: Action BON1. Build F1
+
+# Round 2. Turn 6
+
+Swarmlings: Pass Bon6
+Alchemists: Pass Bon3
+Auren: Pass Bon8
+
+# Round 3 income
+
+Nomads: income
+Auren: income
+Swarmlings: income
+Alchemists: income
+Engineers: income. Transform D4 to gray
+
+start
+
+# Round 3. Turn 1
+Engineers: Build D4
+Nomads: Leech 1
+Nomads: Action ACTN. Build C3
+Engineers: Leech 1
+Auren: send P to Water
+Swarmlings: Dig 1. Build H5.
+Auren: Leech 1
+Alchemists: Burn 2. Action ACT6. transform E4 to black. Build E6
+Auren: Leech 3
+
+# Round 3. Turn 2
+Engineers: Action ACT4
+Nomads: Upgrade E8 to TP
+Engineers: Leech 1
+Auren: Upgrade G3 to TP
+Swarmlings: Leech 2
+Swarmlings: Action ACTS. upgrade H4 to TP
+Auren: Leech 2
+Alchemists: Upgrade E6 to TP
+Engineers: Leech 2
+
+# Round 3. Turn 3
+Engineers: Upgrade D7 to TP. +TW2
+Alchemists: Leech 5
+Nomads: Action ACT3.
+Auren: Upgrade G3 to TE. Convert 6pw to 6c. +Fav12
+Swarmlings: Upgrade H4 to TE. +FAV9
+Auren: Leech 2
+Alchemists: Action ACT2
+
+# Round 3. Turn 4
+Engineers: Upgrade D7 to TE. +FAV10
+Nomads: Upgrade E8 to TE. +FAV10
+Engineers: Leech 1
+Auren: Upgrade F2 to TP.
+Swarmlings: Pass Bon1
+Alchemists: Send p to air
+
+# Round 3. Turn 5
+Engineers: Send p to water
+Nomads: Upgrade D5 to TP
+Engineers: Leech 2
+Auren: Action ACTA. +2AIR
+Alchemists: Upgrade E6 to Temple. +FAV4
+Engineers: Leech 2
+
+# Round 3. Turn 5
+Engineers: Convert 1 power to 1 coin. Action BON2. +WATER
+
+
+
+
+
+
+
+
+
+

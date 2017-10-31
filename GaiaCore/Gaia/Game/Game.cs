@@ -53,6 +53,10 @@ namespace GaiaCore.Gaia
                     log = "FactionName is wrong";
                     return false;
                 }
+            }else if (GameSyntax.buildRegex.IsMatch(syntax))
+            {
+                log = "build syntax not complete!";
+                return false;
             }
             else
             {

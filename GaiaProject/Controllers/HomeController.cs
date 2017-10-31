@@ -73,7 +73,6 @@ namespace GaiaProject.Controllers
 
         public IActionResult ViewGame(string id)
         {
-            ModelState.AddModelError(string.Empty, "Test Fail");
             var gg = GameMgr.GetGameByName(id);
             return View(gg);
         }
@@ -85,11 +84,8 @@ namespace GaiaProject.Controllers
                 return Redirect("/home/index");
             }
             GameMgr.GetGameByName(name).Syntax(syntax,out string log);
-            //ViewData["log"] = log;
 
-            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return Redirect("/home/viewgame/"+name);
-            //return View();
         }
 
         [HttpPost]
@@ -100,9 +96,11 @@ namespace GaiaProject.Controllers
                 return View(GameMgr.GetGameByName(name));
             }
             GameMgr.GetGameByName(name).Syntax(syntax, out string log);
-            //ViewData["log"] = log;
 
-            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            if (!string.IsNullOrEmpty(log))
+            {
+                ModelState.AddModelError(string.Empty, log);
+            }
             return View(GameMgr.GetGameByName(name));
         }
 
