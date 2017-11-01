@@ -5,6 +5,9 @@ using System.Text.RegularExpressions;
 
 namespace GaiaCore.Gaia
 {
+    /// <summary>
+    /// 语义分析进来全部小写
+    /// </summary>
     public static class GameSyntax
     {
         /// <summary>
@@ -24,6 +27,10 @@ namespace GaiaCore.Gaia
         /// 玩家命令正则
         /// </summary>
         public static Regex commandRegex = new Regex("[a-z]+:.+");
-
+        /// <summary>
+        /// 获取RoundBooster正则
+        /// </summary>
+        public const string rbt = "+RBT";
+        public static Regex RBTRegex = new Regex("\\+rbt[0-9]");
     }
 }

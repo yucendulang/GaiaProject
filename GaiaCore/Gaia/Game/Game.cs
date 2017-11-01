@@ -14,6 +14,8 @@ namespace GaiaCore.Gaia
     [JsonObject(MemberSerialization.OptIn)]
     public class GaiaGame
     {
+        private string m_TailLog=string.Empty;
+
         public GaiaGame(string[] username)
         {
             GameStatus = new GameStatus();
@@ -22,9 +24,11 @@ namespace GaiaCore.Gaia
         }
         public bool ProcessSyntax(string syntax, out string log)
         {
-            log = "Syntax is wrong";
+            log = string.Empty;
+            if (syntax.StartsWith("#"))
+                return true;
             syntax = syntax.ToLower();
-
+            bool ret;
             switch (GameStatus.stage)
             {
                 case Stage.RANDOMSETUP:
@@ -32,64 +36,119 @@ namespace GaiaCore.Gaia
                 case Stage.FACTIONSELECTION:
                     return ProcessSyntaxFactionSelect(syntax, ref log);
                 case Stage.INITIALMINES:
-                    var ret=ProcessSyntaxIntialMines(syntax, ref log);
+                    ret = ProcessSyntaxIntialMines(syntax, ref log);
                     if (ret)
                     {
                         GameStatus.NextPlayerForIntial();
                     }
-                    if(ret&& FactionList.All(x=>x.FinishIntialMines())){
-                        GameStatus.stage = Stage.SELECTROUNDBOOSTER;
+                    if (ret && FactionList.All(x => x.FinishIntialMines()))
+                    {
+                        ChangeGameStatus(Stage.SELECTROUNDBOOSTER);
+                        GameStatus.SetPlayerIndexLast();
                     }
                     return ret;
                 case Stage.SELECTROUNDBOOSTER:
-                    log = "未完成";
-                    return false;
+                    ret = ProcessSyntaxRoundBoosterSelect(syntax, ref log);
+                    if (ret)
+                    {
+                        GameStatus.NextPlayerReverse();
+                    }
+                    ///所有人都选完RBT了
+                    if (ret && GameStatus.PlayerIndex + 1 == GameStatus.m_PlayerNumber)
+                    {
+                        ChangeGameStatus(Stage.ROUNDINCOME);
+                        FactionList.ForEach(x => x.CalIncome());
+                        ChangeGameStatus(Stage.ROUNDSTART);
+                    }
+                    return ret;
+
                 default:
                     return false;
             }
-        }     
+        }
+
+        private bool ProcessSyntaxRoundBoosterSelect(string syntax, ref string log)
+        {
+            if (!(ValidateSyntaxCommand(syntax, ref log, out string command, out Faction faction)))
+            {
+                return false;
+            }
+            ///处理Build命令
+            if (!GameSyntax.RBTRegex.IsMatch(command))
+            {
+                log = "命令错误";
+                return false;
+            }
+            var rbtStr = command.Substring(1);
+            var rbt = RBTList.Find(x => x.GetType().Name.Equals(rbtStr, StringComparison.OrdinalIgnoreCase));
+            if (rbt == null)
+            {
+                log = string.Format("{0}板子不存在", rbtStr);
+                return false;
+            }
+
+            faction.GameTileList.Add(rbt);
+            RBTList.Remove(rbt);
+
+            return true;
+        }
 
         private bool ProcessSyntaxIntialMines(string syntax, ref string log)
         {
-            if (GameSyntax.commandRegex.IsMatch(syntax))
+            if (!(ValidateSyntaxCommand(syntax, ref log, out string command, out Faction faction)))
             {
-                var factionName = syntax.Split(':').First();
-                if (!Enum.TryParse(factionName, true, out FactionName result))
-                {
-                    log = "FactionName is wrong";
-                    return false;
-                }
-                if (!(FactionList[GameStatus.PlayerIndex].FactionName == result))
-                {
-                    log = string.Format("不是种族{0}行动轮,是{1}行动轮", factionName, FactionList[GameStatus.PlayerIndex].FactionName.ToString());
-                    return false;
-                }
-                var faction = FactionList.Find(x => x.FactionName == result);
-                if (faction == null)
-                {
-                    log = "FactionName doesn't exit";
-                    return false;
-                }
-                var command = syntax.Split(':').Last();
-                ///处理Build命令
-                if (GameSyntax.buildRegex.IsMatch(command))
-                {
-                    ///Build A2
-                    var position = command.Substring(GameSyntax.factionSelection.Length + 1);
-                    var row = position.Substring(0, 1).ToCharArray().First() - 'a';
-                    var col = position.Substring(1).ParseToInt(0);
-                    if (faction.BuildMine(Map, row, col, out log))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                
+                return false;
             }
-            return false;
+            ///处理Build命令
+            if (!GameSyntax.buildRegex.IsMatch(command))
+            {
+                log = "命令错误";
+                return false;
+            }
+            ///Build A2
+            var position = command.Substring(GameSyntax.factionSelection.Length + 1);
+            var row = position.Substring(0, 1).ToCharArray().First() - 'a';
+            var col = position.Substring(1).ParseToInt(0);
+            if (faction.BuildIntialMine(Map, row, col, out log))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        public bool ValidateSyntaxCommand(string syntax, ref string log, out string command, out Faction faction)
+        {
+            command = string.Empty;
+            faction = null;
+            if (!GameSyntax.commandRegex.IsMatch(syntax))
+            {
+                log = "格式为 种族:命令";
+                return false;
+            }
+
+            var factionName = syntax.Split(':').First();
+            if (!Enum.TryParse(factionName, true, out FactionName result))
+            {
+                log = "FactionName is wrong";
+                return false;
+            }
+            if (!(FactionList[GameStatus.PlayerIndex].FactionName == result))
+            {
+                log = string.Format("不是种族{0}行动轮,是{1}行动轮", factionName, FactionList[GameStatus.PlayerIndex].FactionName.ToString());
+                return false;
+            }
+            faction = FactionList.Find(x => x.FactionName == result);
+            if (faction == null)
+            {
+                log = "FactionName doesn't exit";
+                return false;
+            }
+            command = syntax.Split(':').Last();
+            return true;
         }
 
         private bool ProcessSyntaxFactionSelect(string syntax, ref string log)
@@ -111,7 +170,7 @@ namespace GaiaCore.Gaia
                     }
                     if (FactionList.Count == 4)
                     {
-                        GameStatus.stage = Stage.INITIALMINES;
+                        ChangeGameStatus(Stage.INITIALMINES);
                     }
                     return true;
                 }
@@ -120,27 +179,29 @@ namespace GaiaCore.Gaia
                     log = "FactionName is wrong";
                 }
             }
-            return false;                
+            return false;
         }
 
-        private bool ProcessSyntaxRandomSetup(string syntax,ref string log)
+        private bool ProcessSyntaxRandomSetup(string syntax, ref string log)
         {
             log = string.Empty;
             if (GameSyntax.setupGameRegex.IsMatch(syntax))
             {
                 var seed = syntax.Substring(GameSyntax.setupGame.Length).ParseToInt(0);
                 GameStart(syntax, seed);
-                GameStatus.stage = Stage.FACTIONSELECTION;
+                ChangeGameStatus(Stage.FACTIONSELECTION);
                 return true;
             }
             return false;
         }
 
-        public void Syntax(string syntax,out string log)
+        public void Syntax(string syntax, out string log)
         {
-            if(ProcessSyntax(syntax,out log))
+            if (ProcessSyntax(syntax, out log))
             {
                 UserActionLog += syntax.AddEnter();
+                UserActionLog += m_TailLog;
+                m_TailLog = string.Empty;
             }
         }
 
@@ -180,8 +241,10 @@ namespace GaiaCore.Gaia
             ALTList = ALTMgr.GetList();
             AllianceTileForKnowledge = ALTList.RandomRemove(random);
         }
-        private void SetupPlayer()
+        private void ChangeGameStatus(Stage stage)
         {
+            m_TailLog += "#" + stage.ToString().AddEnter();
+            GameStatus.stage = stage;
         }
         /// <summary>
         /// 实例化四个玩家

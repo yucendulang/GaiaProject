@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GaiaCore.Gaia.Tiles;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,6 +45,7 @@ namespace GaiaCore.Gaia
                 Academies.Add(new Academy());
             }
             StrongHold=new StrongHold();
+            GameTileList = new List<GameTiles>();
         }
 
         internal bool FinishIntialMines()
@@ -59,6 +61,7 @@ namespace GaiaCore.Gaia
         }
 
         public FactionName FactionName { get; }
+        public List<GameTiles> GameTileList { set; get; }
         private int m_credit;
         private int m_ore;
         private int m_knowledge;
@@ -117,7 +120,7 @@ namespace GaiaCore.Gaia
             }
         }
 
-        internal bool BuildMine(Map map, int row, int col, out string log, bool isValidateShipLevel = false)
+        internal bool BuildMine(Map map, int row, int col, out string log)
         {
             log = string.Empty;
             if (!(Mines.Count > 1 && m_credit > m_MineCreditCost && m_ore > m_MineOreCost))
@@ -135,7 +138,7 @@ namespace GaiaCore.Gaia
                 log = "该地点已经有人占领了";
                 return false;
             }
-            if (isValidateShipLevel&&!map.CalIsBuildValidate(row, col, FactionName, m_ShipLevel))
+            if (!map.CalIsBuildValidate(row, col, FactionName, m_ShipLevel))
             {
                 log = "航海距离不够";
                 return false;
@@ -143,6 +146,26 @@ namespace GaiaCore.Gaia
             //扣资源建建筑
             m_ore -= m_MineOreCost;
             m_credit -= m_MineCreditCost;
+            map.HexArray[row, col].Building = Mines.First();
+            map.HexArray[row, col].FactionBelongTo = FactionName;
+            Mines.RemoveAt(0);
+            return true;
+        }
+
+        internal bool BuildIntialMine(Map map, int row, int col, out string log)
+        {
+            log = string.Empty;
+            if (!(map.HexArray[row, col].OGTerrain == OGTerrain))
+            {
+                log = "地形不符";
+                return false;
+            }
+            if (!(map.HexArray[row, col].Building == null && map.HexArray[row, col].FactionBelongTo == null))
+            {
+                log = "该地点已经有人占领了";
+                return false;
+            }
+
             map.HexArray[row, col].Building = Mines.First();
             map.HexArray[row, col].FactionBelongTo = FactionName;
             Mines.RemoveAt(0);

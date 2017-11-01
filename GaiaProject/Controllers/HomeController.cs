@@ -20,16 +20,22 @@ namespace GaiaProject.Controllers
         }
         public IActionResult Index()
         {
-            var task =_userManager.GetUserAsync(HttpContext.User);
-            Task[] taskarray = new Task[] { task};
-            Task.WaitAll(taskarray, millisecondsTimeout:1000);
+
+
+
+            var task = _userManager.GetUserAsync(HttpContext.User);
+            Task[] taskarray = new Task[] { task };
+            Task.WaitAll(taskarray, millisecondsTimeout: 1000);
             if (task.Result != null)
             {
                 ViewData["Message"] = task.Result.UserName;
                 ViewData["GameList"] = GameMgr.GetAllGame(task.Result.UserName);
             }
-            //ViewData["Message"] = @"yucenyucen@126.com";
-            //ViewData["GameList"] = GameMgr.GetAllGame(@"yucenyucen@126.com");
+#if DEBUG
+            ViewData["Message"] = @"yucenyucen@126.com";
+            ViewData["GameList"] = GameMgr.GetAllGame(@"yucenyucen@126.com");
+#endif
+
             return View();
         }
 
@@ -113,7 +119,8 @@ namespace GaiaProject.Controllers
         public IActionResult RestoreData(string filename)
         {
             ViewData["nameList"] = string.Join(",", GameMgr.RestoreDictionary(filename));
-            return View();
+            return Redirect("/home/viewgame/" + "test01");
+            //return View();
         }
         public IActionResult GetAllGame()
         {

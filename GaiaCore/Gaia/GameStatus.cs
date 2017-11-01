@@ -20,11 +20,29 @@
         public bool m_IntialFlag;
 
         public int PlayerIndex { get => m_PlayerIndex - 1; }
+        public void SetPlayerIndexLast()
+        {
+            m_PlayerIndex = m_PlayerNumber;
+        }
 
         public void NextPlayer()
         {
             m_PlayerIndex++;
-            m_PlayerIndex = m_PlayerIndex % m_PlayerNumber;
+            if (m_PlayerIndex == m_PlayerNumber + 1)
+            {
+                m_PlayerIndex = 1;
+            }
+        }
+        /// <summary>
+        /// 倒叙选择
+        /// </summary>
+        public void NextPlayerReverse()
+        {
+            m_PlayerIndex--;
+            if (m_PlayerIndex == 0)
+            {
+                m_PlayerIndex = m_PlayerNumber;
+            }
         }
         /// <summary>
         /// 所有人都选完返回0
@@ -63,6 +81,8 @@
         RANDOMSETUP,
         FACTIONSELECTION,
         INITIALMINES,
-        SELECTROUNDBOOSTER
+        SELECTROUNDBOOSTER,
+        ROUNDINCOME,
+        ROUNDSTART
     }
 }
