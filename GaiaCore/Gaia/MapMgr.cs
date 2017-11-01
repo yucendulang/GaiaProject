@@ -277,7 +277,6 @@ namespace GaiaCore.Gaia
         }
 
 
-
         /// <summary>
         /// 根据中心点算出要操作的Hex块
         /// </summary>
@@ -309,6 +308,24 @@ namespace GaiaCore.Gaia
                 {x + 1 + i, y + 1},
                 {x + 2, y},
             };
+        }
+        public bool CalIsBuildValidate(int x, int y, FactionName name, int distance)
+        {
+            for (int i = Math.Max(x - distance, 0); i < Math.Min(x + distance, m_mapHeight); i++)
+            {
+                for (int j = Math.Max(y - distance, 0); j < Math.Min(j + distance, m_mapWidth); j++)
+                {
+                    if (Math.Sqrt((i - x) * (i - x) + (j - y) * (j - y)) <= distance)
+                    {
+                        if (HexArray[i, j].FactionBelongTo == name)
+                        {
+                            return true;
+                        }
+                    }
+
+                }
+            }
+            return false;
         }
     }
 }

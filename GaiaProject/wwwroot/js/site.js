@@ -7,13 +7,18 @@ function DrawMap() {
     console.log("DrawMap");
     //console.log(model);
     var array = model["map"]["hexArray"];
-    //console.log(array);
+    console.log(array);
     for (var i = 0; i < 20; i++) {
         for (var j = 0; j < 20; j++) {
 
             if (array[i][j] != null) {
-                console.log(i, j, array[i][j].ogTerrain, ConvertIntToColor(array[i][j].ogTerrain), array[i][j].isCenter);
+                //console.log(i, j, array[i][j].ogTerrain, ConvertIntToColor(array[i][j].ogTerrain), array[i][j].isCenter);
                 DrawOneHex(cxt, j, i, ConvertIntToColor(array[i][j].ogTerrain), array[i][j].isCenter, array[i][j]);
+                console.log(i, j, array[i][j].building);
+                if (array[i][j].building != null) {
+                    console.log(j, i, array[i][j].factionBelongTo);
+                    DrawMine(cxt, j, i, array[i][j].factionBelongTo);
+                }
             }
         }
     }
@@ -31,20 +36,22 @@ function DrawOneHex(ctx, col, row, color,isCenter,hex) {
     if (isCenter) {
         textSpaceSectorCenterName(ctx, loc[0], loc[1], hex.spaceSectorName)
     }
-    textHexName(ctx, loc[0], loc[1], String.fromCharCode(65 + row) + col)
+    textHexName(ctx, loc[0], loc[1], String.fromCharCode(65 + row) + col, color)
 
 }
-function textHexName(ctx, row, col, name) {
-    console.log("textHexName" +row + col + name);
+function textHexName(ctx, row, col, name, color) {
+    //console.log("textHexName" +row + col + name);
     ctx.beginPath();
     cxt.font = "15px Verdana";
-    cxt.fillStyle = "White";
+    cxt.fillStyle = ConvertBackGroundColorToTextColor(color);
     ctx.fillText(name, row - 15, col + 20);
     cxt.closePath();
 }
 
+
+
 function textSpaceSectorCenterName(ctx, row, col, name) {
-    console.log(row, col, "isCenter");
+    //console.log(row, col, "isCenter");
     ctx.beginPath();
     cxt.font = "18px Verdana";
     cxt.fillStyle = "White";
@@ -81,41 +88,101 @@ function makeHexPath(ctx, x, y, size, color) {
     ctx.stroke();
 }
 
+function DrawMine(ctx, row, col,name) {
+    var loc = hexCenter(row, col);
+
+    ctx.save();
+
+    ctx.beginPath();
+    ctx.moveTo(loc[0], loc[1] - 10);
+    ctx.lineTo(loc[0] + 10, loc[1]);
+    ctx.lineTo(loc[0] + 10, loc[1] + 10);
+    ctx.lineTo(loc[0] - 10, loc[1] + 10);
+    ctx.lineTo(loc[0] - 10, loc[1]);
+    ctx.closePath();
+
+    fillBuilding(ctx, name);
+
+    ctx.restore();
+}
+
+function fillBuilding(ctx, name) {
+    ctx.fillStyle = ConvertRaceIntToColor(name);
+    ctx.fill();
+
+    ctx.strokeStyle = "Black";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+}
 
 function ConvertIntToColor(i) {
     switch (i) {
         case 0:
-            return "Blue";
-            break;
+            return "blue";
         case 1:
-            return "Red";
-            break;
+            return "red";
         case 2:
-            return "Orange";
-            break;
+            return "orange";
         case 3:
-            return "Yellow";
-            break;
+            return "yellow";
         case 4:
-            return "Brown";
-            break;
+            return "brown";
         case 5:
-            return "Black";
-            break;
+            return "black";
         case 6:
-            return "White";
-            break;
+            return "white";
         case 100:
-            return "Green";
-            break;
+            return "green";
         case 200:
-            return "Purple";
-            break;
+            return "purple";
         case 300:
-            return "Grey";
-            break;
+            return "grey";
         default:
-            return "Grey";
-            break;
+            return "grey";
+    }
+}
+
+function ConvertRaceIntToColor(i) {
+    switch (i) {
+        case 0:
+            return "darkslateblue";
+        case 1:
+            return "darkslateblue";
+        case 2:
+            return "burlywood";
+        case 3:
+            return "burlywood";
+        case 4:
+            return "darkslategray";
+        case 5:
+            return "darkslategray";
+        case 6:
+            return "darkorange";
+        case 7:
+            return "darkorange";
+        case 8:
+            return "tomato";
+        case 9:
+            return "tomato";
+        case 10:
+            return "whitesmoke";
+        case 11:
+            return "whitesmoke";
+        case 12:
+            return "wheat";
+        case 13:
+            return "wheat";
+        default:
+            return "black";
+
+
+    }
+}
+
+function ConvertBackGroundColorToTextColor(color) {
+    if (color == "white" || color == "yellow") {
+        return "black";
+    } else {
+        return "white";
     }
 }

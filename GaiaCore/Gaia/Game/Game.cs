@@ -45,7 +45,7 @@ namespace GaiaCore.Gaia
                         log = "FactionName has been choosen!";
                         return false;
                     }
-                  
+
                     return true;
                 }
                 else
@@ -53,11 +53,45 @@ namespace GaiaCore.Gaia
                     log = "FactionName is wrong";
                     return false;
                 }
-            }else if (GameSyntax.buildRegex.IsMatch(syntax))
-            {
-                log = "build syntax not complete!";
-                return false;
             }
+            else if (GameSyntax.commandRegex.IsMatch(syntax))
+            {
+                var factionName = syntax.Split(':').First();
+                if (!Enum.TryParse(factionName, true, out FactionName result))
+                {
+                    log = "FactionName is wrong";
+                    return false;
+                }
+                var faction = FactionList.Find(x => x.FactionName == result);
+                if (faction == null)
+                {
+                    log = "FactionName doesn't exit";
+                    return false;
+                }
+                var command = syntax.Split(':').Last();
+                ///处理Build命令
+                if (GameSyntax.buildRegex.IsMatch(command))
+                {
+                    ///Build A2
+                    var position = command.Substring(GameSyntax.factionSelection.Length + 1);
+                    var row = position.Substring(0, 1).ToCharArray().First() - 'a';
+                    var col = position.Substring(1).ParseToInt(0);
+                    if (faction.BuildMine(Map, row, col, out log))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    log = factionName + ":Syntax is wrong";
+                    return false;
+                }
+            }
+
             else
             {
                 log = "Syntax is wrong";
@@ -77,23 +111,19 @@ namespace GaiaCore.Gaia
         {
             switch (faction)
             {
-                case FactionName.Ambas:
-                    FactionList.Add(new Faction(faction));
+                case FactionName.Terraner:
+                    FactionList.Add(new Terraner());
                     break;
-                case FactionName.BalTak:
-                    FactionList.Add(new Faction(faction));
+                case FactionName.Taklons:
+                    FactionList.Add(new Taklons());
                     break;
-                case FactionName.Firaks:
-                    FactionList.Add(new Faction(faction));
+                case FactionName.MadAndroid:
+                    FactionList.Add(new MadAndroid());
                     break;
                 case FactionName.Geoden:
-                    FactionList.Add(new Faction(faction));
-                    break;
-                case FactionName.Gleen:
-                    FactionList.Add(new Faction(faction));
+                    FactionList.Add(new Geoden());
                     break;
                 default:
-                    FactionList.Add(new Faction(faction));
                     break;
             };
         }

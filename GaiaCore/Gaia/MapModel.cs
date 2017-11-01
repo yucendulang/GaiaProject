@@ -40,10 +40,11 @@ namespace GaiaCore.Gaia
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string SpaceSectorName { set; get; }
+        [JsonProperty]
         /// <summary>
         /// 属于哪个种族
         /// </summary>
-        public Faction FactionBelongTo { set; get; }
+        public FactionName? FactionBelongTo { set; get; }
         /// <summary>
         /// 对外展示的坐标名
         /// </summary>
@@ -53,6 +54,8 @@ namespace GaiaCore.Gaia
         /// </summary>
         [JsonProperty]
         public bool IsCenter { set; get; }
+        [JsonProperty]
+        public Building Building { set; get; }
     }
     /// <summary>
     /// Space Sector 含义参照说明书 共计十块

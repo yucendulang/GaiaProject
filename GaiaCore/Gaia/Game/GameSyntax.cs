@@ -11,7 +11,7 @@ namespace GaiaCore.Gaia
         /// 游戏开局的语义
         /// </summary>
         public const string setupGame = "setupgame seed";
-        public  static Regex setupGameRegex = new Regex(setupGame + "[0-9]+");
+        public static Regex setupGameRegex = new Regex(setupGame + "[0-9]+");
         /// <summary>
         /// Faction selection
         /// </summary>
@@ -20,6 +20,10 @@ namespace GaiaCore.Gaia
         ///<summary>
         public const string build = "build";
         public static Regex buildRegex = new Regex(build + " [a-z][0-9]{1,2}");
+        /// <summary>
+        /// 玩家命令正则
+        /// </summary>
+        public static Regex commandRegex = new Regex("[a-z]+:*");
 
     }
 }

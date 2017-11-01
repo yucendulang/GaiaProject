@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace GaiaCore.Gaia
 {
-    public class Faction
+    public abstract class Faction
     {
         public Faction(FactionName name)
         {
@@ -22,7 +22,7 @@ namespace GaiaCore.Gaia
             m_EconomicLevel = 0;
             m_GaiaLevel = 0;
             m_ScienceLevel = 0;
-            m_ShipLevel = 0;
+            m_ShipLevel = 1;
             Mines = new List<Mine>();
             for (int i = 0; i < 8; i++)
             {
@@ -59,6 +59,9 @@ namespace GaiaCore.Gaia
         private int m_GaiaLevel;
         private int m_EconomicLevel;
         private int m_ScienceLevel;
+        private const int m_MineOreCost=1;
+        private const int m_MineCreditCost = 2;
+
 
         public virtual void CalIncome()
         {
@@ -98,6 +101,38 @@ namespace GaiaCore.Gaia
             {
                 m_credit += 16;
             }
+        }
+
+        internal bool BuildMine(Map map, int row, int col, out string log, bool isValidateShipLevel = false)
+        {
+            log = string.Empty;
+            if (!(Mines.Count > 1 && m_credit > m_MineCreditCost && m_ore > m_MineOreCost))
+            {
+                log = "资源不够";
+                return false;
+            }
+            if (!(map.HexArray[row, col].OGTerrain == OGTerrain))
+            {
+                log = "地形不符";
+                return false;
+            }
+            if (!(map.HexArray[row, col].Building == null && map.HexArray[row, col].FactionBelongTo == null))
+            {
+                log = "该地点已经有人占领了";
+                return false;
+            }
+            if (isValidateShipLevel&&!map.CalIsBuildValidate(row, col, FactionName, m_ShipLevel))
+            {
+                log = "航海距离不够";
+                return false;
+            }
+            //扣资源建建筑
+            m_ore -= m_MineOreCost;
+            m_credit -= m_MineCreditCost;
+            map.HexArray[row, col].Building = Mines.First();
+            map.HexArray[row, col].FactionBelongTo = FactionName;
+            Mines.RemoveAt(0);
+            return true;
         }
 
         protected virtual void CalKnowledgeIncome()
@@ -162,6 +197,7 @@ namespace GaiaCore.Gaia
         public int GaiaLevel { get => m_GaiaLevel;}
         public int EconomicLevel { get => m_EconomicLevel; }
         public int ScienceLevel { get => m_ScienceLevel; }
+        public abstract Terrain OGTerrain { get; }
     }
     public abstract class Building
     {
@@ -220,21 +256,5 @@ namespace GaiaCore.Gaia
         }
     }
 
-    public enum FactionName
-    {
-        Lantida,
-        Terraner,
-        Ambas,
-        Taklons,
-        Firaks,
-        MadAndroid,
-        BalTak,
-        Geoden,
-        Hive,
-        HadschHalla,
-        Itar,
-        Nevla,
-        Gleen,
-        Xenos
-    }
+
 }
