@@ -24,7 +24,7 @@ namespace GaiaCore.Gaia
             m_ScienceLevel = 0;
             m_ShipLevel = 1;
             Mines = new List<Mine>();
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < m_MineCount; i++)
             {
                 Mines.Add(new Mine());
             }
@@ -45,6 +45,19 @@ namespace GaiaCore.Gaia
             }
             StrongHold=new StrongHold();
         }
+
+        internal bool FinishIntialMines()
+        {
+            if (m_MineCount - Mines.Count == 2)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public FactionName FactionName { get; }
         private int m_credit;
         private int m_ore;
@@ -61,6 +74,7 @@ namespace GaiaCore.Gaia
         private int m_ScienceLevel;
         private const int m_MineOreCost=1;
         private const int m_MineCreditCost = 2;
+        private const int m_MineCount=8;
 
 
         public virtual void CalIncome()

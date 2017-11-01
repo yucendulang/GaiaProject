@@ -22,44 +22,46 @@ namespace GaiaCore.Gaia
         }
         public bool ProcessSyntax(string syntax, out string log)
         {
-            log = string.Empty;
+            log = "Syntax is wrong";
             syntax = syntax.ToLower();
 
-            if (GameSyntax.setupGameRegex.IsMatch(syntax))
+            switch (GameStatus.stage)
             {
-                var seed = syntax.Substring(GameSyntax.setupGame.Length).ParseToInt(0);
-                GameStart(syntax, seed);
-                return true;
-            }
-            else if (GameSyntax.factionSelectionRegex.IsMatch(syntax))
-            {
-                var faction = syntax.Substring(GameSyntax.factionSelection.Length + 1);
-                if (Enum.TryParse(faction, true, out FactionName result))
-                {
-                    if (!FactionList.Exists(x => x.FactionName == result))
+                case Stage.RANDOMSETUP:
+                    return ProcessSyntaxRandomSetup(syntax, ref log);
+                case Stage.FACTIONSELECTION:
+                    return ProcessSyntaxFactionSelect(syntax, ref log);
+                case Stage.INITIALMINES:
+                    var ret=ProcessSyntaxIntialMines(syntax, ref log);
+                    if (ret)
                     {
-                        SetupFaction(result);
+                        GameStatus.NextPlayerForIntial();
                     }
-                    else
-                    {
-                        log = "FactionName has been choosen!";
-                        return false;
+                    if(ret&& FactionList.All(x=>x.FinishIntialMines())){
+                        GameStatus.stage = Stage.SELECTROUNDBOOSTER;
                     }
-
-                    return true;
-                }
-                else
-                {
-                    log = "FactionName is wrong";
+                    return ret;
+                case Stage.SELECTROUNDBOOSTER:
+                    log = "未完成";
                     return false;
-                }
+                default:
+                    return false;
             }
-            else if (GameSyntax.commandRegex.IsMatch(syntax))
+        }     
+
+        private bool ProcessSyntaxIntialMines(string syntax, ref string log)
+        {
+            if (GameSyntax.commandRegex.IsMatch(syntax))
             {
                 var factionName = syntax.Split(':').First();
                 if (!Enum.TryParse(factionName, true, out FactionName result))
                 {
                     log = "FactionName is wrong";
+                    return false;
+                }
+                if (!(FactionList[GameStatus.PlayerIndex].FactionName == result))
+                {
+                    log = string.Format("不是种族{0}行动轮,是{1}行动轮", factionName, FactionList[GameStatus.PlayerIndex].FactionName.ToString());
                     return false;
                 }
                 var faction = FactionList.Find(x => x.FactionName == result);
@@ -85,18 +87,53 @@ namespace GaiaCore.Gaia
                         return false;
                     }
                 }
+                
+            }
+            return false;
+        }
+
+        private bool ProcessSyntaxFactionSelect(string syntax, ref string log)
+        {
+            log = string.Empty;
+            if (GameSyntax.factionSelectionRegex.IsMatch(syntax))
+            {
+                var faction = syntax.Substring(GameSyntax.factionSelection.Length + 1);
+                if (Enum.TryParse(faction, true, out FactionName result))
+                {
+                    if (!FactionList.Exists(x => x.FactionName == result))
+                    {
+                        SetupFaction(result);
+                    }
+                    else
+                    {
+                        log = "FactionName has been choosen!";
+                        return false;
+                    }
+                    if (FactionList.Count == 4)
+                    {
+                        GameStatus.stage = Stage.INITIALMINES;
+                    }
+                    return true;
+                }
                 else
                 {
-                    log = factionName + ":Syntax is wrong";
-                    return false;
+                    log = "FactionName is wrong";
                 }
             }
+            return false;                
+        }
 
-            else
+        private bool ProcessSyntaxRandomSetup(string syntax,ref string log)
+        {
+            log = string.Empty;
+            if (GameSyntax.setupGameRegex.IsMatch(syntax))
             {
-                log = "Syntax is wrong";
-                return false;
+                var seed = syntax.Substring(GameSyntax.setupGame.Length).ParseToInt(0);
+                GameStart(syntax, seed);
+                GameStatus.stage = Stage.FACTIONSELECTION;
+                return true;
             }
+            return false;
         }
 
         public void Syntax(string syntax,out string log)

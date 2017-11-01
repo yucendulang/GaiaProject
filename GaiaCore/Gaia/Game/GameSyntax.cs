@@ -23,7 +23,7 @@ namespace GaiaCore.Gaia
         /// <summary>
         /// 玩家命令正则
         /// </summary>
-        public static Regex commandRegex = new Regex("[a-z]+:*");
+        public static Regex commandRegex = new Regex("[a-z]+:.+");
 
     }
 }
