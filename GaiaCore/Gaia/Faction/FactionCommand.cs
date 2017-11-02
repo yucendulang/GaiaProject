@@ -68,7 +68,7 @@ namespace GaiaCore.Gaia
                 log = string.Format("该地点还不属于{0}", FactionName.ToString());
                 return false;
             }
-            if (!Enum.TryParse(buildStr, out BuildingSyntax syn))
+            if (!Enum.TryParse(buildStr, true, out BuildingSyntax syn))
             {
                 log = string.Format("没有该建筑物", buildStr);
                 return false;
@@ -123,13 +123,14 @@ namespace GaiaCore.Gaia
             ReturnBuilding(map.HexArray[row, col].Building);
             map.HexArray[row, col].Building = build;
             RemoveBuilding(build);
+            GaiaGame.SetLeechPowerQueue(FactionName,row, col);
 
             return true;
         }
 
         private void RemoveBuilding(Building building)
         {
-            switch (building.GetType().ToString())
+            switch (building.GetType().Name)
             {
                 case "Mine":
                     Mines.RemoveAt(0);
@@ -153,7 +154,7 @@ namespace GaiaCore.Gaia
 
         private void ReturnBuilding(Building building)
         {
-            switch (building.GetType().ToString())
+            switch (building.GetType().Name)
             {
                 case "Mine":
                     Mines.Add(building as Mine);

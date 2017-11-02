@@ -327,5 +327,29 @@ namespace GaiaCore.Gaia
             }
             return false;
         }
+
+        public int CalHighestPowerBuilding(int x,int y,FactionName name)
+        {
+            //吸魔力大小范围
+            var distance = 2;
+            var res = 0;
+            for (int i = Math.Max(x - distance, 0); i < Math.Min(x + distance, m_mapHeight); i++)
+            {
+                for (int j = Math.Max(y - distance, 0); j < Math.Min(j + distance, m_mapWidth); j++)
+                {
+                    if (Math.Sqrt((i - x) * (i - x) + (j - y) * (j - y)) <= distance)
+                    {
+                        System.Diagnostics.Debug.WriteLine("row:" + i + " col:" + j);
+
+                        if (HexArray[i, j] != null && HexArray[i, j].FactionBelongTo == name)
+                        {
+                            res = Math.Max(res, HexArray[i, j].Building.MagicLevel);
+                        }
+                    }
+
+                }
+            }
+            return res;
+        }
     }
 }

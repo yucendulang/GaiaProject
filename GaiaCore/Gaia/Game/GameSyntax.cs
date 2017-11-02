@@ -30,13 +30,13 @@ namespace GaiaCore.Gaia
         /// <summary>
         /// 获取RoundBooster正则
         /// </summary>
-        public const string rbt = "+RBT";
+        public const string rbt = "+rbt";
         public static Regex RBTRegex = new Regex("\\+rbt[0-9]");
         /// <summary>
         /// Update语句正则
         /// </summary>
-        public const string update = "update";
-        public static Regex updateRegex = new Regex(update + " ([a-z][0-9]{1,2}) to ([a-z]2)");
+        public const string upgrade = "upgrade";
+        public static Regex upgradeRegex = new Regex(upgrade + " ([a-z][0-9]{1,2}) to ([a-z]{1,2})");
 
     }
 

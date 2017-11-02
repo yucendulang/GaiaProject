@@ -16,8 +16,17 @@ function DrawMap() {
                 DrawOneHex(cxt, j, i, ConvertIntToColor(array[i][j].ogTerrain), array[i][j].isCenter, array[i][j]);
                 console.log(i, j, array[i][j].building);
                 if (array[i][j].building !== null) {
-                    console.log(j, i, array[i][j].factionBelongTo);
-                    DrawMine(cxt, j, i, array[i][j].factionBelongTo);
+                    //画房子
+                    switch (array[i][j].building.name) {
+                        case "Mine":
+                            DrawMine(cxt, j, i, array[i][j].factionBelongTo);
+                            break;
+                        case "TradeCenter":
+                            DrawTradingPost(cxt, j, i, array[i][j].factionBelongTo);
+                            break;
+                        default:
+                            console.log(array[i][j].building.name+"不支持");
+                    }             
                 }
             }
         }
@@ -106,7 +115,7 @@ function DrawMine(ctx, row, col,name) {
     ctx.restore();
 }
 
-function drawTradingPost(ctx, row, col, name) {
+function DrawTradingPost(ctx, row, col, name) {
     var loc = hexCenter(row, col);
 
     ctx.save();

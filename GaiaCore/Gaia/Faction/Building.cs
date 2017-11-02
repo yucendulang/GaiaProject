@@ -8,6 +8,7 @@ namespace GaiaCore.Gaia
     {
         public abstract Type BaseBuilding { get; }
         public abstract int MagicLevel { get; }
+        public virtual string Name => GetType().Name;
     }
 
     public class Mine : Building

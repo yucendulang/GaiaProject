@@ -6,7 +6,7 @@ namespace GaiaCore.Gaia
 {
     public class Taklons : Faction
     {
-        public Taklons():base(FactionName.Taklons)
+        public Taklons(GaiaGame gg) :base(FactionName.Taklons,gg)
         {
 
         }

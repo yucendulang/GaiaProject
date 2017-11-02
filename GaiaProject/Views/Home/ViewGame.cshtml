@@ -32,6 +32,10 @@
     {
         <p>@item.FactionName|Credit:@item.Credit|Ore:@item.Ore|QICs:@item.QICs|Knowledge:@item.Knowledge|Power1:@item.PowerToken1|Power2:@item.PowerToken2|Power3:@item.PowerToken3</p>
         <p>GameTiles:(@string.Join(",", item.GameTileList.Select(x => x.desc)))</p>
+        @foreach(var leech in item.LeechPowerQueue)
+        {
+            <li>From @leech.Item2 leech @leech.Item1 power</li>
+        }
     }
     <h1>Round Booster</h1>
     @foreach (var item in Model.RBTList)

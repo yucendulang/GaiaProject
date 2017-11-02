@@ -64,6 +64,10 @@ namespace GaiaCore.Gaia
                     return ret;
                 case Stage.ROUNDSTART:
                     ret = ProcessSyntaxCommand(syntax, ref log);
+                    if (ret)
+                    {
+                        GameStatus.NextPlayer();
+                    }
                     return ret;
 
                 default:
@@ -88,9 +92,9 @@ namespace GaiaCore.Gaia
 
             foreach(var item in commandList)
             {
-                if (GameSyntax.updateRegex.IsMatch(item))
+                if (GameSyntax.upgradeRegex.IsMatch(item))
                 {
-                    var match=GameSyntax.updateRegex.Match(item);
+                    var match=GameSyntax.upgradeRegex.Match(item);
                     var pos=match.Groups[1].Value;
                     var buildStr = match.Groups[2].Value;
                     ConvertPosToRowCol(pos, out int row, out int col);
@@ -255,16 +259,16 @@ namespace GaiaCore.Gaia
             switch (faction)
             {
                 case FactionName.Terraner:
-                    FactionList.Add(new Terraner());
+                    FactionList.Add(new Terraner(this));
                     break;
                 case FactionName.Taklons:
-                    FactionList.Add(new Taklons());
+                    FactionList.Add(new Taklons(this));
                     break;
                 case FactionName.MadAndroid:
-                    FactionList.Add(new MadAndroid());
+                    FactionList.Add(new MadAndroid(this));
                     break;
                 case FactionName.Geoden:
-                    FactionList.Add(new Geoden());
+                    FactionList.Add(new Geoden(this));
                     break;
                 default:
                     break;
@@ -291,6 +295,19 @@ namespace GaiaCore.Gaia
             m_TailLog += "#" + stage.ToString().AddEnter();
             GameStatus.stage = stage;
         }
+
+        public void SetLeechPowerQueue(FactionName factionName,int row,int col)
+        {
+            foreach(var item in FactionList.Where(x => !x.FactionName.Equals(factionName)))
+            {
+                var power=Map.CalHighestPowerBuilding(row,col,item.FactionName);
+                if (power != 0)
+                {
+                    item.LeechPowerQueue.Enqueue(new Tuple<int, FactionName>(power, factionName));
+                }
+            }
+        }
+
         /// <summary>
         /// 实例化四个玩家
         /// </summary>

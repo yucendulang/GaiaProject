@@ -6,7 +6,7 @@ namespace GaiaCore.Gaia
 {
     public class Geoden : Faction
     {
-        public Geoden():base(FactionName.Geoden)
+        public Geoden(GaiaGame gg) :base(FactionName.Geoden,gg)
         {
 
         }
