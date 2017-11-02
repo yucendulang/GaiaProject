@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GaiaCore.Gaia
 {
-    public abstract class Faction
+    public  abstract partial class Faction
     {
         public Faction(FactionName name)
         {
@@ -78,6 +78,20 @@ namespace GaiaCore.Gaia
         private const int m_MineOreCost=1;
         private const int m_MineCreditCost = 2;
         private const int m_MineCount=8;
+        private const int m_TradeCenterOreCost = 2;
+        private const int m_TradeCenterCreditCostCluster = 3;
+        private const int m_TradeCenterCreditCostAlone = 6;
+        private const int m_TradeCenterCount = 4;
+        private const int m_ReaserchLabOreCost = 3;
+        private const int m_ReaserchLabCreditCost = 5;
+        private const int m_ReaserchLabCount = 3;
+        private const int m_AcademyOreCost = 6;
+        private const int m_AcademyCreditCost = 6;
+        private const int m_AcademyCount = 2;
+        private const int m_StrongHoldOreCost = 4;
+        private const int m_StrongHoldCreditCost = 6;
+        private const int m_StrongHoldCount = 1;
+
 
 
         public virtual void CalIncome()
@@ -100,7 +114,8 @@ namespace GaiaCore.Gaia
             {
                 m_ore += 8 - Mines.Count;
             }
-            return;
+
+            m_ore+=GameTileList.Sum(x => x.GetOreIncome());
         }
         protected virtual void CalCreditIncome()
         {
@@ -118,60 +133,10 @@ namespace GaiaCore.Gaia
             {
                 m_credit += 16;
             }
+            m_credit += GameTileList.Sum(x => x.GetCreditIncome());
         }
 
-        internal bool BuildMine(Map map, int row, int col, out string log)
-        {
-            log = string.Empty;
-            if (!(Mines.Count > 1 && m_credit > m_MineCreditCost && m_ore > m_MineOreCost))
-            {
-                log = "资源不够";
-                return false;
-            }
-            if (!(map.HexArray[row, col].OGTerrain == OGTerrain))
-            {
-                log = "地形不符";
-                return false;
-            }
-            if (!(map.HexArray[row, col].Building == null && map.HexArray[row, col].FactionBelongTo == null))
-            {
-                log = "该地点已经有人占领了";
-                return false;
-            }
-            if (!map.CalIsBuildValidate(row, col, FactionName, m_ShipLevel))
-            {
-                log = "航海距离不够";
-                return false;
-            }
-            //扣资源建建筑
-            m_ore -= m_MineOreCost;
-            m_credit -= m_MineCreditCost;
-            map.HexArray[row, col].Building = Mines.First();
-            map.HexArray[row, col].FactionBelongTo = FactionName;
-            Mines.RemoveAt(0);
-            return true;
-        }
-
-        internal bool BuildIntialMine(Map map, int row, int col, out string log)
-        {
-            log = string.Empty;
-            if (!(map.HexArray[row, col].OGTerrain == OGTerrain))
-            {
-                log = "地形不符";
-                return false;
-            }
-            if (!(map.HexArray[row, col].Building == null && map.HexArray[row, col].FactionBelongTo == null))
-            {
-                log = "该地点已经有人占领了";
-                return false;
-            }
-
-            map.HexArray[row, col].Building = Mines.First();
-            map.HexArray[row, col].FactionBelongTo = FactionName;
-            Mines.RemoveAt(0);
-            return true;
-        }
-
+      
         protected virtual void CalKnowledgeIncome()
         {
             m_knowledge += 4 - ReaserchLabs.Count;
@@ -179,6 +144,8 @@ namespace GaiaCore.Gaia
             {
                 m_knowledge += 2;
             }
+
+            m_knowledge += GameTileList.Sum(x => x.GetKnowledgeIncome());
         }
 
         protected virtual void CalQICIncome()
@@ -187,6 +154,8 @@ namespace GaiaCore.Gaia
             {
                 m_QICs += 1;
             }
+
+            m_QICs += GameTileList.Sum(x => x.GetQICIncome());
         }
 
         protected virtual void CalPowerIncome()
@@ -195,6 +164,8 @@ namespace GaiaCore.Gaia
             {
                 PowerIncrease(4);
             }
+
+            PowerIncrease(GameTileList.Sum(x => x.GetPowerIncome()));
         }
 
         protected virtual void PowerIncrease(int i)
@@ -235,62 +206,6 @@ namespace GaiaCore.Gaia
         public int EconomicLevel { get => m_EconomicLevel; }
         public int ScienceLevel { get => m_ScienceLevel; }
         public abstract Terrain OGTerrain { get; }
-    }
-    public abstract class Building
-    {
-        public abstract int MagicLevel { get; }
-    }
-
-    public class Mine:Building
-    {
-        public override int MagicLevel { get
-            {
-                return 1;
-            }
-        }
-    }
-    public class TradeCenter : Building
-    {
-        public override int MagicLevel
-        {
-            get
-            {
-                return 2;
-            }
-        }
-    }
-
-    public class ReaserchLab : Building
-    {
-        public override int MagicLevel
-        {
-            get
-            {
-                return 2;
-            }
-        }
-    }
-
-    public class Academy : Building
-    {
-        public override int MagicLevel
-        {
-            get
-            {
-                return 3;
-            }
-        }
-    }
-
-    public class StrongHold : Building
-    {
-        public override int MagicLevel
-        {
-            get
-            {
-                return 3;
-            }
-        }
     }
 
 

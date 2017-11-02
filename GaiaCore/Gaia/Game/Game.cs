@@ -26,7 +26,7 @@ namespace GaiaCore.Gaia
         {
             log = string.Empty;
             if (syntax.StartsWith("#"))
-                return true;
+                return false;
             syntax = syntax.ToLower();
             bool ret;
             switch (GameStatus.stage)
@@ -59,12 +59,50 @@ namespace GaiaCore.Gaia
                         ChangeGameStatus(Stage.ROUNDINCOME);
                         FactionList.ForEach(x => x.CalIncome());
                         ChangeGameStatus(Stage.ROUNDSTART);
+                        GameStatus.SetPlayerIndexFirst();
                     }
+                    return ret;
+                case Stage.ROUNDSTART:
+                    ret = ProcessSyntaxCommand(syntax, ref log);
                     return ret;
 
                 default:
                     return false;
             }
+        }
+
+        private bool ProcessSyntaxCommand(string syntax, ref string log)
+        {
+            if (!(ValidateSyntaxCommand(syntax, ref log, out string command, out Faction faction)))
+            {
+                return false;
+            }
+            var commandList = command.Split('.');
+            //非免费行动只能执行一个
+            var NoneFreeActionCount=commandList.Sum(y => GameFreeSyntax.GetRegexList().Exists(x => x.IsMatch(y)) ? 0 : 1);
+            if (NoneFreeActionCount != 1)
+            {
+                log = "能且只能执行一个普通行动";
+                return false;
+            }
+
+            foreach(var item in commandList)
+            {
+                if (GameSyntax.updateRegex.IsMatch(item))
+                {
+                    var match=GameSyntax.updateRegex.Match(item);
+                    var pos=match.Groups[1].Value;
+                    var buildStr = match.Groups[2].Value;
+                    ConvertPosToRowCol(pos, out int row, out int col);
+                    if(!faction.UpdateBuilding(Map, row, col, buildStr, out log))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+
         }
 
         private bool ProcessSyntaxRoundBoosterSelect(string syntax, ref string log)
@@ -73,7 +111,7 @@ namespace GaiaCore.Gaia
             {
                 return false;
             }
-            ///处理Build命令
+            ///处理SelectRBT命令
             if (!GameSyntax.RBTRegex.IsMatch(command))
             {
                 log = "命令错误";
@@ -107,8 +145,9 @@ namespace GaiaCore.Gaia
             }
             ///Build A2
             var position = command.Substring(GameSyntax.factionSelection.Length + 1);
-            var row = position.Substring(0, 1).ToCharArray().First() - 'a';
-            var col = position.Substring(1).ParseToInt(0);
+
+            ConvertPosToRowCol(position, out int row, out int col);
+
             if (faction.BuildIntialMine(Map, row, col, out log))
             {
                 return true;
@@ -118,6 +157,12 @@ namespace GaiaCore.Gaia
                 return false;
             }
 
+        }
+
+        private static void ConvertPosToRowCol(string position, out int row, out int col)
+        {
+            row = position.Substring(0, 1).ToCharArray().First() - 'a';
+            col = position.Substring(1).ParseToInt(0);
         }
 
         public bool ValidateSyntaxCommand(string syntax, ref string log, out string command, out Faction faction)

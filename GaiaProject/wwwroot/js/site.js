@@ -11,11 +11,11 @@ function DrawMap() {
     for (var i = 0; i < 20; i++) {
         for (var j = 0; j < 20; j++) {
 
-            if (array[i][j] != null) {
+            if (array[i][j] !== null) {
                 //console.log(i, j, array[i][j].ogTerrain, ConvertIntToColor(array[i][j].ogTerrain), array[i][j].isCenter);
                 DrawOneHex(cxt, j, i, ConvertIntToColor(array[i][j].ogTerrain), array[i][j].isCenter, array[i][j]);
                 console.log(i, j, array[i][j].building);
-                if (array[i][j].building != null) {
+                if (array[i][j].building !== null) {
                     console.log(j, i, array[i][j].factionBelongTo);
                     DrawMine(cxt, j, i, array[i][j].factionBelongTo);
                 }
@@ -106,6 +106,28 @@ function DrawMine(ctx, row, col,name) {
     ctx.restore();
 }
 
+function drawTradingPost(ctx, row, col, name) {
+    var loc = hexCenter(row, col);
+
+    ctx.save();
+
+    ctx.beginPath();
+    ctx.moveTo(loc[0], loc[1] - 20);
+    ctx.lineTo(loc[0] + 10, loc[1] - 10);
+    ctx.lineTo(loc[0] + 10, loc[1] - 3);
+    ctx.lineTo(loc[0] + 20, loc[1] - 3);
+    ctx.lineTo(loc[0] + 20, loc[1] + 10);
+    ctx.lineTo(loc[0] - 10, loc[1] + 10);
+    ctx.lineTo(loc[0] - 10, loc[1]);
+    ctx.lineTo(loc[0] - 10, loc[1] - 10);
+    ctx.closePath();
+
+    fillBuilding(ctx, name);
+
+    ctx.restore();
+}
+
+
 function fillBuilding(ctx, name) {
     ctx.fillStyle = ConvertRaceIntToColor(name);
     ctx.fill();
@@ -180,7 +202,7 @@ function ConvertRaceIntToColor(i) {
 }
 
 function ConvertBackGroundColorToTextColor(color) {
-    if (color == "white" || color == "yellow") {
+    if (color === "white" || color === "yellow") {
         return "black";
     } else {
         return "white";

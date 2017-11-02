@@ -25,6 +25,11 @@
             m_PlayerIndex = m_PlayerNumber;
         }
 
+        public void SetPlayerIndexFirst()
+        {
+            m_PlayerIndex = 1;
+        }
+
         public void NextPlayer()
         {
             m_PlayerIndex++;

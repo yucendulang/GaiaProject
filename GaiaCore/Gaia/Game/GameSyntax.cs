@@ -32,5 +32,22 @@ namespace GaiaCore.Gaia
         /// </summary>
         public const string rbt = "+RBT";
         public static Regex RBTRegex = new Regex("\\+rbt[0-9]");
+        /// <summary>
+        /// Update语句正则
+        /// </summary>
+        public const string update = "update";
+        public static Regex updateRegex = new Regex(update + " ([a-z][0-9]{1,2}) to ([a-z]2)");
+
+    }
+
+    public static class GameFreeSyntax
+    {
+        public static List<Regex> GetRegexList()
+        {
+            var ret = new List<Regex>();
+            ret.Add(burningRegex);
+            return ret;
+        } 
+        public static Regex burningRegex = new Regex("burn [0-9]");
     }
 }
