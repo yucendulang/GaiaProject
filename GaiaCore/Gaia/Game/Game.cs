@@ -63,16 +63,39 @@ namespace GaiaCore.Gaia
                     }
                     return ret;
                 case Stage.ROUNDSTART:
-                    ret = ProcessSyntaxCommand(syntax, ref log);
-                    if (ret)
+                    ///吸魔力
+                    if (GameSyntax.leechPowerRegex.IsMatch(syntax))
                     {
-                        GameStatus.NextPlayer();
+                        ret = ProcessSyntaxLeechPower(syntax, ref log);
+                        return ret;
                     }
-                    return ret;
-
+                    else
+                    {
+                        ret = ProcessSyntaxCommand(syntax, ref log);
+                        if (ret)
+                        {
+                            GameStatus.NextPlayer();
+                        }
+                        return ret;
+                    }
                 default:
                     return false;
             }
+        }
+
+        private bool ProcessSyntaxLeechPower(string syntax, ref string log)
+        {
+            if (!(ValidateSyntaxCommand(syntax, ref log, out string command, out Faction faction)))
+            {
+                return false;
+            }
+            var match = GameSyntax.leechPowerRegex.Match(syntax);
+            var isLeech = match.Groups[1].Value.Equals(GameSyntax.leech);
+            var power = match.Groups[2].Value.ParseToInt();
+            var factionFromStr = match.Groups[3].Value;
+            Enum.TryParse(factionFromStr, true, out FactionName factionFrom);
+            faction.LeechPower(power, factionFrom, isLeech);
+            return true;
         }
 
         private bool ProcessSyntaxCommand(string syntax, ref string log)
@@ -196,6 +219,11 @@ namespace GaiaCore.Gaia
                 log = "FactionName doesn't exit";
                 return false;
             }
+            if (faction.LeechPowerQueue.Count != 0)
+            {
+                log = "必须先执行吸取魔力行动";
+                return false;
+            }
             command = syntax.Split(':').Last();
             return true;
         }
@@ -303,7 +331,7 @@ namespace GaiaCore.Gaia
                 var power=Map.CalHighestPowerBuilding(row,col,item.FactionName);
                 if (power != 0)
                 {
-                    item.LeechPowerQueue.Enqueue(new Tuple<int, FactionName>(power, factionName));
+                    item.LeechPowerQueue.Add(new Tuple<int, FactionName>(power, factionName));
                 }
             }
         }

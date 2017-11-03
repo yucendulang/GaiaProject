@@ -37,7 +37,12 @@ namespace GaiaCore.Gaia
         /// </summary>
         public const string upgrade = "upgrade";
         public static Regex upgradeRegex = new Regex(upgrade + " ([a-z][0-9]{1,2}) to ([a-z]{1,2})");
-
+        /// <summary>
+        /// 吸魔力的正则表达式
+        /// </summary>
+        public const string leech = "leech";
+        public const string decline = "decline";
+        public static Regex leechPowerRegex = new Regex("[a-z]+:(leech|decline) ([0-9]) from (.+)");
     }
 
     public static class GameFreeSyntax

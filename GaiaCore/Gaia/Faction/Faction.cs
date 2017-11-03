@@ -46,7 +46,7 @@ namespace GaiaCore.Gaia
             }
             StrongHold=new StrongHold();
             GameTileList = new List<GameTiles>();
-            LeechPowerQueue = new Queue<Tuple<int,FactionName>>();
+            LeechPowerQueue = new List<Tuple<int,FactionName>>();
             Score = 10;
             GaiaGame = gg;
         }
@@ -209,7 +209,7 @@ namespace GaiaCore.Gaia
         public int EconomicLevel { get => m_EconomicLevel; }
         public int ScienceLevel { get => m_ScienceLevel; }
         public abstract Terrain OGTerrain { get; }
-        public Queue<Tuple<int,FactionName>> LeechPowerQueue { get; }
+        public List<Tuple<int,FactionName>> LeechPowerQueue { get; }
         public int Score { get; set; }
         public GaiaGame GaiaGame { get; }
     }

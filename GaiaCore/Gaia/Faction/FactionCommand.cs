@@ -36,6 +36,8 @@ namespace GaiaCore.Gaia
             map.HexArray[row, col].Building = Mines.First();
             map.HexArray[row, col].FactionBelongTo = FactionName;
             Mines.RemoveAt(0);
+            GaiaGame.SetLeechPowerQueue(FactionName, row, col);
+
             return true;
         }
 
@@ -126,6 +128,16 @@ namespace GaiaCore.Gaia
             GaiaGame.SetLeechPowerQueue(FactionName,row, col);
 
             return true;
+        }
+
+        internal void LeechPower(int power, FactionName factionFrom,bool isLeech)
+        {
+            LeechPowerQueue.RemoveAt(LeechPowerQueue.FindIndex(x => x.Item1 == power && x.Item2 == factionFrom));
+            if (isLeech)
+            {
+                PowerIncrease(power);
+                Score -= Math.Max(power - 1, 0);
+            }
         }
 
         private void RemoveBuilding(Building building)

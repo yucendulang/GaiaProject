@@ -82,24 +82,19 @@ namespace GaiaProject.Controllers
             var gg = GameMgr.GetGameByName(id);
             return View(gg);
         }
-        [HttpPost]
-        public IActionResult SyntaxGame(string name,string syntax)
-        {
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(syntax))
-            {
-                return Redirect("/home/index");
-            }
-            GameMgr.GetGameByName(name).Syntax(syntax,out string log);
 
-            return Redirect("/home/viewgame/"+name);
-        }
 
         [HttpPost]
-        public IActionResult ViewGame(string name, string syntax)
+        public IActionResult ViewGame(string name, string syntax, string factionName)
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(syntax))
             {
                 return View(GameMgr.GetGameByName(name));
+            }
+
+            if (!string.IsNullOrEmpty(factionName))
+            {
+                syntax = string.Format("{0}:{1}", factionName, syntax);
             }
             GameMgr.GetGameByName(name).Syntax(syntax, out string log);
 
@@ -108,6 +103,16 @@ namespace GaiaProject.Controllers
                 ModelState.AddModelError(string.Empty, log);
             }
             return View(GameMgr.GetGameByName(name));
+        }
+
+        [HttpPost]
+        public IActionResult LeechPower(string name,FactionName factionName, int power, FactionName leechFactionName, bool isLeech)
+        {
+            var faction = GameMgr.GetGameByName(name).FactionList.Find(x => x.FactionName.ToString().Equals(name));
+            var leech = isLeech ? "leech" : "decline";
+            var syntax = string.Format("{0}:{1} {2} from {3}", factionName, leech, power, leechFactionName);
+            GameMgr.GetGameByName(name).Syntax(syntax, out string log);
+            return Redirect("/home/viewgame/" + name);
         }
 
         #region 管理工具
