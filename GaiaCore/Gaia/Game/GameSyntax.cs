@@ -51,6 +51,7 @@ namespace GaiaCore.Gaia
         {
             var ret = new List<Regex>();
             ret.Add(burningRegex);
+            ret.Add(transformRegex);
             return ret;
         } 
         public static Regex burningRegex = new Regex("burn ([0-9])");

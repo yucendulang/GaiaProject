@@ -12,14 +12,28 @@ namespace GaiaCore.Gaia
         internal bool BuildMine(Map map, int row, int col, out string log)
         {
             log = string.Empty;
+            bool isGreenPlanet = false; ;
             if (!(Mines.Count > 1 && m_credit > m_MineCreditCost && m_ore > m_MineOreCost))
             {
                 log = "资源不够";
                 return false;
             }
-            if (!(map.HexArray[row, col].OGTerrain == OGTerrain))
+            if(map.HexArray[row, col].TFTerrain == Terrain.Green)
             {
-                log = "地形不符";
+                isGreenPlanet = true;
+            }
+            else
+            {
+                var transNumNeed = Math.Min(7 - Math.Abs(map.HexArray[row, col].OGTerrain - OGTerrain), Math.Abs(map.HexArray[row, col].OGTerrain - OGTerrain));
+                if (!(transNumNeed <= m_TerraFormNumber))
+                {
+                    log = string.Format("原始地形为{0},需要地形{1},需要改造等级为{2}", map.HexArray[row, col].OGTerrain.ToString(), OGTerrain.ToString(), transNumNeed);
+                    return false;
+                }
+            }
+            if (isGreenPlanet && m_QICs < 1)
+            {
+                log = "至少需要一块QIC";
                 return false;
             }
             if (!(map.HexArray[row, col].Building == null && map.HexArray[row, col].FactionBelongTo == null))
@@ -39,7 +53,11 @@ namespace GaiaCore.Gaia
             map.HexArray[row, col].FactionBelongTo = FactionName;
             Mines.RemoveAt(0);
             GaiaGame.SetLeechPowerQueue(FactionName, row, col);
-
+            m_TerraFormNumber = 0;
+            if (isGreenPlanet)
+            {
+                m_QICs -= 1;
+            }
             return true;
         }
 
@@ -132,6 +150,22 @@ namespace GaiaCore.Gaia
             return true;
         }
 
+        internal void Rollback()
+        {
+            if (m_Backup == null)
+            {
+                throw new Exception("没有进行backup");
+            }
+            m_ore = m_Backup.Ore;
+            m_TerraFormNumber = 0;
+        }
+
+        internal void Backup()
+        {
+            m_Backup = new FactionBackup();
+            m_Backup.Ore = m_ore;
+        }
+
         internal void LeechPower(int power, FactionName factionFrom,bool isLeech)
         {
             LeechPowerQueue.RemoveAt(LeechPowerQueue.FindIndex(x => x.Item1 == power && x.Item2 == factionFrom));
@@ -168,8 +202,16 @@ namespace GaiaCore.Gaia
 
         internal bool SetTransformNumber(int num, out string log)
         {
-            //if(num*GetTransformCost>m_ore)
-            throw new NotImplementedException();
+            log = string.Empty;
+            if (num * GetTransformCost > m_ore)
+            {
+                log = string.Format("{0}改造费用大于拥有矿石数量{1}", num * GetTransformCost, m_ore);
+                return false;
+            }
+
+            m_ore -= num * GetTransformCost;
+            m_TerraFormNumber = num;
+            return true;
         }
 
         private void ReturnBuilding(Building building)

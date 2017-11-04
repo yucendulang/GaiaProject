@@ -94,6 +94,8 @@ namespace GaiaCore.Gaia
         private const int m_StrongHoldOreCost = 4;
         private const int m_StrongHoldCreditCost = 6;
         private const int m_StrongHoldCount = 1;
+        private int m_TerraFormNumber=0;
+        private FactionBackup m_Backup;
 
 
 

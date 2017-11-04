@@ -113,9 +113,10 @@ namespace GaiaCore.Gaia
                 log = "能且只能执行一个普通行动";
                 return false;
             }
-
+            faction.Backup();
             if (!ProcessCommandWithBackup(commandList,faction,out log))
             {
+                faction.Rollback();
                 return false;
             }
             
