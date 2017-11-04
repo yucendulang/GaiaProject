@@ -52,9 +52,11 @@ namespace GaiaCore.Gaia
             var ret = new List<Regex>();
             ret.Add(burningRegex);
             ret.Add(transformRegex);
+            ret.Add(QICShip);
             return ret;
         } 
         public static Regex burningRegex = new Regex("burn ([0-9])");
         public static Regex transformRegex = new Regex("transform ([0-9])");
+        public static Regex QICShip = new Regex("qicship ([0-9])");
     }
 }

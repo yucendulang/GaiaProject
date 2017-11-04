@@ -151,6 +151,15 @@ namespace GaiaCore.Gaia
                         return false;
                     }
                 }
+                else if (GameFreeSyntax.QICShip.IsMatch(item))
+                {
+                    var match = GameFreeSyntax.QICShip.Match(item);
+                    var num = match.Groups[1].Value.ParseToInt(0);
+                    if (!faction.SetQICShip(num, out log))
+                    {
+                        return false;
+                    }
+                }
                 else if (GameFreeSyntax.transformRegex.IsMatch(item))
                 {
                     var match = GameFreeSyntax.transformRegex.Match(item);
@@ -165,6 +174,10 @@ namespace GaiaCore.Gaia
                     log = "语句还不支持";
                     return false;
                 }
+            }
+            if (faction.IsExitUnfinishFreeAction(out log))
+            {
+                return false;
             }
             return true;
         }

@@ -8,7 +8,6 @@ namespace GaiaCore.Gaia
     public abstract partial class Faction
     {
 
-
         internal bool BuildMine(Map map, int row, int col, out string log)
         {
             log = string.Empty;
@@ -41,7 +40,7 @@ namespace GaiaCore.Gaia
                 log = "该地点已经有人占领了";
                 return false;
             }
-            if (!map.CalIsBuildValidate(row, col, FactionName, GetShipDistance))
+            if (!map.CalIsBuildValidate(row, col, FactionName, GetShipDistance+m_QICShip))
             {
                 log = "航海距离不够";
                 return false;
@@ -54,6 +53,7 @@ namespace GaiaCore.Gaia
             Mines.RemoveAt(0);
             GaiaGame.SetLeechPowerQueue(FactionName, row, col);
             m_TerraFormNumber = 0;
+            m_QICShip = 0;
             if (isGreenPlanet)
             {
                 m_QICs -= 1;
@@ -158,12 +158,15 @@ namespace GaiaCore.Gaia
             }
             m_ore = m_Backup.Ore;
             m_TerraFormNumber = 0;
+            m_ShipLevel = 0;
+            m_QICs= m_Backup.QICS;
         }
 
         internal void Backup()
         {
             m_Backup = new FactionBackup();
             m_Backup.Ore = m_ore;
+            m_Backup.QICS = m_QICs;
         }
 
         internal void LeechPower(int power, FactionName factionFrom,bool isLeech)
@@ -200,6 +203,22 @@ namespace GaiaCore.Gaia
             }
         }
 
+        internal bool IsExitUnfinishFreeAction(out string log)
+        {
+            log = string.Empty;
+            if (m_TerraFormNumber!=0)
+            {
+                log = "还存在没使用的Transform";
+                return true;
+            }
+            if (m_QICShip != 0)
+            {
+                log = "还存在没使用的QICSHIP";
+                return true;
+            }
+            return false;
+        }
+
         internal bool SetTransformNumber(int num, out string log)
         {
             log = string.Empty;
@@ -211,6 +230,20 @@ namespace GaiaCore.Gaia
 
             m_ore -= num * GetTransformCost;
             m_TerraFormNumber = num;
+            return true;
+        }
+
+        internal bool SetQICShip(int num, out string log)
+        {
+            log = string.Empty;
+            if (num > m_QICs)
+            {
+                log = string.Format("使用{0}QICSHIP需要足够的QIC", num);
+                return false;
+            }
+
+            m_QICs -= num;
+            m_QICShip = num*2;
             return true;
         }
 
