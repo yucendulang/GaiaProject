@@ -7,6 +7,8 @@ namespace GaiaCore.Gaia
 {
     public abstract partial class Faction
     {
+
+
         internal bool BuildMine(Map map, int row, int col, out string log)
         {
             log = string.Empty;
@@ -162,6 +164,12 @@ namespace GaiaCore.Gaia
                 default:
                     throw new Exception(building.GetType().ToString() + "不会被移除");
             }
+        }
+
+        internal bool SetTransformNumber(int num, out string log)
+        {
+            //if(num*GetTransformCost>m_ore)
+            throw new NotImplementedException();
         }
 
         private void ReturnBuilding(Building building)

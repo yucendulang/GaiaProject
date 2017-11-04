@@ -232,9 +232,29 @@ namespace GaiaCore.Gaia
                 {
                     return 4;
                 }
-                return 0;
+                throw new Exception("m_ShipLevel数值出错" + m_ShipLevel);
             }
         }
+
+        public int GetTransformCost
+        {
+            get
+            {
+                if (m_TransformLevel == 1 | m_TransformLevel == 2)
+                {
+                    return 3;
+                }
+                else if (m_TransformLevel == 3 | m_TransformLevel == 4)
+                {
+                    return 2;
+                }else if (m_TransformLevel == 5 | m_TransformLevel == 6)
+                {
+                    return 1;
+                }
+                throw new Exception("m_Transform数值出错" + m_TransformLevel);
+            }
+        }
+
     }
 
 

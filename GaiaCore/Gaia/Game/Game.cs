@@ -85,7 +85,7 @@ namespace GaiaCore.Gaia
 
         private bool ProcessSyntaxLeechPower(string syntax, ref string log)
         {
-            if (!(ValidateSyntaxCommand(syntax, ref log, out string command, out Faction faction)))
+            if (!(ValidateSyntaxCommandWithoutLeech(syntax, ref log, out string command, out Faction faction)))
             {
                 return false;
             }
@@ -104,6 +104,7 @@ namespace GaiaCore.Gaia
             {
                 return false;
             }
+            
             var commandList = command.Split('.');
             //非免费行动只能执行一个
             var NoneFreeActionCount=commandList.Sum(y => GameFreeSyntax.GetRegexList().Exists(x => x.IsMatch(y)) ? 0 : 1);
@@ -113,25 +114,47 @@ namespace GaiaCore.Gaia
                 return false;
             }
 
-            foreach(var item in commandList)
+            if (!ProcessCommandWithBackup(commandList,faction,out log))
+            {
+                return false;
+            }
+            
+
+            return true;
+
+        }
+        
+        private bool ProcessCommandWithBackup(string[] commandList,Faction faction,out string log)
+        {
+            log = string.Empty;
+            foreach (var item in commandList)
             {
                 if (GameSyntax.upgradeRegex.IsMatch(item))
                 {
-                    var match=GameSyntax.upgradeRegex.Match(item);
-                    var pos=match.Groups[1].Value;
+                    var match = GameSyntax.upgradeRegex.Match(item);
+                    var pos = match.Groups[1].Value;
                     var buildStr = match.Groups[2].Value;
                     ConvertPosToRowCol(pos, out int row, out int col);
-                    if(!faction.UpdateBuilding(Map, row, col, buildStr, out log))
+                    if (!faction.UpdateBuilding(Map, row, col, buildStr, out log))
                     {
                         return false;
                     }
                 }
-                else if(GameSyntax.buildRegex.IsMatch(item))
+                else if (GameSyntax.buildRegex.IsMatch(item))
                 {
                     var match = GameSyntax.buildRegex.Match(item);
                     var pos = match.Groups[1].Value;
                     ConvertPosToRowCol(pos, out int row, out int col);
-                    if(!faction.BuildMine(Map,row,col,out log))
+                    if (!faction.BuildMine(Map, row, col, out log))
+                    {
+                        return false;
+                    }
+                }
+                else if (GameFreeSyntax.transformRegex.IsMatch(item))
+                {
+                    var match = GameFreeSyntax.transformRegex.Match(item);
+                    var num = match.Groups[1].Value.ParseToInt(0);
+                    if (!faction.SetTransformNumber(num, out log))
                     {
                         return false;
                     }
@@ -142,10 +165,9 @@ namespace GaiaCore.Gaia
                     return false;
                 }
             }
-
             return true;
-
         }
+
 
         private bool ProcessSyntaxRoundBoosterSelect(string syntax, ref string log)
         {
@@ -206,8 +228,21 @@ namespace GaiaCore.Gaia
             row = position.Substring(0, 1).ToCharArray().First() - 'a';
             col = position.Substring(1).ParseToInt(0);
         }
-
         public bool ValidateSyntaxCommand(string syntax, ref string log, out string command, out Faction faction)
+        {
+            if (!ValidateSyntaxCommandWithoutLeech(syntax, ref log, out command, out faction))
+            {
+                return false;
+            }
+
+            if (faction.LeechPowerQueue.Count != 0)
+            {
+                log = "必须先执行吸取魔力行动";
+                return false;
+            }
+            return true;
+        }
+        public bool ValidateSyntaxCommandWithoutLeech(string syntax, ref string log, out string command, out Faction faction)
         {
             command = string.Empty;
             faction = null;
@@ -234,11 +269,7 @@ namespace GaiaCore.Gaia
                 log = "FactionName doesn't exit";
                 return false;
             }
-            if (faction.LeechPowerQueue.Count != 0)
-            {
-                log = "必须先执行吸取魔力行动";
-                return false;
-            }
+
             command = syntax.Split(':').Last();
             return true;
         }

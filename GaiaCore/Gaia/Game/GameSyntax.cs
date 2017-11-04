@@ -53,6 +53,7 @@ namespace GaiaCore.Gaia
             ret.Add(burningRegex);
             return ret;
         } 
-        public static Regex burningRegex = new Regex("burn [0-9]");
+        public static Regex burningRegex = new Regex("burn ([0-9])");
+        public static Regex transformRegex = new Regex("transform ([0-9])");
     }
 }
