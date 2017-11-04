@@ -6,17 +6,17 @@ using GaiaCore.Util;
 
 namespace GaiaCore.Gaia
 {
-    public static class MapMgr
+    public class MapMgr
     {
 
-        static List<SpaceSector> ssl;
-        static MapMgr()
+        List<SpaceSector> ssl;
+        public MapMgr()
         {
             ssl = new List<SpaceSector>();
             ssl.AddRange(BuildSpaceSector());
         }
 
-        private static List<SpaceSector> BuildSpaceSector()
+        private List<SpaceSector> BuildSpaceSector()
         {
             var ss1 = new List<Terrain>()
             {
@@ -154,7 +154,7 @@ namespace GaiaCore.Gaia
 
             return result;
         }
-        public static Map GetRandomMap(Random random)
+        public Map GetRandomMap(Random random)
         {
             var result = new Map();
             result.AddSpaceSector(3, 10, ssl[0],random);
@@ -315,7 +315,7 @@ namespace GaiaCore.Gaia
             {
                 for (int j = Math.Max(y - distance, 0); j < Math.Min(j + distance, m_mapWidth); j++)
                 {
-                    if (Math.Sqrt((i - x) * (i - x) + (j - y) * (j - y)) <= distance)
+                    if (HexArray[i, j] != null && CalTwoHexDistance(x, y, i, j) <= distance)
                     {
                         if (HexArray[i, j].FactionBelongTo == name)
                         {
@@ -328,16 +328,16 @@ namespace GaiaCore.Gaia
             return false;
         }
 
-        public int CalHighestPowerBuilding(int x,int y,FactionName name)
+        public int CalHighestPowerBuilding(int x, int y, FactionName name)
         {
             //吸魔力大小范围
             var distance = 2;
             var res = 0;
-            for (int i = Math.Max(x - distance, 0); i < Math.Min(x + distance, m_mapHeight); i++)
+            for (int i = Math.Max(x - distance, 0); i <= Math.Min(x + distance, m_mapHeight); i++)
             {
-                for (int j = Math.Max(y - distance, 0); j < Math.Min(j + distance, m_mapWidth); j++)
+                for (int j = Math.Max(y - distance, 0); j <= Math.Min(j + distance, m_mapWidth); j++)
                 {
-                    if (Math.Sqrt((i - x) * (i - x) + (j - y) * (j - y)) <= distance)
+                    if (CalTwoHexDistance(x, y, i, j) <= distance)
                     {
                         System.Diagnostics.Debug.WriteLine("row:" + i + " col:" + j);
 
@@ -350,6 +350,18 @@ namespace GaiaCore.Gaia
                 }
             }
             return res;
+        }
+
+        public int CalTwoHexDistance(int x1, int y1, int x2, int y2)
+        {
+            var a1 = x1 - (int)Math.Floor(y1 / 2.0);
+            var b1 = y1;
+            var a2 = x2 - (int)Math.Floor(y2 / 2.0);
+            var b2 = y2;
+            var dx = a2 - a1;
+            var dy = b2 - b1;
+            var dist = Math.Max(Math.Max(Math.Abs(dx), Math.Abs(dy)), Math.Abs(dx + dy));
+            return dist;
         }
     }
 }

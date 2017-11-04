@@ -126,6 +126,21 @@ namespace GaiaCore.Gaia
                         return false;
                     }
                 }
+                else if(GameSyntax.buildRegex.IsMatch(item))
+                {
+                    var match = GameSyntax.buildRegex.Match(item);
+                    var pos = match.Groups[1].Value;
+                    ConvertPosToRowCol(pos, out int row, out int col);
+                    if(!faction.BuildMine(Map,row,col,out log))
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    log = "语句还不支持";
+                    return false;
+                }
             }
 
             return true;
@@ -307,7 +322,7 @@ namespace GaiaCore.Gaia
         {
             Seed = i == 0 ? RandomInstance.Next(int.MaxValue) : i;
             var random = new Random(Seed);
-            Map = MapMgr.GetRandomMap(random);
+            Map = new MapMgr().GetRandomMap(random);
             ATTList = (from items in ATTMgr.GetRandomList(6, random) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();
             STT6List = STTMgr.GetRandomList(6, random);
             STT3List = (from items in STTMgr.GetOtherList(STT6List) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();

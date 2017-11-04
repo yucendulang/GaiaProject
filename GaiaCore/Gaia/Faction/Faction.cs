@@ -18,12 +18,12 @@ namespace GaiaCore.Gaia
             m_powerToken1 = 2;
             m_powerToken2 = 4;
             m_powerToken3 = 0;
-            m_TransformLevel = 0;
-            m_AILevel = 0;
-            m_EconomicLevel = 0;
-            m_GaiaLevel = 0;
-            m_ScienceLevel = 0;
-            m_ShipLevel = 1;
+            m_TransformLevel = 1;
+            m_AILevel = 1;
+            m_EconomicLevel = 1;
+            m_GaiaLevel = 1;
+            m_ScienceLevel = 1;
+            m_ShipLevel = 6;
             Mines = new List<Mine>();
             for (int i = 0; i < m_MineCount; i++)
             {
@@ -212,6 +212,29 @@ namespace GaiaCore.Gaia
         public List<Tuple<int,FactionName>> LeechPowerQueue { get; }
         public int Score { get; set; }
         public GaiaGame GaiaGame { get; }
+        public int GetShipDistance
+        {
+            get
+            {
+                if (m_ShipLevel == 1 | m_ShipLevel == 2)
+                {
+                    return 1;
+                }
+                else if (m_ShipLevel == 3 | m_ShipLevel == 4)
+                {
+                    return 2;
+                }
+                else if (m_ShipLevel == 5)
+                {
+                    return 3;
+                }
+                else if (m_ShipLevel == 6)
+                {
+                    return 4;
+                }
+                return 0;
+            }
+        }
     }
 
 

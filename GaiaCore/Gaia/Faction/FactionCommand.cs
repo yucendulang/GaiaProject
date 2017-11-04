@@ -25,7 +25,7 @@ namespace GaiaCore.Gaia
                 log = "该地点已经有人占领了";
                 return false;
             }
-            if (!map.CalIsBuildValidate(row, col, FactionName, m_ShipLevel))
+            if (!map.CalIsBuildValidate(row, col, FactionName, GetShipDistance))
             {
                 log = "航海距离不够";
                 return false;

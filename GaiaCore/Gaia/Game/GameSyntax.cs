@@ -22,7 +22,7 @@ namespace GaiaCore.Gaia
         public static Regex factionSelectionRegex = new Regex(factionSelection + " [a-z]+");
         ///<summary>
         public const string build = "build";
-        public static Regex buildRegex = new Regex(build + " [a-z][0-9]{1,2}");
+        public static Regex buildRegex = new Regex(build + " ([a-z][0-9]{1,2})");
         /// <summary>
         /// 玩家命令正则
         /// </summary>
