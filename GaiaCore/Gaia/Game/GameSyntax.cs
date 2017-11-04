@@ -53,10 +53,14 @@ namespace GaiaCore.Gaia
             ret.Add(burningRegex);
             ret.Add(transformRegex);
             ret.Add(QICShip);
+            ret.Add(getTechTilesRegex);
+            ret.Add(advTechRegex);
             return ret;
         } 
         public static Regex burningRegex = new Regex("burn ([0-9])");
         public static Regex transformRegex = new Regex("transform ([0-9])");
         public static Regex QICShip = new Regex("qicship ([0-9])");
+        public static Regex getTechTilesRegex = new Regex("\\+(a|s)tt([0-9]{1,2})");
+        public static Regex advTechRegex = new Regex("advance (tf|ai|eco|gaia|sci|ship)");
     }
 }

@@ -46,18 +46,22 @@ namespace GaiaCore.Gaia
                 return false;
             }
             //扣资源建建筑
-            m_ore -= m_MineOreCost;
-            m_credit -= m_MineCreditCost;
-            map.HexArray[row, col].Building = Mines.First();
-            map.HexArray[row, col].FactionBelongTo = FactionName;
-            Mines.RemoveAt(0);
-            GaiaGame.SetLeechPowerQueue(FactionName, row, col);
+            Action queue = () =>
+              {
+                  m_ore -= m_MineOreCost;
+                  m_credit -= m_MineCreditCost;
+                  map.HexArray[row, col].Building = Mines.First();
+                  map.HexArray[row, col].FactionBelongTo = FactionName;
+                  Mines.RemoveAt(0);
+                  GaiaGame.SetLeechPowerQueue(FactionName, row, col);
+                  if (isGreenPlanet)
+                  {
+                      m_QICs -= 1;
+                  }
+              };
+            ActionQueue.Enqueue(queue);
             m_TerraFormNumber = 0;
             m_QICShip = 0;
-            if (isGreenPlanet)
-            {
-                m_QICs -= 1;
-            }
             return true;
         }
 
@@ -139,34 +143,25 @@ namespace GaiaCore.Gaia
                 log = string.Format("资源不够");
                 return false;
             }
+            if (syn == BuildingSyntax.RL)
+            {
+                m_TechTilesGet++;
+                m_TechTrachAdv++;
+            }
+            //扣资源,执行操作
+            Action queue = () =>
+            {
+                m_ore -= oreCost;
+                m_credit -= creditCost;
+                ReturnBuilding(map.HexArray[row, col].Building);
+                map.HexArray[row, col].Building = build;
+                RemoveBuilding(build);
+                GaiaGame.SetLeechPowerQueue(FactionName, row, col);
+            };
+            ActionQueue.Enqueue(queue);
 
-            m_ore -= oreCost;
-            m_credit -= creditCost;
-            ReturnBuilding(map.HexArray[row, col].Building);
-            map.HexArray[row, col].Building = build;
-            RemoveBuilding(build);
-            GaiaGame.SetLeechPowerQueue(FactionName,row, col);
 
             return true;
-        }
-
-        internal void Rollback()
-        {
-            if (m_Backup == null)
-            {
-                throw new Exception("没有进行backup");
-            }
-            m_ore = m_Backup.Ore;
-            m_TerraFormNumber = 0;
-            m_ShipLevel = 0;
-            m_QICs= m_Backup.QICS;
-        }
-
-        internal void Backup()
-        {
-            m_Backup = new FactionBackup();
-            m_Backup.Ore = m_ore;
-            m_Backup.QICS = m_QICs;
         }
 
         internal void LeechPower(int power, FactionName factionFrom,bool isLeech)
@@ -216,7 +211,26 @@ namespace GaiaCore.Gaia
                 log = "还存在没使用的QICSHIP";
                 return true;
             }
+            if (m_TechTilesGet != 0)
+            {
+                log = "还存在没拿取的科技版";
+                return true;
+            }
+            if (m_TechTrachAdv != 0)
+            {
+                log = "还存在没推进的科技条";
+                return true;
+            }
             return false;
+        }
+
+        internal void ResetUnfinishAction()
+        {
+            ActionQueue.Clear();
+            m_TerraFormNumber = 0;
+            m_QICShip = 0;
+            m_TechTrachAdv = 0;
+            m_TechTilesGet = 0;
         }
 
         internal bool SetTransformNumber(int num, out string log)
@@ -227,8 +241,11 @@ namespace GaiaCore.Gaia
                 log = string.Format("{0}改造费用大于拥有矿石数量{1}", num * GetTransformCost, m_ore);
                 return false;
             }
-
-            m_ore -= num * GetTransformCost;
+            Action queue = () =>
+            {
+                m_ore -= num * GetTransformCost;
+            };
+            ActionQueue.Enqueue(queue);
             m_TerraFormNumber = num;
             return true;
         }
@@ -242,8 +259,47 @@ namespace GaiaCore.Gaia
                 return false;
             }
 
-            m_QICs -= num;
+            Action queue = () =>
+            {
+                m_QICs -= num;
+            };
+            ActionQueue.Enqueue(queue);
+
+
             m_QICShip = num*2;
+            return true;
+        }
+
+        internal void IncreaseTech(string tech)
+        {
+            switch (tech)
+            {
+                case "tf":
+                    m_TransformLevel++;
+                    break;
+                case "ai":
+                    m_AILevel++;
+                    break;
+                case "eco":
+                    m_EconomicLevel++;
+                    break;
+                case "gaia":
+                    m_GaiaLevel++;
+                    break;
+                case "sci":
+                    m_ScienceLevel++;
+                    break;
+                case "ship":
+                    m_ShipLevel++;
+                    break;
+                default:
+                    throw new Exception("不存在此科技条" + tech);
+            }
+            return;
+        }
+
+        internal bool IsIncreateTechValide(string tech)
+        {
             return true;
         }
 

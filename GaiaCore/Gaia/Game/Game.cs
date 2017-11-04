@@ -105,7 +105,7 @@ namespace GaiaCore.Gaia
                 return false;
             }
             
-            var commandList = command.Split('.');
+            var commandList = command.Split('.').Where(x=>!string.IsNullOrEmpty(x));
             //非免费行动只能执行一个
             var NoneFreeActionCount=commandList.Sum(y => GameFreeSyntax.GetRegexList().Exists(x => x.IsMatch(y)) ? 0 : 1);
             if (NoneFreeActionCount != 1)
@@ -113,10 +113,10 @@ namespace GaiaCore.Gaia
                 log = "能且只能执行一个普通行动";
                 return false;
             }
-            faction.Backup();
-            if (!ProcessCommandWithBackup(commandList,faction,out log))
+            //faction.Backup();
+            if (!ProcessCommandWithBackup(commandList.ToArray(),faction,out log))
             {
-                faction.Rollback();
+                //faction.Rollback();
                 return false;
             }
             
@@ -128,6 +128,8 @@ namespace GaiaCore.Gaia
         private bool ProcessCommandWithBackup(string[] commandList,Faction faction,out string log)
         {
             log = string.Empty;
+            faction.ResetUnfinishAction();
+
             foreach (var item in commandList)
             {
                 if (GameSyntax.upgradeRegex.IsMatch(item))
@@ -169,6 +171,65 @@ namespace GaiaCore.Gaia
                         return false;
                     }
                 }
+                else if (GameFreeSyntax.getTechTilesRegex.IsMatch(item))
+                {
+                    var techTileStr = item.Substring(1);
+                    GameTiles tile;
+                    if (ATTList.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
+                    {
+                        tile = ATTList.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
+                    }
+                    else if (STT3List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
+                    {
+                        tile = STT3List.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
+                    }
+                    else if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
+                    {
+                        tile = STT6List.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
+                    }
+                    else
+                    {
+                        log = string.Format("{0}这块板子不存在", techTileStr);
+                        return false;
+                    }
+                    Action queue = () =>
+                    {
+                        faction.GameTileList.Add(tile);
+                        if (ATTList.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
+                        {
+                            ATTList.Remove(ATTList.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0));
+                        }
+                        else if (STT3List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
+                        {
+                            STT3List.Remove(STT3List.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0));
+                        }
+                        else if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
+                        {
+                            STT6List.Remove(STT6List.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0));
+                        }
+                    };
+                    faction.ActionQueue.Enqueue(queue);
+                    faction.TechTilesGet--;
+                }
+                else if (GameFreeSyntax.advTechRegex.IsMatch(item))
+                {
+                    var match = GameFreeSyntax.advTechRegex.Match(item);
+                    var tech = match.Groups[1].Value;
+                    if (faction.IsIncreateTechValide(tech))
+                    {
+                        Action queue = () =>
+                        {
+                            faction.IncreaseTech(tech);
+                        };
+                        faction.ActionQueue.Enqueue(queue);
+                        faction.TechTrachAdv--;
+                    }
+                    else
+                    {
+                        log = "此科技条不能继续上升";
+                        return false;
+                    }
+                }
                 else
                 {
                     log = "语句还不支持";
@@ -179,6 +240,12 @@ namespace GaiaCore.Gaia
             {
                 return false;
             }
+
+            foreach (var item in faction.ActionQueue)
+            {
+                item.Invoke();
+            }
+
             return true;
         }
 

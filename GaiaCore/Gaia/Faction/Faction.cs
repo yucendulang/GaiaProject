@@ -49,6 +49,7 @@ namespace GaiaCore.Gaia
             LeechPowerQueue = new List<Tuple<int,FactionName>>();
             Score = 10;
             GaiaGame = gg;
+            ActionQueue = new Queue<Action>();
         }
 
         internal bool FinishIntialMines()
@@ -96,6 +97,8 @@ namespace GaiaCore.Gaia
         private const int m_StrongHoldCount = 1;
         private int m_TerraFormNumber=0;
         private int m_QICShip=0;
+        private int m_TechTilesGet = 0;
+        private int m_TechTrachAdv = 0;
         private FactionBackup m_Backup;
 
 
@@ -215,6 +218,7 @@ namespace GaiaCore.Gaia
         public List<Tuple<int,FactionName>> LeechPowerQueue { get; }
         public int Score { get; set; }
         public GaiaGame GaiaGame { get; }
+        public Queue<Action> ActionQueue { get; set; }
         public int GetShipDistance
         {
             get
@@ -258,6 +262,8 @@ namespace GaiaCore.Gaia
             }
         }
 
+        public int TechTrachAdv { get => m_TechTrachAdv; set => m_TechTrachAdv = value; }
+        public int TechTilesGet { get => m_TechTilesGet; set => m_TechTilesGet = value; }
     }
 
 
