@@ -22,9 +22,14 @@ namespace GaiaCore.Gaia
             GameStatus.PlayerNumber = username.Count();
             FactionList = new List<Faction>();
             FactionNextTurnList = new List<Faction>();
+            UserDic = new Dictionary<string, List<Faction>>();
             Username = username;
+            foreach(var us in username)
+            {
+                UserDic.Add(us, new List<Faction>());
+            }
         }
-        public bool ProcessSyntax(string syntax, out string log)
+        public bool ProcessSyntax(string user,string syntax, out string log)
         {
             log = string.Empty;
             if (syntax.StartsWith("#"))
@@ -414,6 +419,7 @@ namespace GaiaCore.Gaia
                 {
                     if (!FactionList.Exists(x => x.FactionName == result))
                     {
+
                         SetupFaction(result);
                     }
                     else
@@ -448,9 +454,9 @@ namespace GaiaCore.Gaia
             return false;
         }
 
-        public void Syntax(string syntax, out string log)
+        public void Syntax(string user,string syntax, out string log)
         {
-            if (ProcessSyntax(syntax, out log))
+            if (ProcessSyntax(user,syntax, out log))
             {
                 UserActionLog += syntax.AddEnter();
                 UserActionLog += m_TailLog;
@@ -562,6 +568,7 @@ namespace GaiaCore.Gaia
         public int Seed { set; get; }
         [JsonProperty]
         public string[] Username { set; get; }
+        public Dictionary<string,List<Faction>> UserDic { set; get; }
         #endregion
     }
 }

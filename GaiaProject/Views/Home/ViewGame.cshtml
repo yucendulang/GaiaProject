@@ -1,8 +1,9 @@
 ﻿@model GaiaCore.Gaia.GaiaGame
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
-@{
-
-}
+@if (SignInManager.IsSignedIn(User))
+{
 <script type='text/javascript' language='javascript' src='~/js/site.js'></script>
 @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
 {
@@ -10,18 +11,32 @@
     <p>现在是 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 的回合,颜色是 @Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()</p>
     <br>
 }
-@foreach (var leech in @Model.FactionList[Model.GameStatus.PlayerIndex].LeechPowerQueue)
-{
-    <form asp-controller="Home" asp-action="LeechPower" method="post" class="form-horizontal">
+
+
+@foreach (var ur in Model.Username)
+    {
+        if (ur.Equals(User.Identity.Name))
+        {
+            @foreach (var leech in @Model.FactionList[index].LeechPowerQueue)
+            {
+    <form asp - controller = "Home" asp - action = "LeechPower" method = "post" class="form-horizontal">
         <div>是否要从 @leech.Item2 吸取 @leech.Item1 点魔力</div>
-        <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
-        <input name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden" />
-        <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
-        <input name="leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
-        <button type="submit" name="isLeech" class="btn btn-default" value="true">是</button>
-        <button type="submit" name="isLeech" class="btn btn-default" value="false">否</button>
+        <input name = "name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
+        <input name = "factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden" />
+        <input name = "power" class="form-control" value="@leech.Item1" type="hidden" />
+        <input name = "leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
+        <button type = "submit" name="isLeech" class="btn btn-default" value="true">是</button>
+        <button type = "submit" name="isLeech" class="btn btn-default" value="false">否</button>
     </form>
-}
+            }
+
+        }
+        index++;
+
+    }
+    }
+    }
+
 <br>
 
 @if (ViewData["log"] != null)
@@ -57,7 +72,7 @@
         <p>@item.FactionName|Color:@item.OGTerrain.ToString()|C:@item.Credit|O:@item.Ore|QICs:@item.QICs|K:@item.Knowledge|PI:@item.PowerToken1|PII:@item.PowerToken2|PIII:@item.PowerToken3</p>
         <p>铲子:@item.TransformLevel|航海:@item.ShipLevel|AI:@item.AILevel|盖亚:@item.GaiaLevel|经济:@item.EconomicLevel|科技:@item.ScienceLevel</p>
         <p>GameTiles:(@string.Join(",", item.GameTileList.Select(x => x.desc)))</p>
-        @foreach(var leech in item.LeechPowerQueue)
+        @foreach (var leech in item.LeechPowerQueue)
         {
             <li>From @leech.Item2 leech @leech.Item1 power</li>
         }
@@ -115,3 +130,8 @@
 
 
     </script>
+}
+else
+{
+    <p>没做完不好意思啊</p>
+}

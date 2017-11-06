@@ -87,22 +87,34 @@ namespace GaiaProject.Controllers
         [HttpPost]
         public IActionResult ViewGame(string name, string syntax, string factionName)
         {
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(syntax))
+            var task = _userManager.GetUserAsync(HttpContext.User);
+            Task[] taskarray = new Task[] { task };
+            Task.WaitAll(taskarray, millisecondsTimeout: 1000);
+            if (task.Result != null)
             {
+
+                if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(syntax))
+                {
+                    return View(GameMgr.GetGameByName(name));
+                }
+
+                if (!string.IsNullOrEmpty(factionName))
+                {
+                    syntax = string.Format("{0}:{1}", factionName, syntax);
+                }
+                GameMgr.GetGameByName(name).Syntax(task.Result.UserName, syntax, out string log);
+
+                if (!string.IsNullOrEmpty(log))
+                {
+                    ModelState.AddModelError(string.Empty, log);
+                }
                 return View(GameMgr.GetGameByName(name));
             }
-
-            if (!string.IsNullOrEmpty(factionName))
+            else
             {
-                syntax = string.Format("{0}:{1}", factionName, syntax);
+                ModelState.AddModelError(string.Empty, "没有获取到用户名");
+                return View(GameMgr.GetGameByName(name));
             }
-            GameMgr.GetGameByName(name).Syntax(syntax, out string log);
-
-            if (!string.IsNullOrEmpty(log))
-            {
-                ModelState.AddModelError(string.Empty, log);
-            }
-            return View(GameMgr.GetGameByName(name));
         }
 
         [HttpPost]
