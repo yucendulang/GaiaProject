@@ -33,6 +33,9 @@ function DrawMap() {
                         case "StrongHold":
                             DrawStronghold(cxt, j, i, array[i][j].factionBelongTo);
                             break;
+                        case "GaiaBuilding":
+                            DrawGaiaBuilding(cxt, j, i, array[i][j].factionBelongTo);
+                            break;
                         default:
                             console.log(array[i][j].building.name + "不支持");
                     }
@@ -155,6 +158,20 @@ function DrawResearchLab(ctx, row, col, name) {
     ctx.arc(loc[0], loc[1], 14, 0.001, Math.PI * 2, false);
 
     fillBuilding(ctx, name);
+
+    ctx.restore();
+}
+
+function DrawGaiaBuilding(ctx, row, col, name) {
+    var loc = hexCenter(row, col);
+    loc[1] -= 15;
+    loc[0] -= 10;
+    ctx.save();
+    fillBuilding(ctx, name);
+
+    ctx.beginPath();
+    ctx.fillRect(loc[0], loc[1], 20, 20);
+    ctx.strokeRect(loc[0], loc[1], 20, 20);
 
     ctx.restore();
 }

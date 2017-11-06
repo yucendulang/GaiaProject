@@ -64,6 +64,87 @@ namespace GaiaCore.Gaia
             m_QICShip = 0;
             return true;
         }
+        internal bool BuildGaia(Map map, int row, int col, out string log)
+        {
+            log = string.Empty;
+            if (m_GaiaLevel == 0)
+            {
+                log = "执行盖亚行动至少需要一级GaiaLevel";
+                return false;
+            }
+            if (Gaias.Count == 0)
+            {
+                log = "没有可用的盖亚建筑";
+                return false;
+            }
+            if (m_powerToken1+m_powerToken2+m_powerToken3<GetGaiaCost())
+            {
+                log = "魔力豆资源不够";
+                return false;
+            }
+            if (map.HexArray[row, col].TFTerrain !=Terrain.Purple)
+            {
+                log = "必须为紫星";
+                return false;
+            }
+            if (!(map.HexArray[row, col].Building == null && map.HexArray[row, col].FactionBelongTo == null))
+            {
+                log = "该地点已经有人占领了";
+                return false;
+            }
+            if (!map.CalIsBuildValidate(row, col, FactionName, GetShipDistance + m_QICShip))
+            {
+                log = "航海距离不够";
+                return false;
+            }
+            //扣资源建建筑
+            Action queue = () =>
+            {
+                RemovePowerToken(GetGaiaCost());
+                map.HexArray[row, col].Building = Gaias.First();
+                map.HexArray[row, col].FactionBelongTo = FactionName;
+            };
+            ActionQueue.Enqueue(queue);
+            m_QICShip = 0;
+            return true;
+        }
+
+        private void RemovePowerToken(int n)
+        {
+            if (m_powerToken1 + m_powerToken2 + m_powerToken3 < GetGaiaCost())
+            {
+                throw new Exception(string.Format("没有{0}个魔力豆来移除",n));
+            }
+            m_powerToken1 -= n;
+            if (m_powerToken1 < 0)
+            {
+                m_powerToken2 += m_powerToken1;
+                m_powerToken1 = 0;
+            }
+            if (m_powerToken2 < 0)
+            {
+                m_powerToken3 += m_powerToken2;
+                m_powerToken2 = 0;
+            }
+        }
+
+        private int GetGaiaCost()
+        {
+            if (m_GaiaLevel == 0)
+            {
+                throw new Exception("0级GaiaLevel不能造Gaia建筑");
+            }else if (m_GaiaLevel == 1 || m_GaiaLevel == 2)
+            {
+                return 6;
+            }else if (m_GaiaLevel == 3)
+            {
+                return 4;
+            }else if (m_GaiaLevel == 4 || m_GaiaLevel == 5)
+            {
+                return 3;
+            }
+            throw new Exception(m_GaiaLevel+"级GaiaLevel出错");
+        }
 
         internal bool BuildIntialMine(Map map, int row, int col, out string log)
         {
@@ -227,6 +308,7 @@ namespace GaiaCore.Gaia
             return false;
         }
 
+
         internal void ResetUnfinishAction()
         {
             ActionQueue.Clear();
@@ -316,6 +398,26 @@ namespace GaiaCore.Gaia
                     break;
                 case "gaia":
                     m_GaiaLevel++;
+                    if (m_GaiaLevel == 1)
+                    {
+                        Gaias.Add(new GaiaBuilding());
+                    }else if(m_GaiaLevel == 2)
+                    {
+                        m_powerToken1 += 3;
+                    }
+                    else if (m_GaiaLevel == 3)
+                    {
+                        PowerIncrease(GameConstNumber.TechLv2toLv3BonusPower);
+                        Gaias.Add(new GaiaBuilding());
+                    }
+                    else if (m_GaiaLevel == 4)
+                    {
+                        Gaias.Add(new GaiaBuilding());
+                    }
+                    else if(m_GaiaLevel ==5)
+                    {
+                        throw new NotImplementedException();
+                    }
                     break;
                 case "sci":
                     m_ScienceLevel++;

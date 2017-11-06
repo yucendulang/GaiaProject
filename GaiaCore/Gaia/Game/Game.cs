@@ -107,10 +107,7 @@ namespace GaiaCore.Gaia
                             FactionNextTurnList = new List<Faction>();
                             NewRound();
                         }
-                        else
-                        {
-                            return ret;
-                        }
+                        return ret;
                     }
                     return false;
                 default:
@@ -192,6 +189,16 @@ namespace GaiaCore.Gaia
                     var pos = match.Groups[1].Value;
                     ConvertPosToRowCol(pos, out int row, out int col);
                     if (!faction.BuildMine(Map, row, col, out log))
+                    {
+                        return false;
+                    }
+                }
+                else if (GameSyntax.gaiaRegex.IsMatch(item))
+                {
+                    var match = GameSyntax.gaiaRegex.Match(item);
+                    var pos = match.Groups[1].Value;
+                    ConvertPosToRowCol(pos, out int row, out int col);
+                    if (!faction.BuildGaia(Map, row, col, out log))
                     {
                         return false;
                     }

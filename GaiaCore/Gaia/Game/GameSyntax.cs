@@ -48,6 +48,11 @@ namespace GaiaCore.Gaia
         /// </summary>
         public const string pass = "pass";
         public static Regex passRegex = new Regex("pass (rbt[0-9])");
+        /// <summary>
+        /// 盖亚语句
+        /// </summary>
+        public const string gaia = "gaia";
+        public static Regex gaiaRegex = new Regex(gaia + " ([a-z][0-9]{1,2})");
     }
 
     public static class GameFreeSyntax

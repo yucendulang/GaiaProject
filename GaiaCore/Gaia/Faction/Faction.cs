@@ -19,12 +19,12 @@ namespace GaiaCore.Gaia
             m_powerToken1 = 2;
             m_powerToken2 = 4;
             m_powerToken3 = 0;
-            m_TransformLevel = 1;
-            m_AILevel = 1;
-            m_EconomicLevel = 1;
-            m_GaiaLevel = 1;
-            m_ScienceLevel = 1;
-            m_ShipLevel = 6;
+            m_TransformLevel = 0;
+            m_AILevel = 0;
+            m_EconomicLevel = 0;
+            m_GaiaLevel = 0;
+            m_ScienceLevel = 0;
+            m_ShipLevel = 5;
             Mines = new List<Mine>();
             for (int i = 0; i < m_MineCount; i++)
             {
@@ -43,6 +43,7 @@ namespace GaiaCore.Gaia
             Academy1 = new Academy();
             Academy2 = new Academy();
             StrongHold=new StrongHold();
+            Gaias = new List<GaiaBuilding>();
             GameTileList = new List<GameTiles>();
             LeechPowerQueue = new List<Tuple<int,FactionName>>();
             Score = 10;
@@ -192,7 +193,7 @@ namespace GaiaCore.Gaia
                 m_powerToken1 = 0;
             }
         }
-
+        public List<GaiaBuilding> Gaias { set; get; }
         public List<Mine> Mines { set; get; }
         public List<TradeCenter> TradeCenters { set; get; }
         public List<ResearchLab> ReaserchLabs { set; get; }
@@ -222,19 +223,19 @@ namespace GaiaCore.Gaia
         {
             get
             {
-                if (m_ShipLevel == 1 | m_ShipLevel == 2)
+                if (m_ShipLevel == 0 | m_ShipLevel == 1)
                 {
                     return 1;
                 }
-                else if (m_ShipLevel == 3 | m_ShipLevel == 4)
+                else if (m_ShipLevel == 2 | m_ShipLevel == 3)
                 {
                     return 2;
                 }
-                else if (m_ShipLevel == 5)
+                else if (m_ShipLevel == 4)
                 {
                     return 3;
                 }
-                else if (m_ShipLevel == 6)
+                else if (m_ShipLevel == 5)
                 {
                     return 4;
                 }
@@ -246,14 +247,14 @@ namespace GaiaCore.Gaia
         {
             get
             {
-                if (m_TransformLevel == 1 | m_TransformLevel == 2)
+                if (m_TransformLevel == 0 | m_TransformLevel == 1)
                 {
                     return 3;
                 }
-                else if (m_TransformLevel == 3 | m_TransformLevel == 4)
+                else if (m_TransformLevel == 2 | m_TransformLevel == 3)
                 {
                     return 2;
-                }else if (m_TransformLevel == 5 | m_TransformLevel == 6)
+                }else if (m_TransformLevel == 4 | m_TransformLevel == 5)
                 {
                     return 1;
                 }
@@ -264,24 +265,7 @@ namespace GaiaCore.Gaia
         public int TechTilesGet { get => m_TechTilesGet; set => m_TechTilesGet = value; }
         public int TechTrachAdv { get => m_TechTrachAdv; set => m_TechTrachAdv = value; }
 
-
-        public bool IncreaseTransformLevel()
-        {
-            if (TransformLevel > 0 && TransformLevel < 5)
-            {
-                m_TransformLevel++;
-            }
-            else if (TransformLevel == 5)
-            {
-                ///检测城版
-                m_TransformLevel++;
-            }
-            else
-            {
-                return false;
-            }
-            return true;
-        }
+        
         private static List<FieldInfo> list = new List<FieldInfo>()
         {
             typeof(Faction).GetField("m_TransformLevel",BindingFlags.NonPublic|BindingFlags.Instance),
@@ -298,11 +282,11 @@ namespace GaiaCore.Gaia
                 throw new Exception("超出科技条边界");
             }
             var level= (int)list[index].GetValue(this);
-            if (level > 0 && level < 5)
+            if (level >= 0 && level < 4)
             {
                 //level++;
             }
-            else if (level == 5)
+            else if (level == 4)
             {
                 ///检测城版
                 //level++;
