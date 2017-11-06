@@ -123,6 +123,7 @@ namespace GaiaCore.Gaia
         INITIALMINES,
         SELECTROUNDBOOSTER,
         ROUNDINCOME,
-        ROUNDSTART
+        ROUNDSTART,
+        ROUNDWAITLEECHPOWER
     }
 }

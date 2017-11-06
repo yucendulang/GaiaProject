@@ -102,7 +102,7 @@ namespace GaiaProject.Controllers
                 {
                     syntax = string.Format("{0}:{1}", factionName, syntax);
                 }
-                GameMgr.GetGameByName(name).Syntax(task.Result.UserName, syntax, out string log);
+                GameMgr.GetGameByName(name).Syntax( syntax, out string log, task.Result.UserName);
 
                 if (!string.IsNullOrEmpty(log))
                 {

@@ -24,12 +24,12 @@ namespace GaiaCore.Gaia
             FactionNextTurnList = new List<Faction>();
             UserDic = new Dictionary<string, List<Faction>>();
             Username = username;
-            foreach(var us in username)
+            foreach(var us in username.Distinct())
             {
                 UserDic.Add(us, new List<Faction>());
             }
         }
-        public bool ProcessSyntax(string user,string syntax, out string log)
+        public bool ProcessSyntax(string user, string syntax, out string log)
         {
             log = string.Empty;
             if (syntax.StartsWith("#"))
@@ -41,7 +41,7 @@ namespace GaiaCore.Gaia
                 case Stage.RANDOMSETUP:
                     return ProcessSyntaxRandomSetup(syntax, ref log);
                 case Stage.FACTIONSELECTION:
-                    return ProcessSyntaxFactionSelect(syntax, ref log);
+                    return ProcessSyntaxFactionSelect(user, syntax, ref log);
                 case Stage.INITIALMINES:
                     ret = ProcessSyntaxIntialMines(syntax, ref log);
                     if (ret)
@@ -78,9 +78,16 @@ namespace GaiaCore.Gaia
                         ret = ProcessSyntaxCommand(syntax, ref log);
                         if (ret && GameStatus.IsAllPass())
                         {
-                            FactionList = FactionNextTurnList;
-                            FactionNextTurnList = new List<Faction>();
-                            NewRound();
+                            if (FactionList.All(x => x.LeechPowerQueue.Count == 0))
+                            {
+                                FactionList = FactionNextTurnList;
+                                FactionNextTurnList = new List<Faction>();
+                                NewRound();
+                            }
+                            else
+                            {
+                                GameStatus.stage = Stage.ROUNDWAITLEECHPOWER;
+                            }
                         }
                         else if (ret)
                         {
@@ -89,6 +96,23 @@ namespace GaiaCore.Gaia
 
                         return ret;
                     }
+                ///只处理吸魔力
+                case Stage.ROUNDWAITLEECHPOWER:
+                    if (GameSyntax.leechPowerRegex.IsMatch(syntax))
+                    {
+                        ret = ProcessSyntaxLeechPower(syntax, ref log);
+                        if (ret)
+                        {
+                            FactionList = FactionNextTurnList;
+                            FactionNextTurnList = new List<Faction>();
+                            NewRound();
+                        }
+                        else
+                        {
+                            return ret;
+                        }
+                    }
+                    return false;
                 default:
                     return false;
             }
@@ -104,7 +128,7 @@ namespace GaiaCore.Gaia
 
         private bool ProcessSyntaxLeechPower(string syntax, ref string log)
         {
-            if (!(ValidateSyntaxCommandWithoutLeech(syntax, ref log, out string command, out Faction faction)))
+            if (!(ValidateSyntaxCommandForLeech(syntax, ref log, out string command, out Faction faction)))
             {
                 return false;
             }
@@ -365,8 +389,14 @@ namespace GaiaCore.Gaia
         }
         public bool ValidateSyntaxCommand(string syntax, ref string log, out string command, out Faction faction)
         {
-            if (!ValidateSyntaxCommandWithoutLeech(syntax, ref log, out command, out faction))
+            if (!ValidateSyntaxCommandForLeech(syntax, ref log, out command, out faction))
             {
+                return false;
+            }
+
+            if (!(FactionList[GameStatus.PlayerIndex] == faction))
+            {
+                log = string.Format("不是种族{0}行动轮,是{1}行动轮", faction.FactionName, FactionList[GameStatus.PlayerIndex].FactionName.ToString());
                 return false;
             }
 
@@ -377,7 +407,7 @@ namespace GaiaCore.Gaia
             }
             return true;
         }
-        public bool ValidateSyntaxCommandWithoutLeech(string syntax, ref string log, out string command, out Faction faction)
+        public bool ValidateSyntaxCommandForLeech(string syntax, ref string log, out string command, out Faction faction)
         {
             command = string.Empty;
             faction = null;
@@ -393,11 +423,7 @@ namespace GaiaCore.Gaia
                 log = "FactionName is wrong";
                 return false;
             }
-            if (!(FactionList[GameStatus.PlayerIndex].FactionName == result))
-            {
-                log = string.Format("不是种族{0}行动轮,是{1}行动轮", factionName, FactionList[GameStatus.PlayerIndex].FactionName.ToString());
-                return false;
-            }
+
             faction = FactionList.Find(x => x.FactionName == result);
             if (faction == null)
             {
@@ -409,7 +435,7 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        private bool ProcessSyntaxFactionSelect(string syntax, ref string log)
+        private bool ProcessSyntaxFactionSelect(string user,string syntax, ref string log)
         {
             log = string.Empty;
             if (GameSyntax.factionSelectionRegex.IsMatch(syntax))
@@ -420,7 +446,7 @@ namespace GaiaCore.Gaia
                     if (!FactionList.Exists(x => x.FactionName == result))
                     {
 
-                        SetupFaction(result);
+                        SetupFaction(user,result);
                     }
                     else
                     {
@@ -454,7 +480,7 @@ namespace GaiaCore.Gaia
             return false;
         }
 
-        public void Syntax(string user,string syntax, out string log)
+        public void Syntax(string syntax, out string log, string user = "")
         {
             if (ProcessSyntax(user,syntax, out log))
             {
@@ -464,7 +490,7 @@ namespace GaiaCore.Gaia
             }
         }
 
-        private void SetupFaction(FactionName faction)
+        private void SetupFaction(string user,FactionName faction)
         {
             switch (faction)
             {
@@ -483,6 +509,11 @@ namespace GaiaCore.Gaia
                 default:
                     break;
             };
+            if (string.IsNullOrEmpty(user))
+            {
+                user = Username[FactionList.Count - 1];
+            }
+            UserDic[user].Add(FactionList.Last());
         }
 
         private void GameStart(string syntax, int i = 0)
