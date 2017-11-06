@@ -22,7 +22,7 @@ namespace GaiaCore.Gaia
         public override int MagicLevel => 2;
     }
 
-    public class ReaserchLab : Building
+    public class ResearchLab : Building
     {
         public override Type BaseBuilding => typeof(TradeCenter);
         public override int MagicLevel => 2;
@@ -30,7 +30,7 @@ namespace GaiaCore.Gaia
 
     public class Academy : Building
     {
-        public override Type BaseBuilding => typeof(ReaserchLab);
+        public override Type BaseBuilding => typeof(ResearchLab);
         public override int MagicLevel => 3;
     }
 

@@ -17,7 +17,7 @@ namespace GaiaCore.Gaia
                 log = "资源不够";
                 return false;
             }
-            if(map.HexArray[row, col].TFTerrain == Terrain.Green)
+            if (map.HexArray[row, col].TFTerrain == Terrain.Green)
             {
                 isGreenPlanet = true;
             }
@@ -40,7 +40,7 @@ namespace GaiaCore.Gaia
                 log = "该地点已经有人占领了";
                 return false;
             }
-            if (!map.CalIsBuildValidate(row, col, FactionName, GetShipDistance+m_QICShip))
+            if (!map.CalIsBuildValidate(row, col, FactionName, GetShipDistance + m_QICShip))
             {
                 log = "航海距离不够";
                 return false;
@@ -164,7 +164,7 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        internal void LeechPower(int power, FactionName factionFrom,bool isLeech)
+        internal void LeechPower(int power, FactionName factionFrom, bool isLeech)
         {
             LeechPowerQueue.RemoveAt(LeechPowerQueue.FindIndex(x => x.Item1 == power && x.Item2 == factionFrom));
             if (isLeech)
@@ -184,7 +184,7 @@ namespace GaiaCore.Gaia
                 case "TradeCenter":
                     TradeCenters.RemoveAt(0);
                     break;
-                case "ReaserchLab":
+                case "ResearchLab":
                     ReaserchLabs.RemoveAt(0);
                     break;
                 case "Academy":
@@ -201,7 +201,7 @@ namespace GaiaCore.Gaia
         internal bool IsExitUnfinishFreeAction(out string log)
         {
             log = string.Empty;
-            if (m_TerraFormNumber!=0)
+            if (m_TerraFormNumber != 0)
             {
                 log = "还存在没使用的Transform";
                 return true;
@@ -216,11 +216,6 @@ namespace GaiaCore.Gaia
                 log = "还存在没拿取的科技版";
                 return true;
             }
-            if (m_TechTrachAdv != 0)
-            {
-                log = "还存在没推进的科技条";
-                return true;
-            }
             return false;
         }
 
@@ -229,8 +224,8 @@ namespace GaiaCore.Gaia
             ActionQueue.Clear();
             m_TerraFormNumber = 0;
             m_QICShip = 0;
-            m_TechTrachAdv = 0;
             m_TechTilesGet = 0;
+            m_TechTrachAdv = 0;
         }
 
         internal bool SetTransformNumber(int num, out string log)
@@ -248,6 +243,33 @@ namespace GaiaCore.Gaia
             ActionQueue.Enqueue(queue);
             m_TerraFormNumber = num;
             return true;
+        }
+
+        internal void AdvanceTechByIndex(int v){
+            switch (v)
+            {
+                case 0:m_TransformLevel ++;break;
+                case 1:m_ShipLevel++; break;
+                case 2:m_AILevel++;break;
+                case 3:m_GaiaLevel++;break;
+                case 4:m_EconomicLevel++;break;
+                case 5:m_ScienceLevel++;break;
+                default:
+                    throw new Exception(string.Format("科技条只支持0-5,不支持{0}",v));
+            }
+        }
+        static List<string> TechStrList = new List<string>(){
+            "tf",
+            "ship",
+            "ai",
+            "gaia",
+            "eco",
+            "sci",
+        };
+
+        internal static string ConvertTechIndexToStr(int v)
+        {
+            return TechStrList[v];
         }
 
         internal bool SetQICShip(int num, out string log)
@@ -300,7 +322,8 @@ namespace GaiaCore.Gaia
 
         internal bool IsIncreateTechValide(string tech)
         {
-            return true;
+            var index = TechStrList.FindIndex(x=>x.Equals(tech));
+            return IsIncreaseTechLevelByIndexValidate(index);
         }
 
         private void ReturnBuilding(Building building)
@@ -313,8 +336,8 @@ namespace GaiaCore.Gaia
                 case "TradeCenter":
                     TradeCenters.Add(building as TradeCenter);
                     break;
-                case "ReaserchLab":
-                    ReaserchLabs.Add(building as ReaserchLab);
+                case "ResearchLab":
+                    ReaserchLabs.Add(building as ResearchLab);
                     break;
                 default:
                     throw new Exception(building.GetType().ToString() + "不会被归还");

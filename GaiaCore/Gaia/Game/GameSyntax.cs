@@ -61,6 +61,7 @@ namespace GaiaCore.Gaia
         public static Regex transformRegex = new Regex("transform ([0-9])");
         public static Regex QICShip = new Regex("qicship ([0-9])");
         public static Regex getTechTilesRegex = new Regex("\\+(a|s)tt([0-9]{1,2})");
-        public static Regex advTechRegex = new Regex("advance (tf|ai|eco|gaia|sci|ship)");
+        public static Regex advTechRegex = new Regex("advance.*");
+        public static Regex advTechRegex2 = new Regex("advance (tf|ai|eco|gaia|sci|ship)");
     }
 }

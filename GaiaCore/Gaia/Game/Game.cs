@@ -181,6 +181,7 @@ namespace GaiaCore.Gaia
                     }
                     else if (STT3List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
                     {
+                        faction.TechTrachAdv++;
                         tile = STT3List.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
                     }
                     else if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
@@ -199,22 +200,39 @@ namespace GaiaCore.Gaia
                         {
                             ATTList.Remove(ATTList.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0));
                         }
-                        else if (STT3List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
-                        {
-                            STT3List.Remove(STT3List.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0));
-                        }
-                        else if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
-                        {
-                            STT6List.Remove(STT6List.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0));
-                        }
                     };
+
+                    if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
+                    {
+                        var index = STT6List.FindIndex(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
+                        faction.LimitTechAdvance = Faction.ConvertTechIndexToStr(index);
+                    }
                     faction.ActionQueue.Enqueue(queue);
                     faction.TechTilesGet--;
                 }
                 else if (GameFreeSyntax.advTechRegex.IsMatch(item))
                 {
-                    var match = GameFreeSyntax.advTechRegex.Match(item);
-                    var tech = match.Groups[1].Value;
+
+                    string tech;
+                    if (faction.TechTrachAdv == 0)
+                    {
+                        log = "不能推进科技条";
+                        return false;
+                    }
+                    if (string.IsNullOrEmpty(faction.LimitTechAdvance)&& GameFreeSyntax.advTechRegex2.IsMatch(item))
+                    {
+                        var match = GameFreeSyntax.advTechRegex2.Match(item);
+                        tech = match.Groups[1].Value;
+                    }else if (!string.IsNullOrEmpty(faction.LimitTechAdvance))
+                    {
+                        tech = faction.LimitTechAdvance;
+                    }
+                    else
+                    {
+                        log = "请检查语句语法格式";
+                        return false;
+                    }
+
                     if (faction.IsIncreateTechValide(tech))
                     {
                         Action queue = () =>

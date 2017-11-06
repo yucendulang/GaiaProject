@@ -24,9 +24,18 @@ function DrawMap() {
                         case "TradeCenter":
                             DrawTradingPost(cxt, j, i, array[i][j].factionBelongTo);
                             break;
+                        case "ResearchLab":
+                            DrawResearchLab(cxt, j, i, array[i][j].factionBelongTo);
+                            break;
+                        case "Academy":
+                            DrawAcademy(cxt, j, i, array[i][j].factionBelongTo);
+                            break;
+                        case "StrongHold":
+                            DrawStronghold(cxt, j, i, array[i][j].factionBelongTo);
+                            break;
                         default:
-                            console.log(array[i][j].building.name+"不支持");
-                    }             
+                            console.log(array[i][j].building.name + "不支持");
+                    }
                 }
             }
         }
@@ -136,6 +145,61 @@ function DrawTradingPost(ctx, row, col, name) {
     ctx.restore();
 }
 
+function DrawResearchLab(ctx, row, col, name) {
+    var loc = hexCenter(row, col);
+    loc[1] -= 5;
+
+    ctx.save();
+
+    ctx.beginPath();
+    ctx.arc(loc[0], loc[1], 14, 0.001, Math.PI * 2, false);
+
+    fillBuilding(ctx, name);
+
+    ctx.restore();
+}
+
+
+function DrawStronghold(ctx, row, col, name) {
+    var loc = hexCenter(row, col);
+    loc[1] -= 5;
+    var size = 15;
+    var bend = 10;
+
+    ctx.save();
+
+    ctx.beginPath();
+    ctx.moveTo(loc[0] - size, loc[1] - size);
+    ctx.quadraticCurveTo(loc[0] - bend, loc[1],
+        loc[0] - size, loc[1] + size);
+    ctx.quadraticCurveTo(loc[0], loc[1] + bend,
+        loc[0] + size, loc[1] + size);
+    ctx.quadraticCurveTo(loc[0] + bend, loc[1],
+        loc[0] + size, loc[1] - size);
+    ctx.quadraticCurveTo(loc[0], loc[1] - bend,
+        loc[0] - size, loc[1] - size);
+
+    fillBuilding(ctx, name);
+
+    ctx.restore();
+}
+
+function DrawAcademy(ctx, row, col, name) {
+    var loc = hexCenter(row, col);
+    var size = 7;
+    loc[1] -= 5;
+
+    ctx.save();
+
+    ctx.beginPath();
+    ctx.arc(loc[0] - size, loc[1], 12, Math.PI / 2, -Math.PI / 2, false);
+    ctx.arc(loc[0] + size, loc[1], 12, -Math.PI / 2, Math.PI / 2, false);
+    ctx.closePath();
+
+    fillBuilding(ctx, name);
+
+    ctx.restore();
+}
 
 function fillBuilding(ctx, name) {
     ctx.fillStyle = ConvertRaceIntToColor(name);

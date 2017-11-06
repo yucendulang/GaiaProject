@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace GaiaCore.Gaia
@@ -11,9 +12,9 @@ namespace GaiaCore.Gaia
         public Faction(FactionName name,GaiaGame gg)
         {
             FactionName = name;
-            m_credit = 15;
+            m_credit = 30;
             m_knowledge = 3;
-            m_ore = 4;
+            m_ore = 11;
             m_QICs = 1;
             m_powerToken1 = 2;
             m_powerToken2 = 4;
@@ -34,10 +35,10 @@ namespace GaiaCore.Gaia
             {
                 TradeCenters.Add(new TradeCenter());
             }
-            ReaserchLabs = new List<ReaserchLab>();
+            ReaserchLabs = new List<ResearchLab>();
             for (int i = 0; i < 3; i++)
             {
-                ReaserchLabs.Add(new ReaserchLab());
+                ReaserchLabs.Add(new ResearchLab());
             }
             Academies = new List<Academy>();
             for (int i = 0; i < 2; i++)
@@ -99,7 +100,6 @@ namespace GaiaCore.Gaia
         private int m_QICShip=0;
         private int m_TechTilesGet = 0;
         private int m_TechTrachAdv = 0;
-        private FactionBackup m_Backup;
 
 
 
@@ -198,7 +198,7 @@ namespace GaiaCore.Gaia
 
         public List<Mine> Mines { set; get; }
         public List<TradeCenter> TradeCenters { set; get; }
-        public List<ReaserchLab> ReaserchLabs { set; get; }
+        public List<ResearchLab> ReaserchLabs { set; get; }
         public List<Academy> Academies { set; get; }
         public StrongHold StrongHold { set; get; }
         public int Credit { get => m_credit; }
@@ -219,6 +219,7 @@ namespace GaiaCore.Gaia
         public int Score { get; set; }
         public GaiaGame GaiaGame { get; }
         public Queue<Action> ActionQueue { get; set; }
+        public string LimitTechAdvance { get;set; }
         public int GetShipDistance
         {
             get
@@ -262,8 +263,67 @@ namespace GaiaCore.Gaia
             }
         }
 
-        public int TechTrachAdv { get => m_TechTrachAdv; set => m_TechTrachAdv = value; }
         public int TechTilesGet { get => m_TechTilesGet; set => m_TechTilesGet = value; }
+        public int TechTrachAdv { get => m_TechTrachAdv; set => m_TechTrachAdv = value; }
+
+
+        public bool IncreaseTransformLevel()
+        {
+            if (TransformLevel > 0 && TransformLevel < 5)
+            {
+                m_TransformLevel++;
+            }
+            else if (TransformLevel == 5)
+            {
+                ///检测城版
+                m_TransformLevel++;
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        }
+        private static List<FieldInfo> list = new List<FieldInfo>()
+        {
+            typeof(Faction).GetField("m_TransformLevel",BindingFlags.NonPublic|BindingFlags.Instance),
+            typeof(Faction).GetField("m_ShipLevel",BindingFlags.NonPublic|BindingFlags.Instance),
+            typeof(Faction).GetField("m_AILevel",BindingFlags.NonPublic|BindingFlags.Instance),
+            typeof(Faction).GetField("m_GaiaLevel",BindingFlags.NonPublic|BindingFlags.Instance),
+            typeof(Faction).GetField("m_EconomicLevel",BindingFlags.NonPublic|BindingFlags.Instance),
+            typeof(Faction).GetField("m_ScienceLevel",BindingFlags.NonPublic|BindingFlags.Instance),
+        };
+        public bool IsIncreaseTechLevelByIndexValidate(int index)
+        {
+            if (index < 0 | index > 5)
+            {
+                throw new Exception("超出科技条边界");
+            }
+            var level= (int)list[index].GetValue(this);
+            if (level > 0 && level < 5)
+            {
+                //level++;
+            }
+            else if (level == 5)
+            {
+                ///检测城版
+                //level++;
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+        //private int m_TransformLevel;
+
+        //       private int m_ShipLevel;
+        //       private int m_AILevel;
+        //       private int m_GaiaLevel;
+        //       private int m_EconomicLevel;
+        //       private int m_ScienceLevel;
     }
 
 
