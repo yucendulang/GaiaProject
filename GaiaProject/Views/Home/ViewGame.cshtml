@@ -6,7 +6,8 @@
 <script type='text/javascript' language='javascript' src='~/js/site.js'></script>
 @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
 {
-    <p>现在是 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 的回合</p>
+    <p>现在是Round @Model.GameStatus.RoundCount,Turn @Model.GameStatus.TurnCount</p>
+    <p>现在是 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 的回合,颜色是 @Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()</p>
     <br>
 }
 @foreach (var leech in @Model.FactionList[Model.GameStatus.PlayerIndex].LeechPowerQueue)

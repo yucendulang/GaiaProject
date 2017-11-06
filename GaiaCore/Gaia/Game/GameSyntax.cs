@@ -43,6 +43,11 @@ namespace GaiaCore.Gaia
         public const string leech = "leech";
         public const string decline = "decline";
         public static Regex leechPowerRegex = new Regex("[a-z]+:(leech|decline) ([0-9]) from (.+)");
+        /// <summary>
+        /// 吸魔力的正则表达式
+        /// </summary>
+        public const string pass = "pass";
+        public static Regex passRegex = new Regex("pass (rbt[0-9])");
     }
 
     public static class GameFreeSyntax

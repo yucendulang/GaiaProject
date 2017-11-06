@@ -1,4 +1,6 @@
-﻿namespace GaiaCore.Gaia
+﻿using System.Collections.Generic;
+
+namespace GaiaCore.Gaia
 {
     public class GameStatus
     {
@@ -6,10 +8,15 @@
         {
             m_PlayerIndex = 1;
             m_IntialFlag = false;
+            m_PassPlayerIndex = new List<int>();
         }
         public Status status = Status.PREPARING;
         public Stage stage = Stage.RANDOMSETUP;
-        public const int m_PlayerNumber = 4;
+        private int m_PlayerNumber = 4;
+        private List<int> m_PassPlayerIndex;
+        private int m_RoundCount = 0;
+        private int m_TurnCount = 0;
+
         /// <summary>
         /// 当前玩家的标签
         /// </summary>
@@ -20,22 +27,50 @@
         public bool m_IntialFlag;
 
         public int PlayerIndex { get => m_PlayerIndex - 1; }
+        public int PlayerNumber { get => m_PlayerNumber; set => m_PlayerNumber = value; }
+        public int RoundCount { get => m_RoundCount; set => m_RoundCount = value; }
+        public int TurnCount { get => m_TurnCount; set => m_TurnCount = value; }
+
         public void SetPlayerIndexLast()
         {
-            m_PlayerIndex = m_PlayerNumber;
+            m_PlayerIndex = PlayerNumber;
         }
 
-        public void SetPlayerIndexFirst()
+        public void NewRoundReset()
         {
             m_PlayerIndex = 1;
+            m_PassPlayerIndex = new List<int>();
+            RoundCount++;
+            TurnCount = 1;
+        }
+
+        public void SetPassPlayerIndex(int v)
+        {
+            m_PassPlayerIndex.Add(v);
+        }
+
+        public bool IsAllPass()
+        {
+            return m_PassPlayerIndex.Count == m_PlayerNumber;
         }
 
         public void NextPlayer()
         {
-            m_PlayerIndex++;
-            if (m_PlayerIndex == m_PlayerNumber + 1)
+            if (m_PassPlayerIndex.Count == m_PlayerNumber)
             {
+                throw new System.Exception("所有玩家已经Pass,不应该调用NextPlayer");
+            }
+
+            m_PlayerIndex++;
+            if (m_PlayerIndex == PlayerNumber + 1)
+            {
+                TurnCount++;
                 m_PlayerIndex = 1;
+            }
+
+            if (m_PassPlayerIndex.Contains(PlayerIndex))
+            {
+                NextPlayer();
             }
         }
         /// <summary>
@@ -46,7 +81,7 @@
             m_PlayerIndex--;
             if (m_PlayerIndex == 0)
             {
-                m_PlayerIndex = m_PlayerNumber;
+                m_PlayerIndex = PlayerNumber;
             }
         }
         /// <summary>
@@ -62,10 +97,10 @@
                 else
                 {
                     m_PlayerIndex++;
-                    if (m_PlayerIndex == m_PlayerNumber + 1)
+                    if (m_PlayerIndex == PlayerNumber + 1)
                     {
                         m_IntialFlag = true;
-                        m_PlayerIndex = m_PlayerNumber;
+                        m_PlayerIndex = PlayerNumber;
                     }
                 }
 

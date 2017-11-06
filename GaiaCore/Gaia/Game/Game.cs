@@ -19,7 +19,9 @@ namespace GaiaCore.Gaia
         public GaiaGame(string[] username)
         {
             GameStatus = new GameStatus();
+            GameStatus.PlayerNumber = username.Count();
             FactionList = new List<Faction>();
+            FactionNextTurnList = new List<Faction>();
             Username = username;
         }
         public bool ProcessSyntax(string syntax, out string log)
@@ -54,12 +56,9 @@ namespace GaiaCore.Gaia
                         GameStatus.NextPlayerReverse();
                     }
                     ///所有人都选完RBT了
-                    if (ret && GameStatus.PlayerIndex + 1 == GameStatus.m_PlayerNumber)
+                    if (ret && GameStatus.PlayerIndex + 1 == GameStatus.PlayerNumber)
                     {
-                        ChangeGameStatus(Stage.ROUNDINCOME);
-                        FactionList.ForEach(x => x.CalIncome());
-                        ChangeGameStatus(Stage.ROUNDSTART);
-                        GameStatus.SetPlayerIndexFirst();
+                        NewRound();
                     }
                     return ret;
                 case Stage.ROUNDSTART:
@@ -72,15 +71,30 @@ namespace GaiaCore.Gaia
                     else
                     {
                         ret = ProcessSyntaxCommand(syntax, ref log);
-                        if (ret)
+                        if (ret && GameStatus.IsAllPass())
+                        {
+                            FactionList = FactionNextTurnList;
+                            FactionNextTurnList = new List<Faction>();
+                            NewRound();
+                        }
+                        else if (ret)
                         {
                             GameStatus.NextPlayer();
                         }
+
                         return ret;
                     }
                 default:
                     return false;
             }
+        }
+
+        private void NewRound()
+        {
+            ChangeGameStatus(Stage.ROUNDINCOME);
+            FactionList.ForEach(x => x.CalIncome());
+            ChangeGameStatus(Stage.ROUNDSTART);
+            GameStatus.NewRoundReset();
         }
 
         private bool ProcessSyntaxLeechPower(string syntax, ref string log)
@@ -248,6 +262,13 @@ namespace GaiaCore.Gaia
                         return false;
                     }
                 }
+                else if (GameSyntax.passRegex.IsMatch(item)){
+                    var match = GameSyntax.passRegex.Match(item);
+                    var rbtStr=match.Groups[1].Value;
+                    FactionNextTurnList.Add(faction);
+                    ProcessGetRoundBooster(rbtStr, faction, out log);
+                    GameStatus.SetPassPlayerIndex(FactionList.IndexOf(faction));
+                }
                 else
                 {
                     log = "语句还不支持";
@@ -281,16 +302,26 @@ namespace GaiaCore.Gaia
                 return false;
             }
             var rbtStr = command.Substring(1);
+
+            ProcessGetRoundBooster(rbtStr, faction, out log);
+            return true;
+        }
+
+        private bool ProcessGetRoundBooster(string rbtStr,Faction faction,out string log)
+        {
+            log = string.Empty;
             var rbt = RBTList.Find(x => x.GetType().Name.Equals(rbtStr, StringComparison.OrdinalIgnoreCase));
             if (rbt == null)
             {
                 log = string.Format("{0}板子不存在", rbtStr);
                 return false;
             }
-
+            if(faction.GameTileList.Exists(x=>x is RoundBooster))
+            {
+                RBTList.Add(faction.GameTileList.Find(x => x is RoundBooster) as RoundBooster);
+            }
             faction.GameTileList.Add(rbt);
             RBTList.Remove(rbt);
-
             return true;
         }
 
@@ -485,6 +516,7 @@ namespace GaiaCore.Gaia
         /// 实例化四个玩家
         /// </summary>
         public List<Faction> FactionList { set; get; }
+        public List<Faction> FactionNextTurnList { set; get; }
         #region 存档需要save的内容
         [JsonProperty]
         /// <summary>

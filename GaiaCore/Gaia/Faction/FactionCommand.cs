@@ -234,6 +234,7 @@ namespace GaiaCore.Gaia
             m_QICShip = 0;
             m_TechTilesGet = 0;
             m_TechTrachAdv = 0;
+            LimitTechAdvance = string.Empty;
         }
 
         internal bool SetTransformNumber(int num, out string log)
