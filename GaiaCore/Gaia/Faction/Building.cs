@@ -55,9 +55,13 @@ namespace GaiaCore.Gaia
         /// </summary>
         RL,
         /// <summary>
-        /// Academy
+        /// Academy 提供知识的
         /// </summary>
-        AC,
+        AC1,
+        /// <summary>
+        /// 
+        /// </summary>
+        AC2,
         /// <summary>
         /// StrongHold
         /// </summary>

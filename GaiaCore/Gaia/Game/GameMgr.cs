@@ -82,16 +82,19 @@ namespace GaiaCore.Gaia
                 var d = new DirectoryInfo(BackupDataPath);
                 filename = (from p in d.EnumerateFiles() orderby p.Name descending select p.Name).FirstOrDefault() ;
             }
+            System.Diagnostics.Debug.WriteLine("读取文件" + filename);
             var logPath = Path.Combine(BackupDataPath, filename);
             var logReader = File.ReadAllText(logPath);
             var temp = JsonConvert.DeserializeObject<Dictionary<string,GaiaGame>>(logReader);
             m_dic = new Dictionary<string, GaiaGame>();
             foreach (var item in temp)
             {
+                System.Diagnostics.Debug.WriteLine("开始恢复"+item.Key);
                 var gg = new GaiaGame(item.Value.Username);
                 foreach(var str in item.Value.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     gg.Syntax(str,out string log);
+                    System.Diagnostics.Debug.WriteLine(log);
                 }
                 m_dic.Add(item.Key, gg);
             }

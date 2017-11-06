@@ -119,8 +119,13 @@ namespace GaiaCore.Gaia
                     oreCost = m_StrongHoldOreCost;
                     creditCost = m_StrongHoldCreditCost;
                     break;
-                case BuildingSyntax.AC:
-                    build = Academies.First();
+                case BuildingSyntax.AC1:
+                    build = Academy1;
+                    oreCost = m_AcademyOreCost;
+                    creditCost = m_AcademyCreditCost;
+                    break;
+                case BuildingSyntax.AC2:
+                    build = Academy2;
                     oreCost = m_AcademyOreCost;
                     creditCost = m_AcademyCreditCost;
                     break;
@@ -143,7 +148,7 @@ namespace GaiaCore.Gaia
                 log = string.Format("资源不够");
                 return false;
             }
-            if (syn == BuildingSyntax.RL)
+            if (syn == BuildingSyntax.RL|| syn == BuildingSyntax.AC1 || syn == BuildingSyntax.AC2)
             {
                 m_TechTilesGet++;
                 m_TechTrachAdv++;
@@ -155,7 +160,7 @@ namespace GaiaCore.Gaia
                 m_credit -= creditCost;
                 ReturnBuilding(map.HexArray[row, col].Building);
                 map.HexArray[row, col].Building = build;
-                RemoveBuilding(build);
+                RemoveBuilding(syn);
                 GaiaGame.SetLeechPowerQueue(FactionName, row, col);
             };
             ActionQueue.Enqueue(queue);
@@ -174,27 +179,30 @@ namespace GaiaCore.Gaia
             }
         }
 
-        private void RemoveBuilding(Building building)
+        private void RemoveBuilding(BuildingSyntax syn)
         {
-            switch (building.GetType().Name)
+            switch (syn)
             {
-                case "Mine":
+                case BuildingSyntax.M:
                     Mines.RemoveAt(0);
                     break;
-                case "TradeCenter":
+                case BuildingSyntax.TC:
                     TradeCenters.RemoveAt(0);
                     break;
-                case "ResearchLab":
+                case BuildingSyntax.RL:
                     ReaserchLabs.RemoveAt(0);
                     break;
-                case "Academy":
-                    Academies.RemoveAt(0);
+                case BuildingSyntax.AC1:
+                    Academy1 = null;
                     break;
-                case "StrongHold":
+                case BuildingSyntax.AC2:
+                    Academy2 = null;
+                    break;
+                case BuildingSyntax.SH:
                     StrongHold = null;
                     break;
                 default:
-                    throw new Exception(building.GetType().ToString() + "不会被移除");
+                    throw new Exception(syn.ToString() + "不会被移除");
             }
         }
 

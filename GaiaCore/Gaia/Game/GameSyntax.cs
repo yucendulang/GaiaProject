@@ -36,7 +36,7 @@ namespace GaiaCore.Gaia
         /// Update语句正则
         /// </summary>
         public const string upgrade = "upgrade";
-        public static Regex upgradeRegex = new Regex(upgrade + " ([a-z][0-9]{1,2}) to ([a-z]{1,2})");
+        public static Regex upgradeRegex = new Regex(upgrade + " ([a-z][0-9]{1,2}) to ([a-z0-9]{1,3})");
         /// <summary>
         /// 吸魔力的正则表达式
         /// </summary>

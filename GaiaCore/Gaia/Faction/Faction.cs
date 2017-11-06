@@ -40,11 +40,8 @@ namespace GaiaCore.Gaia
             {
                 ReaserchLabs.Add(new ResearchLab());
             }
-            Academies = new List<Academy>();
-            for (int i = 0; i < 2; i++)
-            {
-                Academies.Add(new Academy());
-            }
+            Academy1 = new Academy();
+            Academy2 = new Academy();
             StrongHold=new StrongHold();
             GameTileList = new List<GameTiles>();
             LeechPowerQueue = new List<Tuple<int,FactionName>>();
@@ -149,7 +146,7 @@ namespace GaiaCore.Gaia
         protected virtual void CalKnowledgeIncome()
         {
             m_knowledge += 4 - ReaserchLabs.Count;
-            if (Academies.Count <= 1)
+            if (Academy1 == null)
             {
                 m_knowledge += 2;
             }
@@ -159,7 +156,7 @@ namespace GaiaCore.Gaia
 
         protected virtual void CalQICIncome()
         {
-            if (Academies.Count == 0)
+            if (Academy2 == null)
             {
                 m_QICs += 1;
             }
@@ -199,7 +196,8 @@ namespace GaiaCore.Gaia
         public List<Mine> Mines { set; get; }
         public List<TradeCenter> TradeCenters { set; get; }
         public List<ResearchLab> ReaserchLabs { set; get; }
-        public List<Academy> Academies { set; get; }
+        public Academy Academy1 { set; get; }
+        public Academy Academy2 { set; get; }
         public StrongHold StrongHold { set; get; }
         public int Credit { get => m_credit; }
         public int Ore { get => m_ore;}

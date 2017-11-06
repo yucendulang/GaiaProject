@@ -110,7 +110,7 @@ namespace GaiaCore.Gaia
         public SpaceSector RandomRotato(Random random)
         {
             var time = random.Next(6);
-            System.Diagnostics.Debug.WriteLine("Time is "+time);
+            //System.Diagnostics.Debug.WriteLine("Time is "+time);
             SpaceSector result=this;
             for (int i = 0; i < time; i++)
             {

@@ -173,7 +173,6 @@ namespace GaiaCore.Gaia
             centerTuple.ForEach(x =>
             {
                 var index = random.Next(randomList.Count);
-                System.Diagnostics.Debug.WriteLine("index is "+index);
                 result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random), random);
                 randomList.RemoveAt(index);
             });
@@ -208,7 +207,7 @@ namespace GaiaCore.Gaia
             {
                 if (!IsOneHexValidate(item.Item1, item.Item2))
                 {
-                    System.Diagnostics.Debug.WriteLine(string.Format("发现不合法{0} {1}", item.Item1, item.Item2));
+                    //System.Diagnostics.Debug.WriteLine(string.Format("发现不合法{0} {1}", item.Item1, item.Item2));
                     return false;
                 }
             }
@@ -339,7 +338,7 @@ namespace GaiaCore.Gaia
                 {
                     if (CalTwoHexDistance(x, y, i, j) <= distance)
                     {
-                        System.Diagnostics.Debug.WriteLine("row:" + i + " col:" + j);
+                        //System.Diagnostics.Debug.WriteLine("row:" + i + " col:" + j);
 
                         if (HexArray[i, j] != null && HexArray[i, j].FactionBelongTo == name)
                         {
