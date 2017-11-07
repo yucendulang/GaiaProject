@@ -375,5 +375,35 @@ namespace GaiaCore.Gaia
             var dist = Math.Max(Math.Max(Math.Abs(dx), Math.Abs(dy)), Math.Abs(dx + dy));
             return dist;
         }
+        /// <summary>
+        /// 寻找周围的魔力建筑 不包括GaiaBuilding
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public List<Tuple<int, int>> GetSurroundhex(int x, int y, FactionName name)
+        {
+            //吸魔力大小范围
+            var ret = new List<Tuple<int, int>>();
+            var distance = 1;
+            for (int i = Math.Max(x - distance, 0); i <= Math.Min(x + distance, m_mapHeight); i++)
+            {
+                for (int j = Math.Max(y - distance, 0); j <= Math.Min(j + distance, m_mapWidth); j++)
+                {
+                    if (CalTwoHexDistance(x, y, i, j) <= distance)
+                    {
+                        //System.Diagnostics.Debug.WriteLine("row:" + i + " col:" + j);
+
+                        if (HexArray[i, j] != null && HexArray[i, j].FactionBelongTo == name && !(HexArray[i, j].Building is GaiaBuilding))
+                        {
+                            ret.Add(new Tuple<int, int>(i, j));
+                        }
+                    }
+
+                }
+            }
+            return ret;
+        }
     }
 }

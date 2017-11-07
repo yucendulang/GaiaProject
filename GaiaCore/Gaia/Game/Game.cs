@@ -351,6 +351,17 @@ namespace GaiaCore.Gaia
                         return false;
                     }
                 }
+                else if (GameSyntax.forgingAlliance.IsMatch(item))
+                {
+                    var posStrList=item.Substring(GameSyntax.satellite.Length + 1).Split(',');
+                    List<Tuple<int, int>> list = new List<Tuple<int, int>>();
+                    foreach(var pos in posStrList)
+                    {
+                        ConvertPosToRowCol(pos, out int row, out int col);
+                        list.Add(new Tuple<int, int>(row, col));
+                    }
+                    faction.ForgingAllianceCheckAll(list, out log);
+                }
                 else
                 {
                     log = "语句还不支持";

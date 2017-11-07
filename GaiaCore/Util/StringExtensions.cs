@@ -26,7 +26,7 @@ namespace GaiaCore.Util
             }
             else
             {
-                return source + "\r\n";
+                return source + System.Environment.NewLine;
             }
         }
     }

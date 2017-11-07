@@ -57,6 +57,7 @@ namespace GaiaCore.Gaia
         public bool IsCenter { set; get; }
         [JsonProperty]
         public Building Building { set; get; }
+        public bool IsAlliance = false;
     }
     /// <summary>
     /// Space Sector 含义参照说明书 共计十块

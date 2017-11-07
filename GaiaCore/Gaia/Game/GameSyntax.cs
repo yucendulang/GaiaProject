@@ -44,7 +44,7 @@ namespace GaiaCore.Gaia
         public const string decline = "decline";
         public static Regex leechPowerRegex = new Regex("[a-z]+:(leech|decline) ([0-9]) from (.+)");
         /// <summary>
-        /// 吸魔力的正则表达式
+        /// pass板子的正则
         /// </summary>
         public const string pass = "pass";
         public static Regex passRegex = new Regex("pass (rbt[0-9]{1,2})");
@@ -56,6 +56,7 @@ namespace GaiaCore.Gaia
         public const string action = "action";
         private static readonly List<string> turnActionList = new List<string>()
         {
+            "stt1",
             "act1",
             "act2",
             //"act3",
@@ -68,6 +69,15 @@ namespace GaiaCore.Gaia
             //"act10",
         };
         public static Regex actionRegex = new Regex(string.Format("{0} ({1})", action, string.Join("|", turnActionList)));
+        /// <summary>
+        /// 建立城邦
+        /// </summary>
+        public static string satellite = "satellite";
+        public static Regex forgingAlliance = new Regex("satellite [a-z][0-9]{1,2}(,[a-z][0-9]{1,2})*");
+        /// <summary>
+        /// 获取AllianceTile正则
+        /// </summary>
+        public static Regex ALTRegex = new Regex("\\+(alt[0-9])");
     }
 
     public static class GameFreeSyntax

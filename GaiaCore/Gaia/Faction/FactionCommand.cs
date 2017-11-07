@@ -1,5 +1,6 @@
 ﻿using GaiaCore.Gaia.Tiles;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -480,6 +481,57 @@ namespace GaiaCore.Gaia
             }
             TriggerRST(typeof(RST6));
             return;
+        }
+        internal bool ForgingAllianceCheckAll(List<Tuple<int, int>> list, out string log)
+        {
+            log = string.Empty;
+            if(!ForgingAlliance(list, out log))
+            {
+                return false;
+            }
+            foreach(var item in list)
+            {
+                var dump = new List<Tuple<int, int>>(list);
+                dump.Remove(item);
+                if (ForgingAlliance(dump, out log))
+                {
+                    log = string.Format("缺少{0}{1}也能形成星盟", item.Item1, item.Item2);
+                    return false;
+                }
+            }
+            return true;
+        }
+        internal bool ForgingAlliance(List<Tuple<int, int>> list, out string log)
+        {
+            log = string.Empty;
+
+            Queue<Tuple<int,int>> allianceQueue = new Queue<Tuple<int, int>>();
+            List<Tuple<int, int>> allianceList = new List<Tuple<int, int>>();
+            list.ForEach(x => allianceQueue.Enqueue(x));
+            list.ForEach(x => allianceList.Add(x));
+            while (allianceQueue.Any())
+            {
+                var hex = allianceQueue.Dequeue();
+                var surroundHex = GaiaGame.Map.GetSurroundhex(hex.Item1, hex.Item2,FactionName);
+                foreach(var shex in surroundHex)
+                {
+                    if (GaiaGame.Map.HexArray[hex.Item1, hex.Item2].TFTerrain != Terrain.Empty && GaiaGame.Map.HexArray[hex.Item1, hex.Item2].IsAlliance)
+                    {
+                        log = string.Format("跟{0}{1}格接壤,不符合星盟规则");
+                        return false;
+                    }
+                }
+                var newhex=surroundHex.Where(x => !allianceList.Exists(y => x.Item1 == y.Item1 && x.Item2 == y.Item2));
+                newhex.ToList().ForEach(x => allianceQueue.Enqueue(x));
+                newhex.ToList().ForEach(x => allianceList.Add(x));
+            }
+            if (allianceList.Sum(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].Building == null ? 0 : GaiaGame.Map.HexArray[x.Item1, x.Item2].Building.MagicLevel) < 7)
+            {
+                log = "魔力等级不够7级";
+                return false;
+            }
+
+            return true;
         }
 
         internal bool PredicateAction(string actionStr, out string log)
