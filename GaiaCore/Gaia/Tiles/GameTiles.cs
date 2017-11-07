@@ -23,9 +23,11 @@ namespace GaiaCore.Gaia.Tiles
         public virtual int GetQICIncome() { return 0; }
 
         public virtual int GetPowerTokenIncome() { return 0; }
+        public virtual int GetTurnEndScore(Faction faction) { return 0; }
 
         public virtual bool InvokeGameTileAction(Faction faction) { throw new NotImplementedException(); }
         public virtual bool PredicateGameTileAction() { return !IsUsed; }
+        public virtual bool OneTimeAction(Faction faction) { return true; }
         public virtual bool CanAction { get => false; }
         public virtual bool IsUsed { set; get; }
 

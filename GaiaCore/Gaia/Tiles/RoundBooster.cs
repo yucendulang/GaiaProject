@@ -93,6 +93,11 @@ namespace GaiaCore.Gaia.Tiles
         {
             return 1;
         }
+
+        public override int GetTurnEndScore(Faction faction)
+        {
+            return GameConstNumber.MineCount-faction.Mines.Count;
+        }
     }
     public class RBT4 : RoundBooster
     {
@@ -106,6 +111,11 @@ namespace GaiaCore.Gaia.Tiles
         public override int GetOreIncome()
         {
             return 1;
+        }
+
+        public override int GetTurnEndScore(Faction faction)
+        {
+            return (GameConstNumber.TradeCenterCount - faction.TradeCenters.Count)*2;
         }
     }
     public class RBT5 : RoundBooster
@@ -121,6 +131,11 @@ namespace GaiaCore.Gaia.Tiles
         {
             return 1;
         }
+
+        public override int GetTurnEndScore(Faction faction)
+        {
+            return (GameConstNumber.ResearchLabCount - faction.ReaserchLabs.Count) * 2;
+        }
     }
     public class RBT6 : RoundBooster
     {
@@ -128,13 +143,31 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "pass-vp:SH/AD*4,4PW";
+                return "pass-vp:SH/AC*4,4PW";
             }
         }
 
         public override int GetPowerIncome()
         {
             return 4;
+        }
+        public override int GetTurnEndScore(Faction faction)
+        {
+            var ret = 0;
+            if (faction.Academy1 == null)
+            {
+                ret += 4;
+            }
+            if (faction.Academy2 == null)
+            {
+                ret += 4;
+            }
+            if (faction.StrongHold == null)
+            {
+                ret += 4;
+            }
+
+            return ret;
         }
     }
     public class RBT7 : RoundBooster
@@ -150,6 +183,10 @@ namespace GaiaCore.Gaia.Tiles
         public override int GetCreditIncome()
         {
             return 4;
+        }
+        public override int GetTurnEndScore(Faction faction)
+        {
+            return faction.GaiaPlanetNumber * 4;
         }
     }
     public class RBT8 : RoundBooster

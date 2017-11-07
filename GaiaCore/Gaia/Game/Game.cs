@@ -266,6 +266,7 @@ namespace GaiaCore.Gaia
                         {
                             ATTList.Remove(ATTList.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0));
                         }
+                        tile.OneTimeAction(faction);
                     };
 
                     if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))

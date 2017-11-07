@@ -69,6 +69,10 @@ namespace GaiaCore.Gaia
                   {
                       m_QICs -= 1;
                   }
+                  if (isGreenPlanet)
+                  {
+                      GaiaPlanetNumber++;
+                  }
               };
             ActionQueue.Enqueue(queue);
             TerraFormNumber = 0;
@@ -118,6 +122,17 @@ namespace GaiaCore.Gaia
             ActionQueue.Enqueue(queue);
             TempShip = 0;
             return true;
+        }
+
+        internal int CalPlanetType()
+        {
+            var hexList = GaiaGame.Map.GetHexList();
+            var q =
+                from h in hexList
+                where h.FactionBelongTo == FactionName && h.TFTerrain != Terrain.Purple
+                group h by h.TFTerrain into g
+                select g;
+            return q.Count();
         }
 
         private void RemovePowerToken(int n)

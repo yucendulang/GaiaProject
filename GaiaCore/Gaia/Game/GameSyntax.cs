@@ -92,7 +92,8 @@ namespace GaiaCore.Gaia
         
         private static readonly List<string> turnActionList = new List<string>()
         {
-            "rbt1"
+            "rbt1",
+            "rbt2"
         };
         public static Regex actionRegex = new Regex(string.Format("{0} ({1})", GameSyntax.action, string.Join("|", turnActionList)));
 

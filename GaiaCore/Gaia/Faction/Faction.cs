@@ -26,17 +26,17 @@ namespace GaiaCore.Gaia
             m_ScienceLevel = 0;
             m_ShipLevel = 5;
             Mines = new List<Mine>();
-            for (int i = 0; i < m_MineCount; i++)
+            for (int i = 0; i < GameConstNumber.MineCount; i++)
             {
                 Mines.Add(new Mine());
             }
             TradeCenters = new List<TradeCenter>();
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < GameConstNumber.TradeCenterCount; i++)
             {
                 TradeCenters.Add(new TradeCenter());
             }
             ReaserchLabs = new List<ResearchLab>();
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < GameConstNumber.ResearchLabCount; i++)
             {
                 ReaserchLabs.Add(new ResearchLab());
             }
@@ -51,11 +51,12 @@ namespace GaiaCore.Gaia
             ActionQueue = new Queue<Action>();
             ActionList = new Dictionary<string, Func<Faction, bool>>();
             PredicateActionList = new Dictionary<string, Func< bool>>();
+            GaiaPlanetNumber = 0;
         }
 
         internal bool FinishIntialMines()
         {
-            if (m_MineCount - Mines.Count == 2)
+            if (GameConstNumber.MineCount - Mines.Count == 2)
             {
                 return true;
             }
@@ -82,7 +83,7 @@ namespace GaiaCore.Gaia
         private int m_ScienceLevel;
         private const int m_MineOreCost=1;
         private const int m_MineCreditCost = 2;
-        private const int m_MineCount=8;
+
         private const int m_TradeCenterOreCost = 2;
         private const int m_TradeCenterCreditCostCluster = 3;
         private const int m_TradeCenterCreditCostAlone = 6;
@@ -177,7 +178,7 @@ namespace GaiaCore.Gaia
             PowerIncrease(GameTileList.Sum(x => x.GetPowerIncome()));
         }
 
-        protected virtual void PowerIncrease(int i)
+        public virtual void PowerIncrease(int i)
         {
             if (m_powerToken1 > i)
             {
@@ -203,9 +204,9 @@ namespace GaiaCore.Gaia
         public Academy Academy2 { set; get; }
         public StrongHold StrongHold { set; get; }
         public int Credit { get => m_credit; }
-        public int Ore { get => m_ore;}
+        public int Ore { get => m_ore; set => m_ore = value; }
         public int Knowledge { get => m_knowledge; set => m_knowledge = value; }
-        public int QICs { get => m_QICs; }
+        public int QICs { get => m_QICs; set => m_QICs = value; }
         public int PowerToken1 { get => m_powerToken1; }
         public int PowerToken2 { get => m_powerToken2;  }
         public int PowerToken3 { get => m_powerToken3;  }
@@ -223,6 +224,7 @@ namespace GaiaCore.Gaia
         public string LimitTechAdvance { get;set; }
         public Dictionary<string,Func<Faction,bool>> ActionList { get; set; }
         public Dictionary<string,Func<bool>> PredicateActionList { get; set; }
+        public int GaiaPlanetNumber { get; set; }
         public int GetShipDistance
         {
             get

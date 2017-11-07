@@ -186,6 +186,19 @@ namespace GaiaCore.Gaia
         public const int m_mapWidth = 20;
         public const int m_mapHeight = 20;
         public TerrenHex[,] HexArray = new TerrenHex[m_mapWidth, m_mapHeight];
+
+        public IList<TerrenHex> GetHexList()
+        {
+            var list = new List<TerrenHex>();
+            foreach(var item in HexArray)
+            {
+                if (item != null)
+                {
+                    list.Add(item);
+                }
+            }
+            return list;
+        }
         public void AddSpaceSector(int x, int y, SpaceSector ss,Random random)
         {
 

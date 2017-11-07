@@ -30,14 +30,16 @@ namespace GaiaCore.Gaia
 
     public class Academy : Building
     {
+        public int MagicLevelIncrease = 0;
         public override Type BaseBuilding => typeof(ResearchLab);
-        public override int MagicLevel => 3;
+        public override int MagicLevel => 3 + MagicLevelIncrease;
     }
 
     public class StrongHold : Building
     {
+        public int MagicLevelIncrease = 0;
         public override Type BaseBuilding => typeof(TradeCenter);
-        public override int MagicLevel => 3;
+        public override int MagicLevel => 3 + MagicLevelIncrease;
     }
 
     public enum BuildingSyntax
