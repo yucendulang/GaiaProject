@@ -34,6 +34,7 @@ namespace GaiaCore.Gaia
         /// <summary>
         /// Transformation的地形
         /// </summary>
+        [JsonProperty]
         public Terrain TFTerrain { set; get; }
         /// <summary>
         /// 属于哪个大板块的名字

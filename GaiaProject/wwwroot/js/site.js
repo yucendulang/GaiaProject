@@ -13,7 +13,7 @@ function DrawMap() {
 
             if (array[i][j] !== null) {
                 //console.log(i, j, array[i][j].ogTerrain, ConvertIntToColor(array[i][j].ogTerrain), array[i][j].isCenter);
-                DrawOneHex(cxt, j, i, ConvertIntToColor(array[i][j].ogTerrain), array[i][j].isCenter, array[i][j]);
+                DrawOneHex(cxt, j, i, ConvertIntToColor(array[i][j].tfTerrain), array[i][j].isCenter, array[i][j]);
                 console.log(i, j, array[i][j].building);
                 if (array[i][j].building !== null) {
                     //画房子

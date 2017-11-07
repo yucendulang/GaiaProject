@@ -119,8 +119,20 @@ namespace GaiaCore.Gaia
         {
             ChangeGameStatus(Stage.ROUNDINCOME);
             FactionList.ForEach(x => x.CalIncome());
+            GaiaPhase();
             ChangeGameStatus(Stage.ROUNDSTART);
             GameStatus.NewRoundReset();
+        }
+
+        private void GaiaPhase()
+        {
+            foreach (var item in Map.HexArray)
+            {
+                if (item?.Building is GaiaBuilding)
+                {
+                    item.TFTerrain = Terrain.Green;
+                }
+            }
         }
 
         private bool ProcessSyntaxLeechPower(string syntax, ref string log)

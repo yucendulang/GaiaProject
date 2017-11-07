@@ -11,7 +11,8 @@ namespace GaiaCore.Gaia
         internal bool BuildMine(Map map, int row, int col, out string log)
         {
             log = string.Empty;
-            bool isGreenPlanet = false; ;
+            bool isGreenPlanet = false;
+            bool isGaiaPlanet = false;
             if (!(Mines.Count > 1 && m_credit > m_MineCreditCost && m_ore > m_MineOreCost))
             {
                 log = "资源不够";
@@ -20,6 +21,12 @@ namespace GaiaCore.Gaia
             if (map.HexArray[row, col].TFTerrain == Terrain.Green)
             {
                 isGreenPlanet = true;
+                if(map.HexArray[row,col].TFTerrain==Terrain.Green
+                    &&map.HexArray[row,col].Building is GaiaBuilding
+                    &&map.HexArray[row,col].FactionBelongTo== FactionName)
+                {
+                    isGaiaPlanet = true;
+                }
             }
             else
             {
@@ -30,12 +37,12 @@ namespace GaiaCore.Gaia
                     return false;
                 }
             }
-            if (isGreenPlanet && m_QICs < 1)
+            if (!isGaiaPlanet&&isGreenPlanet && m_QICs < 1)
             {
                 log = "至少需要一块QIC";
                 return false;
             }
-            if (!(map.HexArray[row, col].Building == null && map.HexArray[row, col].FactionBelongTo == null))
+            if (!isGaiaPlanet&&!(map.HexArray[row, col].Building == null && map.HexArray[row, col].FactionBelongTo == null))
             {
                 log = "该地点已经有人占领了";
                 return false;
@@ -50,11 +57,15 @@ namespace GaiaCore.Gaia
               {
                   m_ore -= m_MineOreCost;
                   m_credit -= m_MineCreditCost;
+                  if (isGaiaPlanet)
+                  {
+                      Gaias.Add(map.HexArray[row, col].Building as GaiaBuilding);
+                  }
                   map.HexArray[row, col].Building = Mines.First();
                   map.HexArray[row, col].FactionBelongTo = FactionName;
                   Mines.RemoveAt(0);
                   GaiaGame.SetLeechPowerQueue(FactionName, row, col);
-                  if (isGreenPlanet)
+                  if (!isGaiaPlanet&&isGreenPlanet)
                   {
                       m_QICs -= 1;
                   }
