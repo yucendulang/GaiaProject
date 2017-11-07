@@ -1,0 +1,11 @@
+{
+  "test01": {
+    "UserActionLog": "setupgame seed1800359655\r\n#FACTIONSELECTION\r\nsetup terraner\r\nsetup madandroid\r\nsetup geoden\r\nsetup taklons\r\n#INITIALMINES\r\nterraner:build b3\r\nmadandroid:build e7\r\ngeoden:build F6\r\ntaklons:build c9\r\ntaklons:build L3\r\ngeoden:build H3\r\nmadandroid:build I4\r\nterraner:build c11\r\n#SELECTROUNDBOOSTER\r\ntaklons:+rbt1\r\ngeoden:+rbt2\r\nMadAndroid:+rbt3\r\nterraner:+rbt4\r\n#ROUNDINCOME\r\n#ROUNDSTART\r\nTerraner:upgrade c11 to tc\r\nMadAndroid:upgrade e7 to tc\r\nGeoden:leech 1 from MadAndroid\r\nGeoden:transform 1.build e3\r\nTaklons:decline 1 from Terraner\r\nTaklons:upgrade c9 to tc\r\nTerraner:leech 2 from Taklons\r\nTerraner:pass rbt5.\r\nMadAndroid:pass rbt10\r\nGeoden:transform 1.build h4\r\nMadAndroid:leech 1 from Geoden\r\nTaklons:pass rbt8.\r\nGeoden:upgrade f6 to tc\r\nGeoden:upgrade h4 to tc\r\nGeoden:upgrade h3 to tc\r\nMadAndroid:leech 2 from Geoden\r\nMadAndroid:leech 1 from Geoden\r\nMadAndroid:leech 1 from Geoden\r\n",
+    "Username": [
+      "yucenyucen@126.com",
+      "yucenyucen@126.com",
+      "yucenyucen@126.com",
+      "yucenyucen@126.com"
+    ]
+  }
+}
