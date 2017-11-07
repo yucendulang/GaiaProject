@@ -301,9 +301,15 @@ namespace GaiaCore.Gaia
                 else if (GameSyntax.passRegex.IsMatch(item)){
                     var match = GameSyntax.passRegex.Match(item);
                     var rbtStr=match.Groups[1].Value;
-                    FactionNextTurnList.Add(faction);
-                    ProcessGetRoundBooster(rbtStr, faction, out log);
-                    GameStatus.SetPassPlayerIndex(FactionList.IndexOf(faction));
+                    if(!ProcessGetRoundBooster(rbtStr, faction, out log))
+                    {
+                        return false;
+                    }
+                    Action action = () => {
+                        FactionNextTurnList.Add(faction);
+                        GameStatus.SetPassPlayerIndex(FactionList.IndexOf(faction));
+                    };
+                    faction.ActionQueue.Enqueue(action);
                 }
                 else
                 {

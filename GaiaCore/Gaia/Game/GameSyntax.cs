@@ -31,7 +31,7 @@ namespace GaiaCore.Gaia
         /// 获取RoundBooster正则
         /// </summary>
         public const string rbt = "+rbt";
-        public static Regex RBTRegex = new Regex("\\+rbt[0-9]");
+        public static Regex RBTRegex = new Regex("\\+rbt[0-9]{1,2}");
         /// <summary>
         /// Update语句正则
         /// </summary>
@@ -47,7 +47,7 @@ namespace GaiaCore.Gaia
         /// 吸魔力的正则表达式
         /// </summary>
         public const string pass = "pass";
-        public static Regex passRegex = new Regex("pass (rbt[0-9])");
+        public static Regex passRegex = new Regex("pass (rbt[0-9]{1,2})");
         /// <summary>
         /// 盖亚语句
         /// </summary>
