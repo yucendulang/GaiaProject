@@ -53,6 +53,21 @@ namespace GaiaCore.Gaia
         /// </summary>
         public const string gaia = "gaia";
         public static Regex gaiaRegex = new Regex(gaia + " ([a-z][0-9]{1,2})");
+        public const string action = "action";
+        private static readonly List<string> turnActionList = new List<string>()
+        {
+            "act1",
+            "act2",
+            //"act3",
+            //"act4",
+            //"act5",
+            //"act6",
+            //"act7",
+            //"act8",
+            //"act9",
+            //"act10",
+        };
+        public static Regex actionRegex = new Regex(string.Format("{0} ({1})", action, string.Join("|", turnActionList)));
     }
 
     public static class GameFreeSyntax
@@ -65,6 +80,7 @@ namespace GaiaCore.Gaia
             ret.Add(QICShip);
             ret.Add(getTechTilesRegex);
             ret.Add(advTechRegex);
+            ret.Add(actionRegex);
             return ret;
         } 
         public static Regex burningRegex = new Regex("burn ([0-9])");
@@ -73,5 +89,12 @@ namespace GaiaCore.Gaia
         public static Regex getTechTilesRegex = new Regex("\\+(a|s)tt([0-9]{1,2})");
         public static Regex advTechRegex = new Regex("advance.*");
         public static Regex advTechRegex2 = new Regex("advance (tf|ai|eco|gaia|sci|ship)");
+        
+        private static readonly List<string> turnActionList = new List<string>()
+        {
+            "rbt1"
+        };
+        public static Regex actionRegex = new Regex(string.Format("{0} ({1})", GameSyntax.action, string.Join("|", turnActionList)));
+
     }
 }

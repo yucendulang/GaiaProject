@@ -40,7 +40,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "ACT:1TF,2C";
+                return "Action rbt1:1TF , 2C";
             }
         }
 
@@ -48,6 +48,14 @@ namespace GaiaCore.Gaia.Tiles
         {
             return 2;
         }
+
+        public override bool InvokeGameTileAction(Faction faction)
+        {
+            faction.TerraFormNumber += 1;
+            IsUsed = true;
+            return true;
+        }
+        public override bool CanAction => true;
     }
     public class RBT2 : RoundBooster
     {
@@ -62,6 +70,13 @@ namespace GaiaCore.Gaia.Tiles
         public override int GetPowerIncome()
         {
             return 2;
+        }
+
+        public override bool InvokeGameTileAction(Faction faction)
+        {
+            faction.TempShip += 1;
+            IsUsed = true;
+            return true;
         }
     }
     public class RBT3 : RoundBooster

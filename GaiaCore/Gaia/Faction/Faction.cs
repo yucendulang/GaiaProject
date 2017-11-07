@@ -49,6 +49,8 @@ namespace GaiaCore.Gaia
             Score = 10;
             GaiaGame = gg;
             ActionQueue = new Queue<Action>();
+            ActionList = new Dictionary<string, Func<Faction, bool>>();
+            PredicateActionList = new Dictionary<string, Func< bool>>();
         }
 
         internal bool FinishIntialMines()
@@ -95,7 +97,7 @@ namespace GaiaCore.Gaia
         private const int m_StrongHoldCreditCost = 6;
         private const int m_StrongHoldCount = 1;
         private int m_TerraFormNumber=0;
-        private int m_QICShip=0;
+        private int m_TempShip=0;
         private int m_TechTilesGet = 0;
         private int m_TechTrachAdv = 0;
 
@@ -202,7 +204,7 @@ namespace GaiaCore.Gaia
         public StrongHold StrongHold { set; get; }
         public int Credit { get => m_credit; }
         public int Ore { get => m_ore;}
-        public int Knowledge { get => m_knowledge;}
+        public int Knowledge { get => m_knowledge; set => m_knowledge = value; }
         public int QICs { get => m_QICs; }
         public int PowerToken1 { get => m_powerToken1; }
         public int PowerToken2 { get => m_powerToken2;  }
@@ -219,25 +221,27 @@ namespace GaiaCore.Gaia
         public GaiaGame GaiaGame { get; }
         public Queue<Action> ActionQueue { get; set; }
         public string LimitTechAdvance { get;set; }
+        public Dictionary<string,Func<Faction,bool>> ActionList { get; set; }
+        public Dictionary<string,Func<bool>> PredicateActionList { get; set; }
         public int GetShipDistance
         {
             get
             {
                 if (m_ShipLevel == 0 | m_ShipLevel == 1)
                 {
-                    return 1;
+                    return 1 + TempShip;
                 }
                 else if (m_ShipLevel == 2 | m_ShipLevel == 3)
                 {
-                    return 2;
+                    return 2 + TempShip;
                 }
                 else if (m_ShipLevel == 4)
                 {
-                    return 3;
+                    return 3 + TempShip;
                 }
                 else if (m_ShipLevel == 5)
                 {
-                    return 4;
+                    return 4 + TempShip;
                 }
                 throw new Exception("m_ShipLevel数值出错" + m_ShipLevel);
             }
@@ -264,8 +268,9 @@ namespace GaiaCore.Gaia
 
         public int TechTilesGet { get => m_TechTilesGet; set => m_TechTilesGet = value; }
         public int TechTrachAdv { get => m_TechTrachAdv; set => m_TechTrachAdv = value; }
+        public int TerraFormNumber { get => m_TerraFormNumber; set => m_TerraFormNumber = value; }
+        public int TempShip { get => m_TempShip; set => m_TempShip = value; }
 
-        
         private static List<FieldInfo> list = new List<FieldInfo>()
         {
             typeof(Faction).GetField("m_TransformLevel",BindingFlags.NonPublic|BindingFlags.Instance),

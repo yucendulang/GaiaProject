@@ -160,11 +160,15 @@ namespace GaiaCore.Gaia
             var commandList = command.Split('.').Where(x=>!string.IsNullOrEmpty(x));
             //非免费行动只能执行一个
             var NoneFreeActionCount=commandList.Sum(y => GameFreeSyntax.GetRegexList().Exists(x => x.IsMatch(y)) ? 0 : 1);
-            if (NoneFreeActionCount != 1)
+            if (NoneFreeActionCount == 0 && commandList.ToList().Exists(x => GameFreeSyntax.advTechRegex2.IsMatch(x))){
+                //
+            }
+            else if (NoneFreeActionCount != 1)
             {
                 log = "能且只能执行一个普通行动";
                 return false;
             }
+
             //faction.Backup();
             if (!ProcessCommandWithBackup(commandList.ToArray(),faction,out log))
             {
@@ -276,9 +280,9 @@ namespace GaiaCore.Gaia
                 {
 
                     string tech;
-                    if (faction.TechTrachAdv == 0)
+                    if (faction.TechTrachAdv == 0 && faction.Knowledge < 4)
                     {
-                        log = "不能推进科技条";
+                        log = "没有建立RL或者AC或者科技不足四点";
                         return false;
                     }
                     if (string.IsNullOrEmpty(faction.LimitTechAdvance)&& GameFreeSyntax.advTechRegex2.IsMatch(item))
@@ -302,7 +306,14 @@ namespace GaiaCore.Gaia
                             faction.IncreaseTech(tech);
                         };
                         faction.ActionQueue.Enqueue(queue);
-                        faction.TechTrachAdv--;
+                        if (faction.TechTrachAdv != 0)
+                        {
+                            faction.TechTrachAdv--;
+                        }else
+                        {
+                            faction.Knowledge -= 4;
+                        }
+                        
                     }
                     else
                     {
@@ -322,6 +333,22 @@ namespace GaiaCore.Gaia
                         GameStatus.SetPassPlayerIndex(FactionList.IndexOf(faction));
                     };
                     faction.ActionQueue.Enqueue(action);
+                }
+                else if (GameSyntax.actionRegex.IsMatch(item)){
+                    throw new NotImplementedException();
+                }
+                else if (GameFreeSyntax.actionRegex.IsMatch(item))
+                {
+                    var match = GameFreeSyntax.actionRegex.Match(item);
+                    var actionStr = match.Groups[1].Value;
+                    if (faction.PredicateAction(actionStr,out log))
+                    {
+                        faction.DoAction(actionStr,true);
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
@@ -372,9 +399,17 @@ namespace GaiaCore.Gaia
             }
             if(faction.GameTileList.Exists(x=>x is RoundBooster))
             {
-                RBTList.Add(faction.GameTileList.Find(x => x is RoundBooster) as RoundBooster);
+                var ret = faction.GameTileList.Find(x => x is RoundBooster) as RoundBooster;
+                RBTList.Add(ret);
+                faction.GameTileList.Remove(ret);
+                ret.IsUsed = false; ;
             }
             faction.GameTileList.Add(rbt);
+            if (rbt.CanAction)
+            {
+                faction.PredicateActionList.Add(rbt.GetType().Name.ToLower(), rbt.PredicateGameTileAction);
+                faction.ActionList.Add(rbt.GetType().Name.ToLower(), rbt.InvokeGameTileAction);
+            }
             RBTList.Remove(rbt);
             return true;
         }

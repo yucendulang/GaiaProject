@@ -31,7 +31,7 @@ namespace GaiaCore.Gaia
             else
             {
                 var transNumNeed = Math.Min(7 - Math.Abs(map.HexArray[row, col].OGTerrain - OGTerrain), Math.Abs(map.HexArray[row, col].OGTerrain - OGTerrain));
-                if (!(transNumNeed <= m_TerraFormNumber))
+                if (!(transNumNeed <= TerraFormNumber))
                 {
                     log = string.Format("原始地形为{0},需要地形{1},需要改造等级为{2}", map.HexArray[row, col].OGTerrain.ToString(), OGTerrain.ToString(), transNumNeed);
                     return false;
@@ -47,7 +47,7 @@ namespace GaiaCore.Gaia
                 log = "该地点已经有人占领了";
                 return false;
             }
-            if (!map.CalIsBuildValidate(row, col, FactionName, GetShipDistance + m_QICShip))
+            if (!map.CalIsBuildValidate(row, col, FactionName, GetShipDistance))
             {
                 log = "航海距离不够";
                 return false;
@@ -71,8 +71,8 @@ namespace GaiaCore.Gaia
                   }
               };
             ActionQueue.Enqueue(queue);
-            m_TerraFormNumber = 0;
-            m_QICShip = 0;
+            TerraFormNumber = 0;
+            TempShip = 0;
             return true;
         }
         internal bool BuildGaia(Map map, int row, int col, out string log)
@@ -103,7 +103,7 @@ namespace GaiaCore.Gaia
                 log = "该地点已经有人占领了";
                 return false;
             }
-            if (!map.CalIsBuildValidate(row, col, FactionName, GetShipDistance + m_QICShip))
+            if (!map.CalIsBuildValidate(row, col, FactionName, GetShipDistance))
             {
                 log = "航海距离不够";
                 return false;
@@ -116,7 +116,7 @@ namespace GaiaCore.Gaia
                 map.HexArray[row, col].FactionBelongTo = FactionName;
             };
             ActionQueue.Enqueue(queue);
-            m_QICShip = 0;
+            TempShip = 0;
             return true;
         }
 
@@ -301,12 +301,12 @@ namespace GaiaCore.Gaia
         internal bool IsExitUnfinishFreeAction(out string log)
         {
             log = string.Empty;
-            if (m_TerraFormNumber != 0)
+            if (TerraFormNumber != 0)
             {
                 log = "还存在没使用的Transform";
                 return true;
             }
-            if (m_QICShip != 0)
+            if (TempShip != 0)
             {
                 log = "还存在没使用的QICSHIP";
                 return true;
@@ -323,8 +323,8 @@ namespace GaiaCore.Gaia
         internal void ResetUnfinishAction()
         {
             ActionQueue.Clear();
-            m_TerraFormNumber = 0;
-            m_QICShip = 0;
+            TerraFormNumber = 0;
+            TempShip = 0;
             m_TechTilesGet = 0;
             m_TechTrachAdv = 0;
             LimitTechAdvance = string.Empty;
@@ -343,7 +343,7 @@ namespace GaiaCore.Gaia
                 m_ore -= num * GetTransformCost;
             };
             ActionQueue.Enqueue(queue);
-            m_TerraFormNumber = num;
+            TerraFormNumber += num;
             return true;
         }
 
@@ -390,7 +390,7 @@ namespace GaiaCore.Gaia
             ActionQueue.Enqueue(queue);
 
 
-            m_QICShip = num*2;
+            TempShip += num*2;
             return true;
         }
 
@@ -440,6 +440,39 @@ namespace GaiaCore.Gaia
                     throw new Exception("不存在此科技条" + tech);
             }
             return;
+        }
+
+        internal bool PredicateAction(string actionStr, out string log)
+        {
+            log = string.Empty;
+            if (PredicateActionList.ContainsKey(actionStr)&& !PredicateActionList[actionStr].Invoke())
+            {
+                log = "此行动不可用";
+                return false;
+            }
+            if (!ActionList.ContainsKey(actionStr))
+            {
+                log = "没有做此行动的板子";
+                return false;
+            }
+            return true;
+        }
+
+        internal void DoAction(string actionStr,bool isFreeSyntax=false)
+        {
+            var func = ActionList[actionStr];
+            if (isFreeSyntax)
+            {
+                func.Invoke(this);
+            }
+            else
+            {
+                Action action = () =>
+                {
+                    func.Invoke(this);
+                };
+                ActionQueue.Enqueue(action);
+            }
         }
 
         internal bool IsIncreateTechValide(string tech)
