@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GaiaCore.Gaia.Tiles;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -54,31 +55,45 @@ namespace GaiaCore.Gaia
             }
             //扣资源建建筑
             Action queue = () =>
-              {
-                  m_ore -= m_MineOreCost;
-                  m_credit -= m_MineCreditCost;
-                  if (isGaiaPlanet)
-                  {
-                      Gaias.Add(map.HexArray[row, col].Building as GaiaBuilding);
-                  }
-                  map.HexArray[row, col].Building = Mines.First();
-                  map.HexArray[row, col].FactionBelongTo = FactionName;
-                  Mines.RemoveAt(0);
-                  GaiaGame.SetLeechPowerQueue(FactionName, row, col);
-                  if (!isGaiaPlanet&&isGreenPlanet)
-                  {
-                      m_QICs -= 1;
-                  }
-                  if (isGreenPlanet)
-                  {
-                      GaiaPlanetNumber++;
-                  }
-              };
+            {
+                m_ore -= m_MineOreCost;
+                m_credit -= m_MineCreditCost;
+                if (isGaiaPlanet)
+                {
+                    Gaias.Add(map.HexArray[row, col].Building as GaiaBuilding);
+                }
+                map.HexArray[row, col].Building = Mines.First();
+                map.HexArray[row, col].FactionBelongTo = FactionName;
+                Mines.RemoveAt(0);
+                GaiaGame.SetLeechPowerQueue(FactionName, row, col);
+                if (!isGaiaPlanet && isGreenPlanet)
+                {
+                    m_QICs -= 1;
+                }
+                if (isGreenPlanet)
+                {
+                    TriggerRST(typeof(RST4));
+                    GaiaPlanetNumber++;
+                }
+                else
+                {
+                    TriggerRST(typeof(RST1));
+                }
+            };
             ActionQueue.Enqueue(queue);
             TerraFormNumber = 0;
             TempShip = 0;
             return true;
         }
+
+        private void TriggerRST(Type type)
+        {
+            if (GaiaGame.RSTList[(GaiaGame.GameStatus.RoundCount - 1)].GetType()==type)
+            {
+                Score += GaiaGame.RSTList[(GaiaGame.GameStatus.RoundCount - 1)].GetTriggerScore;
+            }
+        }
+
         internal bool BuildGaia(Map map, int row, int col, out string log)
         {
             log = string.Empty;
@@ -209,32 +224,38 @@ namespace GaiaCore.Gaia
             int oreCost;
             int creditCost;
             Building build;
+            Type trigger;
             switch (syn)
             {
                 case BuildingSyntax.TC:
                     build = TradeCenters.First();
                     oreCost = m_TradeCenterOreCost;
                     creditCost = m_TradeCenterCreditCostCluster;
+                    trigger = typeof(RST2);
                     break;
                 case BuildingSyntax.RL:
                     build = ReaserchLabs.First();
                     oreCost = m_ReaserchLabOreCost;
                     creditCost = m_ReaserchLabCreditCost;
+                    trigger = null;
                     break;
                 case BuildingSyntax.SH:
                     build = StrongHold;
                     oreCost = m_StrongHoldOreCost;
                     creditCost = m_StrongHoldCreditCost;
+                    trigger = typeof(RST3);
                     break;
                 case BuildingSyntax.AC1:
                     build = Academy1;
                     oreCost = m_AcademyOreCost;
                     creditCost = m_AcademyCreditCost;
+                    trigger = typeof(RST3);
                     break;
                 case BuildingSyntax.AC2:
                     build = Academy2;
                     oreCost = m_AcademyOreCost;
                     creditCost = m_AcademyCreditCost;
+                    trigger = typeof(RST3);
                     break;
                 default:
                     log = "未知升级";
@@ -269,10 +290,12 @@ namespace GaiaCore.Gaia
                 map.HexArray[row, col].Building = build;
                 RemoveBuilding(syn);
                 GaiaGame.SetLeechPowerQueue(FactionName, row, col);
+                if (trigger != null)
+                {
+                    TriggerRST(trigger);
+                }
             };
             ActionQueue.Enqueue(queue);
-
-
             return true;
         }
 
@@ -355,6 +378,7 @@ namespace GaiaCore.Gaia
             }
             Action queue = () =>
             {
+                TriggerRST(typeof(RST7));
                 m_ore -= num * GetTransformCost;
             };
             ActionQueue.Enqueue(queue);
@@ -454,6 +478,7 @@ namespace GaiaCore.Gaia
                 default:
                     throw new Exception("不存在此科技条" + tech);
             }
+            TriggerRST(typeof(RST6));
             return;
         }
 

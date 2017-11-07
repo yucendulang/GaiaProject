@@ -31,6 +31,7 @@ namespace GaiaCore.Gaia.Tiles
 
     public abstract class RoundScoring:GameTiles
     {
+        public abstract int GetTriggerScore { get; }
     }
     public class RST1 : RoundScoring
     {
@@ -41,6 +42,7 @@ namespace GaiaCore.Gaia.Tiles
                 return "M->2VP";
             }
         }
+        public override int GetTriggerScore => 2;
     }
     public class RST2 : RoundScoring
     {
@@ -51,6 +53,8 @@ namespace GaiaCore.Gaia.Tiles
                 return "TC->3VP";
             }
         }
+
+        public override int GetTriggerScore => 3;
     }
     public class RST3 : RoundScoring
     {
@@ -61,6 +65,8 @@ namespace GaiaCore.Gaia.Tiles
                 return "SH/AD->5VP";
             }
         }
+
+        public override int GetTriggerScore => 5;
     }
     public class RST4 : RoundScoring
     {
@@ -71,6 +77,8 @@ namespace GaiaCore.Gaia.Tiles
                 return "M(G)->4VP";
             }
         }
+
+        public override int GetTriggerScore => 4;
     }
     public class RST5 : RoundScoring
     {
@@ -81,6 +89,8 @@ namespace GaiaCore.Gaia.Tiles
                 return "AL->5VP";
             }
         }
+
+        public override int GetTriggerScore => 5;
     }
     public class RST6 : RoundScoring
     {
@@ -91,6 +101,7 @@ namespace GaiaCore.Gaia.Tiles
                 return "RA->2VP";
             }
         }
+        public override int GetTriggerScore => 2;
     }
     public class RST7 : RoundScoring
     {
@@ -101,5 +112,7 @@ namespace GaiaCore.Gaia.Tiles
                 return "TF->2VP";
             }
         }
+
+        public override int GetTriggerScore => 2;
     }
 }
