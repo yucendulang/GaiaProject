@@ -393,19 +393,6 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        internal void AdvanceTechByIndex(int v){
-            switch (v)
-            {
-                case 0:m_TransformLevel ++;break;
-                case 1:m_ShipLevel++; break;
-                case 2:m_AILevel++;break;
-                case 3:m_GaiaLevel++;break;
-                case 4:m_EconomicLevel++;break;
-                case 5:m_ScienceLevel++;break;
-                default:
-                    throw new Exception(string.Format("科技条只支持0-5,不支持{0}",v));
-            }
-        }
         static List<string> TechStrList = new List<string>(){
             "tf",
             "ship",
@@ -446,12 +433,53 @@ namespace GaiaCore.Gaia
             {
                 case "tf":
                     m_TransformLevel++;
+                    if (m_TransformLevel == 1)
+                    {
+                        Ore += 2;
+                    }
+                    else if (m_TransformLevel == 3)
+                    {
+                        PowerIncrease(GameConstNumber.TechLv2toLv3BonusPower);
+                    }
+                    else if (m_TransformLevel == 4)
+                    {
+                        Ore += 2;
+                    }
+                    else if (m_TransformLevel == 5)
+                    {
+                        GameTileList.Find(x => x is AllianceTile && x.IsUsed == false).IsUsed = true;
+                        GameTileList.Add(GaiaGame.AllianceTileForTransForm);
+                        GaiaGame.AllianceTileForTransForm.OneTimeAction(this);
+                    }
                     break;
                 case "ai":
                     m_AILevel++;
+                    if (m_AILevel == 1 || m_AILevel == 2)
+                    {
+                        QICs += 1;
+                    }else if (m_AILevel == 3)
+                    {
+                        QICs += 2;
+                        PowerIncrease(GameConstNumber.TechLv2toLv3BonusPower);
+                    }else if (m_AILevel == 4)
+                    {
+                        QICs += 2;
+                    }
+                    else if(m_AILevel==5)
+                    {
+                        GameTileList.Find(x => x is AllianceTile && x.IsUsed == false).IsUsed = true;
+                        QICs += 4;
+                    }
                     break;
                 case "eco":
                     m_EconomicLevel++;
+                    if (m_EconomicLevel==3)
+                    {
+                        PowerIncrease(GameConstNumber.TechLv2toLv3BonusPower);
+                    }else if (m_EconomicLevel == 5)
+                    {
+                        GameTileList.Find(x => x is AllianceTile && x.IsUsed == false).IsUsed = true;
+                    }
                     break;
                 case "gaia":
                     m_GaiaLevel++;
@@ -473,14 +501,38 @@ namespace GaiaCore.Gaia
                     }
                     else if(m_GaiaLevel ==5)
                     {
-                        throw new NotImplementedException();
+                        GameTileList.Find(x => x is AllianceTile && x.IsUsed == false).IsUsed = true;
+                        Score +=4;
+                        Score += GaiaPlanetNumber * 1;
                     }
                     break;
                 case "sci":
                     m_ScienceLevel++;
+                    if (m_ScienceLevel == 3)
+                    {
+                        PowerIncrease(GameConstNumber.TechLv2toLv3BonusPower);
+                    }
+                    else if (m_ScienceLevel == 5)
+                    {
+                        GameTileList.Find(x => x is AllianceTile && x.IsUsed == false).IsUsed = true;
+                    }
                     break;
                 case "ship":
                     m_ShipLevel++;
+                    if (m_ShipLevel == 1)
+                    {
+                        QICs += 1;
+                    }
+                    else if (m_ShipLevel == 3)
+                    {
+                        QICs += 1;
+                        PowerIncrease(GameConstNumber.TechLv2toLv3BonusPower);
+                    }
+                    else if (m_AILevel == 5)
+                    {
+                        GameTileList.Find(x => x is AllianceTile && x.IsUsed == false).IsUsed = true;
+                        throw new NotImplementedException("黑星科技没有完成");
+                    }
                     break;
                 default:
                     throw new Exception("不存在此科技条" + tech);

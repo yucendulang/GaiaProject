@@ -114,8 +114,58 @@ namespace GaiaCore.Gaia
             CalCreditIncome();
             CalKnowledgeIncome();
             CalPowerIncome();
-            CalQICIncome();          
+            CalQICIncome();
+            CallTechIncome();
         }
+
+        private void CallTechIncome()
+        {
+            switch (EconomicLevel)
+            {
+                case 1:
+                    Credit += 2;
+                    PowerIncrease(1);
+                    break;
+                case 2:
+                    Credit += 2;
+                    PowerIncrease(2);
+                    Ore += 1;
+                    break;
+                case 3:
+                    Credit += 3;
+                    PowerIncrease(3);
+                    Ore += 1;
+                    break;
+                case 4:
+                    Credit += 4;
+                    PowerIncrease(4);
+                    Ore += 2;
+                    break;
+                case 5:
+                    Credit += 6;
+                    PowerIncrease(6);
+                    Ore += 3;
+                    break;
+                default:
+                    break;
+            }
+            switch (ScienceLevel)
+            {
+                case 1:
+                    Knowledge += 1;
+                    break;
+                case 2:
+                    Knowledge += 2;
+                    break;
+                case 3:
+                    Knowledge += 3;
+                    break;
+                case 4:
+                    Knowledge += 4;
+                    break;
+            }
+        }
+
         protected virtual void CalOreIncome()
         {
             if (Mines.Count >= 6 && Mines.Count <= 8)
@@ -299,8 +349,14 @@ namespace GaiaCore.Gaia
             }
             else if (level == 4)
             {
-                ///检测城版
-                //level++;
+                if(GameTileList.Exists(x => x is AllianceTile && x.IsUsed == false))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {

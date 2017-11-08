@@ -134,6 +134,8 @@ namespace GaiaCore.Gaia.Tiles
             faction.Score += 12;
             return true;
         }
+
+        public override bool IsUsed { get => true; set => base.IsUsed = value; }
     }
     public class ALT7 : AllianceTile
     {

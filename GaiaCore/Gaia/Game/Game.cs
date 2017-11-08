@@ -624,7 +624,7 @@ namespace GaiaCore.Gaia
             FSTList.Add(new FST1());
             RBTList = (from items in RBTMgr.GetRandomList(4 + 3, random) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();
             ALTList = ALTMgr.GetList();
-            AllianceTileForKnowledge = ALTList.RandomRemove(random);
+            AllianceTileForTransForm = ALTList.RandomRemove(random);
         }
         private void ChangeGameStatus(Stage stage)
         {
@@ -687,7 +687,7 @@ namespace GaiaCore.Gaia
         /// AlianceList
         /// </summary>
         public List<AllianceTile> ALTList { set; get; }
-        public AllianceTile AllianceTileForKnowledge { set; get; }
+        public AllianceTile AllianceTileForTransForm { set; get; }
         [JsonProperty]
         public string UserActionLog { set; get; }
         [JsonProperty]
