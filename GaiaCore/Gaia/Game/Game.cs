@@ -19,12 +19,12 @@ namespace GaiaCore.Gaia
         public GaiaGame(string[] username)
         {
             GameStatus = new GameStatus();
-            GameStatus.PlayerNumber = username.Count();
+            GameStatus.PlayerNumber = username.ToList().Where(x => !string.IsNullOrEmpty(x)).Count();
             FactionList = new List<Faction>();
             FactionNextTurnList = new List<Faction>();
             UserDic = new Dictionary<string, List<Faction>>();
             Username = username;
-            foreach(var us in username.Distinct())
+            foreach(var us in username.ToList().Where(x=>!string.IsNullOrEmpty(x)).Distinct())
             {
                 UserDic.Add(us, new List<Faction>());
             }
@@ -561,7 +561,7 @@ namespace GaiaCore.Gaia
                         log = "FactionName has been choosen!";
                         return false;
                     }
-                    if (FactionList.Count == 4)
+                    if (FactionList.Count == GameStatus.PlayerNumber)
                     {
                         ChangeGameStatus(Stage.INITIALMINES);
                     }

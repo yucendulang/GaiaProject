@@ -20,11 +20,9 @@ namespace GaiaProject.Models.HomeViewModels
         [EmailAddress]
         [Display(Name = "Player2")]
         public string Player2 { set; get; }
-        [Required]
         [EmailAddress]
         [Display(Name = "Player3")]
         public string Player3 { set; get; }
-        [Required]
         [EmailAddress]
         [Display(Name = "Player4")]
         public string Player4 { set; get; }
