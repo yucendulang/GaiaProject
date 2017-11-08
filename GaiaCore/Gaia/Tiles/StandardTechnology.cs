@@ -121,7 +121,7 @@ namespace GaiaCore.Gaia.Tiles
 
         public override bool OneTimeAction(Faction faction)
         {
-            faction.Knowledge += faction.CalPlanetType();
+            faction.Knowledge += faction.GetPlanetTypeCount();
             return true;
         }
     }

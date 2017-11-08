@@ -323,7 +323,7 @@ namespace GaiaCore.Gaia
         }
 
         public int TechTilesGet { get => m_TechTilesGet; set => m_TechTilesGet = value; }
-        public int TechTrachAdv { get => m_TechTrachAdv; set => m_TechTrachAdv = value; }
+        public int TechTracAdv { get => m_TechTrachAdv; set => m_TechTrachAdv = value; }
         public int TerraFormNumber { get => m_TerraFormNumber; set => m_TerraFormNumber = value; }
         public int TempShip { get => m_TempShip; set => m_TempShip = value; }
 

@@ -31,7 +31,7 @@ namespace GaiaCore.Gaia.Tiles
 
     public abstract class RoundScoring:GameTiles
     {
-        public abstract int GetTriggerScore { get; }
+        
     }
     public class RST1 : RoundScoring
     {

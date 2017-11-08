@@ -244,10 +244,23 @@ namespace GaiaCore.Gaia
                     if (ATTList.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
                     {
                         tile = ATTList.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
+                        if((tile as AdavanceTechnology).isPicked)
+                        {
+                            log = "板子已经被拿走了";
+                            return false;
+                        }
+                        var index = ATTList.IndexOf(tile as AdavanceTechnology);
+                        var level = faction.GetTechLevelbyIndex(index);
+                        if (!(level == 4 || level == 5))
+                        {
+                            log = "拿取该高级科技版对应科技等级不够";
+                            return false;
+                        }
+                        faction.TechTracAdv++;
                     }
                     else if (STT3List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
                     {
-                        faction.TechTrachAdv++;
+                        faction.TechTracAdv++;
                         tile = STT3List.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
                     }
                     else if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
@@ -264,7 +277,7 @@ namespace GaiaCore.Gaia
                         faction.GameTileList.Add(tile);
                         if (ATTList.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
                         {
-                            ATTList.Remove(ATTList.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0));
+                            (tile as AdavanceTechnology).isPicked = true;
                         }
                         tile.OneTimeAction(faction);
                     };
@@ -281,7 +294,7 @@ namespace GaiaCore.Gaia
                 {
 
                     string tech;
-                    if (faction.TechTrachAdv == 0 && faction.Knowledge < 4)
+                    if (faction.TechTracAdv == 0 && faction.Knowledge < 4)
                     {
                         log = "没有建立RL或者AC或者科技不足四点";
                         return false;
@@ -307,9 +320,9 @@ namespace GaiaCore.Gaia
                             faction.IncreaseTech(tech);
                         };
                         faction.ActionQueue.Enqueue(queue);
-                        if (faction.TechTrachAdv != 0)
+                        if (faction.TechTracAdv != 0)
                         {
-                            faction.TechTrachAdv--;
+                            faction.TechTracAdv--;
                         }else
                         {
                             faction.Knowledge -= 4;

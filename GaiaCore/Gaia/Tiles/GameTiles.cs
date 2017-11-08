@@ -30,6 +30,7 @@ namespace GaiaCore.Gaia.Tiles
         public virtual bool OneTimeAction(Faction faction) { return true; }
         public virtual bool CanAction { get => false; }
         public virtual bool IsUsed { set; get; }
+        public virtual int GetTriggerScore { get; }
 
     }
 

@@ -57,16 +57,19 @@ namespace GaiaCore.Gaia
         private static readonly List<string> turnActionList = new List<string>()
         {
             "stt1",
+            "att1",
+            "att2",
+            "att3",
             "act1",
             "act2",
-            //"act3",
-            //"act4",
-            //"act5",
-            //"act6",
-            //"act7",
-            //"act8",
-            //"act9",
-            //"act10",
+            "act3",
+            "act4",
+            "act5",
+            "act6",
+            "act7",
+            "act8",
+            "act9",
+            "act10",
         };
         public static Regex actionRegex = new Regex(string.Format("{0} ({1})", action, string.Join("|", turnActionList)));
         /// <summary>

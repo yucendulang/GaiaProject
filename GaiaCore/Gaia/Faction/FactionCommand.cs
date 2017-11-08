@@ -140,7 +140,18 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        internal int CalPlanetType()
+        internal int GetSpaceSectorCount()
+        {
+            var hexList = GaiaGame.Map.GetHexList();
+            var q =
+                    from h in hexList
+                    where h.FactionBelongTo == FactionName && !(h.Building is GaiaBuilding)
+                    group h by h.SpaceSectorName into g
+                    select g;
+            return q.Count();
+        }
+
+        internal int GetPlanetTypeCount()
         {
             var hexList = GaiaGame.Map.GetHexList();
             var q =
@@ -298,6 +309,11 @@ namespace GaiaCore.Gaia
             };
             ActionQueue.Enqueue(queue);
             return true;
+        }
+
+        internal int GetTechLevelbyIndex(int index)
+        {
+            throw new NotImplementedException();
         }
 
         internal void LeechPower(int power, FactionName factionFrom, bool isLeech)
