@@ -24,8 +24,13 @@ namespace GaiaCore.Gaia
             OGTerrain = t;
             TFTerrain = t;
             IsCenter = isCenter;
+            if (t == Terrain.Empty)
+            {
+                m_Satellite = new List<FactionName>();
+            }
         }
 
+        private List<FactionName> m_Satellite;
         /// <summary>
         /// Origin的地形
         /// </summary>
@@ -57,7 +62,29 @@ namespace GaiaCore.Gaia
         public bool IsCenter { set; get; }
         [JsonProperty]
         public Building Building { set; get; }
+        [JsonProperty]
+        public List<FactionName> Satellite {
+            get
+            {
+                if (this.OGTerrain == Terrain.Empty)
+                {
+                    return m_Satellite;
+                }              
+                else
+                {
+                    return null;
+                }
+            }
+        }
         public bool IsAlliance = false;
+
+        internal void AddSatellite(FactionName factionName)
+        {
+            if (Satellite != null)
+            {
+                Satellite.Add(factionName);
+            }        
+        }
     }
     /// <summary>
     /// Space Sector 含义参照说明书 共计十块

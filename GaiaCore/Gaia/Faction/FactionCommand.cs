@@ -355,6 +355,11 @@ namespace GaiaCore.Gaia
                 log = "还存在没拿取的科技版";
                 return true;
             }
+            if (m_AllianceTileGet != 0)
+            {
+                log = "还存在没拿取的星盟版";
+                return true;
+            }
             return false;
         }
 
@@ -366,6 +371,7 @@ namespace GaiaCore.Gaia
             TempShip = 0;
             m_TechTilesGet = 0;
             m_TechTrachAdv = 0;
+            m_AllianceTileGet = 0;
             LimitTechAdvance = string.Empty;
         }
 
@@ -482,6 +488,36 @@ namespace GaiaCore.Gaia
             TriggerRST(typeof(RST6));
             return;
         }
+
+        internal bool GetAllianceTile(AllianceTile alt, out string log)
+        {
+            log = string.Empty;
+            if (m_AllianceTileGet == 0)
+            {
+                log = "没有获得城版的权限";
+                return false;
+            }
+            Action action = () =>
+            {
+                GameTileList.Add(alt);
+                alt.OneTimeAction(this);
+                GaiaGame.ALTList.Remove(alt);
+            };
+            ActionQueue.Enqueue(action);
+            m_AllianceTileGet--;
+            return true;
+        }
+
+        internal void ForgingAllianceGetTile(List<Tuple<int, int>> list)
+        {
+            Action action = () =>
+            {
+                ForgingAlliance(list, out string log, true);
+            };
+            ActionQueue.Enqueue(action);
+            m_AllianceTileGet++;
+        }
+
         internal bool ForgingAllianceCheckAll(List<Tuple<int, int>> list, out string log)
         {
             log = string.Empty;
@@ -501,7 +537,7 @@ namespace GaiaCore.Gaia
             }
             return true;
         }
-        internal bool ForgingAlliance(List<Tuple<int, int>> list, out string log)
+        internal bool ForgingAlliance(List<Tuple<int, int>> list, out string log, bool isSetFlag = false)
         {
             log = string.Empty;
 
@@ -529,6 +565,22 @@ namespace GaiaCore.Gaia
             {
                 log = "魔力等级不够7级";
                 return false;
+            }
+
+            if (isSetFlag)
+            {
+                allianceList.ForEach(x =>
+                {
+                    if (GaiaGame.Map.HexArray[x.Item1, x.Item2].OGTerrain != Terrain.Empty)
+                    {
+                        GaiaGame.Map.HexArray[x.Item1, x.Item2].IsAlliance = true;
+                    }
+                    else
+                    {
+                        GaiaGame.Map.HexArray[x.Item1, x.Item2].AddSatellite(FactionName);
+                    }
+                });
+
             }
 
             return true;

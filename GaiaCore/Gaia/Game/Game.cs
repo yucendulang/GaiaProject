@@ -360,7 +360,30 @@ namespace GaiaCore.Gaia
                         ConvertPosToRowCol(pos, out int row, out int col);
                         list.Add(new Tuple<int, int>(row, col));
                     }
-                    faction.ForgingAllianceCheckAll(list, out log);
+                    if(faction.ForgingAllianceCheckAll(list, out log))
+                    {
+                        faction.ForgingAllianceGetTile(list);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else if (GameFreeSyntax.ALTRegex.IsMatch(item))
+                {
+                    var match = GameFreeSyntax.ALTRegex.Match(item);
+                    var altStr=match.Groups[1].Value;
+                    var alt = ALTList.Find(x => x.GetType().Name.Equals(altStr, StringComparison.OrdinalIgnoreCase));
+                    if (alt == null)
+                    {
+                        log = string.Format("{0}板子不存在", alt);
+                        return false;
+                    }
+                    if(!faction.GetAllianceTile(alt,out log))
+                    {
+                        return false;
+                    }
+
                 }
                 else
                 {

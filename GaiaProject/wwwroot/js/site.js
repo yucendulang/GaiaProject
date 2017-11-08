@@ -40,6 +40,10 @@ function DrawMap() {
                             console.log(array[i][j].building.name + "不支持");
                     }
                 }
+                if (array[i][j].satellite !== null) {
+                    DrawSatellite(cxt, j, i, array[i][j].satellite);
+                }
+
             }
         }
     }
@@ -174,6 +178,24 @@ function DrawGaiaBuilding(ctx, row, col, name) {
     ctx.strokeRect(loc[0], loc[1], 20, 20);
 
     ctx.restore();
+}
+
+function DrawSatellite(ctx, row, col, satellite) {
+    switch (satellite.length) {
+        case 1:
+            var loc = hexCenter(row, col);
+            loc[1] -= 9;
+            loc[0] -= 4;
+            ctx.save();
+            fillBuilding(ctx, satellite[0]);
+            ctx.beginPath();
+            ctx.fillRect(loc[0], loc[1], 8, 8);
+            ctx.strokeRect(loc[0], loc[1], 8, 8);
+            ctx.restore();
+            break;
+        default:
+            break;
+    }
 }
 
 

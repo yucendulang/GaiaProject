@@ -97,10 +97,14 @@ namespace GaiaCore.Gaia
         private const int m_StrongHoldOreCost = 4;
         private const int m_StrongHoldCreditCost = 6;
         private const int m_StrongHoldCount = 1;
+#region 临时变量 判断动作完成与否 需要清零
         private int m_TerraFormNumber=0;
         private int m_TempShip=0;
         private int m_TechTilesGet = 0;
         private int m_TechTrachAdv = 0;
+        private int m_AllianceTileGet = 0;
+        public string LimitTechAdvance { get; set; }
+        #endregion
 
 
 
@@ -203,11 +207,11 @@ namespace GaiaCore.Gaia
         public Academy Academy1 { set; get; }
         public Academy Academy2 { set; get; }
         public StrongHold StrongHold { set; get; }
-        public int Credit { get => m_credit; }
+        public int Credit { get => m_credit; set => m_credit = value; }
         public int Ore { get => m_ore; set => m_ore = value; }
         public int Knowledge { get => m_knowledge; set => m_knowledge = value; }
         public int QICs { get => m_QICs; set => m_QICs = value; }
-        public int PowerToken1 { get => m_powerToken1; }
+        public int PowerToken1 { get => m_powerToken1; set => m_powerToken1=value; }
         public int PowerToken2 { get => m_powerToken2;  }
         public int PowerToken3 { get => m_powerToken3;  }
         public int TransformLevel { get => m_TransformLevel;  }
@@ -221,7 +225,7 @@ namespace GaiaCore.Gaia
         public int Score { get; set; }
         public GaiaGame GaiaGame { get; }
         public Queue<Action> ActionQueue { get; set; }
-        public string LimitTechAdvance { get;set; }
+
         public Dictionary<string,Func<Faction,bool>> ActionList { get; set; }
         public Dictionary<string,Func<bool>> PredicateActionList { get; set; }
         public int GaiaPlanetNumber { get; set; }

@@ -72,7 +72,7 @@ else if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
     {
         <p>@item.FactionName|分数:@item.Score|Color:@item.OGTerrain.ToString()|C:@item.Credit|O:@item.Ore|QICs:@item.QICs|K:@item.Knowledge|PI:@item.PowerToken1|PII:@item.PowerToken2|PIII:@item.PowerToken3</p>
         <p>铲子:@item.TransformLevel|航海:@item.ShipLevel|AI:@item.AILevel|盖亚:@item.GaiaLevel|经济:@item.EconomicLevel|科技:@item.ScienceLevel</p>
-        <p>游戏板子:##@string.Join("|||", item.GameTileList.Select(x => x.desc))##</p>
+        <p>游戏板子:##@string.Join("|||", item.GameTileList.Select(x => string.Format("{0}:{1}",x.GetType().Name, x.desc)))##</p>
         <p>建筑物 M @item.Mines.Count /8 | TC @item.TradeCenters.Count /4 |RL @item.ReaserchLabs.Count /3 |AC1 @if (item.Academy1 == null) { <a>不在</a>} else { <a>在</a>} |AC2 @if (item.Academy1 == null) { <a>不在</a>} else { <a>在</a>}  </p>
         @foreach (var leech in item.LeechPowerQueue)
         {

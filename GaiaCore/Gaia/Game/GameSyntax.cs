@@ -74,10 +74,7 @@ namespace GaiaCore.Gaia
         /// </summary>
         public static string satellite = "satellite";
         public static Regex forgingAlliance = new Regex("satellite [a-z][0-9]{1,2}(,[a-z][0-9]{1,2})*");
-        /// <summary>
-        /// 获取AllianceTile正则
-        /// </summary>
-        public static Regex ALTRegex = new Regex("\\+(alt[0-9])");
+
     }
 
     public static class GameFreeSyntax
@@ -91,6 +88,7 @@ namespace GaiaCore.Gaia
             ret.Add(getTechTilesRegex);
             ret.Add(advTechRegex);
             ret.Add(actionRegex);
+            ret.Add(ALTRegex);
             return ret;
         } 
         public static Regex burningRegex = new Regex("burn ([0-9])");
@@ -106,6 +104,9 @@ namespace GaiaCore.Gaia
             "rbt2"
         };
         public static Regex actionRegex = new Regex(string.Format("{0} ({1})", GameSyntax.action, string.Join("|", turnActionList)));
-
+        /// <summary>
+        /// 获取AllianceTile正则
+        /// </summary>
+        public static Regex ALTRegex = new Regex("\\+(alt[0-9])");
     }
 }
