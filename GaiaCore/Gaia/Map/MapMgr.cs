@@ -405,5 +405,30 @@ namespace GaiaCore.Gaia
             }
             return ret;
         }
+
+        public List<Tuple<int, int>> GetSatellitehex(int x, int y, FactionName name,List<Tuple<int,int>> list)
+        {
+            //吸魔力大小范围
+            var ret = new List<Tuple<int, int>>();
+            var distance = 1;
+            for (int i = Math.Max(x - distance, 0); i <= Math.Min(x + distance, m_mapHeight); i++)
+            {
+                for (int j = Math.Max(y - distance, 0); j <= Math.Min(j + distance, m_mapWidth); j++)
+                {
+                    if (CalTwoHexDistance(x, y, i, j) <= distance)
+                    {
+                        //System.Diagnostics.Debug.WriteLine("row:" + i + " col:" + j);
+
+                        if ((HexArray[i, j] != null && HexArray[i, j].FactionBelongTo == name && !(HexArray[i, j].Building is GaiaBuilding))
+                        || list.Exists(z => z.Item1 == i && z.Item2 == j))
+                        {
+                            ret.Add(new Tuple<int, int>(i, j));
+                        }
+                    }
+
+                }
+            }
+            return ret;
+        }
     }
 }

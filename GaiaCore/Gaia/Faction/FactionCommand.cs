@@ -180,7 +180,7 @@ namespace GaiaCore.Gaia
 
         private void RemovePowerToken(int n)
         {
-            if (PowerToken1 + PowerToken2 + PowerToken3 < GetGaiaCost())
+            if (PowerToken1 + PowerToken2 + PowerToken3 <n)
             {
                 throw new Exception(string.Format("没有{0}个魔力豆来移除",n));
             }
@@ -815,11 +815,22 @@ namespace GaiaCore.Gaia
         internal bool ForgingAllianceCheckAll(List<Tuple<int, int>> list, out string log)
         {
             log = string.Empty;
-            if(!ForgingAlliance(list, out log))
+            if (PowerToken1 + PowerToken2 + PowerToken3 < list.Count)
+            {
+                log = "魔力豆要比卫星数量多";
+                return false;
+            }
+            if (!list.TrueForAll(x => !GaiaGame.Map.HexArray[x.Item1, x.Item2].Satellite.Contains(FactionName)
+             && GaiaGame.Map.HexArray[x.Item1, x.Item2].TFTerrain == Terrain.Empty))
+            {
+                log = "卫星不能建立在非空地以及形成过星盟的地盘上";
+                return false;
+            }
+            if (!ForgingAlliance(list, out log))
             {
                 return false;
             }
-            foreach(var item in list)
+            foreach (var item in list)
             {
                 var dump = new List<Tuple<int, int>>(list);
                 dump.Remove(item);
@@ -835,15 +846,15 @@ namespace GaiaCore.Gaia
         {
             log = string.Empty;
 
-            Queue<Tuple<int,int>> allianceQueue = new Queue<Tuple<int, int>>();
+            Queue<Tuple<int, int>> allianceQueue = new Queue<Tuple<int, int>>();
             List<Tuple<int, int>> allianceList = new List<Tuple<int, int>>();
             list.ForEach(x => allianceQueue.Enqueue(x));
             list.ForEach(x => allianceList.Add(x));
             while (allianceQueue.Any())
             {
                 var hex = allianceQueue.Dequeue();
-                var surroundHex = GaiaGame.Map.GetSurroundhex(hex.Item1, hex.Item2,FactionName);
-                foreach(var shex in surroundHex)
+                var surroundHex = GaiaGame.Map.GetSurroundhex(hex.Item1, hex.Item2, FactionName);
+                foreach (var shex in surroundHex)
                 {
                     if (GaiaGame.Map.HexArray[hex.Item1, hex.Item2].TFTerrain != Terrain.Empty && GaiaGame.Map.HexArray[hex.Item1, hex.Item2].IsAlliance)
                     {
@@ -851,13 +862,32 @@ namespace GaiaCore.Gaia
                         return false;
                     }
                 }
-                var newhex=surroundHex.Where(x => !allianceList.Exists(y => x.Item1 == y.Item1 && x.Item2 == y.Item2));
+                var newhex = surroundHex.Where(x => !allianceList.Exists(y => x.Item1 == y.Item1 && x.Item2 == y.Item2));
                 newhex.ToList().ForEach(x => allianceQueue.Enqueue(x));
                 newhex.ToList().ForEach(x => allianceList.Add(x));
             }
             if (allianceList.Sum(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].Building == null ? 0 : GaiaGame.Map.HexArray[x.Item1, x.Item2].Building.MagicLevel) < 7)
             {
                 log = "魔力等级不够7级";
+                return false;
+            }
+
+            var isConnectList = new List<Tuple<int, int>>();
+            allianceQueue = new Queue<Tuple<int, int>>();
+            allianceQueue.Enqueue(allianceList.First());
+            while (allianceQueue.Any())
+            {
+                var hex = allianceQueue.Dequeue();
+                isConnectList.Add(hex);
+                var surroundHex = GaiaGame.Map.GetSatellitehex(hex.Item1, hex.Item2, FactionName, list);
+                var newlist = surroundHex.Where(x => allianceList.Exists(y => y.Item1 == x.Item1 && y.Item2 == x.Item2))
+                    .Where(x => !isConnectList.Exists(y => y.Item1 == x.Item1 && y.Item2 == x.Item2)).ToList();
+                newlist.ForEach(x => allianceQueue.Enqueue(x));
+            }
+
+            if (isConnectList.Count != allianceList.Count)
+            {
+                log = "没有组成连通的地块";
                 return false;
             }
 
@@ -874,7 +904,7 @@ namespace GaiaCore.Gaia
                         GaiaGame.Map.HexArray[x.Item1, x.Item2].AddSatellite(FactionName);
                     }
                 });
-
+                RemovePowerToken(list.Count);
             }
 
             return true;
