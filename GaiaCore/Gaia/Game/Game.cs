@@ -133,6 +133,11 @@ namespace GaiaCore.Gaia
                     item.TFTerrain = Terrain.Green;
                 }
             }
+            FactionList.ForEach(x =>
+            {
+                x.PowerToken1 += x.PowerTokenGaia;
+                x.PowerTokenGaia = 0;
+            });
         }
 
         private bool ProcessSyntaxLeechPower(string syntax, ref string log)
@@ -244,7 +249,7 @@ namespace GaiaCore.Gaia
                     if (ATTList.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
                     {
                         tile = ATTList.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
-                        if((tile as AdavanceTechnology).isPicked)
+                        if ((tile as AdavanceTechnology).isPicked)
                         {
                             log = "板子已经被拿走了";
                             return false;
@@ -280,17 +285,24 @@ namespace GaiaCore.Gaia
                             (tile as AdavanceTechnology).isPicked = true;
                         }
                         tile.OneTimeAction(faction);
+                        if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
+                        {
+                            var index = STT6List.FindIndex(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
+                            faction.LimitTechAdvance = Faction.ConvertTechIndexToStr(index);
+                            if (faction.IsIncreateTechValide(faction.LimitTechAdvance))
+                            {
+                                faction.IncreaseTech(faction.LimitTechAdvance);
+                            }
+                        }
                     };
-
-                    if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
-                    {
-                        var index = STT6List.FindIndex(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
-                        faction.LimitTechAdvance = Faction.ConvertTechIndexToStr(index);
-                    }
                     faction.ActionQueue.Enqueue(queue);
                     faction.TechTilesGet--;
+                    if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
+                    {
+                        faction.TechTracAdv--;
+                    }
                 }
-                else if (GameFreeSyntax.advTechRegex.IsMatch(item))
+                else if (GameFreeSyntax.advTechRegex2.IsMatch(item))
                 {
 
                     string tech;
@@ -299,19 +311,9 @@ namespace GaiaCore.Gaia
                         log = "没有建立RL或者AC或者科技不足四点";
                         return false;
                     }
-                    if (string.IsNullOrEmpty(faction.LimitTechAdvance)&& GameFreeSyntax.advTechRegex2.IsMatch(item))
-                    {
-                        var match = GameFreeSyntax.advTechRegex2.Match(item);
-                        tech = match.Groups[1].Value;
-                    }else if (!string.IsNullOrEmpty(faction.LimitTechAdvance))
-                    {
-                        tech = faction.LimitTechAdvance;
-                    }
-                    else
-                    {
-                        log = "请检查语句语法格式";
-                        return false;
-                    }
+
+                    var match = GameFreeSyntax.advTechRegex2.Match(item);
+                    tech = match.Groups[1].Value;
 
                     if (faction.IsIncreateTechValide(tech))
                     {
@@ -323,11 +325,11 @@ namespace GaiaCore.Gaia
                         if (faction.TechTracAdv != 0)
                         {
                             faction.TechTracAdv--;
-                        }else
+                        }
+                        else
                         {
                             faction.Knowledge -= 4;
                         }
-                        
                     }
                     else
                     {
@@ -335,29 +337,32 @@ namespace GaiaCore.Gaia
                         return false;
                     }
                 }
-                else if (GameSyntax.passRegex.IsMatch(item)){
+                else if (GameSyntax.passRegex.IsMatch(item))
+                {
                     var match = GameSyntax.passRegex.Match(item);
-                    var rbtStr=match.Groups[1].Value;
-                    if(!ProcessGetRoundBooster(rbtStr, faction, out log))
+                    var rbtStr = match.Groups[1].Value;
+                    if (!ProcessGetRoundBooster(rbtStr, faction, out log))
                     {
                         return false;
                     }
-                    Action action = () => {
+                    Action action = () =>
+                    {
                         FactionNextTurnList.Add(faction);
                         GameStatus.SetPassPlayerIndex(FactionList.IndexOf(faction));
                     };
                     faction.ActionQueue.Enqueue(action);
                 }
-                else if (GameSyntax.actionRegex.IsMatch(item)){
+                else if (GameSyntax.actionRegex.IsMatch(item))
+                {
                     throw new NotImplementedException();
                 }
                 else if (GameFreeSyntax.actionRegex.IsMatch(item))
                 {
                     var match = GameFreeSyntax.actionRegex.Match(item);
                     var actionStr = match.Groups[1].Value;
-                    if (faction.PredicateAction(actionStr,out log))
+                    if (faction.PredicateAction(actionStr, out log))
                     {
-                        faction.DoAction(actionStr,true);
+                        faction.DoAction(actionStr, true);
                     }
                     else
                     {
@@ -366,14 +371,14 @@ namespace GaiaCore.Gaia
                 }
                 else if (GameSyntax.forgingAlliance.IsMatch(item))
                 {
-                    var posStrList=item.Substring(GameSyntax.satellite.Length + 1).Split(',');
+                    var posStrList = item.Substring(GameSyntax.satellite.Length + 1).Split(',');
                     List<Tuple<int, int>> list = new List<Tuple<int, int>>();
-                    foreach(var pos in posStrList)
+                    foreach (var pos in posStrList)
                     {
                         ConvertPosToRowCol(pos, out int row, out int col);
                         list.Add(new Tuple<int, int>(row, col));
                     }
-                    if(faction.ForgingAllianceCheckAll(list, out log))
+                    if (faction.ForgingAllianceCheckAll(list, out log))
                     {
                         faction.ForgingAllianceGetTile(list);
                     }
@@ -385,14 +390,14 @@ namespace GaiaCore.Gaia
                 else if (GameFreeSyntax.ALTRegex.IsMatch(item))
                 {
                     var match = GameFreeSyntax.ALTRegex.Match(item);
-                    var altStr=match.Groups[1].Value;
+                    var altStr = match.Groups[1].Value;
                     var alt = ALTList.Find(x => x.GetType().Name.Equals(altStr, StringComparison.OrdinalIgnoreCase));
                     if (alt == null)
                     {
                         log = string.Format("{0}板子不存在", alt);
                         return false;
                     }
-                    if(!faction.GetAllianceTile(alt,out log))
+                    if (!faction.GetAllianceTile(alt, out log))
                     {
                         return false;
                     }

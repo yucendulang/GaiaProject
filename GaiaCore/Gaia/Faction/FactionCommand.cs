@@ -134,6 +134,7 @@ namespace GaiaCore.Gaia
                 RemovePowerToken(GetGaiaCost());
                 map.HexArray[row, col].Building = Gaias.First();
                 map.HexArray[row, col].FactionBelongTo = FactionName;
+                PowerTokenGaia += GetGaiaCost();
             };
             ActionQueue.Enqueue(queue);
             TempShip = 0;
@@ -417,6 +418,7 @@ namespace GaiaCore.Gaia
             "eco",
             "sci",
         };
+        
 
         internal static string ConvertTechIndexToStr(int v)
         {

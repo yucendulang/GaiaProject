@@ -9,7 +9,7 @@ namespace GaiaCore.Gaia
 {
     public  abstract partial class Faction
     {
-        public Faction(FactionName name,GaiaGame gg)
+        public Faction(FactionName name, GaiaGame gg)
         {
             FactionName = name;
             m_credit = 30;
@@ -19,6 +19,7 @@ namespace GaiaCore.Gaia
             m_powerToken1 = 2;
             m_powerToken2 = 4;
             m_powerToken3 = 0;
+            m_powerTokenGaia = 0;
             m_TransformLevel = 0;
             m_AILevel = 0;
             m_EconomicLevel = 0;
@@ -42,16 +43,17 @@ namespace GaiaCore.Gaia
             }
             Academy1 = new Academy();
             Academy2 = new Academy();
-            StrongHold=new StrongHold();
+            StrongHold = new StrongHold();
             Gaias = new List<GaiaBuilding>();
             GameTileList = new List<GameTiles>();
-            LeechPowerQueue = new List<Tuple<int,FactionName>>();
+            LeechPowerQueue = new List<Tuple<int, FactionName>>();
             Score = 10;
             GaiaGame = gg;
             ActionQueue = new Queue<Action>();
             ActionList = new Dictionary<string, Func<Faction, bool>>();
-            PredicateActionList = new Dictionary<string, Func< bool>>();
+            PredicateActionList = new Dictionary<string, Func<bool>>();
             GaiaPlanetNumber = 0;
+
         }
 
         internal bool FinishIntialMines()
@@ -75,6 +77,7 @@ namespace GaiaCore.Gaia
         private int m_powerToken1;
         private int m_powerToken2;
         private int m_powerToken3;
+        private int m_powerTokenGaia;
         private int m_TransformLevel;
         private int m_ShipLevel;
         private int m_AILevel;
@@ -326,6 +329,7 @@ namespace GaiaCore.Gaia
         public int TechTracAdv { get => m_TechTrachAdv; set => m_TechTrachAdv = value; }
         public int TerraFormNumber { get => m_TerraFormNumber; set => m_TerraFormNumber = value; }
         public int TempShip { get => m_TempShip; set => m_TempShip = value; }
+        public int PowerTokenGaia { get => m_powerTokenGaia; set => m_powerTokenGaia = value; }
 
         private static List<FieldInfo> list = new List<FieldInfo>()
         {

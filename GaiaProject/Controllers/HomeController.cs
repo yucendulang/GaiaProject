@@ -68,7 +68,7 @@ namespace GaiaProject.Controllers
             string[] username = new string[] { model.Player1, model.Player2, model.Player3, model.Player4 };
             GameMgr.CreateNewGame(model.Name, username, out GaiaGame result);
             ViewData["ReturnUrl"] = "/Home/ViewGame/" + model.Name;
-            return View(model);
+            return Redirect("/home/viewgame/" + model.Name);
         }
         // GET: /Home/NewGame
         [HttpGet]

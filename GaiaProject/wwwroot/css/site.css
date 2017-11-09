@@ -6,15 +6,15 @@
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 /* Set widths on the form inputs since otherwise they're 100% wide */
 input,
 select,
 textarea {
-    max-width: 280px;
+    max-width: 300px;
 }
 
 /* Carousel */
@@ -41,10 +41,14 @@ textarea {
     width: 100%;
 }
 
-/* Hide/rearrange for smaller screens */
+ /*Hide/rearrange for smaller screens*/ 
 @media screen and (max-width: 767px) {
-    /* Hide captions */
+     Hide captions 
     .carousel-caption {
         display: none;
     }
 }
+
+.container {
+    width: 1640px;
+} 
