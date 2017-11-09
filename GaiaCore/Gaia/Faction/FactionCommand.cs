@@ -122,7 +122,7 @@ namespace GaiaCore.Gaia
                 log = "没有可用的盖亚建筑";
                 return false;
             }
-            if (m_powerToken1+m_powerToken2+m_powerToken3<GetGaiaCost())
+            if (PowerToken1 + PowerToken2 + PowerToken3 < GetGaiaCost())
             {
                 log = "魔力豆资源不够";
                 return false;
@@ -179,20 +179,20 @@ namespace GaiaCore.Gaia
 
         private void RemovePowerToken(int n)
         {
-            if (m_powerToken1 + m_powerToken2 + m_powerToken3 < GetGaiaCost())
+            if (PowerToken1 + PowerToken2 + PowerToken3 < GetGaiaCost())
             {
                 throw new Exception(string.Format("没有{0}个魔力豆来移除",n));
             }
-            m_powerToken1 -= n;
-            if (m_powerToken1 < 0)
+            PowerToken1 -= n;
+            if (PowerToken1 < 0)
             {
-                m_powerToken2 += m_powerToken1;
-                m_powerToken1 = 0;
+                PowerToken2 += PowerToken1;
+                PowerToken1 = 0;
             }
-            if (m_powerToken2 < 0)
+            if (PowerToken2 < 0)
             {
-                m_powerToken3 += m_powerToken2;
-                m_powerToken2 = 0;
+                PowerToken3 += PowerToken2;
+                PowerToken2 = 0;
             }
         }
 
@@ -421,6 +421,9 @@ namespace GaiaCore.Gaia
             m_AllianceTileGet = 0;
             LimitTechAdvance = string.Empty;
             IsUseAction2 = false;
+            TempPowerToken1 = 0;
+            TempPowerToken2 = 0;
+            TempPowerToken3 = 0;
         }
 
         internal bool SetTransformNumber(int num, out string log)
@@ -538,7 +541,7 @@ namespace GaiaCore.Gaia
                         Gaias.Add(new GaiaBuilding());
                     }else if(m_GaiaLevel == 2)
                     {
-                        m_powerToken1 += 3;
+                        PowerToken1 += 3;
                     }
                     else if (m_GaiaLevel == 3)
                     {

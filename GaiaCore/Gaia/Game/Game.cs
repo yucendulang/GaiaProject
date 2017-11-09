@@ -316,7 +316,7 @@ namespace GaiaCore.Gaia
                                 faction.PredicateActionList.Add(tile.GetType().Name.ToLower(), tile.PredicateGameTileAction);
                                 faction.ActionList.Add(tile.GetType().Name.ToLower(), tile.InvokeGameTileAction);
                             }
-                            
+
                             faction.LimitTechAdvance = Faction.ConvertTechIndexToStr(index);
                             if (faction.IsIncreateTechValide(faction.LimitTechAdvance))
                             {
@@ -390,7 +390,7 @@ namespace GaiaCore.Gaia
                         faction.DoAction(actionStr, false);
                     }
                     else
-                    { 
+                    {
                         return false;
                     }
                 }
@@ -440,6 +440,29 @@ namespace GaiaCore.Gaia
                         return false;
                     }
 
+                }
+                else if (GameFreeSyntax.burningRegex.IsMatch(item))
+                {
+                    var match = GameFreeSyntax.burningRegex.Match(item);
+                    var v = match.Groups[1].Value.ParseToInt();
+                    if (!(faction.PowerToken2 >= v * 2))
+                    {
+                        log = item + "需要" + v * 2 + "魔力";
+                        return false;
+                    }
+                    faction.TempPowerToken1 += v;
+                    faction.TempPowerToken2 -= v * 2;
+                    faction.TempPowerToken3 += v;
+                    Action action = () =>
+                    {
+                        faction.PowerToken1 = faction.PowerToken1;
+                        faction.PowerToken2 = faction.PowerToken2;
+                        faction.PowerToken3 = faction.PowerToken3;
+                        faction.TempPowerToken1 = 0;
+                        faction.TempPowerToken2 = 0;
+                        faction.TempPowerToken3 = 0;
+                    };
+                    faction.ActionQueue.Enqueue(action);
                 }
                 else
                 {
