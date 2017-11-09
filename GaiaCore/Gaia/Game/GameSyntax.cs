@@ -91,6 +91,7 @@ namespace GaiaCore.Gaia
             ret.Add(advTechRegex);
             ret.Add(actionRegex);
             ret.Add(ALTRegex);
+            ret.Add(ConvertRegex);
             return ret;
         } 
         public static Regex burningRegex = new Regex("burn ([0-9])");
@@ -112,5 +113,9 @@ namespace GaiaCore.Gaia
         /// 获取AllianceTile正则
         /// </summary>
         public static Regex ALTRegex = new Regex("\\+(alt[0-9])");
+        /// <summary>
+        /// convert的正则
+        /// </summary>
+        public static Regex ConvertRegex = new Regex("convert ([0-9]{1,2})([a-z]{1,2}) to ([0-9]{1,2})([a-z]{1,2})");
     }
 }

@@ -15,7 +15,7 @@ namespace GaiaCore.Gaia
             log = string.Empty;
             bool isGreenPlanet = false;
             bool isGaiaPlanet = false;
-            if (!(Mines.Count > 1 && m_credit >= m_MineCreditCost && m_ore >= m_MineOreCost))
+            if (!(Mines.Count > 1 && Credit >= m_MineCreditCost && Ore >= m_MineOreCost))
             {
                 log = "资源不够";
                 return false;
@@ -39,7 +39,7 @@ namespace GaiaCore.Gaia
                     return false;
                 }
             }
-            if (!isGaiaPlanet&&isGreenPlanet && m_QICs < 1)
+            if (!isGaiaPlanet&&isGreenPlanet && QICs < 1)
             {
                 log = "至少需要一块QIC";
                 return false;
@@ -57,8 +57,8 @@ namespace GaiaCore.Gaia
             //扣资源建建筑
             Action queue = () =>
             {
-                m_ore -= m_MineOreCost;
-                m_credit -= m_MineCreditCost;
+                Ore -= m_MineOreCost;
+                Credit -= m_MineCreditCost;
                 if (isGaiaPlanet)
                 {
                     Gaias.Add(map.HexArray[row, col].Building as GaiaBuilding);
@@ -69,7 +69,7 @@ namespace GaiaCore.Gaia
                 GaiaGame.SetLeechPowerQueue(FactionName, row, col);
                 if (!isGaiaPlanet && isGreenPlanet)
                 {
-                    m_QICs -= 1;
+                    QICs -= 1;
                 }
                 if (isGreenPlanet)
                 {
@@ -298,7 +298,7 @@ namespace GaiaCore.Gaia
                 log = string.Format("需要基础建筑类型{0}", build.BaseBuilding.ToString());
                 return false;
             }
-            if (m_ore < oreCost || m_credit < creditCost)
+            if (Ore < oreCost || Credit < creditCost)
             {
                 log = string.Format("资源不够");
                 return false;
@@ -311,8 +311,8 @@ namespace GaiaCore.Gaia
             //扣资源,执行操作
             Action queue = () =>
             {
-                m_ore -= oreCost;
-                m_credit -= creditCost;
+                Ore -= oreCost;
+                Credit -= creditCost;
                 ReturnBuilding(map.HexArray[row, col].Building);
                 map.HexArray[row, col].Building = build;
                 RemoveBuilding(syn);
@@ -424,20 +424,24 @@ namespace GaiaCore.Gaia
             TempPowerToken1 = 0;
             TempPowerToken2 = 0;
             TempPowerToken3 = 0;
+            TempCredit = 0;
+            TempKnowledge = 0;
+            TempOre = 0;
+            TempQICs = 0;
         }
 
         internal bool SetTransformNumber(int num, out string log)
         {
             log = string.Empty;
-            if (num * GetTransformCost > m_ore)
+            if (num * GetTransformCost > Ore)
             {
-                log = string.Format("{0}改造费用大于拥有矿石数量{1}", num * GetTransformCost, m_ore);
+                log = string.Format("{0}改造费用大于拥有矿石数量{1}", num * GetTransformCost, Ore);
                 return false;
             }
             Action queue = () =>
             {
                 TriggerRST(typeof(RST7));
-                m_ore -= num * GetTransformCost;
+                Ore -= num * GetTransformCost;
             };
             ActionQueue.Enqueue(queue);
             TerraFormNumber += num;
@@ -463,7 +467,7 @@ namespace GaiaCore.Gaia
         internal bool SetQICShip(int num, out string log)
         {
             log = string.Empty;
-            if (num > m_QICs)
+            if (num > QICs)
             {
                 log = string.Format("使用{0}QICSHIP需要足够的QIC", num);
                 return false;
@@ -471,7 +475,7 @@ namespace GaiaCore.Gaia
 
             Action queue = () =>
             {
-                m_QICs -= num;
+                QICs -= num;
             };
             ActionQueue.Enqueue(queue);
 
@@ -592,6 +596,190 @@ namespace GaiaCore.Gaia
             }
             TriggerRST(typeof(RST6));
             return;
+        }
+
+        internal bool ConvertOneResourceToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log)
+        {
+            log = string.Empty;
+            var str = rFKind + rTKind;
+            switch (str)
+            {
+                case "pwqic":
+                    if (rFNum != rTNum * 4)
+                    {
+                        log = "兑换比例为4：1";
+                        return false;
+                    }
+                    if (PowerToken3 < rFNum)
+                    {
+                        log = "魔力值不够";
+                    }
+                    TempPowerToken3 -= rFNum;
+                    TempPowerToken1 += rFNum;
+                    TempQICs += rTNum;
+                    Action action=() =>{
+                        PowerToken3 = PowerToken3;
+                        PowerToken1 = PowerToken1;
+                        QICs = QICs;
+                        TempPowerToken3 = 0;
+                        TempPowerToken1 = 0;
+                        TempQICs = 0;
+                    };
+                    ActionQueue.Enqueue(action);
+                    break;
+                case "pwo":
+                    if (rFNum != rTNum * 3)
+                    {
+                        log = "兑换比例为3：1";
+                        return false;
+                    }
+                    if (PowerToken3 < rFNum)
+                    {
+                        log = "魔力值不够";
+                    }
+                    TempPowerToken3 -= rFNum;
+                    TempPowerToken1 += rFNum;
+                    TempOre += rTNum;
+                    action = () => {
+                        PowerToken3 = PowerToken3;
+                        PowerToken1 = PowerToken1;
+                        Ore = Ore;
+                        TempPowerToken3 = 0;
+                        TempPowerToken1 = 0;
+                        TempOre = 0;
+                    };
+                    ActionQueue.Enqueue(action);
+                    break;
+                case "pwk":
+                    if (rFNum != rTNum * 4)
+                    {
+                        log = "兑换比例为4：1";
+                        return false;
+                    }
+                    if (PowerToken3 < rFNum)
+                    {
+                        log = "魔力值不够";
+                    }
+                    TempPowerToken3 -= rFNum;
+                    TempPowerToken1 += rFNum;
+                    TempKnowledge += rTNum;
+                    action = () => {
+                        PowerToken3 = PowerToken3;
+                        PowerToken1 = PowerToken1;
+                        Knowledge = Knowledge;
+                        TempPowerToken3 = 0;
+                        TempPowerToken1 = 0;
+                        TempKnowledge = 0;
+                    };
+                    ActionQueue.Enqueue(action);
+                    break;
+                case "pwc":
+                    if (rFNum != rTNum * 1)
+                    {
+                        log = "兑换比例为1：1";
+                        return false;
+                    }
+                    if (PowerToken3 < rFNum)
+                    {
+                        log = "魔力值不够";
+                    }
+                    TempPowerToken3 -= rFNum;
+                    TempPowerToken1 += rFNum;
+                    TempCredit += rTNum;
+                    action = () => {
+                        PowerToken3 = PowerToken3;
+                        PowerToken1 = PowerToken1;
+                        Credit = Credit;
+                        TempPowerToken3 = 0;
+                        TempPowerToken1 = 0;
+                        TempCredit = 0;
+                    };
+                    ActionQueue.Enqueue(action);
+                    break;
+                case "qico":
+                    if (rFNum != rTNum * 1)
+                    {
+                        log = "兑换比例为1：1";
+                        return false;
+                    }
+                    if (QICs < rFNum)
+                    {
+                        log = "QIC不够";
+                    }
+                    TempQICs -= rFNum;
+                    TempOre += rTNum;
+                    action = () => {
+                        QICs = QICs;
+                        Ore = Ore;
+                        TempQICs = 0;
+                        TempOre = 0;
+                    };
+                    ActionQueue.Enqueue(action);
+                    break;
+                case "kc":
+                    if (rFNum != rTNum * 1)
+                    {
+                        log = "兑换比例为1：1";
+                        return false;
+                    }
+                    if (Knowledge < rFNum)
+                    {
+                        log = "知识不够";
+                    }
+                    TempKnowledge -= rFNum;
+                    TempCredit += rTNum;
+                    action = () => {
+                        Knowledge = Knowledge;
+                        Credit = Credit;
+                        TempKnowledge = 0;
+                        TempCredit = 0;
+                    };
+                    ActionQueue.Enqueue(action);
+                    break;
+                case "oc":
+                    if (rFNum != rTNum * 1)
+                    {
+                        log = "兑换比例为1：1";
+                        return false;
+                    }
+                    if (Ore < rFNum)
+                    {
+                        log = "矿不够";
+                    }
+                    TempOre -= rFNum;
+                    TempCredit += rTNum;
+                    action = () => {
+                        Ore = Ore;
+                        Credit = Credit;
+                        TempOre = 0;
+                        TempCredit = 0;
+                    };
+                    ActionQueue.Enqueue(action);
+                    break;
+                case "opwt":
+                    if (rFNum != rTNum * 1)
+                    {
+                        log = "兑换比例为1：1";
+                        return false;
+                    }
+                    if (Ore < rFNum)
+                    {
+                        log = "矿不够";
+                    }
+                    TempOre -= rFNum;
+                    TempPowerToken1 += rTNum;
+                    action = () => {
+                        Ore = Ore;
+                        PowerToken1 = PowerToken1;
+                        TempOre = 0;
+                        TempPowerToken1 = 0;
+                    };
+                    ActionQueue.Enqueue(action);
+                    break;
+                default:
+                    throw new Exception("不支持这种转换");
+            }
+            return true;
         }
 
         internal bool GetAllianceTile(AllianceTile alt, out string log)

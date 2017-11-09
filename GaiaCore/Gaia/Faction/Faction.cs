@@ -111,6 +111,11 @@ namespace GaiaCore.Gaia
         public int TempPowerToken1 = 0;
         public int TempPowerToken2 = 0;
         public int TempPowerToken3 = 0;
+
+        public int TempCredit = 0;
+        public int TempOre = 0;
+        public int TempKnowledge = 0;
+        public int TempQICs = 0;
         public string LimitTechAdvance { get; set; }
         #endregion
 
@@ -178,60 +183,60 @@ namespace GaiaCore.Gaia
         {
             if (Mines.Count >= 6 && Mines.Count <= 8)
             {
-                m_ore += 9 - Mines.Count;
+                Ore += 9 - Mines.Count;
             }
             else if (Mines.Count == 5)
             {
-                m_ore += 3;
+                Ore += 3;
             }
             else if (Mines.Count < 5)
             {
-                m_ore += 8 - Mines.Count;
+                Ore += 8 - Mines.Count;
             }
 
-            m_ore += GameTileList.Sum(x => x.GetOreIncome());
+            Ore += GameTileList.Sum(x => x.GetOreIncome());
         }
         protected virtual void CalCreditIncome()
         {
             if (TradeCenters.Count == 3)
             {
-                m_credit += 3;
+                Credit += 3;
             }
             else if (TradeCenters.Count == 2)
             {
-                m_credit += 7;
+                Credit += 7;
             }
             else if (TradeCenters.Count == 1)
             {
-                m_credit += 11;
+                Credit += 11;
             }
             else if (TradeCenters.Count == 0)
             {
-                m_credit += 16;
+                Credit += 16;
             }
-            m_credit += GameTileList.Sum(x => x.GetCreditIncome());
+            Credit += GameTileList.Sum(x => x.GetCreditIncome());
         }
 
 
         protected virtual void CalKnowledgeIncome()
         {
-            m_knowledge += 4 - ResearchLabs.Count;
+            Knowledge += 4 - ResearchLabs.Count;
             if (Academy1 == null)
             {
-                m_knowledge += 2;
+                Knowledge += 2;
             }
 
-            m_knowledge += GameTileList.Sum(x => x.GetKnowledgeIncome());
+            Knowledge += GameTileList.Sum(x => x.GetKnowledgeIncome());
         }
 
         protected virtual void CalQICIncome()
         {
             if (Academy2 == null)
             {
-                m_QICs += 1;
+                QICs += 1;
             }
 
-            m_QICs += GameTileList.Sum(x => x.GetQICIncome());
+            QICs += GameTileList.Sum(x => x.GetQICIncome());
         }
 
         protected virtual void CalPowerIncome()
@@ -271,10 +276,10 @@ namespace GaiaCore.Gaia
         public Academy Academy1 { set; get; }
         public Academy Academy2 { set; get; }
         public StrongHold StrongHold { set; get; }
-        public int Credit { get => m_credit; set => m_credit = value; }
-        public int Ore { get => m_ore; set => m_ore = value; }
-        public int Knowledge { get => m_knowledge; set => m_knowledge = value; }
-        public int QICs { get => m_QICs; set => m_QICs = value; }
+        public int Credit { get => m_credit+TempCredit; set => m_credit = value; }
+        public int Ore { get => m_ore+TempOre; set => m_ore = value; }
+        public int Knowledge { get => m_knowledge+TempKnowledge; set => m_knowledge = value; }
+        public int QICs { get => m_QICs+TempQICs; set => m_QICs = value; }
         public int PowerToken1 { get => m_powerToken1 + TempPowerToken1; set => m_powerToken1 = value; }
         public int PowerToken2 { get => m_powerToken2 + TempPowerToken2; set => m_powerToken2 = value; }
         public int PowerToken3 { get => m_powerToken3 + TempPowerToken3; set => m_powerToken3 = value; }

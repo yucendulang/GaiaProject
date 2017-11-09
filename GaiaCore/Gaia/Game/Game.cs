@@ -200,11 +200,11 @@ namespace GaiaCore.Gaia
             //faction.Backup();
             if (!ProcessCommandWithBackup(commandList.ToArray(),faction,out log))
             {
+                faction.ResetUnfinishAction();
                 //faction.Rollback();
                 return false;
             }
-            
-
+            faction.ResetUnfinishAction();
             return true;
 
         }
@@ -463,6 +463,20 @@ namespace GaiaCore.Gaia
                         faction.TempPowerToken3 = 0;
                     };
                     faction.ActionQueue.Enqueue(action);
+                }
+                else if (GameFreeSyntax.ConvertRegex.IsMatch(item))
+                {
+                    var match = GameFreeSyntax.ConvertRegex.Match(item);
+                    var RFNum = match.Groups[1].Value.ParseToInt(0);
+                    var RFKind = match.Groups[2].Value;
+                    var RTNum = match.Groups[3].Value.ParseToInt(0);
+                    var RTKind = match.Groups[4].Value;
+                    if(!faction.ConvertOneResourceToAnother(RFNum, RFKind, RTNum, RTKind,out log))
+                    {
+                        return false;
+                    }
+
+                    
                 }
                 else
                 {
