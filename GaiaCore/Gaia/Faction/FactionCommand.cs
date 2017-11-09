@@ -15,7 +15,7 @@ namespace GaiaCore.Gaia
             log = string.Empty;
             bool isGreenPlanet = false;
             bool isGaiaPlanet = false;
-            if (!(Mines.Count > 1 && m_credit > m_MineCreditCost && m_ore > m_MineOreCost))
+            if (!(Mines.Count > 1 && m_credit >= m_MineCreditCost && m_ore >= m_MineOreCost))
             {
                 log = "资源不够";
                 return false;
