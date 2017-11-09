@@ -3,6 +3,10 @@
     padding-bottom: 20px;
 }
 
+.container {
+    width: 1640px;
+} 
+
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
@@ -49,6 +53,3 @@ textarea {
     }
 }
 
-.container {
-    width: 1640px;
-} 
