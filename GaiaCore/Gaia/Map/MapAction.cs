@@ -5,9 +5,9 @@ using System.Text;
 
 namespace GaiaCore.Gaia
 {
-    public static class MapActionMgr
+    public class MapActionMgr
     {
-        static List<MapAction> mapActList = new List<MapAction>()
+        List<MapAction> mapActList = new List<MapAction>()
         {
             new ACT1(),
             new ACT2(),
@@ -20,10 +20,15 @@ namespace GaiaCore.Gaia
             new ACT9(),
             new ACT10()
         };
-        internal static void AddMapActionList(Dictionary<string, Func<Faction, bool>> actionList, Dictionary<string, Func<Faction, bool>> preList)
+        internal void AddMapActionList(Dictionary<string, Func<Faction, bool>> actionList, Dictionary<string, Func<Faction, bool>> preList)
         {
             mapActList.ForEach(x => actionList.Add(x.GetType().Name.ToLower(), x.InvokeGameTileAction));
             mapActList.ForEach(x => preList.Add(x.GetType().Name.ToLower(), x.PredicateGameTileAction));
+        }
+
+        internal void Reset()
+        {
+            mapActList.ForEach(x => x.IsUsed = false);
         }
     }
     public abstract class MapAction : GameTiles

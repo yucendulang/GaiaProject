@@ -23,6 +23,7 @@ namespace GaiaCore.Gaia
             FactionList = new List<Faction>();
             FactionNextTurnList = new List<Faction>();
             UserDic = new Dictionary<string, List<Faction>>();
+            MapActionMrg = new MapActionMgr();
             Username = username;
             foreach(var us in username.ToList().Where(x=>!string.IsNullOrEmpty(x)).Distinct())
             {
@@ -122,6 +123,8 @@ namespace GaiaCore.Gaia
             GaiaPhase();
             ChangeGameStatus(Stage.ROUNDSTART);
             GameStatus.NewRoundReset();
+            FactionList.ForEach(x => x.GameTileList.ForEach(y => y.IsUsed = false));
+            MapActionMrg.Reset();
         }
 
         private void GaiaPhase()
@@ -714,6 +717,7 @@ namespace GaiaCore.Gaia
         /// AlianceList
         /// </summary>
         public List<AllianceTile> ALTList { set; get; }
+        public MapActionMgr MapActionMrg { set; get; }
         public AllianceTile AllianceTileForTransForm { set; get; }
         [JsonProperty]
         public string UserActionLog { set; get; }

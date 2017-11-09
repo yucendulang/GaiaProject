@@ -52,7 +52,7 @@ namespace GaiaCore.Gaia
             ActionQueue = new Queue<Action>();
             ActionList = new Dictionary<string, Func<Faction, bool>>();
             PredicateActionList = new Dictionary<string, Func<Faction,bool>>();
-            MapActionMgr.AddMapActionList(ActionList, PredicateActionList);
+            GaiaGame.MapActionMrg.AddMapActionList(ActionList, PredicateActionList);
             GaiaPlanetNumber = 0;
 
         }
