@@ -51,7 +51,8 @@ namespace GaiaCore.Gaia
             GaiaGame = gg;
             ActionQueue = new Queue<Action>();
             ActionList = new Dictionary<string, Func<Faction, bool>>();
-            PredicateActionList = new Dictionary<string, Func<bool>>();
+            PredicateActionList = new Dictionary<string, Func<Faction,bool>>();
+            MapActionMgr.AddMapActionList(ActionList, PredicateActionList);
             GaiaPlanetNumber = 0;
 
         }
@@ -106,6 +107,7 @@ namespace GaiaCore.Gaia
         private int m_TechTilesGet = 0;
         private int m_TechTrachAdv = 0;
         private int m_AllianceTileGet = 0;
+        private int m_AllianceTileReGet = 0;
         public string LimitTechAdvance { get; set; }
         #endregion
 
@@ -266,7 +268,7 @@ namespace GaiaCore.Gaia
         public int QICs { get => m_QICs; set => m_QICs = value; }
         public int PowerToken1 { get => m_powerToken1; set => m_powerToken1=value; }
         public int PowerToken2 { get => m_powerToken2;  }
-        public int PowerToken3 { get => m_powerToken3;  }
+        public int PowerToken3 { get => m_powerToken3; set => m_powerToken3 = value; }
         public int TransformLevel { get => m_TransformLevel;  }
         public int ShipLevel { get => m_ShipLevel;  }
         public int AILevel { get => m_AILevel; }
@@ -280,7 +282,7 @@ namespace GaiaCore.Gaia
         public Queue<Action> ActionQueue { get; set; }
 
         public Dictionary<string,Func<Faction,bool>> ActionList { get; set; }
-        public Dictionary<string,Func<bool>> PredicateActionList { get; set; }
+        public Dictionary<string,Func<Faction,bool>> PredicateActionList { get; set; }
         public int GaiaPlanetNumber { get; set; }
         public int GetShipDistance
         {
@@ -330,6 +332,7 @@ namespace GaiaCore.Gaia
         public int TerraFormNumber { get => m_TerraFormNumber; set => m_TerraFormNumber = value; }
         public int TempShip { get => m_TempShip; set => m_TempShip = value; }
         public int PowerTokenGaia { get => m_powerTokenGaia; set => m_powerTokenGaia = value; }
+        public int AllianceTileReGet { get => m_AllianceTileReGet; set => m_AllianceTileReGet = value; }
 
         private static List<FieldInfo> list = new List<FieldInfo>()
         {

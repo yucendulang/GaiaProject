@@ -56,20 +56,18 @@ namespace GaiaCore.Gaia
         public const string action = "action";
         private static readonly List<string> turnActionList = new List<string>()
         {
+            "act10",
             "stt1",
             "att1",
             "att2",
             "att3",
             "act1",
-            "act2",
             "act3",
             "act4",
             "act5",
-            "act6",
             "act7",
             "act8",
             "act9",
-            "act10",
         };
         public static Regex actionRegex = new Regex(string.Format("{0} ({1})", action, string.Join("|", turnActionList)));
         /// <summary>
@@ -104,7 +102,9 @@ namespace GaiaCore.Gaia
         private static readonly List<string> turnActionList = new List<string>()
         {
             "rbt1",
-            "rbt2"
+            "rbt2",
+            "act2",
+            "act6",
         };
         public static Regex actionRegex = new Regex(string.Format("{0} ({1})", GameSyntax.action, string.Join("|", turnActionList)));
         /// <summary>

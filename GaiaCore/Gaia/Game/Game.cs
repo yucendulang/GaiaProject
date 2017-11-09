@@ -354,7 +354,16 @@ namespace GaiaCore.Gaia
                 }
                 else if (GameSyntax.actionRegex.IsMatch(item))
                 {
-                    throw new NotImplementedException();
+                    var match = GameSyntax.actionRegex.Match(item);
+                    var actionStr = match.Groups[1].Value;
+                    if (faction.PredicateAction(actionStr, out log))
+                    {
+                        faction.DoAction(actionStr, false);
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else if (GameFreeSyntax.actionRegex.IsMatch(item))
                 {

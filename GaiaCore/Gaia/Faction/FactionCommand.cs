@@ -87,6 +87,12 @@ namespace GaiaCore.Gaia
             return true;
         }
 
+        internal void PowerUse(int v)
+        {
+            PowerToken3 -= v;
+            PowerToken1 += v;
+        }
+
         private void TriggerRST(Type type)
         {
             if (GaiaGame.RSTList[(GaiaGame.GameStatus.RoundCount - 1)].GetType()==type)
@@ -357,7 +363,7 @@ namespace GaiaCore.Gaia
         internal bool IsExitUnfinishFreeAction(out string log)
         {
             log = string.Empty;
-            if (TerraFormNumber != 0)
+            if (TerraFormNumber != 0 && !(IsUseAction2&&TerraFormNumber==1))
             {
                 log = "还存在没使用的Transform";
                 return true;
@@ -390,6 +396,7 @@ namespace GaiaCore.Gaia
             m_TechTrachAdv = 0;
             m_AllianceTileGet = 0;
             LimitTechAdvance = string.Empty;
+            IsUseAction2 = false;
         }
 
         internal bool SetTransformNumber(int num, out string log)
@@ -418,7 +425,8 @@ namespace GaiaCore.Gaia
             "eco",
             "sci",
         };
-        
+
+        public bool IsUseAction2 { get; internal set; }
 
         internal static string ConvertTechIndexToStr(int v)
         {
@@ -659,7 +667,7 @@ namespace GaiaCore.Gaia
         internal bool PredicateAction(string actionStr, out string log)
         {
             log = string.Empty;
-            if (PredicateActionList.ContainsKey(actionStr)&& !PredicateActionList[actionStr].Invoke())
+            if (PredicateActionList.ContainsKey(actionStr)&& !PredicateActionList[actionStr].Invoke(this))
             {
                 log = "此行动不可用";
                 return false;
