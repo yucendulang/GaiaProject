@@ -295,7 +295,7 @@ namespace GaiaCore.Gaia
             }
             if (hex.Building.GetType() != build.BaseBuilding)
             {
-                log = string.Format("需要基础建筑类型{0}", hex.Building.GetType().ToString());
+                log = string.Format("需要基础建筑类型{0}", build.BaseBuilding.ToString());
                 return false;
             }
             if (m_ore < oreCost || m_credit < creditCost)
