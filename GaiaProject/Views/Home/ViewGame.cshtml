@@ -29,6 +29,10 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.INITIALMINES)
 {
     <p>现在等待 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 建造初始房子 </p>
 }
+else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.SELECTROUNDBOOSTER)
+{
+    <p>现在等待 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 选择回合加速版 +rbtx</p>
+}
 else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
 {
     <p>游戏结束 @string.Join("|",@Model.FactionList.OrderBy(x=>x.Score).Select(x=>string.Format("{0}:{1}",x.FactionName,x.Score)))</p>
@@ -89,23 +93,23 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
         <h4>种族</h4>
         @foreach (var item in Model.FactionList)
         {
-            <div>@item.FactionName|分数:@item.Score|Color:@item.OGTerrain.ToString()|C:@item.Credit|O:@item.Ore|QICs:@item.QICs|K:@item.Knowledge|PI:@item.PowerToken1|PII:@item.PowerToken2|PIII:@item.PowerToken3|PG:@item.PowerTokenGaia</div>
+            <div>@item.FactionName|分数:@item.Score|Color:@item.OGTerrain.ToString()|C:@item.Credit|O:@item.Ore|QICs:@item.QICs|K:@item.Knowledge|PG:@item.PowerTokenGaia|Power:@item.PowerToken1/@item.PowerToken2/@item.PowerToken3</div>
             <div>铲子:@item.TransformLevel|航海:@item.ShipLevel|AI:@item.AILevel|盖亚:@item.GaiaLevel|经济:@item.EconomicLevel|科技:@item.ScienceLevel</div>
             <div>游戏板子:##@string.Join("|||", item.GameTileList.Select(x => string.Format("{0}:{1}", x.GetType().Name, x.desc)))##</div>
             <div>
-                建筑物 M @item.Mines.Count /8 | TC @item.TradeCenters.Count /4 |RL @item.ResearchLabs.Count /3 |盖亚 @item.Gaias.Count/3
+                建筑物 M @(8-item.Mines.Count) /8 | TC @(4-item.TradeCenters.Count) /4 |RL @(3-item.ResearchLabs.Count) /3 |板子上有的盖亚 @item.Gaias.Count
                 |AC1 @if (item.Academy1 == null)
-                { <a>0/1</a> }
+                { <a>1/1</a> }
                 else
-                { <a>1/1</a>}
+                { <a>0/1</a>}
                 |AC2 @if (item.Academy2 == null)
-                { <a>0/1</a>}
-                else
                 { <a>1/1</a>}
+                else
+                { <a>0/1</a>}
                 |SH @if (item.StrongHold == null)
-                { <a>0/1</a>}
-                else
                 { <a>1/1</a>}
+                else
+                { <a>0/1</a>}
             </div>
 
             @foreach (var leech in item.LeechPowerQueue)

@@ -78,6 +78,7 @@ namespace GaiaCore.Gaia.Tiles
             IsUsed = true;
             return true;
         }
+        public override bool CanAction => true;
     }
     public class RBT3 : RoundBooster
     {
