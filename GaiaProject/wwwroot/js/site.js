@@ -68,9 +68,9 @@ function DrawOneHex(ctx, col, row, color,isCenter,hex) {
 function textHexName(ctx, row, col, name, color) {
     //console.log("textHexName" +row + col + name);
     ctx.beginPath();
-    cxt.font = "15px Verdana";
+    cxt.font = "12px Verdana";
     cxt.fillStyle = ConvertBackGroundColorToTextColor(color);
-    ctx.fillText(name, row - 15, col + 20);
+    ctx.fillText(name, row - 11, col + 20);
     cxt.closePath();
 }
 
@@ -79,9 +79,9 @@ function textHexName(ctx, row, col, name, color) {
 function textSpaceSectorCenterName(ctx, row, col, name) {
     //console.log(row, col, "isCenter");
     ctx.beginPath();
-    cxt.font = "18px Verdana";
+    cxt.font = "12px Verdana";
     cxt.fillStyle = "White";
-    ctx.fillText(name, row - 10, col - 10);
+    ctx.fillText(name, row - 8, col - 12);
     cxt.closePath();
 }
 
