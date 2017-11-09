@@ -635,6 +635,10 @@ namespace GaiaCore.Gaia
                 UserActionLog += m_TailLog;
                 m_TailLog = string.Empty;
             }
+            else
+            {
+                UserActionLog += "#"+DateTime.Now.ToString()+"#"+syntax.AddEnter();
+            }
         }
 
         private void SetupFaction(string user,FactionName faction)
