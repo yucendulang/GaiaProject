@@ -149,6 +149,7 @@ namespace GaiaCore.Gaia
                 map.HexArray[row, col].Building = Gaias.First();
                 map.HexArray[row, col].FactionBelongTo = FactionName;
                 PowerTokenGaia += GetGaiaCost();
+                Gaias.RemoveAt(0);
             };
             ActionQueue.Enqueue(queue);
             TempShip = 0;
