@@ -68,7 +68,7 @@ namespace GaiaCore.Gaia
             JsonSerializerSettings jsetting = new JsonSerializerSettings();
             jsetting.ContractResolver = new LimitPropsContractResolver(new string[] { "UserActionLog", "Username" });
             var str=JsonConvert.SerializeObject(m_dic,Formatting.Indented, jsetting);
-            var logPath = System.IO.Path.Combine(BackupDataPath, DateTime.Now.ToString("yyyyMMddhhmmss")+".txt");
+            var logPath = System.IO.Path.Combine(BackupDataPath, DateTime.Now.ToString("yyyyMMddHHmmss")+".txt");
             var logWriter=System.IO.File.CreateText(logPath);
             logWriter.Write(str);
             logWriter.Dispose();
