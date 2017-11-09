@@ -30,7 +30,8 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
     <p>游戏结束 @string.Join("|",@Model.FactionList.OrderBy(x=>x.Score).Select(x=>string.Format("{0}:{1}",x.FactionName,x.Score)))</p>
 }
 
-
+@if (Model.UserDic.ContainsKey(User.Identity.Name))
+{
 @foreach (var fac in Model.UserDic[User.Identity.Name])
 {
     @foreach (var leech in fac.LeechPowerQueue)
@@ -45,6 +46,7 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
                 <button type = "submit" name="isLeech" class="btn btn-default" value="false">否</button>
             </form>
     }
+}
 }
 
 @if (ViewData["log"] != null)
