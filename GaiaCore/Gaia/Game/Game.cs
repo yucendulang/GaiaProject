@@ -34,7 +34,7 @@ namespace GaiaCore.Gaia
         {
             log = string.Empty;
             if (syntax.StartsWith("#"))
-                return false;
+                return true;
             syntax = syntax.ToLower();
             bool ret;
             switch (GameStatus.stage)
