@@ -313,6 +313,12 @@ namespace GaiaCore.Gaia
                 {
                     TriggerRST(trigger);
                 }
+                if (syn == BuildingSyntax.AC2)
+                {
+                    var tile = new AC2();
+                    GameTileList.Add(tile);
+                    ActionList.Add(tile.GetType().Name.ToLower(), tile.InvokeGameTileAction);
+                }
             };
             ActionQueue.Enqueue(queue);
             return true;

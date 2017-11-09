@@ -37,8 +37,7 @@ namespace GaiaCore.Gaia
         public override string desc => GetType().Name;
         public override bool InvokeGameTileAction(Faction faction)
         {
-            IsUsed = true;
-            return true;
+            return base.InvokeGameTileAction(faction);
         }
     }
     public class ACT1 : MapAction

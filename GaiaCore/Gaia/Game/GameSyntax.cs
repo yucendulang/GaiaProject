@@ -68,6 +68,7 @@ namespace GaiaCore.Gaia
             "act7",
             "act8",
             "act9",
+            "ac2",
         };
         public static Regex actionRegex = new Regex(string.Format("{0} ({1})", action, string.Join("|", turnActionList)));
         /// <summary>
