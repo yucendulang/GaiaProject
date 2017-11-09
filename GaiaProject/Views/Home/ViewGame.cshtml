@@ -80,7 +80,7 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
         </canvas>
     </div>
     <div class="col-md-5">
-        <h1>种族</h1>
+        <h4>种族</h4>
         @foreach (var item in Model.FactionList)
         {
             <div>@item.FactionName|分数:@item.Score|Color:@item.OGTerrain.ToString()|C:@item.Credit|O:@item.Ore|QICs:@item.QICs|K:@item.Knowledge|PI:@item.PowerToken1|PII:@item.PowerToken2|PIII:@item.PowerToken3|PG:@item.PowerTokenGaia</div>
@@ -111,10 +111,15 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
         }
 
 
-        <h1>Round Booster</h1>
+        <h4>Round Booster</h4>
         @foreach (var item in Model.RBTList)
         {
             <p>@item.GetType().Name @item.desc</p>
+        }
+        <h4>Round Score</h4>
+        @for (int i = 0; i < Model.RSTList.Count; i++)
+        {
+            <p>Round @(i+1) @Model.RSTList[i].desc</p>
         }
     </div>
 </div>
@@ -132,11 +137,6 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
     @foreach (var item in Model.STT3List)
     {
         <p>@item.GetType().Name @item.desc</p>
-    }
-    <h1>Round Score</h1>
-    @for (int i = 0; i < Model.RSTList.Count; i++)
-    {
-        <p>Round @i @Model.RSTList[i].desc</p>
     }
     <h1>Final Score</h1>
     @foreach (var item in Model.FSTList)
