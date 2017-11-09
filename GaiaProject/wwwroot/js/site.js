@@ -8,6 +8,7 @@ function DrawMap() {
     //console.log(model);
     var array = model["map"]["hexArray"];
     console.log(array);
+    renderColorCycle(cxt, "white");
     for (var i = 0; i < 20; i++) {
         for (var j = 0; j < 20; j++) {
 
@@ -276,6 +277,8 @@ function ConvertIntToColor(i) {
     }
 }
 
+var cycle = ["blue", "red", "orange", "yellow", "brown", "black", "white"]; 
+
 function ConvertRaceIntToColor(i) {
     switch (i) {
         case 0:
@@ -319,4 +322,35 @@ function ConvertBackGroundColorToTextColor(color) {
     } else {
         return "white";
     }
+}
+
+function renderColorCycle(ctx, startColor) {
+
+    ctx.save()
+    //ctx.scale(2, 2);
+    ctx.translate(830, 50);
+
+    var base = cycle.indexOf(startColor);
+
+    for (var i = 0; i < 7; ++i) {
+        var terrain = cycle[(base + i) % 7];
+
+        ctx.save()
+
+        var size = 10;
+
+        var angle = (Math.PI * 2 / 7) * i - Math.PI / 2;
+        ctx.translate(30 * Math.cos(angle), 30 * Math.sin(angle));
+
+        ctx.beginPath();
+        ctx.arc(0, 0, size, Math.PI * 2, 0, false);
+        console.log(terrain);
+        ctx.fillStyle = terrain;
+        ctx.fill();
+
+        ctx.stroke();
+
+        ctx.restore();
+    }
+    ctx.restore();
 }
