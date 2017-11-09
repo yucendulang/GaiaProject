@@ -118,13 +118,33 @@ namespace GaiaCore.Gaia
 
         private void NewRound()
         {
-            ChangeGameStatus(Stage.ROUNDINCOME);
-            FactionList.ForEach(x => x.CalIncome());
-            GaiaPhase();
-            ChangeGameStatus(Stage.ROUNDSTART);
-            GameStatus.NewRoundReset();
-            FactionList.ForEach(x => x.GameTileList.ForEach(y => y.IsUsed = false));
-            MapActionMrg.Reset();
+            if (GameStatus.RoundCount == GameConstNumber.GameRoundCount)
+            {
+                CalGameEndScore();
+                ChangeGameStatus(Stage.GAMEEND);
+            }
+            else
+            {
+                ChangeGameStatus(Stage.ROUNDINCOME);
+                FactionList.ForEach(x => x.CalIncome());
+                GaiaPhase();
+                GameStatus.NewRoundReset();
+                FactionList.ForEach(x => x.GameTileList.ForEach(y => y.IsUsed = false));
+                MapActionMrg.Reset();
+                ChangeGameStatus(Stage.ROUNDSTART);
+            }
+        }
+
+        private void CalGameEndScore()
+        {
+            foreach (var item in FactionList)
+            {
+                for (int i = 0; i < 6; i++)
+                {
+                    item.Score += Math.Max((item.GetTechLevelbyIndex(i) - 2), 0) * 4;
+                }
+            }
+            FSTList.ForEach(x => x.InvokeGameTileAction(FactionList));
         }
 
         private void GaiaPhase()
@@ -468,6 +488,8 @@ namespace GaiaCore.Gaia
                 RBTList.Add(ret);
                 faction.GameTileList.Remove(ret);
                 ret.IsUsed = false; ;
+                faction.PredicateActionList.Remove(ret.GetType().Name.ToLower());
+                faction.ActionList.Remove(ret.GetType().Name.ToLower());
             }
             faction.GameTileList.Add(rbt);
             if (rbt.CanAction)
@@ -652,6 +674,7 @@ namespace GaiaCore.Gaia
             RSTList = RSTMgr.GetRandomList(6, random);
             FSTList = new List<FinalScoring>();
             FSTList.Add(new FST1());
+            FSTList.Add(new FST3());
             RBTList = (from items in RBTMgr.GetRandomList(4 + 3, random) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();
             ALTList = ALTMgr.GetList();
             AllianceTileForTransForm = ALTList.RandomRemove(random);
@@ -671,6 +694,21 @@ namespace GaiaCore.Gaia
                 {
                     item.LeechPowerQueue.Add(new Tuple<int, FactionName>(power, factionName));
                 }
+            }
+        }
+
+        public string GetCurrentUserName()
+        {
+            if (GameStatus.stage == Stage.FACTIONSELECTION)
+            {
+                return Username[GameStatus.PlayerIndex];
+            }
+            else if(GameStatus.stage==Stage.ROUNDWAITLEECHPOWER||GameStatus.stage==Stage.GAMEEND)
+            {
+                return string.Empty;
+            }else
+            {
+                return UserDic.Where(x => x.Value.Contains(FactionList[GameStatus.PlayerIndex])).First().Key;
             }
         }
 

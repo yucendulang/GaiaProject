@@ -10,5 +10,6 @@ namespace GaiaCore.Gaia
         public const int MineCount = 8;
         public const int TradeCenterCount = 4;
         public const int ResearchLabCount = 3;
+        public const int GameRoundCount = 3;
     }
 }

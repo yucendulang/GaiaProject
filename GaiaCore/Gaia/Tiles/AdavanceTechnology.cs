@@ -183,7 +183,7 @@ namespace GaiaCore.Gaia.Tiles
         }
         public override int GetTurnEndScore(Faction faction)
         {
-            return (GameConstNumber.ResearchLabCount - faction.ReaserchLabs.Count) * 2;
+            return (GameConstNumber.ResearchLabCount - faction.ResearchLabs.Count) * 2;
         }
 
     }

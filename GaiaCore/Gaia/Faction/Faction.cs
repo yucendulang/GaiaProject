@@ -36,10 +36,10 @@ namespace GaiaCore.Gaia
             {
                 TradeCenters.Add(new TradeCenter());
             }
-            ReaserchLabs = new List<ResearchLab>();
+            ResearchLabs = new List<ResearchLab>();
             for (int i = 0; i < GameConstNumber.ResearchLabCount; i++)
             {
-                ReaserchLabs.Add(new ResearchLab());
+                ResearchLabs.Add(new ResearchLab());
             }
             Academy1 = new Academy();
             Academy2 = new Academy();
@@ -208,7 +208,7 @@ namespace GaiaCore.Gaia
       
         protected virtual void CalKnowledgeIncome()
         {
-            m_knowledge += 4 - ReaserchLabs.Count;
+            m_knowledge += 4 - ResearchLabs.Count;
             if (Academy1 == null)
             {
                 m_knowledge += 2;
@@ -258,7 +258,7 @@ namespace GaiaCore.Gaia
         public List<GaiaBuilding> Gaias { set; get; }
         public List<Mine> Mines { set; get; }
         public List<TradeCenter> TradeCenters { set; get; }
-        public List<ResearchLab> ReaserchLabs { set; get; }
+        public List<ResearchLab> ResearchLabs { set; get; }
         public Academy Academy1 { set; get; }
         public Academy Academy2 { set; get; }
         public StrongHold StrongHold { set; get; }

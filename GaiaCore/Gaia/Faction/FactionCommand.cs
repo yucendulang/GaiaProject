@@ -87,6 +87,14 @@ namespace GaiaCore.Gaia
             return true;
         }
 
+        internal object GetRemainBuildCount()
+        {
+            var i1 = Academy1 == null ? 0 : 1;
+            var i2 = Academy2 == null ? 0 : 1;
+            var i3 = StrongHold == null ? 0 : 1;
+            return Mines.Count + TradeCenters.Count + ResearchLabs.Count + i1 + i2 + i3;
+        }
+
         internal void PowerUse(int v)
         {
             PowerToken3 -= v;
@@ -253,7 +261,7 @@ namespace GaiaCore.Gaia
                     trigger = typeof(RST2);
                     break;
                 case BuildingSyntax.RL:
-                    build = ReaserchLabs.First();
+                    build = ResearchLabs.First();
                     oreCost = m_ReaserchLabOreCost;
                     creditCost = m_ReaserchLabCreditCost;
                     trigger = null;
@@ -326,7 +334,17 @@ namespace GaiaCore.Gaia
 
         internal int GetTechLevelbyIndex(int index)
         {
-            throw new NotImplementedException();
+            switch (index)
+            {
+                case 0:return TransformLevel;
+                case 1:return ShipLevel;
+                case 2:return AILevel;
+                case 3:return GaiaLevel;
+                case 4:return EconomicLevel;
+                case 5:return ScienceLevel;
+                default:
+                    throw new Exception("index越界"+index);
+            }
         }
 
         internal void LeechPower(int power, FactionName factionFrom, bool isLeech)
@@ -350,7 +368,7 @@ namespace GaiaCore.Gaia
                     TradeCenters.RemoveAt(0);
                     break;
                 case BuildingSyntax.RL:
-                    ReaserchLabs.RemoveAt(0);
+                    ResearchLabs.RemoveAt(0);
                     break;
                 case BuildingSyntax.AC1:
                     Academy1 = null;
@@ -720,7 +738,7 @@ namespace GaiaCore.Gaia
                     TradeCenters.Add(building as TradeCenter);
                     break;
                 case "ResearchLab":
-                    ReaserchLabs.Add(building as ResearchLab);
+                    ResearchLabs.Add(building as ResearchLab);
                     break;
                 default:
                     throw new Exception(building.GetType().ToString() + "不会被归还");

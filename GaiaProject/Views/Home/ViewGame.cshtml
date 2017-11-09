@@ -21,6 +21,14 @@ else if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
     <p>现在是Round @Model.GameStatus.RoundCount,Turn @Model.GameStatus.TurnCount</p>
     <p>现在是 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 的回合,颜色是 @Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()</p>
 }
+else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
+{
+    <p>现在等待 @Model.Username[Model.GameStatus.PlayerIndex] 选种族</p>
+}
+else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
+{
+    <p>游戏结束 @string.Join("|",@Model.FactionList.OrderBy(x=>x.Score).Select(x=>string.Format("{0}:{1}",x.FactionName,x.Score)))</p>
+}
 
 
 @foreach (var fac in Model.UserDic[User.Identity.Name])
@@ -43,6 +51,8 @@ else if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
 {
     <p>@ViewData["log"]</p>
 }
+@if (User.Identity.Name.Equals(Model.GetCurrentUserName()))
+{
 <form asp-controller="Home" asp-action="ViewGame" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
     <div asp-validation-summary="All" class="text-danger"></div>
 
@@ -62,6 +72,7 @@ else if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
         <button type="submit" class="btn btn-default">Save</button>
     </div>
 </form>
+}
 <div class="row">
     <div class="col-md-7">
         <canvas id="myCanvas" width="950" height="740" style="border:1px solid #c3c3c3;">
@@ -76,7 +87,7 @@ else if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
             <div>铲子:@item.TransformLevel|航海:@item.ShipLevel|AI:@item.AILevel|盖亚:@item.GaiaLevel|经济:@item.EconomicLevel|科技:@item.ScienceLevel</div>
             <div>游戏板子:##@string.Join("|||", item.GameTileList.Select(x => string.Format("{0}:{1}", x.GetType().Name, x.desc)))##</div>
             <div>
-                建筑物 M @item.Mines.Count /8 | TC @item.TradeCenters.Count /4 |RL @item.ReaserchLabs.Count /3 |盖亚 @item.Gaias.Count/3
+                建筑物 M @item.Mines.Count /8 | TC @item.TradeCenters.Count /4 |RL @item.ResearchLabs.Count /3 |盖亚 @item.Gaias.Count/3
                 |AC1 @if (item.Academy1 == null)
                 { <a>0/1</a> }
                 else

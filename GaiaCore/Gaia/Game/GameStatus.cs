@@ -124,6 +124,7 @@ namespace GaiaCore.Gaia
         SELECTROUNDBOOSTER,
         ROUNDINCOME,
         ROUNDSTART,
-        ROUNDWAITLEECHPOWER
+        ROUNDWAITLEECHPOWER,
+        GAMEEND
     }
 }
