@@ -16,16 +16,20 @@
         }
     }
 }
-else if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
+else if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDSTART)
 {
     <p>现在是Round @Model.GameStatus.RoundCount,Turn @Model.GameStatus.TurnCount</p>
     <p>现在是 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 的回合,颜色是 @Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()</p>
 }
 else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
 {
-    <p>现在等待 @Model.Username[Model.GameStatus.PlayerIndex] 选种族</p>
+    <p>现在等待 @Model.Username[Model.GameStatus.PlayerIndex] 选种族 setup xxx</p>
 }
-else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
+else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.INITIALMINES)
+{
+    <p>现在等待 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 建造初始房子 </p>
+}
+else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
 {
     <p>游戏结束 @string.Join("|",@Model.FactionList.OrderBy(x=>x.Score).Select(x=>string.Format("{0}:{1}",x.FactionName,x.Score)))</p>
 }
