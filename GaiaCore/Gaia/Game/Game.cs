@@ -524,8 +524,7 @@ namespace GaiaCore.Gaia
             }
             var rbtStr = command.Substring(1);
 
-            ProcessGetRoundBooster(rbtStr, faction, out log);
-            return true;
+            return ProcessGetRoundBooster(rbtStr, faction, out log);
         }
 
         private bool ProcessGetRoundBooster(string rbtStr,Faction faction,out string log)
@@ -645,6 +644,12 @@ namespace GaiaCore.Gaia
                 var faction = syntax.Substring(GameSyntax.factionSelection.Length + 1);
                 if (Enum.TryParse(faction, true, out FactionName result))
                 {
+                    if (FactionList.Exists(x => (int)x.FactionName/2 == (int)result /2))
+                    {
+                        log = "不能选择相同颜色的种族";
+                        return false;
+                    }
+                    
                     if (!FactionList.Exists(x => x.FactionName == result))
                     {
 
