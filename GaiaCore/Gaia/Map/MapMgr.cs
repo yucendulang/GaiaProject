@@ -157,7 +157,7 @@ namespace GaiaCore.Gaia
         public Map GetRandomMap(Random random)
         {
             var result = new Map();
-            result.AddSpaceSector(3, 10, ssl[0],random);
+            result.AddSpaceSector(3, 10, ssl[0], random);
             result.AddSpaceSector(6, 7, ssl[1], random);
             result.AddSpaceSector(7, 12, ssl[2], random);
             result.AddSpaceSector(10, 9, ssl[3], random);
@@ -190,7 +190,7 @@ namespace GaiaCore.Gaia
         public IList<TerrenHex> GetHexList()
         {
             var list = new List<TerrenHex>();
-            foreach(var item in HexArray)
+            foreach (var item in HexArray)
             {
                 if (item != null)
                 {
@@ -199,7 +199,7 @@ namespace GaiaCore.Gaia
             }
             return list;
         }
-        public void AddSpaceSector(int x, int y, SpaceSector ss,Random random)
+        public void AddSpaceSector(int x, int y, SpaceSector ss, Random random)
         {
 
             List<Tuple<int, int>> hexList = GetHexList(x, y);
@@ -210,7 +210,7 @@ namespace GaiaCore.Gaia
             if (!ValidateMap(hexList))
             {
                 //System.Diagnostics.Debug.WriteLine("发现不合法");
-                AddSpaceSector(x, y, ss.RandomRotato(random),random);
+                AddSpaceSector(x, y, ss.RandomRotato(random), random);
             }
         }
 
@@ -274,7 +274,7 @@ namespace GaiaCore.Gaia
         private bool IsTwoHexColorSame(int x, int y, int x2, int y2)
         {
 
-            if (x < 0 || y < 0||x>=m_mapWidth||y>=m_mapHeight)
+            if (x < 0 || y < 0 || x >= m_mapWidth || y >= m_mapHeight)
                 return false;
             if (HexArray[x, y] == null)
                 return false;
@@ -345,9 +345,9 @@ namespace GaiaCore.Gaia
             //吸魔力大小范围
             var distance = 2;
             var res = 0;
-            for (int i = Math.Max(x - distance, 0); i <= Math.Min(x + distance, m_mapHeight); i++)
+            for (int i = Math.Max(x - distance, 0); i <= Math.Min(x + distance, m_mapHeight - 1); i++)
             {
-                for (int j = Math.Max(y - distance, 0); j <= Math.Min(j + distance, m_mapWidth); j++)
+                for (int j = Math.Max(y - distance, 0); j <= Math.Min(j + distance, m_mapWidth - 1); j++)
                 {
                     if (CalTwoHexDistance(x, y, i, j) <= distance)
                     {
@@ -382,7 +382,7 @@ namespace GaiaCore.Gaia
         /// <param name="y"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public List<Tuple<int, int>> GetSurroundhex(int x, int y, FactionName name,int? dis=null)
+        public List<Tuple<int, int>> GetSurroundhex(int x, int y, FactionName name, int? dis = null)
         {
             //吸魔力大小范围
             var ret = new List<Tuple<int, int>>();
@@ -395,9 +395,9 @@ namespace GaiaCore.Gaia
             {
                 distance = 1;
             }
-            for (int i = Math.Max(x - distance, 0); i <= Math.Min(x + distance, m_mapHeight); i++)
+            for (int i = Math.Max(x - distance, 0); i <= Math.Min(x + distance, m_mapHeight - 1); i++)
             {
-                for (int j = Math.Max(y - distance, 0); j <= Math.Min(j + distance, m_mapWidth); j++)
+                for (int j = Math.Max(y - distance, 0); j <= Math.Min(j + distance, m_mapWidth - 1); j++)
                 {
                     if (CalTwoHexDistance(x, y, i, j) <= distance)
                     {
@@ -421,14 +421,14 @@ namespace GaiaCore.Gaia
         /// <param name="name"></param>
         /// <param name="list"></param>
         /// <returns></returns>
-        public List<Tuple<int, int>> GetSatellitehex(int x, int y, FactionName name,List<Tuple<int,int>> list)
+        public List<Tuple<int, int>> GetSatellitehex(int x, int y, FactionName name, List<Tuple<int, int>> list)
         {
             //吸魔力大小范围
             var ret = new List<Tuple<int, int>>();
             var distance = 1;
-            for (int i = Math.Max(x - distance, 0); i <= Math.Min(x + distance, m_mapHeight); i++)
+            for (int i = Math.Max(x - distance, 0); i <= Math.Min(x + distance, m_mapHeight - 1); i++)
             {
-                for (int j = Math.Max(y - distance, 0); j <= Math.Min(j + distance, m_mapWidth); j++)
+                for (int j = Math.Max(y - distance, 0); j <= Math.Min(j + distance, m_mapWidth - 1); j++)
                 {
                     if (CalTwoHexDistance(x, y, i, j) <= distance)
                     {
