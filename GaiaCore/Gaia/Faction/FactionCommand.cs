@@ -941,11 +941,11 @@ namespace GaiaCore.Gaia
             while (allianceQueue.Any())
             {
                 var hex = allianceQueue.Dequeue();
-                isConnectList.Add(hex);
                 var surroundHex = GaiaGame.Map.GetSatellitehex(hex.Item1, hex.Item2, FactionName, list);
                 var newlist = surroundHex.Where(x => allianceList.Exists(y => y.Item1 == x.Item1 && y.Item2 == x.Item2))
                     .Where(x => !isConnectList.Exists(y => y.Item1 == x.Item1 && y.Item2 == x.Item2)).ToList();
                 newlist.ForEach(x => allianceQueue.Enqueue(x));
+                isConnectList.AddRange(newlist);
             }
 
             if (isConnectList.Count != allianceList.Count)
