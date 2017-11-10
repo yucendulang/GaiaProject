@@ -709,6 +709,36 @@ namespace GaiaCore.Gaia
                 case FactionName.Geoden:
                     FactionList.Add(new Geoden(this));
                     break;
+                case FactionName.Ambas:
+                    FactionList.Add(new Ambas(this));
+                    break;
+                case FactionName.Lantida:
+                    FactionList.Add(new Lantida(this));
+                    break;
+                case FactionName.Firaks:
+                    FactionList.Add(new Firaks(this));
+                    break;
+                case FactionName.BalTak:
+                    FactionList.Add(new BalTak(this));
+                    break;
+                case FactionName.Hive:
+                    FactionList.Add(new Hive(this));
+                    break;
+                case FactionName.HadschHalla:
+                    FactionList.Add(new HadschHalla(this));
+                    break;
+                case FactionName.Itar:
+                    FactionList.Add(new Ambas(this));
+                    break;
+                case FactionName.Nevla:
+                    FactionList.Add(new Ambas(this));
+                    break;
+                case FactionName.Gleen:
+                    FactionList.Add(new Ambas(this));
+                    break;
+                case FactionName.Xenos:
+                    FactionList.Add(new Ambas(this));
+                    break;
                 default:
                     break;
             };

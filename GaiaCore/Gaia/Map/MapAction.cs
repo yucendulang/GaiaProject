@@ -7,7 +7,7 @@ namespace GaiaCore.Gaia
 {
     public class MapActionMgr
     {
-        List<MapAction> mapActList = new List<MapAction>()
+        public List<MapAction> mapActList = new List<MapAction>()
         {
             new ACT1(),
             new ACT2(),
