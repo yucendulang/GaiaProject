@@ -89,14 +89,21 @@ namespace GaiaCore.Gaia
             m_dic = new Dictionary<string, GaiaGame>();
             foreach (var item in temp)
             {
-                System.Diagnostics.Debug.WriteLine("开始恢复"+item.Key);
-                var gg = new GaiaGame(item.Value.Username);
-                foreach(var str in item.Value.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
+                try
                 {
-                    gg.Syntax(str,out string log);
-                    System.Diagnostics.Debug.WriteLine(log);
+                    System.Diagnostics.Debug.WriteLine("开始恢复" + item.Key);
+                    var gg = new GaiaGame(item.Value.Username);
+                    foreach (var str in item.Value.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        gg.Syntax(str, out string log);
+                        System.Diagnostics.Debug.WriteLine(log);
+                    }
+                    m_dic.Add(item.Key, gg);
                 }
-                m_dic.Add(item.Key, gg);
+                catch
+                {
+                    continue;
+                }
             }
             return m_dic.Keys;
         }

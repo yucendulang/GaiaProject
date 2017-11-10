@@ -764,7 +764,7 @@ namespace GaiaCore.Gaia
             FSTList = new List<FinalScoring>();
             FSTList.Add(new FST1());
             FSTList.Add(new FST3());
-            RBTList = (from items in RBTMgr.GetRandomList(4 + 3, random) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();
+            RBTList = (from items in RBTMgr.GetRandomList(GameStatus.PlayerNumber + 3, random) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();
             ALTList = ALTMgr.GetList();
             AllianceTileForTransForm = ALTList.RandomRemove(random);
         }
