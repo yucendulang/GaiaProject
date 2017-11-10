@@ -12,13 +12,13 @@ namespace GaiaCore.Gaia
         public Faction(FactionName name, GaiaGame gg)
         {
             FactionName = name;
-            m_credit = 30;
-            m_knowledge = 3;
-            m_ore = 11;
-            m_QICs = 1;
+            m_credit = 50;
+            m_knowledge = 20;
+            m_ore = 30;
+            m_QICs = 3;
             m_powerToken1 = 2;
             m_powerToken2 = 4;
-            m_powerToken3 = 0;
+            m_powerToken3 = 5;
             m_powerTokenGaia = 0;
             m_TransformLevel = 0;
             m_AILevel = 0;
