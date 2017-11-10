@@ -318,9 +318,9 @@ function ConvertRaceIntToColor(i) {
 
 function ConvertBackGroundColorToTextColor(color) {
     if (color === "white" || color === "yellow") {
-        return "black";
-    } else {
         return "white";
+    } else {
+        return "black";
     }
 }
 
