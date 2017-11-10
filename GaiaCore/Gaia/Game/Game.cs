@@ -276,6 +276,11 @@ namespace GaiaCore.Gaia
                             log = "拿取该高级科技版对应科技等级不够";
                             return false;
                         }
+                        if (!faction.GameTileList.Exists(x => x is AllianceTile && x.IsUsed == false))
+                        {
+                            log = "没有没翻面的城邦";
+                            return false;
+                        }
                         faction.TechTracAdv++;
                     }
                     else if (STT3List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
@@ -303,6 +308,7 @@ namespace GaiaCore.Gaia
                         if (ATTList.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
                         {
                             (tile as AdavanceTechnology).isPicked = true;
+                            faction.GameTileList.Find(x => x is AllianceTile && x.IsUsed == false).IsUsed = true;
                         }
                         tile.OneTimeAction(faction);
                         if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))

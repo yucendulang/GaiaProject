@@ -24,7 +24,7 @@ namespace GaiaCore.Gaia
             }
             if (map.HexArray[row, col].TFTerrain == Terrain.Empty)
             {
-                log = "不能在空地上建造";
+                log = "你必须在星球上进行建造";
                 return false;
             }
 
