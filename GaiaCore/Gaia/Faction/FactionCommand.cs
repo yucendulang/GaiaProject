@@ -607,7 +607,7 @@ namespace GaiaCore.Gaia
             };
 
             ActionQueue.Enqueue(action);
-            AllianceTileReGet++;
+            m_AllianceTileGet++;
         }
 
         internal bool ForgingAllianceCheckAllWithOutSatellite(List<Tuple<int, int>> list, out string log)
