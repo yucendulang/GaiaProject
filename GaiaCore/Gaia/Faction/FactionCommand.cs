@@ -54,7 +54,7 @@ namespace GaiaCore.Gaia
             }
             if (!isGaiaPlanet&&isGreenPlanet && QICs < 1)
             {
-                log = "至少需要一块QIC";
+                log = "至少需要一块Q";
                 return false;
             }
             if (!isGaiaPlanet&&!(map.HexArray[row, col].Building == null && map.HexArray[row, col].FactionBelongTo == null))
@@ -478,7 +478,7 @@ namespace GaiaCore.Gaia
             log = string.Empty;
             if (num > QICs)
             {
-                log = string.Format("使用{0}QICSHIP需要足够的QIC", num);
+                log = string.Format("使用{0}QICSHIP需要足够的Q", num);
                 return false;
             }
             
@@ -668,7 +668,7 @@ namespace GaiaCore.Gaia
             var str = rFKind + rTKind;
             switch (str)
             {
-                case "pwqic":
+                case "pwq":
                     if (rFNum != rTNum * 4)
                     {
                         log = "兑换比例为4：1";
@@ -760,7 +760,7 @@ namespace GaiaCore.Gaia
                     };
                     ActionQueue.Enqueue(action);
                     break;
-                case "qico":
+                case "qo":
                     if (rFNum != rTNum * 1)
                     {
                         log = "兑换比例为1：1";
@@ -768,7 +768,7 @@ namespace GaiaCore.Gaia
                     }
                     if (QICs < rFNum)
                     {
-                        log = "QIC不够";
+                        log = "Q不够";
                     }
                     TempQICs -= rFNum;
                     TempOre += rTNum;

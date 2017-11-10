@@ -88,7 +88,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "Act:1QIC,5C";
+                return "Act:1Q,5C";
             }
         }
 

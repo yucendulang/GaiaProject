@@ -7,7 +7,7 @@ namespace GaiaCore.Gaia
 {
     public class AC2 : GameTiles
     {
-        public override string desc => "QIC";
+        public override string desc => "Q";
         public override bool InvokeGameTileAction(Faction faction)
         {
             faction.QICs += 1;
