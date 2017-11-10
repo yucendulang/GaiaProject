@@ -80,7 +80,7 @@ function textSpaceSectorCenterName(ctx, row, col, name) {
     //console.log(row, col, "isCenter");
     ctx.beginPath();
     cxt.font = "12px Verdana";
-    cxt.fillStyle = "White";
+    cxt.fillStyle = "Black";
     ctx.fillText(name, row - 8, col - 12);
     cxt.closePath();
 }
@@ -107,7 +107,7 @@ function makeHexPath(ctx, x, y, size, color) {
         x += Math.cos(angle) * size;
         y += Math.sin(angle) * size;
     }
-    cxt.strokeStyle = "Black"
+    cxt.strokeStyle = "Gray"
     cxt.fillStyle = color;
     cxt.fill();
     ctx.closePath();
@@ -253,19 +253,19 @@ function fillBuilding(ctx, name) {
 function ConvertIntToColor(i) {
     switch (i) {
         case 0:
-            return "#60C0F0";
+            return cycle[0];
         case 1:
-            return "#F08080";
+            return cycle[1];
         case 2:
-            return "#F0C060";
+            return cycle[2];
         case 3:
-            return "#F0F080";
+            return cycle[3];
         case 4:
-            return "#B08040";
+            return cycle[4];
         case 5:
-            return "#C0C0C0";
+            return cycle[5];
         case 6:
-            return "#E0F0FF";
+            return cycle[6];
         case 100:
             return "#80F080";
         case 200:
@@ -276,8 +276,8 @@ function ConvertIntToColor(i) {
             return "#FFFFFF";
     }
 }
-
-var cycle = ["blue", "red", "orange", "yellow", "brown", "black", "white"]; 
+//["blue", "red", "orange", "yellow", "brown", "black", "white"]
+var cycle = ["#60C0F0", "#F08080", "#F0C060", "#F0F080", "#B08040", "#C0C0C0", "#E0F0FF"]; 
 
 function ConvertRaceIntToColor(i) {
     switch (i) {
@@ -317,10 +317,10 @@ function ConvertRaceIntToColor(i) {
 }
 
 function ConvertBackGroundColorToTextColor(color) {
-    if (color === "white" || color === "yellow") {
-        return "white";
-    } else {
+    if (color !== ConvertIntToColor(300)) {
         return "black";
+    } else {
+        return "gray";
     }
 }
 
