@@ -252,6 +252,7 @@ namespace GaiaCore.Gaia
 
         public virtual int PowerIncrease(int i)
         {
+            var ret = Math.Min(m_powerToken1 * 2 + m_powerToken2, i);
             if (m_powerToken1 > i)
             {
                 m_powerToken1 -= i;
@@ -269,7 +270,7 @@ namespace GaiaCore.Gaia
                 m_powerToken2 = 0;
                 m_powerToken1 = 0;
             }
-            return Math.Min(m_powerToken1 * 2 + m_powerToken2, i);
+            return ret;
         }
         public List<GaiaBuilding> Gaias { set; get; }
         public List<Mine> Mines { set; get; }
