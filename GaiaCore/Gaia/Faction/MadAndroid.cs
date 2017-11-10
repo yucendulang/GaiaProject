@@ -10,6 +10,6 @@ namespace GaiaCore.Gaia
         {
 
         }
-        public override Terrain OGTerrain { get => Terrain.Black; }
+        public override Terrain OGTerrain { get => Terrain.Gray; }
     }
 }

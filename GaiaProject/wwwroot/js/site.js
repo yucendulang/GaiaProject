@@ -348,7 +348,7 @@ function ConvertIntToColor(i) {
             return "#FFFFFF";
     }
 }
-//["blue", "red", "orange", "yellow", "brown", "black", "white"]
+//["blue", "red", "orange", "yellow", "brown", "gray", "white"]
 var cycle = ["#6bd8f3", "#f23c4d", "#ea8736", "#facd2f", "#ad5e2f", "#a3a3a3", "#d3f1f5"]; 
 
 function ConvertRaceIntToColor(i) {

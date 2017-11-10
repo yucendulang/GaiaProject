@@ -157,7 +157,7 @@ namespace GaiaCore.Gaia
         Orange,
         Yellow,
         Brown,
-        Black,
+        Gray,
         White,
         Green=100,
         Purple=200,

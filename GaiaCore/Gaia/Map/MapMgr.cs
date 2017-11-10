@@ -32,7 +32,7 @@ namespace GaiaCore.Gaia
             };
             var ss2 = new List<Terrain>()
             {
-                Terrain.Black,
+                Terrain.Gray,
                 Terrain.Orange,Terrain.Empty,
                 Terrain.Empty,Terrain.Empty,Terrain.Empty,
                 Terrain.Empty,Terrain.White,
@@ -48,7 +48,7 @@ namespace GaiaCore.Gaia
                 Terrain.Empty,Terrain.Empty,
                 Terrain.Empty,Terrain.Empty,Terrain.Empty,
                 Terrain.Green,Terrain.Empty,
-                Terrain.Empty,Terrain.Empty,Terrain.Black,
+                Terrain.Empty,Terrain.Empty,Terrain.Gray,
                 Terrain.Empty,Terrain.White,
                 Terrain.Empty,Terrain.Empty,Terrain.Empty,
                 Terrain.Blue,Terrain.Empty,
@@ -56,7 +56,7 @@ namespace GaiaCore.Gaia
             };
             var ss4 = new List<Terrain>()
             {
-                Terrain.Black,
+                Terrain.Gray,
                 Terrain.Empty,Terrain.Empty,
                 Terrain.Empty,Terrain.Red,Terrain.Empty,
                 Terrain.Empty,Terrain.Empty,
@@ -100,7 +100,7 @@ namespace GaiaCore.Gaia
                 Terrain.Green,Terrain.Green,
                 Terrain.Empty,Terrain.Empty,Terrain.Empty,
                 Terrain.Empty,Terrain.Empty,
-                Terrain.Black
+                Terrain.Gray
             };
             var ss8 = new List<Terrain>()
             {
@@ -109,7 +109,7 @@ namespace GaiaCore.Gaia
                 Terrain.Empty,Terrain.White,Terrain.Purple,
                 Terrain.Empty,Terrain.Empty,
                 Terrain.Empty,Terrain.Empty,Terrain.Empty,
-                Terrain.Orange,Terrain.Black,
+                Terrain.Orange,Terrain.Gray,
                 Terrain.Empty,Terrain.Empty,Terrain.Empty,
                 Terrain.Purple,Terrain.Empty,
                 Terrain.Empty
@@ -121,7 +121,7 @@ namespace GaiaCore.Gaia
                 Terrain.Empty,Terrain.Empty,Terrain.White,
                 Terrain.Empty,Terrain.Empty,
                 Terrain.Empty,Terrain.Empty,Terrain.Empty,
-                Terrain.Black,Terrain.Green,
+                Terrain.Gray,Terrain.Green,
                 Terrain.Brown,Terrain.Empty,Terrain.Empty,
                 Terrain.Empty,Terrain.Empty,
                 Terrain.Empty
