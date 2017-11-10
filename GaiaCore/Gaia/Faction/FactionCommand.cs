@@ -30,13 +30,13 @@ namespace GaiaCore.Gaia
             else
             {
                 transNumNeed = Math.Min(7 - Math.Abs(map.HexArray[row, col].OGTerrain - OGTerrain), Math.Abs(map.HexArray[row, col].OGTerrain - OGTerrain));
-                if (transNumNeed * GetTransformCost > Ore)
+                if (Math.Max((transNumNeed - TerraFormNumber), 0) * GetTransformCost > Ore)
                 {
-                    log = string.Format("原始地形为{0},需要地形{1},需要矿石为{2}", map.HexArray[row, col].OGTerrain.ToString(), OGTerrain.ToString(), transNumNeed * GetTransformCost);
+                    log = string.Format("原始地形为{0},需要地形{1},需要矿石为{2}或者使用action行动获取铲子", map.HexArray[row, col].OGTerrain.ToString(), OGTerrain.ToString(), transNumNeed * GetTransformCost);
                     return false;
                 }
             }
-            if (!(Mines.Count > 1 && Credit >= m_MineCreditCost && Ore >= m_MineOreCost+ transNumNeed * GetTransformCost))
+            if (!(Mines.Count > 1 && Credit >= m_MineCreditCost && Ore >= m_MineOreCost+ Math.Max((transNumNeed - TerraFormNumber), 0) * GetTransformCost))
             {
                 log = "资源不够";
                 return false;
