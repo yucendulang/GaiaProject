@@ -459,15 +459,12 @@ namespace GaiaCore.Gaia
                         log = item + "需要" + v * 2 + "魔力";
                         return false;
                     }
-                    faction.TempPowerToken1 += v;
                     faction.TempPowerToken2 -= v * 2;
                     faction.TempPowerToken3 += v;
                     Action action = () =>
                     {
-                        faction.PowerToken1 = faction.PowerToken1;
                         faction.PowerToken2 = faction.PowerToken2;
                         faction.PowerToken3 = faction.PowerToken3;
-                        faction.TempPowerToken1 = 0;
                         faction.TempPowerToken2 = 0;
                         faction.TempPowerToken3 = 0;
                     };

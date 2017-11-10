@@ -116,6 +116,6 @@ namespace GaiaCore.Gaia
         /// <summary>
         /// convert的正则
         /// </summary>
-        public static Regex ConvertRegex = new Regex("convert ([0-9]{1,2})([a-z]{1,2}) to ([0-9]{1,2})([a-z]{1,2})");
+        public static Regex ConvertRegex = new Regex("convert ([0-9]{1,2})([a-z]{1,3}) to ([0-9]{1,2})([a-z]{1,3})");
     }
 }
