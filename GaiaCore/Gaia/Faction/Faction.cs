@@ -247,6 +247,7 @@ namespace GaiaCore.Gaia
             }
 
             PowerIncrease(GameTileList.Sum(x => x.GetPowerIncome()));
+            PowerToken1 += GameTileList.Sum(x => x.GetPowerTokenIncome());
         }
 
         public virtual int PowerIncrease(int i)
