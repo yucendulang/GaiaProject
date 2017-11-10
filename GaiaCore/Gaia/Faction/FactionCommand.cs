@@ -377,8 +377,8 @@ namespace GaiaCore.Gaia
             LeechPowerQueue.RemoveAt(LeechPowerQueue.FindIndex(x => x.Item1 == power && x.Item2 == factionFrom));
             if (isLeech)
             {
-                PowerIncrease(power);
-                Score -= Math.Max(power - 1, 0);
+                var ret=PowerIncrease(power);
+                Score -= Math.Max(ret - 1, 0);
             }
         }
 

@@ -249,7 +249,7 @@ namespace GaiaCore.Gaia
             PowerIncrease(GameTileList.Sum(x => x.GetPowerIncome()));
         }
 
-        public virtual void PowerIncrease(int i)
+        public virtual int PowerIncrease(int i)
         {
             if (m_powerToken1 > i)
             {
@@ -268,6 +268,7 @@ namespace GaiaCore.Gaia
                 m_powerToken2 = 0;
                 m_powerToken1 = 0;
             }
+            return Math.Min(m_powerToken1 * 2 + m_powerToken2, i);
         }
         public List<GaiaBuilding> Gaias { set; get; }
         public List<Mine> Mines { set; get; }
