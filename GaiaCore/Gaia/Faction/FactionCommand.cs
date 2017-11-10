@@ -17,6 +17,17 @@ namespace GaiaCore.Gaia
             bool isGreenPlanet = false;
             bool isGaiaPlanet = false;
             int transNumNeed = 0;
+            if (map.HexArray[row, col].TFTerrain == Terrain.Purple)
+            {
+                log = "不能在紫色星球上建造";
+                return false;
+            }
+            if (map.HexArray[row, col].TFTerrain == Terrain.Empty)
+            {
+                log = "不能在空地上建造";
+                return false;
+            }
+
             if (map.HexArray[row, col].TFTerrain == Terrain.Green)
             {
                 isGreenPlanet = true;
