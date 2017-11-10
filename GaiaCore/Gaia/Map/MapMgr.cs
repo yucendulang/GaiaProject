@@ -405,7 +405,14 @@ namespace GaiaCore.Gaia
             }
             return ret;
         }
-
+        /// <summary>
+        /// 寻找周围的建筑 包括传入的卫星部分
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <param name="list"></param>
+        /// <returns></returns>
         public List<Tuple<int, int>> GetSatellitehex(int x, int y, FactionName name,List<Tuple<int,int>> list)
         {
             //吸魔力大小范围

@@ -599,6 +599,60 @@ namespace GaiaCore.Gaia
             return;
         }
 
+        internal void ForgingAllianceGetTileWithOutSatellite(List<Tuple<int, int>> list)
+        {
+            Action action = () =>
+            {
+                list.ForEach(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].IsAlliance=true);
+            };
+
+            ActionQueue.Enqueue(action);
+            AllianceTileReGet++;
+        }
+
+        internal bool ForgingAllianceCheckAllWithOutSatellite(List<Tuple<int, int>> list, out string log)
+        {
+            log = string.Empty;
+            if(!list.TrueForAll(x=>
+            {
+                TerrenHex terrenHex = GaiaGame.Map.HexArray[x.Item1, x.Item2];
+                return terrenHex.Building != null && terrenHex.FactionBelongTo == FactionName && !(terrenHex.Building is GaiaBuilding);
+            }))
+            {
+                log = "形成星盟的只能是本家的非盖亚建筑物";
+                return false;
+            }
+
+            if (list.Exists(x =>
+            {
+                TerrenHex terrenHex = GaiaGame.Map.HexArray[x.Item1, x.Item2];
+                return terrenHex.IsAlliance == true;
+            }))
+            {
+                log = "有地块已经形成过星盟";
+                return false;
+            }
+
+            if (list.Exists(x =>
+            {
+                TerrenHex terrenHex = GaiaGame.Map.HexArray[x.Item1, x.Item2];
+                var surroundHex = GaiaGame.Map.GetSurroundhex(x.Item1, x.Item2, FactionName);
+                return surroundHex.Exists(y => GaiaGame.Map.HexArray[y.Item1, y.Item2].IsAlliance);
+            }))
+            {
+                log = "周围接壤的地块也不能形成过星盟";
+                return false;
+            }
+
+            if (list.Sum(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].Building.MagicLevel) < 7)
+            {
+                log = "魔力等级不够7级";
+                return false;
+            }
+
+            return true;
+        }
+
         internal bool ConvertOneResourceToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log)
         {
             log = string.Empty;

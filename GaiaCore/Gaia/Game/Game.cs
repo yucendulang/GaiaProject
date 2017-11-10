@@ -425,6 +425,24 @@ namespace GaiaCore.Gaia
                         return false;
                     }
                 }
+                else if (GameSyntax.forgingAlliance2.IsMatch(item))
+                {
+                    var posStrList = item.Substring(GameSyntax.alliance.Length + 1).Split(',');
+                    List<Tuple<int, int>> list = new List<Tuple<int, int>>();
+                    foreach (var pos in posStrList)
+                    {
+                        ConvertPosToRowCol(pos, out int row, out int col);
+                        list.Add(new Tuple<int, int>(row, col));
+                    }
+                    if (faction.ForgingAllianceCheckAllWithOutSatellite(list, out log))
+                    {
+                        faction.ForgingAllianceGetTileWithOutSatellite(list);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
                 else if (GameFreeSyntax.ALTRegex.IsMatch(item))
                 {
                     var match = GameFreeSyntax.ALTRegex.Match(item);
