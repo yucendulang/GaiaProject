@@ -484,7 +484,7 @@ namespace GaiaCore.Gaia
             
             Action queue = () =>
             {
-                QICs -= QICs;
+                QICs = QICs;
                 TempQICs = 0;
             };
             ActionQueue.Enqueue(queue);
