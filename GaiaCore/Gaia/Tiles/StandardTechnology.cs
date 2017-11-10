@@ -228,7 +228,7 @@ namespace GaiaCore.Gaia.Tiles
 
             foreach (var item in faction.GaiaGame.Map.HexArray)
             {
-                if (item.Building == null || item.FactionBelongTo != faction.FactionName)
+                if (item==null||item.Building == null || item.FactionBelongTo != faction.FactionName)
                 {
                     continue;
                 }

@@ -214,8 +214,9 @@ namespace GaiaCore.Gaia
             log = string.Empty;
             faction.ResetUnfinishAction();
 
-            foreach (var item in commandList)
+            foreach (var itemT in commandList)
             {
+                var item = itemT.Trim();
                 if (GameSyntax.upgradeRegex.IsMatch(item))
                 {
                     var match = GameSyntax.upgradeRegex.Match(item);
