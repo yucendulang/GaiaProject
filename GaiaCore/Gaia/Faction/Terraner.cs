@@ -6,7 +6,7 @@ namespace GaiaCore.Gaia
 {
     public class Terraner:Faction
     {
-        public Terraner(GaiaGame gg) :base(FactionName.Terraner,gg)
+        public Terraner(GaiaGame gg) :base(FactionName.Terraner, gg)
         {
 
         }

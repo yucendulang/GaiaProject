@@ -6,7 +6,7 @@ namespace GaiaCore.Gaia
 {
     public class Nevla : Faction
     {
-        public Nevla(GaiaGame gg) :base(FactionName.Geoden,gg)
+        public Nevla(GaiaGame gg) :base(FactionName.Nevla, gg)
         {
 
         }

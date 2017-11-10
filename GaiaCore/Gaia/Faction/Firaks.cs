@@ -6,7 +6,7 @@ namespace GaiaCore.Gaia
 {
     public class Firaks : Faction
     {
-        public Firaks(GaiaGame gg) :base(FactionName.Geoden,gg)
+        public Firaks(GaiaGame gg) :base(FactionName.Firaks, gg)
         {
 
         }

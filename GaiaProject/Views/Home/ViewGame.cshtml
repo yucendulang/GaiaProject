@@ -182,6 +182,18 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
         }
     </div>
 </div>
+<h1>魔力行动</h1>
+        @foreach (var item in Model.MapActionMrg.mapActList)
+        {
+            if (item.IsUsed)
+            {
+                <s>@item.GetType().Name @item.desc</s>
+            }
+            else
+            {
+                <div>@item.GetType().Name @item.desc</div>
+            }
+        }
     <h1>Advance Tech</h1>
     @foreach (var item in Model.ATTList)
     {

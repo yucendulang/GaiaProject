@@ -8,7 +8,7 @@ function DrawMap() {
     //console.log(model);
     var array = model["map"]["hexArray"];
     console.log(array);
-    renderColorCycle(cxt, "white");
+    renderColorCycle(cxt);
     for (var i = 0; i < 20; i++) {
         for (var j = 0; j < 20; j++) {
 
@@ -111,7 +111,7 @@ var activeObjList = new MikuDrawedObjList();
 function textHexName(ctx, row, col, name, color) {
     //console.log("textHexName" +row + col + name);
     ctx.beginPath();
-    cxt.font = "12px Verdana";
+    cxt.font = "10px Verdana";
     cxt.fillStyle = ConvertBackGroundColorToTextColor(color);
     ctx.fillText(name, row - 11, col + 20);
     cxt.closePath();
@@ -126,8 +126,8 @@ function textHexName(ctx, row, col, name, color) {
 function textSpaceSectorCenterName(ctx, row, col, name) {
     //console.log(row, col, "isCenter");
     ctx.beginPath();
-    cxt.font = "12px Verdana";
-    cxt.fillStyle = "White";
+    cxt.font = "10px Verdana";
+    cxt.fillStyle = "black";
     ctx.fillText(name, row - 8, col - 12);
     cxt.closePath();
 }
@@ -324,62 +324,63 @@ function fillBuilding(ctx, name) {
 function ConvertIntToColor(i) {
     switch (i) {
         case 0:
-            return "#60C0F0";
+            return cycle[0];
         case 1:
-            return "#F08080";
+            return cycle[1];
         case 2:
-            return "#F0C060";
+            return cycle[2];
         case 3:
-            return "#F0F080";
+            return cycle[3];
         case 4:
-            return "#B08040";
+            return cycle[4];
         case 5:
-            return "#C0C0C0";
+            return cycle[5];
         case 6:
-            return "#E0F0FF";
+            return cycle[6];
         case 100:
             return "#80F080";
         case 200:
             return "#D19FE8";
         case 300:
-            return "#FFFFFF";
+            return "#FFFFFF"
+            // return "#d4d4d2";
         default:
             return "#FFFFFF";
     }
 }
-
-var cycle = ["blue", "red", "orange", "yellow", "brown", "black", "white"]; 
+//["blue", "red", "orange", "yellow", "brown", "black", "white"]
+var cycle = ["#6bd8f3", "#f23c4d", "#ea8736", "#facd2f", "#ad5e2f", "#a3a3a3", "#d3f1f5"]; 
 
 function ConvertRaceIntToColor(i) {
     switch (i) {
         case 0:
-            return "#2080F0";
+            return "#16a0e0";
         case 1:
-            return "#2080F0";
+            return "#16a0e0";
         case 2:
-            return "#A06040";
+            return "#8b3a0a";
         case 3:
-            return "#A06040";
+            return "#8b3a0a";
         case 4:
-            return "#808080";
+            return "#6b6868";
         case 5:
-            return "#808080";
+            return "#6b6868";
         case 6:
-            return "#F0A020";
+            return "#d75d0c";
         case 7:
-            return "#F0A020";
+            return "#d75d0c";
         case 8:
-            return "#E04040";
+            return "#d71729";
         case 9:
-            return "#E04040";
+            return "#d71729";
         case 10:
-            return "#F0F8FF";
+            return "#ebfafb";
         case 11:
-            return "#F0F8FF";
+            return "#ebfafb";
         case 12:
-            return "#E0E040";
+            return "#deb703";
         case 13:
-            return "#E0E040";
+            return "#deb703";
         default:
             return "black";
 
@@ -388,20 +389,20 @@ function ConvertRaceIntToColor(i) {
 }
 
 function ConvertBackGroundColorToTextColor(color) {
-    if (color === "white" || color === "yellow") {
-        return "black";
+    if (color === ConvertIntToColor(300)) {
+        return "gray";
     } else {
-        return "white";
+        return "black";
     }
 }
 
-function renderColorCycle(ctx, startColor) {
+function renderColorCycle(ctx) {
 
     ctx.save()
     //ctx.scale(2, 2);
     ctx.translate(830, 50);
 
-    var base = cycle.indexOf(startColor);
+    var base =0;
 
     for (var i = 0; i < 7; ++i) {
         var terrain = cycle[(base + i) % 7];

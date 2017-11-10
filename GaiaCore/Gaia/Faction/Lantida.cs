@@ -6,7 +6,7 @@ namespace GaiaCore.Gaia
 {
     public class Lantida : Faction
     {
-        public Lantida(GaiaGame gg) :base(FactionName.Geoden,gg)
+        public Lantida(GaiaGame gg) :base(FactionName.Lantida, gg)
         {
 
         }

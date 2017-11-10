@@ -6,7 +6,7 @@ namespace GaiaCore.Gaia
 {
     public class MadAndroid : Faction
     {
-        public MadAndroid(GaiaGame gg) :base(FactionName.MadAndroid,gg)
+        public MadAndroid(GaiaGame gg) :base(FactionName.MadAndroid, gg)
         {
 
         }

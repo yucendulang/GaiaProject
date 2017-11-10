@@ -6,7 +6,7 @@ namespace GaiaCore.Gaia
 {
     public class HadschHalla : Faction
     {
-        public HadschHalla(GaiaGame gg) :base(FactionName.Geoden,gg)
+        public HadschHalla(GaiaGame gg) :base(FactionName.HadschHalla, gg)
         {
 
         }

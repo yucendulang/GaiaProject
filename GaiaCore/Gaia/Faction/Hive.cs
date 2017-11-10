@@ -6,7 +6,7 @@ namespace GaiaCore.Gaia
 {
     public class Hive : Faction
     {
-        public Hive(GaiaGame gg) :base(FactionName.Geoden,gg)
+        public Hive(GaiaGame gg) :base(FactionName.Hive, gg)
         {
 
         }

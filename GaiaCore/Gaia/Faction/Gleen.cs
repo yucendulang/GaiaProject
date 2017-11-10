@@ -6,7 +6,7 @@ namespace GaiaCore.Gaia
 {
     public class Gleen : Faction
     {
-        public Gleen(GaiaGame gg) :base(FactionName.Geoden,gg)
+        public Gleen(GaiaGame gg) :base(FactionName.Gleen, gg)
         {
 
         }
