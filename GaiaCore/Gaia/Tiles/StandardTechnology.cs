@@ -7,7 +7,7 @@ namespace GaiaCore.Gaia.Tiles
 {
     public static class STTMgr
     {
-        public static List<StandardTechnology> GetRandomList(int n,Random random)
+        public static List<StandardTechnology> GetRandomList(int n, Random random)
         {
             var list = new List<StandardTechnology>()
             {
@@ -43,7 +43,7 @@ namespace GaiaCore.Gaia.Tiles
                 new STT8(),
                 new STT9()
             };
-            list.RemoveAll(x => removelist.Exists(y=>x.GetType()==y.GetType()));
+            list.RemoveAll(x => removelist.Exists(y => x.GetType() == y.GetType()));
             return list;
         }
     }
@@ -71,7 +71,7 @@ namespace GaiaCore.Gaia.Tiles
             }
         }
 
-        public const int powerIncreaseConst= 4;
+        public const int powerIncreaseConst = 4;
 
         public override bool CanAction => true;
         public override bool InvokeGameTileAction(Faction faction)
@@ -212,9 +212,34 @@ namespace GaiaCore.Gaia.Tiles
 
         public override bool OneTimeAction(Faction faction)
         {
-            faction.Academy1.MagicLevelIncrease += 1;
-            faction.Academy2.MagicLevelIncrease += 1;
-            faction.StrongHold.MagicLevelIncrease += 1;
+            if (faction.Academy1 != null)
+            {
+                faction.Academy1.MagicLevelIncrease += 1;
+            }
+            if (faction.Academy2 != null)
+            {
+                faction.Academy2.MagicLevelIncrease += 1;
+            }
+            if (faction.StrongHold != null)
+            {
+                faction.StrongHold.MagicLevelIncrease += 1;
+            }
+
+            foreach (var item in faction.GaiaGame.Map.HexArray)
+            {
+                if (item.Building == null || item.FactionBelongTo != faction.FactionName)
+                {
+                    continue;
+                }
+                if (item.Building is Academy)
+                {
+                    (item.Building as Academy).MagicLevelIncrease += 1;
+                }
+                if (item.Building is StrongHold)
+                {
+                    (item.Building as StrongHold).MagicLevelIncrease += 1;
+                }
+            }
             return true;
         }
     }
