@@ -6,7 +6,7 @@ namespace GaiaCore.Gaia
 {
     public class BalTak : Faction
     {
-        public BalTak(GaiaGame gg) :base(FactionName.Geoden,gg)
+        public BalTak(GaiaGame gg) :base(FactionName.BalTak, gg)
         {
 
         }

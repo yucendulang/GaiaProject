@@ -6,7 +6,7 @@ namespace GaiaCore.Gaia
 {
     public class Xenos : Faction
     {
-        public Xenos(GaiaGame gg) :base(FactionName.Geoden,gg)
+        public Xenos(GaiaGame gg) :base(FactionName.Xenos, gg)
         {
 
         }

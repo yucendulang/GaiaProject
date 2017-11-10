@@ -6,7 +6,7 @@ namespace GaiaCore.Gaia
 {
     public class Itar : Faction
     {
-        public Itar(GaiaGame gg) :base(FactionName.Geoden,gg)
+        public Itar(GaiaGame gg) :base(FactionName.Itar, gg)
         {
 
         }
