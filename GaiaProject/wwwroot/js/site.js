@@ -15,7 +15,7 @@ function DrawMap() {
             if (array[i][j] !== null) {
                 //console.log(i, j, array[i][j].ogTerrain, ConvertIntToColor(array[i][j].ogTerrain), array[i][j].isCenter);
                 DrawOneHex(cxt, j, i, ConvertIntToColor(array[i][j].tfTerrain), array[i][j].isCenter, array[i][j]);
-                console.log(i, j, array[i][j].building);
+                //console.log(i, j, array[i][j].building);
                 if (array[i][j].building !== null) {
                     //画房子
                     switch (array[i][j].building.name) {
@@ -51,20 +51,61 @@ function DrawMap() {
 }
 
 
-function DrawOneHex(ctx, col, row, color,isCenter,hex) {
+function DrawOneHex(ctx, col, row, color, isCenter, hex) {
+
     //console.log("DrawHex");
     var loc = hexCenter(col, row)
     //console.log(loc[0], loc[1]);
+    var name = String.fromCharCode(65 + row) + col;
 
     var x = loc[0] + Math.sin(Math.PI / 6) * hex_size;
     var y = loc[1] - Math.cos(Math.PI / 6) * hex_size;
-    makeHexPath(ctx, x, y, hex_size, color);
+    makeHexPath(ctx, x, y, hex_size, color,name);
     if (isCenter) {
         textSpaceSectorCenterName(ctx, loc[0], loc[1], hex.spaceSectorName)
     }
-    textHexName(ctx, loc[0], loc[1], String.fromCharCode(65 + row) + col, color)
+    textHexName(ctx, loc[0], loc[1], name , color)
 
 }
+
+//存储管理已经绘制的元素的一个类  
+//存储的元素必须实现  
+//1.创建自身路径：createPath(context);  
+//2.绘制自身：drawSelf(context);  
+//3.点击时的时间处理：beClick();  
+var canvasobjList = [];
+var MikuDrawedObjList = function () {
+
+
+    this.push = function(obj) {
+        canvasobjList.push(obj);
+        //console.log(canvasobjList);
+    };
+    this.remove = function(obj) {
+        for (var i = 0; i < canvasobjList.length; i++) {
+            var temp = canvasobjList[i];
+            if (temp === obj) {
+                canvasobjList.splice(i, 1);
+                return i;
+            }
+        }
+    };
+    this.getClickObj = function (context, x, y) {
+        //console.log(canvasobjList);
+        for (var i = 0; i < canvasobjList.length; i++) {
+            if (canvasobjList[i].xmax >= x && canvasobjList[i].xmin <= x && canvasobjList[i].ymax >= y && canvasobjList[i].ymin <= y) {
+                return canvasobjList[i];
+            }
+            //console.log(canvasobjList[i]);
+        }
+    };
+}  
+//页面元素列表  
+var activeObjList = new MikuDrawedObjList();
+
+
+
+
 function textHexName(ctx, row, col, name, color) {
     //console.log("textHexName" +row + col + name);
     ctx.beginPath();
@@ -72,6 +113,10 @@ function textHexName(ctx, row, col, name, color) {
     cxt.fillStyle = ConvertBackGroundColorToTextColor(color);
     ctx.fillText(name, row - 11, col + 20);
     cxt.closePath();
+
+
+    //console.log({ "name": name, "row": row, "col": col });
+
 }
 
 
@@ -80,7 +125,7 @@ function textSpaceSectorCenterName(ctx, row, col, name) {
     //console.log(row, col, "isCenter");
     ctx.beginPath();
     cxt.font = "12px Verdana";
-    cxt.fillStyle = "Black";
+    cxt.fillStyle = "White";
     ctx.fillText(name, row - 8, col - 12);
     cxt.closePath();
 }
@@ -95,23 +140,47 @@ function hexCenter(row, col) {
     return [y, x];
 }
 
-function makeHexPath(ctx, x, y, size, color) {
+function makeHexPath(ctx, x, y, size, color,name) {
     //console.log("makeHexPath",x,y,size,color);
     var angle = 0;
 
     ctx.beginPath();
     ctx.moveTo(x, y);
+
+
+    var obj = {"name":name}
     for (var i = 0; i < 6; i++) {
         ctx.lineTo(x, y);
+
+        
+        switch (i) {
+        case 0:
+            obj.xmax = x;
+            obj.ymin = y;
+            break;
+        case 3:
+                obj.xmin = x;
+            obj.ymax = y;
+            break;
+        }
+
+
         angle += Math.PI / 3;
         x += Math.cos(angle) * size;
         y += Math.sin(angle) * size;
+
+
     }
-    cxt.strokeStyle = "Gray"
+    cxt.strokeStyle = "Black"
     cxt.fillStyle = color;
     cxt.fill();
     ctx.closePath();
     ctx.stroke();
+
+    //添加元素
+    //console.log(obj);
+    activeObjList.push(obj);
+    //activeObjList.push({ "name": name, "row": row, "col": col });
 }
 
 function DrawMine(ctx, row, col,name) {
@@ -253,19 +322,19 @@ function fillBuilding(ctx, name) {
 function ConvertIntToColor(i) {
     switch (i) {
         case 0:
-            return cycle[0];
+            return "#60C0F0";
         case 1:
-            return cycle[1];
+            return "#F08080";
         case 2:
-            return cycle[2];
+            return "#F0C060";
         case 3:
-            return cycle[3];
+            return "#F0F080";
         case 4:
-            return cycle[4];
+            return "#B08040";
         case 5:
-            return cycle[5];
+            return "#C0C0C0";
         case 6:
-            return cycle[6];
+            return "#E0F0FF";
         case 100:
             return "#80F080";
         case 200:
@@ -276,8 +345,8 @@ function ConvertIntToColor(i) {
             return "#FFFFFF";
     }
 }
-//["blue", "red", "orange", "yellow", "brown", "black", "white"]
-var cycle = ["#60C0F0", "#F08080", "#F0C060", "#F0F080", "#B08040", "#C0C0C0", "#E0F0FF"]; 
+
+var cycle = ["blue", "red", "orange", "yellow", "brown", "black", "white"]; 
 
 function ConvertRaceIntToColor(i) {
     switch (i) {
@@ -317,10 +386,10 @@ function ConvertRaceIntToColor(i) {
 }
 
 function ConvertBackGroundColorToTextColor(color) {
-    if (color !== ConvertIntToColor(300)) {
+    if (color === "white" || color === "yellow") {
         return "black";
     } else {
-        return "gray";
+        return "white";
     }
 }
 

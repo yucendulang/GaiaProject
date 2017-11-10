@@ -24,6 +24,16 @@ else if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDSTART)
 else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
 {
     <p>现在等待 @Model.Username[Model.GameStatus.PlayerIndex] 选种族 setup xxx</p>
+
+    ViewBag.enums = Enum.GetValues(typeof(GaiaCore.Gaia.FactionName)).Cast<GaiaCore.Gaia.FactionName>();
+    @Html.DropDownList("enumList", new SelectList(ViewBag.enums), new { @class = "btn dropdown-toggle form-control",@id="zhongzuList" })
+
+    <script>
+        $("#zhongzuList").change(function() {
+            $("#syntax").val("setup " + $(this).val());
+            //alert($(this).val());
+        })
+    </script>
 }
 else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.INITIALMINES)
 {
@@ -68,7 +78,7 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
 
     <label class="col-md-1 control-label">syntax</label> 
     <div class="col-md-4">
-        <input name="syntax" class="form-control" />
+        <input name="syntax" class="form-control" id="syntax"/>
     </div>
     <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden"/>
     @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
@@ -133,18 +143,6 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
         }
     </div>
 </div>
-    <h1>魔力行动</h1>
-    @foreach (var item in Model.MapActionMrg.mapActList)
-    {
-        if (item.IsUsed)
-        {
-            <s>@item.GetType().Name @item.desc</s>
-        }
-        else
-        {
-            <div>@item.GetType().Name @item.desc</div>
-        }
-    }
     <h1>Advance Tech</h1>
     @foreach (var item in Model.ATTList)
     {
@@ -179,12 +177,47 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
 
 
     <script type="text/javascript">
-    var c = document.getElementById("myCanvas");
-    var cxt = c.getContext("2d");
-    var model = @Html.Raw(Json.Serialize(Model));
-    console.log("js start");
-    DrawMap();
+        var c = document.getElementById("myCanvas");
+        var cxt = c.getContext("2d");
+        var model = @Html.Raw(Json.Serialize(Model));
+        console.log("js start");
+        DrawMap();
 
+
+        var list = canvasobjList;
+
+        function getEventPosition(ev){
+            var x, y;
+            if (ev.layerX || ev.layerX == 0) {
+                x = ev.layerX;
+                y = ev.layerY;
+            } else if (ev.offsetX || ev.offsetX == 0) { // Opera
+                x = ev.offsetX;
+                y = ev.offsetY;
+            }
+            return {x: x, y: y};
+        }
+
+        function getClickObj(x,y) {
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].xmax >= x && list[i].xmin <= x && list[i].ymax >= y && list[i].ymin <= y) {
+                    return list[i];
+                }
+//            console.log(list[i]);
+//            console.log(x+"/"+y)
+            }
+        };
+
+
+        c.addEventListener('click', function (e) {
+            //console.log(list);
+            var xy = getEventPosition(e);
+            var clickObj = getClickObj(xy.x, xy.y);
+            $("#syntax").val("build " + clickObj.name);
+            //console.log(clickObj);
+            //console.log("f");
+            //alert(getEventPosition(e).x+"/"+getEventPosition(e).y);
+        }, false);
 
 
     </script>
