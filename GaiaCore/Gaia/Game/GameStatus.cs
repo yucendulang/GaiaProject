@@ -27,6 +27,9 @@ namespace GaiaCore.Gaia
         public bool m_IntialFlag;
 
         public int PlayerIndex { get => m_PlayerIndex - 1; }
+        /// <summary>
+        /// 玩家人数
+        /// </summary>
         public int PlayerNumber { get => m_PlayerNumber; set => m_PlayerNumber = value; }
         public int RoundCount { get => m_RoundCount; set => m_RoundCount = value; }
         public int TurnCount { get => m_TurnCount; set => m_TurnCount = value; }
