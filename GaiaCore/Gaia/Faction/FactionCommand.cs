@@ -264,7 +264,14 @@ namespace GaiaCore.Gaia
                 case BuildingSyntax.TC:
                     build = TradeCenters.First();
                     oreCost = m_TradeCenterOreCost;
-                    creditCost = m_TradeCenterCreditCostCluster;
+                    if (GaiaGame.FactionList.Where(x => x != this).ToList().Exists(y => GaiaGame.Map.GetSurroundhex(row, col, y.FactionName,2).Count != 0))
+                    {
+                        creditCost = m_TradeCenterCreditCostCluster;
+                    }
+                    else
+                    {
+                        creditCost = m_TradeCenterCreditCostAlone;
+                    }       
                     trigger = typeof(RST2);
                     break;
                 case BuildingSyntax.RL:

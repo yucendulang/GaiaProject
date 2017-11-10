@@ -382,11 +382,19 @@ namespace GaiaCore.Gaia
         /// <param name="y"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public List<Tuple<int, int>> GetSurroundhex(int x, int y, FactionName name)
+        public List<Tuple<int, int>> GetSurroundhex(int x, int y, FactionName name,int? dis=null)
         {
             //吸魔力大小范围
             var ret = new List<Tuple<int, int>>();
-            var distance = 1;
+            int distance = 0;
+            if (dis.HasValue)
+            {
+                distance = dis.Value;
+            }
+            else
+            {
+                distance = 1;
+            }
             for (int i = Math.Max(x - distance, 0); i <= Math.Min(x + distance, m_mapHeight); i++)
             {
                 for (int j = Math.Max(y - distance, 0); j <= Math.Min(j + distance, m_mapWidth); j++)
