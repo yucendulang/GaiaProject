@@ -470,14 +470,15 @@ namespace GaiaCore.Gaia
                 log = string.Format("使用{0}QICSHIP需要足够的QIC", num);
                 return false;
             }
-
+            
             Action queue = () =>
             {
-                QICs -= num;
+                QICs -= QICs;
+                TempQICs = 0;
             };
             ActionQueue.Enqueue(queue);
 
-
+            TempQICs -= num;
             TempShip += num*2;
             return true;
         }
