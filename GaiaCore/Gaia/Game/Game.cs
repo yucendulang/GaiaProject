@@ -291,6 +291,11 @@ namespace GaiaCore.Gaia
                         log = string.Format("{0}这块板子不存在", techTileStr);
                         return false;
                     }
+                    if (faction.GameTileList.Exists(x => x.GetType().Name.Equals(tile.GetType().Name)))
+                    {
+                        log = string.Format("玩家已经获得该板块{0}",tile.GetType().Name);
+                        return false;
+                    }
                     Action queue = () =>
                     {
                         faction.GameTileList.Add(tile);

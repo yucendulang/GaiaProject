@@ -77,7 +77,8 @@ namespace GaiaCore.Gaia.Tiles
         public override bool InvokeGameTileAction(Faction faction)
         {
             faction.PowerIncrease(powerIncreaseConst);
-            return true;
+
+            return base.InvokeGameTileAction(faction);
         }
     }
     /// <summary>
