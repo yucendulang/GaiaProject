@@ -10,6 +10,11 @@ namespace GaiaCore.Gaia.Tiles
         {
             IsUsed = false;
         }
+        /// <summary>
+        /// 名称
+        /// </summary>
+        public virtual string name { get; set; }
+
         public abstract string desc { get; }
 
         public virtual int GetOreIncome() { return 0; }

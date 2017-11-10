@@ -17,6 +17,8 @@ function DrawMap() {
                 DrawOneHex(cxt, j, i, ConvertIntToColor(array[i][j].tfTerrain), array[i][j].isCenter, array[i][j]);
                 //console.log(i, j, array[i][j].building);
                 if (array[i][j].building !== null) {
+                    //建筑对象
+                    buildingObj.typename = array[i][j].building.name;
                     //画房子
                     switch (array[i][j].building.name) {
                         case "Mine":
@@ -140,6 +142,7 @@ function hexCenter(row, col) {
     return [y, x];
 }
 
+var buildingObj;
 function makeHexPath(ctx, x, y, size, color,name) {
     //console.log("makeHexPath",x,y,size,color);
     var angle = 0;
@@ -147,20 +150,19 @@ function makeHexPath(ctx, x, y, size, color,name) {
     ctx.beginPath();
     ctx.moveTo(x, y);
 
-
-    var obj = {"name":name}
+    buildingObj = { "position": name }
     for (var i = 0; i < 6; i++) {
         ctx.lineTo(x, y);
 
         
         switch (i) {
         case 0:
-            obj.xmax = x;
-            obj.ymin = y;
+            buildingObj.xmax = x;
+            buildingObj.ymin = y;
             break;
         case 3:
-                obj.xmin = x;
-            obj.ymax = y;
+            buildingObj.xmin = x;
+            buildingObj.ymax = y;
             break;
         }
 
@@ -179,7 +181,7 @@ function makeHexPath(ctx, x, y, size, color,name) {
 
     //添加元素
     //console.log(obj);
-    activeObjList.push(obj);
+    activeObjList.push(buildingObj);
     //activeObjList.push({ "name": name, "row": row, "col": col });
 }
 

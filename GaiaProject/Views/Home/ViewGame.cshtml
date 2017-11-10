@@ -20,20 +20,55 @@ else if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDSTART)
 {
     <p>现在是Round @Model.GameStatus.RoundCount,Turn @Model.GameStatus.TurnCount</p>
     <p>现在是 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 的回合,颜色是 @Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()</p>
+
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        选择要升级的建筑
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    
+                    <select class="btn dropdown-toggle form-control" id="updateBuildList">
+                        <option value="">--请选择升级建筑--</option>
+                        <option value="RL">ResearchLab</option>
+                        <option value="SH">SH</option>
+                    </select>
+
+                    <div id="sttBody">
+                        
+                        @Html.DropDownList("enumList", new SelectList(Model.STT6List, "name", "desc"), "--请选择科技板块(6)--", new {@class = "btn dropdown-toggle form-control", @id = "stt6List", @syntax = ".+"})
+                        
+                        @Html.DropDownList("enumList", new SelectList(Model.STT3List, "name", "desc"), "--请选择科技板块(6)--", new { @class = "btn dropdown-toggle form-control", @id = "stt3List", @syntax = ".+" })
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-primary" id="updateQuery">
+                        确定
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
 }
 else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
 {
     <p>现在等待 @Model.Username[Model.GameStatus.PlayerIndex] 选种族 setup xxx</p>
 
     ViewBag.enums = Enum.GetValues(typeof(GaiaCore.Gaia.FactionName)).Cast<GaiaCore.Gaia.FactionName>();
-    @Html.DropDownList("enumList", new SelectList(ViewBag.enums), new { @class = "btn dropdown-toggle form-control",@id="zhongzuList" })
+    @Html.DropDownList("enumList", new SelectList(ViewBag.enums),"--请选择种族--", new { @class = "btn dropdown-toggle form-control selectchange", @id="zhongzuList", @syntax="setup " })
 
-    <script>
-        $("#zhongzuList").change(function() {
-            $("#syntax").val("setup " + $(this).val());
-            //alert($(this).val());
-        })
-    </script>
+
 }
 else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.INITIALMINES)
 {
@@ -42,6 +77,10 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.INITIALMINES)
 else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.SELECTROUNDBOOSTER)
 {
     <p>现在等待 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 选择回合加速版 +rbtx</p>
+
+    @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"),"--请选择回合助推板--", new { @class = "btn dropdown-toggle form-control selectchange",@id="rbtList", @syntax = "+" })
+
+
 }
 else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
 {
@@ -131,12 +170,12 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
         }
 
 
-        <h4>Round Booster</h4>
+        <h4>回合助推板</h4>
         @foreach (var item in Model.RBTList)
         {
             <p>@item.GetType().Name @item.desc</p>
         }
-        <h4>Round Score</h4>
+        <h4>回合计分板</h4>
         @for (int i = 0; i < Model.RSTList.Count; i++)
         {
             <p>Round @(i+1) @Model.RSTList[i].desc</p>
@@ -208,19 +247,113 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
             }
         };
 
+        String.prototype.format = function(args) {
+            var result = this;
+            if (arguments.length > 0) {    
+                if (arguments.length == 1 && typeof (args) == "object") {
+                    for (var key in args) {
+                        if(args[key]!=undefined){
+                            var reg = new RegExp("({" + key + "})", "g");
+                            result = result.replace(reg, args[key]);
+                        }
+                    }
+                }
+                else {
+                    for (var i = 0; i < arguments.length; i++) {
+                        if (arguments[i] != undefined) {
+                            //var reg = new RegExp("({[" + i + "]})", "g");//这个在索引大于9时会有问题，谢谢何以笙箫的指出
+                            var reg= new RegExp("({)" + i + "(})", "g");
+                            result = result.replace(reg, arguments[i]);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
 
         c.addEventListener('click', function (e) {
             //console.log(list);
             var xy = getEventPosition(e);
             var clickObj = getClickObj(xy.x, xy.y);
-            $("#syntax").val("build " + clickObj.name);
-            //console.log(clickObj);
+            if (clickObj.typename != undefined) {
+                switch (clickObj.typename) {
+                case "Mine":
+                        $("#syntax").val("upgrade {0} to {1}".format(clickObj.position,"TC"));
+                    break;
+                case "TradeCenter":
+                    //$("#myModalLabel").text("新增");
+                        $('#myModal').modal();
+                    $("#sttBody").hide();
+                    $("#updateBuildList").change(function() {
+                        if ($(this).val() == "RL") {
+                            $("#sttBody").show();
+                        } else {
+                            $("#sttBody").hide();
+                        }
+                        //alert(2);
+                    });
+                    $("#stt6List").change(function() {
+                        //if ($("#stt6List").val()!=)
+                        $("#stt3List").val("");
+                    });
+                    $("#stt3List").change(function() {
+                        //if ($("#stt6List").val()!=)
+                        $("#stt6List").val("");
+                    });
+
+                    $("#updateQuery").click(function () {
+                        if ($("#stt6List").val() != "") {
+                            $("#syntax").val("upgrade {0} to {1}.+{2}".format(clickObj.position,
+                                $("#updateBuildList").val(),
+                                $("#stt6List").val()));
+
+                        } else {
+                            $("#syntax").val("upgrade {0} to {1}.+{2} advance tf".format(clickObj.position, $("#updateBuildList").val(), $("#stt3List").val()));
+                        }
+                        $('#myModal').modal('hide');
+                    });
+//                        $("#updateBuildList li").click(function() {
+//                            $("#syntax").val("upgrade {0} to {1}.+".format(clickObj.position, this.id));
+//                            $('#myModal').modal('hide');
+//                    });
+                    break;
+                case "ResearchLab":
+                        $("#syntax").val("upgrade {0} to {1}".format(clickObj.position,"AC"));
+                    break;
+                case "Academy":
+                    
+                    break;
+                case "StrongHold":
+                        //alert("不能继续升级");
+                    break;
+                case "GaiaBuilding":
+                       //alert("不能继续升级");
+                    break;
+                default:
+                        console.log("不能继续升级");
+                }
+            } else {
+                $("#syntax").val("build " + clickObj.position);
+            }
+            
+            console.log(clickObj);
             //console.log("f");
             //alert(getEventPosition(e).x+"/"+getEventPosition(e).y);
         }, false);
 
 
     </script>
+
+
+    <script>
+        $(".selectchange").change(function () {
+            var obj = $(this);
+            var syntax = obj.attr("syntax");
+            $("#syntax").val(syntax + $(this).val());
+            //alert($(this).val());
+        })
+    </script>
+
     }
     else
     {

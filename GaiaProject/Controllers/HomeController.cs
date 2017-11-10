@@ -74,6 +74,16 @@ namespace GaiaProject.Controllers
         [HttpGet]
         public IActionResult NewGame()
         {
+
+            var task = _userManager.GetUserAsync(HttpContext.User);
+            Task[] taskarray = new Task[] { task };
+            Task.WaitAll(taskarray, millisecondsTimeout: 1000);
+            if (task.Result != null)
+            {
+                ViewData["Message"] = task.Result.UserName;
+                ViewData["GameList"] = GameMgr.GetAllGame(task.Result.UserName);
+            }
+
             return View();
         }
 

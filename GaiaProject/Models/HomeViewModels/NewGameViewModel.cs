@@ -10,21 +10,21 @@ namespace GaiaProject.Models.HomeViewModels
     {
         [StringLength(10,MinimumLength =3)]
         [Required]
-        [Display(Name = "GameName")]
+        [Display(Name = "游戏名称")]
         public string Name { set; get; }
         [Required]
         [EmailAddress]
-        [Display(Name = "Player1")]
+        [Display(Name = "玩家1")]
         public string Player1 { set; get; }
         [Required]
         [EmailAddress]
-        [Display(Name = "Player2")]
+        [Display(Name = "玩家2")]
         public string Player2 { set; get; }
         [EmailAddress]
-        [Display(Name = "Player3")]
+        [Display(Name = "玩家3")]
         public string Player3 { set; get; }
         [EmailAddress]
-        [Display(Name = "Player4")]
+        [Display(Name = "玩家4")]
         public string Player4 { set; get; }
     }
 }

@@ -36,6 +36,10 @@ namespace GaiaCore.Gaia.Tiles
 
     public class RBT1 : RoundBooster
     {
+        public RBT1()
+        {
+            this.name = "RBT1";
+        }
         public override string desc
         {
             get
@@ -59,6 +63,10 @@ namespace GaiaCore.Gaia.Tiles
     }
     public class RBT2 : RoundBooster
     {
+        public RBT2()
+        {
+            this.name = "RBT2";
+        }
         public override string desc
         {
             get
@@ -82,6 +90,10 @@ namespace GaiaCore.Gaia.Tiles
     }
     public class RBT3 : RoundBooster
     {
+        public RBT3()
+        {
+            this.name = "RBT3";
+        }
         public override string desc
         {
             get
@@ -102,6 +114,10 @@ namespace GaiaCore.Gaia.Tiles
     }
     public class RBT4 : RoundBooster
     {
+        public RBT4()
+        {
+            this.name = "RBT4";
+        }
         public override string desc
         {
             get
@@ -121,6 +137,10 @@ namespace GaiaCore.Gaia.Tiles
     }
     public class RBT5 : RoundBooster
     {
+        public RBT5()
+        {
+            this.name = "RBT5";
+        }
         public override string desc
         {
             get
@@ -140,6 +160,10 @@ namespace GaiaCore.Gaia.Tiles
     }
     public class RBT6 : RoundBooster
     {
+        public RBT6()
+        {
+            this.name = "RBT6";
+        }
         public override string desc
         {
             get
@@ -173,6 +197,10 @@ namespace GaiaCore.Gaia.Tiles
     }
     public class RBT7 : RoundBooster
     {
+        public RBT7()
+        {
+            this.name = "RBT7";
+        }
         public override string desc
         {
             get
@@ -192,6 +220,10 @@ namespace GaiaCore.Gaia.Tiles
     }
     public class RBT8 : RoundBooster
     {
+        public RBT8()
+        {
+            this.name = "RBT8";
+        }
         public override string desc
         {
             get
@@ -212,6 +244,10 @@ namespace GaiaCore.Gaia.Tiles
     }
     public class RBT9 : RoundBooster
     {
+        public RBT9()
+        {
+            this.name = "RBT9";
+        }
         public override string desc
         {
             get
@@ -232,6 +268,10 @@ namespace GaiaCore.Gaia.Tiles
     }
     public class RBT10 : RoundBooster
     {
+        public RBT10()
+        {
+            this.name = "RBT10";
+        }
         public override string desc
         {
             get

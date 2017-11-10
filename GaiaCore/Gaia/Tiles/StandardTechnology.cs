@@ -51,13 +51,18 @@ namespace GaiaCore.Gaia.Tiles
 
     public abstract class StandardTechnology : GameTiles
     {
-
+        public StandardTechnology()
+        {
+            this.name = this.GetType().Name;
+        }
     }
     /// <summary>
     /// 行动：获得4魔力
     /// </summary>
     public class STT1 : StandardTechnology
     {
+
+
         public override string desc
         {
             get
