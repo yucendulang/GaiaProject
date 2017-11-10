@@ -253,27 +253,27 @@ function fillBuilding(ctx, name) {
 function ConvertIntToColor(i) {
     switch (i) {
         case 0:
-            return "blue";
+            return "#60C0F0";
         case 1:
-            return "red";
+            return "#F08080";
         case 2:
-            return "orange";
+            return "#F0C060";
         case 3:
-            return "yellow";
+            return "#F0F080";
         case 4:
-            return "brown";
+            return "#B08040";
         case 5:
-            return "black";
+            return "#C0C0C0";
         case 6:
-            return "white";
+            return "#E0F0FF";
         case 100:
-            return "green";
+            return "#80F080";
         case 200:
-            return "purple";
+            return "#D19FE8";
         case 300:
-            return "grey";
+            return "#FFFFFF";
         default:
-            return "grey";
+            return "#FFFFFF";
     }
 }
 
@@ -282,33 +282,33 @@ var cycle = ["blue", "red", "orange", "yellow", "brown", "black", "white"];
 function ConvertRaceIntToColor(i) {
     switch (i) {
         case 0:
-            return "darkslateblue";
+            return "#2080F0";
         case 1:
-            return "darkslateblue";
+            return "#2080F0";
         case 2:
-            return "burlywood";
+            return "#A06040";
         case 3:
-            return "burlywood";
+            return "#A06040";
         case 4:
-            return "darkslategray";
+            return "#808080";
         case 5:
-            return "darkslategray";
+            return "#808080";
         case 6:
-            return "darkorange";
+            return "#F0A020";
         case 7:
-            return "darkorange";
+            return "#F0A020";
         case 8:
-            return "tomato";
+            return "#E04040";
         case 9:
-            return "tomato";
+            return "#E04040";
         case 10:
-            return "whitesmoke";
+            return "#F0F8FF";
         case 11:
-            return "whitesmoke";
+            return "#F0F8FF";
         case 12:
-            return "wheat";
+            return "#E0E040";
         case 13:
-            return "wheat";
+            return "#E0E040";
         default:
             return "black";
 
