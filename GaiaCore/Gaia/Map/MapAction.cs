@@ -42,6 +42,7 @@ namespace GaiaCore.Gaia
     }
     public class ACT1 : MapAction
     {
+        public override string desc => "7pw→3k";
         protected override int ResourceCost => 7;
         public override bool PredicateGameTileAction(Faction faction)
         {
@@ -57,6 +58,7 @@ namespace GaiaCore.Gaia
 
     public class ACT2 : MapAction
     {
+        public override string desc => "5pw→2tf";
         protected override int ResourceCost => 5;
         public override bool PredicateGameTileAction(Faction faction)
         {
@@ -77,6 +79,7 @@ namespace GaiaCore.Gaia
 
     public class ACT3 : MapAction
     {
+        public override string desc => "4pw→2o";
         protected override int ResourceCost => 4;
         public override bool PredicateGameTileAction(Faction faction)
         {
@@ -91,6 +94,7 @@ namespace GaiaCore.Gaia
     }
     public class ACT4 : MapAction
     {
+        public override string desc => "4pw→7c";
         protected override int ResourceCost => 4;
         public override bool PredicateGameTileAction(Faction faction)
         {
@@ -105,6 +109,7 @@ namespace GaiaCore.Gaia
     }
     public class ACT5 : MapAction
     {
+        public override string desc => "4pw→2k";
         protected override int ResourceCost => 4;
         public override bool PredicateGameTileAction(Faction faction)
         {
@@ -119,6 +124,7 @@ namespace GaiaCore.Gaia
     }
     public class ACT6 : MapAction
     {
+        public override string desc => "3pw→1tf";
         protected override int ResourceCost => 3;
         public override bool PredicateGameTileAction(Faction faction)
         {
@@ -137,6 +143,7 @@ namespace GaiaCore.Gaia
     }
     public class ACT7 : MapAction
     {
+        public override string desc => "3pw→2pwt";
         protected override int ResourceCost => 3;
         public override bool PredicateGameTileAction(Faction faction)
         {
@@ -151,6 +158,7 @@ namespace GaiaCore.Gaia
     }
     public class ACT8 : MapAction
     {
+        public override string desc => "4Q→1stt/att";
         protected override int ResourceCost => 4;
         public override bool PredicateGameTileAction(Faction faction)
         {
@@ -165,6 +173,7 @@ namespace GaiaCore.Gaia
     }
     public class ACT9 : MapAction
     {
+        public override string desc => "3Q→score 1alt";
         protected override int ResourceCost => 3;
         public override bool PredicateGameTileAction(Faction faction)
         {
@@ -179,6 +188,7 @@ namespace GaiaCore.Gaia
     }
     public class ACT10 : MapAction
     {
+        public override string desc => "2Q→3vp+1 P_type->1vp";
         protected override int ResourceCost => 2;
         public override bool PredicateGameTileAction(Faction faction)
         {
