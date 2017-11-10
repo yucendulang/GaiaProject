@@ -12,32 +12,34 @@ namespace GaiaCore.Gaia
 
         internal bool BuildMine(Map map, int row, int col, out string log)
         {
+
             log = string.Empty;
             bool isGreenPlanet = false;
             bool isGaiaPlanet = false;
-            if (!(Mines.Count > 1 && Credit >= m_MineCreditCost && Ore >= m_MineOreCost))
-            {
-                log = "资源不够";
-                return false;
-            }
+            int transNumNeed = 0;
             if (map.HexArray[row, col].TFTerrain == Terrain.Green)
             {
                 isGreenPlanet = true;
-                if(map.HexArray[row,col].TFTerrain==Terrain.Green
-                    &&map.HexArray[row,col].Building is GaiaBuilding
-                    &&map.HexArray[row,col].FactionBelongTo== FactionName)
+                if (map.HexArray[row, col].TFTerrain == Terrain.Green
+                    && map.HexArray[row, col].Building is GaiaBuilding
+                    && map.HexArray[row, col].FactionBelongTo == FactionName)
                 {
                     isGaiaPlanet = true;
                 }
             }
             else
             {
-                var transNumNeed = Math.Min(7 - Math.Abs(map.HexArray[row, col].OGTerrain - OGTerrain), Math.Abs(map.HexArray[row, col].OGTerrain - OGTerrain));
-                if (!(transNumNeed <= TerraFormNumber))
+                transNumNeed = Math.Min(7 - Math.Abs(map.HexArray[row, col].OGTerrain - OGTerrain), Math.Abs(map.HexArray[row, col].OGTerrain - OGTerrain));
+                if (transNumNeed * GetTransformCost > Ore)
                 {
-                    log = string.Format("原始地形为{0},需要地形{1},需要改造等级为{2}", map.HexArray[row, col].OGTerrain.ToString(), OGTerrain.ToString(), transNumNeed);
+                    log = string.Format("原始地形为{0},需要地形{1},需要矿石为{2}", map.HexArray[row, col].OGTerrain.ToString(), OGTerrain.ToString(), transNumNeed * GetTransformCost);
                     return false;
                 }
+            }
+            if (!(Mines.Count > 1 && Credit >= m_MineCreditCost && Ore >= m_MineOreCost+ transNumNeed * GetTransformCost))
+            {
+                log = "资源不够";
+                return false;
             }
             if (!isGaiaPlanet&&isGreenPlanet && QICs < 1)
             {
@@ -57,7 +59,7 @@ namespace GaiaCore.Gaia
             //扣资源建建筑
             Action queue = () =>
             {
-                Ore -= m_MineOreCost;
+                Ore -= m_MineOreCost + transNumNeed * GetTransformCost;
                 Credit -= m_MineCreditCost;
                 if (isGaiaPlanet)
                 {
@@ -79,6 +81,10 @@ namespace GaiaCore.Gaia
                 else
                 {
                     TriggerRST(typeof(RST1));
+                }
+                for (int i = 0; i < transNumNeed; i++)
+                {
+                    TriggerRST(typeof(RST7));
                 }
             };
             ActionQueue.Enqueue(queue);
@@ -431,23 +437,7 @@ namespace GaiaCore.Gaia
             TempQICs = 0;
         }
 
-        internal bool SetTransformNumber(int num, out string log)
-        {
-            log = string.Empty;
-            if (num * GetTransformCost > Ore)
-            {
-                log = string.Format("{0}改造费用大于拥有矿石数量{1}", num * GetTransformCost, Ore);
-                return false;
-            }
-            Action queue = () =>
-            {
-                TriggerRST(typeof(RST7));
-                Ore -= num * GetTransformCost;
-            };
-            ActionQueue.Enqueue(queue);
-            TerraFormNumber += num;
-            return true;
-        }
+
 
         static List<string> TechStrList = new List<string>(){
             "tf",

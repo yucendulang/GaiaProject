@@ -87,7 +87,6 @@ namespace GaiaCore.Gaia
         {
             var ret = new List<Regex>();
             ret.Add(burningRegex);
-            ret.Add(transformRegex);
             ret.Add(QICShip);
             ret.Add(getTechTilesRegex);
             ret.Add(advTechRegex);
@@ -97,7 +96,6 @@ namespace GaiaCore.Gaia
             return ret;
         } 
         public static Regex burningRegex = new Regex("burn ([0-9])");
-        public static Regex transformRegex = new Regex("transform ([0-9])");
         public static Regex QICShip = new Regex("qicship ([0-9])");
         public static Regex getTechTilesRegex = new Regex("\\+(a|s)tt([0-9]{1,2})");
         public static Regex advTechRegex = new Regex("advance.*");

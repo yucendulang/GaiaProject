@@ -256,15 +256,6 @@ namespace GaiaCore.Gaia
                         return false;
                     }
                 }
-                else if (GameFreeSyntax.transformRegex.IsMatch(item))
-                {
-                    var match = GameFreeSyntax.transformRegex.Match(item);
-                    var num = match.Groups[1].Value.ParseToInt(0);
-                    if (!faction.SetTransformNumber(num, out log))
-                    {
-                        return false;
-                    }
-                }
                 else if (GameFreeSyntax.getTechTilesRegex.IsMatch(item))
                 {
                     var techTileStr = item.Substring(1);
