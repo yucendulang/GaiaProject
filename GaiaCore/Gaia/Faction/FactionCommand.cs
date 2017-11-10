@@ -89,10 +89,8 @@ namespace GaiaCore.Gaia
                     TriggerRST(typeof(RST4));
                     GaiaPlanetNumber++;
                 }
-                else
-                {
-                    TriggerRST(typeof(RST1));
-                }
+                TriggerRST(typeof(RST1));
+                TriggerRST(typeof(ATT4));
                 for (int i = 0; i < transNumNeed; i++)
                 {
                     TriggerRST(typeof(RST7));
@@ -123,6 +121,10 @@ namespace GaiaCore.Gaia
             if (GaiaGame.RSTList[(GaiaGame.GameStatus.RoundCount - 1)].GetType()==type)
             {
                 Score += GaiaGame.RSTList[(GaiaGame.GameStatus.RoundCount - 1)].GetTriggerScore;
+            }
+            if(GameTileList.Exists(x=>x.GetType()==type))
+            {
+                Score += GameTileList.Find(x => x.GetType() == type).GetTriggerScore;
             }
         }
 
@@ -351,6 +353,9 @@ namespace GaiaCore.Gaia
                     var tile = new AC2();
                     GameTileList.Add(tile);
                     ActionList.Add(tile.GetType().Name.ToLower(), tile.InvokeGameTileAction);
+                }else if (syn == BuildingSyntax.TC)
+                {
+                    TriggerRST(typeof(ATT5));
                 }
             };
             ActionQueue.Enqueue(queue);
@@ -432,6 +437,11 @@ namespace GaiaCore.Gaia
                 log = "还存在没拿取的星盟版";
                 return true;
             }
+            if (TechReturn != 0)
+            {
+                log = "获取高级科技必须退回一个低级科技";
+                return true;
+            }
             return false;
         }
 
@@ -453,6 +463,7 @@ namespace GaiaCore.Gaia
             TempKnowledge = 0;
             TempOre = 0;
             TempQICs = 0;
+            TechReturn = 0;
         }
 
 
@@ -467,6 +478,10 @@ namespace GaiaCore.Gaia
         };
 
         public bool IsUseAction2 { get; internal set; }
+        /// <summary>
+        /// 代表需要退回的板子数量
+        /// </summary>
+        public int TechReturn { get; internal set; }
 
         internal static string ConvertTechIndexToStr(int v)
         {
@@ -605,6 +620,7 @@ namespace GaiaCore.Gaia
                     throw new Exception("不存在此科技条" + tech);
             }
             TriggerRST(typeof(RST6));
+            TriggerRST(typeof(ATT6));
             return;
         }
 
@@ -613,6 +629,7 @@ namespace GaiaCore.Gaia
             Action action = () =>
             {
                 list.ForEach(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].IsAlliance=true);
+                TriggerRST(typeof(RST5));
             };
 
             ActionQueue.Enqueue(action);
@@ -870,6 +887,7 @@ namespace GaiaCore.Gaia
             Action action = () =>
             {
                 ForgingAlliance(list, out string log, true);
+                TriggerRST(typeof(RST5));
             };
             ActionQueue.Enqueue(action);
             m_AllianceTileGet++;
@@ -883,8 +901,9 @@ namespace GaiaCore.Gaia
                 log = "魔力豆要比卫星数量多";
                 return false;
             }
-            if (!list.TrueForAll(x => !GaiaGame.Map.HexArray[x.Item1, x.Item2].Satellite.Contains(FactionName)
-             && GaiaGame.Map.HexArray[x.Item1, x.Item2].TFTerrain == Terrain.Empty))
+            if (list.Exists(x => (GaiaGame.Map.HexArray[x.Item1, x.Item2].Satellite != null
+             && GaiaGame.Map.HexArray[x.Item1, x.Item2].Satellite.Contains(FactionName))
+             || GaiaGame.Map.HexArray[x.Item1, x.Item2].TFTerrain != Terrain.Empty))
             {
                 log = "卫星不能建立在非空地以及形成过星盟的地盘上";
                 return false;

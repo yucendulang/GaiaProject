@@ -93,6 +93,7 @@ namespace GaiaCore.Gaia
             ret.Add(actionRegex);
             ret.Add(ALTRegex);
             ret.Add(ConvertRegex);
+            ret.Add(ReturnTechTilesRegex);
             return ret;
         } 
         public static Regex burningRegex = new Regex("burn ([0-9])");
@@ -117,5 +118,9 @@ namespace GaiaCore.Gaia
         /// convert的正则
         /// </summary>
         public static Regex ConvertRegex = new Regex("convert ([0-9]{1,2})([a-z]{1,3}) to ([0-9]{1,2})([a-z]{1,3})");
+        /// <summary>
+        /// 退回板子的正则
+        /// </summary>
+        public static Regex ReturnTechTilesRegex = new Regex("-stt[1-9]{1}");
     }
 }

@@ -21,17 +21,7 @@ namespace GaiaCore.Gaia.Tiles
                 new STT8(),
                 new STT9()
             };
-            var result = new List<StandardTechnology>();
-            for (int i = 0; i < n; i++)
-            {
-                result.Add(list.RandomRemove(random));
-            }
-            return result;
-        }
-
-        public static List<StandardTechnology> GetOtherList(List<StandardTechnology> removelist)
-        {
-            var list = new List<StandardTechnology>()
+            var listALL = new List<StandardTechnology>()
             {
                 new STT1(),
                 new STT2(),
@@ -41,10 +31,87 @@ namespace GaiaCore.Gaia.Tiles
                 new STT6(),
                 new STT7(),
                 new STT8(),
-                new STT9()
+                new STT9(),
+                new STT1(),
+                new STT2(),
+                new STT3(),
+                new STT4(),
+                new STT5(),
+                new STT6(),
+                new STT7(),
+                new STT8(),
+                new STT9(),
+                new STT1(),
+                new STT2(),
+                new STT3(),
+                new STT4(),
+                new STT5(),
+                new STT6(),
+                new STT7(),
+                new STT8(),
+                new STT9(),
+                new STT1(),
+                new STT2(),
+                new STT3(),
+                new STT4(),
+                new STT5(),
+                new STT6(),
+                new STT7(),
+                new STT8(),
+                new STT9(),
             };
-            list.RemoveAll(x => removelist.Exists(y => x.GetType() == y.GetType()));
-            return list;
+            var result = new List<StandardTechnology>();
+            for (int i = 0; i < n; i++)
+            {
+                var remove = list.RandomRemove(random);
+                result.AddRange(listALL.FindAll(x=>x.GetType()== remove.GetType()));
+            }
+            return result;
+        }
+
+        public static List<StandardTechnology> GetOtherList(List<StandardTechnology> removelist)
+        {
+            var listALL = new List<StandardTechnology>()
+            {
+                new STT1(),
+                new STT2(),
+                new STT3(),
+                new STT4(),
+                new STT5(),
+                new STT6(),
+                new STT7(),
+                new STT8(),
+                new STT9(),
+                new STT1(),
+                new STT2(),
+                new STT3(),
+                new STT4(),
+                new STT5(),
+                new STT6(),
+                new STT7(),
+                new STT8(),
+                new STT9(),
+                new STT1(),
+                new STT2(),
+                new STT3(),
+                new STT4(),
+                new STT5(),
+                new STT6(),
+                new STT7(),
+                new STT8(),
+                new STT9(),
+                new STT1(),
+                new STT2(),
+                new STT3(),
+                new STT4(),
+                new STT5(),
+                new STT6(),
+                new STT7(),
+                new STT8(),
+                new STT9(),
+            };
+            listALL.RemoveAll(x => removelist.Exists(y => x.GetType() == y.GetType()));
+            return listALL;
         }
     }
 

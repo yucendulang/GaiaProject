@@ -282,6 +282,7 @@ namespace GaiaCore.Gaia
                             return false;
                         }
                         faction.TechTracAdv++;
+                        faction.TechReturn++;
                     }
                     else if (STT3List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
                     {
@@ -299,18 +300,18 @@ namespace GaiaCore.Gaia
                     }
                     if (faction.GameTileList.Exists(x => x.GetType().Name.Equals(tile.GetType().Name)))
                     {
-                        log = string.Format("玩家已经获得该板块{0}",tile.GetType().Name);
+                        log = string.Format("玩家已经获得该板块{0}", tile.GetType().Name);
                         return false;
                     }
                     Action queue = () =>
                     {
                         faction.GameTileList.Add(tile);
+                        tile.OneTimeAction(faction);
                         if (ATTList.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
                         {
                             (tile as AdavanceTechnology).isPicked = true;
                             faction.GameTileList.Find(x => x is AllianceTile && x.IsUsed == false).IsUsed = true;
                         }
-                        tile.OneTimeAction(faction);
                         if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
                         {
                             var index = STT6List.FindIndex(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
@@ -325,6 +326,11 @@ namespace GaiaCore.Gaia
                             {
                                 faction.IncreaseTech(faction.LimitTechAdvance);
                             }
+                            STT6List.Remove(tile as StandardTechnology);
+                        }
+                        else if (STT3List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
+                        {
+                            STT3List.Remove(tile as StandardTechnology);
                         }
                     };
                     faction.ActionQueue.Enqueue(queue);
@@ -489,12 +495,32 @@ namespace GaiaCore.Gaia
                     var RFKind = match.Groups[2].Value;
                     var RTNum = match.Groups[3].Value.ParseToInt(0);
                     var RTKind = match.Groups[4].Value;
-                    if(!faction.ConvertOneResourceToAnother(RFNum, RFKind, RTNum, RTKind,out log))
+                    if (!faction.ConvertOneResourceToAnother(RFNum, RFKind, RTNum, RTKind, out log))
                     {
                         return false;
                     }
 
-                    
+
+                }
+                else if (GameFreeSyntax.ReturnTechTilesRegex.IsMatch(item))
+                {
+                    if (faction.TechReturn == 0)
+                    {
+                        log = "你不能退回科技版";
+                        return false;
+                    }
+                    var techTileStr = item.Substring(1);
+                    var tile = faction.GameTileList.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
+                    if (tile == null)
+                    {
+                        log = "你没有此块STT版";
+                        return false;
+                    }
+                    Action queue = () =>
+                    {
+                        faction.GameTileList.Remove(tile);
+                    };
+                    faction.TechReturn--;
                 }
                 else
                 {
