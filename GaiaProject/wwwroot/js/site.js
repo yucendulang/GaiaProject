@@ -269,6 +269,24 @@ function DrawSatellite(ctx, row, col, satellite) {
             ctx.strokeRect(loc[0], loc[1], 8, 8);
             ctx.restore();
             break;
+        case 2:
+            var loc = hexCenter(row, col);
+            loc[1] -= 20;
+            loc[0] -= 4;
+            ctx.save();
+            fillBuilding(ctx, satellite[0]);
+            ctx.beginPath();
+            ctx.fillRect(loc[0], loc[1], 8, 8);
+            ctx.strokeRect(loc[0], loc[1], 8, 8);
+            ctx.restore();
+            loc[1] += 15;
+            ctx.save();
+            fillBuilding(ctx, satellite[1]);
+            ctx.beginPath();
+            ctx.fillRect(loc[0], loc[1], 8, 8);
+            ctx.strokeRect(loc[0], loc[1], 8, 8);
+            ctx.restore();
+            break;
         default:
             break;
     }
