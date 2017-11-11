@@ -773,16 +773,16 @@ namespace GaiaCore.Gaia
                     FactionList.Add(new HadschHalla(this));
                     break;
                 case FactionName.Itar:
-                    FactionList.Add(new Ambas(this));
+                    FactionList.Add(new Itar(this));
                     break;
                 case FactionName.Nevla:
-                    FactionList.Add(new Ambas(this));
+                    FactionList.Add(new Nevla(this));
                     break;
                 case FactionName.Gleen:
-                    FactionList.Add(new Ambas(this));
+                    FactionList.Add(new Gleen(this));
                     break;
                 case FactionName.Xenos:
-                    FactionList.Add(new Ambas(this));
+                    FactionList.Add(new Xenos(this));
                     break;
                 default:
                     break;
