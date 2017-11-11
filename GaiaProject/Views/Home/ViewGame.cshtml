@@ -330,7 +330,9 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
         
         <div class="col-md-6">
             <script src="~/js/echarts.min.js"></script>
-            <div id="main" style="width: 600px; height: 400px;"></div>
+            <div style="background: url(/images/development.png);background-size:100% 80%;">
+                <div id="main" style="width: 100%; height: 400px;"></div>
+            </div>
             <script type="text/javascript">
                 // 基于准备好的dom，初始化echarts实例
                 var myChart = echarts.init(document.getElementById('main'));
