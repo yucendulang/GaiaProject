@@ -93,6 +93,7 @@ namespace GaiaCore.Gaia
             ret.Add(ConvertRegex);
             ret.Add(ReturnTechTilesRegex);
             ret.Add(PlanetRegex);
+            ret.Add(advTechRegex2);
             return ret;
         } 
         public static Regex burningRegex = new Regex("burn ([0-9])");
