@@ -88,7 +88,6 @@ namespace GaiaCore.Gaia
             var ret = new List<Regex>();
             ret.Add(burningRegex);
             ret.Add(getTechTilesRegex);
-            ret.Add(advTechRegex);
             ret.Add(actionRegex);
             ret.Add(ALTRegex);
             ret.Add(ConvertRegex);
@@ -99,7 +98,6 @@ namespace GaiaCore.Gaia
         public static Regex burningRegex = new Regex("burn ([0-9])");
         public static Regex QICShip = new Regex("qicship ([0-9])");
         public static Regex getTechTilesRegex = new Regex("\\+(a|s)tt([0-9]{1,2})");
-        public static Regex advTechRegex = new Regex("advance.*");
         public static Regex advTechRegex2 = new Regex("advance (tf|ai|eco|gaia|sci|ship)");
         
         private static readonly List<string> turnActionList = new List<string>()

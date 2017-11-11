@@ -253,6 +253,17 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
          {
              <div>From @leech.Item2 leech @leech.Item1 power</div>
          }
+        @foreach (var it in item.GameTileList)
+        {
+            if (it.IsUsed)
+            {
+                <s>@it.GetType().Name @it.desc</s>
+            }
+            else
+            {
+                <div>@it.GetType().Name @it.desc</div>
+            }
+        }
                 @*<p>---分割线---</p>*@
 
     }

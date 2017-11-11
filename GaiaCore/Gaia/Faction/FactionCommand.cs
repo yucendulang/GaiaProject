@@ -345,8 +345,9 @@ namespace GaiaCore.Gaia
             }
             if (syn == BuildingSyntax.RL|| syn == BuildingSyntax.AC1 || syn == BuildingSyntax.AC2)
             {
-                m_TechTilesGet++;
-                m_TechTrachAdv++;
+                TechTilesGet++;
+                TechTracAdv++;
+                IsUpgradeAdvTechTrack=true;
             }
             //扣资源,执行操作
             Action queue = () =>
@@ -440,7 +441,7 @@ namespace GaiaCore.Gaia
                 log = "还存在没使用的QICSHIP";
                 return true;
             }
-            if (m_TechTilesGet != 0)
+            if (TechTilesGet != 0)
             {
                 log = "还存在没拿取的科技版";
                 return true;
@@ -458,6 +459,11 @@ namespace GaiaCore.Gaia
             if (PlanetGet != 0)
             {
                 log = "死星没有被放置在地图上";
+                return true;
+            }
+            if (TechTracAdv != 1 && TechTracAdv != 0)
+            {
+                log = "科技轨走到奇怪的逻辑 联系Dulang";
                 return true;
             }
             return false;
@@ -483,6 +489,7 @@ namespace GaiaCore.Gaia
             TempQICs = 0;
             TechReturn = 0;
             PlanetGet = 0;
+            IsUpgradeAdvTechTrack = false;
         }
 
 
@@ -502,6 +509,7 @@ namespace GaiaCore.Gaia
         /// </summary>
         public int TechReturn { get; internal set; }
         public int PlanetGet { get; internal set; }
+        public bool IsUpgradeAdvTechTrack { get; private set; }
 
         internal static string ConvertTechIndexToStr(int v)
         {

@@ -272,16 +272,18 @@ namespace GaiaCore.Gaia
                             log = "没有没翻面的城邦";
                             return false;
                         }
-                        faction.TechTracAdv++;
                         faction.TechReturn++;
                     }
                     else if (STT3List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
                     {
-                        faction.TechTracAdv++;
                         tile = STT3List.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
                     }
                     else if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
                     {
+                        if (faction.IsUpgradeAdvTechTrack)
+                        {
+                            faction.TechTracAdv--;
+                        }
                         tile = STT6List.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
                     }
                     else
@@ -313,7 +315,7 @@ namespace GaiaCore.Gaia
                             }
 
                             faction.LimitTechAdvance = Faction.ConvertTechIndexToStr(index);
-                            if (faction.IsIncreateTechValide(faction.LimitTechAdvance))
+                            if (faction.IsUpgradeAdvTechTrack&&faction.IsIncreateTechValide(faction.LimitTechAdvance))
                             {
                                 faction.IncreaseTech(faction.LimitTechAdvance);
                             }
@@ -326,10 +328,6 @@ namespace GaiaCore.Gaia
                     };
                     faction.ActionQueue.Enqueue(queue);
                     faction.TechTilesGet--;
-                    if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
-                    {
-                        faction.TechTracAdv--;
-                    }
                 }
                 else if (GameFreeSyntax.advTechRegex2.IsMatch(item))
                 {
