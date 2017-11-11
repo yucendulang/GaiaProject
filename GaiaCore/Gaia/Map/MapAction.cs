@@ -39,6 +39,19 @@ namespace GaiaCore.Gaia
         {
             return base.InvokeGameTileAction(faction);
         }
+
+        public string GetText()
+        {
+            string value = this.desc.Substring(this.desc.IndexOf("→") + 1);
+
+            return value.Length > 2 ? value.Substring(0, 3) : value;
+        }
+
+        public string GetConst()
+        {
+            string value = this.desc.Substring(0,this.desc.IndexOf("→") + 1);
+            return value;
+        }
     }
     public class ACT1 : MapAction
     {
