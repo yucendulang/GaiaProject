@@ -152,16 +152,17 @@ namespace GaiaCore.Gaia
 
     public enum Terrain
     {
-        NA=-1,
-        Blue=0,
+        NA = -1,
+        Blue = 0,
         Red,
         Orange,
         Yellow,
         Brown,
         Gray,
         White,
-        Green=100,
-        Purple=200,
-        Empty=300,
+        Green = 100,
+        Purple = 200,
+        Empty = 300,
+        Black = 400
     }
 }

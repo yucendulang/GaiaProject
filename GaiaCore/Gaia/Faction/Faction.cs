@@ -25,7 +25,7 @@ namespace GaiaCore.Gaia
             m_EconomicLevel = 0;
             m_GaiaLevel = 0;
             m_ScienceLevel = 0;
-            m_ShipLevel = 5;
+            m_ShipLevel = 4;
             Mines = new List<Mine>();
             for (int i = 0; i < GameConstNumber.MineCount; i++)
             {

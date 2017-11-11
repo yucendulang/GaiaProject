@@ -82,7 +82,7 @@ namespace GaiaCore.Gaia.Tiles
 
         public override bool InvokeGameTileAction(Faction faction)
         {
-            faction.TempShip += 1;
+            faction.TempShip += 3;
             IsUsed = true;
             return true;
         }
