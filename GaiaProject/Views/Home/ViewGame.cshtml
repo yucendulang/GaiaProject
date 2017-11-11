@@ -34,21 +34,13 @@ else if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDSTART)
                         选择要升级的建筑
                     </h4>
                 </div>
-                <div class="modal-body">
-                    
+                <div class="modal-body">                
                     <select class="btn dropdown-toggle form-control" id="updateBuildList">
-                        <option value="">--请选择升级建筑--</option>
-                        <option value="RL">ResearchLab</option>
-                        <option value="SH">SH</option>
                     </select>
-
-                    <div id="sttBody">
-                        
-                        @Html.DropDownList("enumList", new SelectList(Model.STT6List, "name", "desc"), "--请选择科技板块(6)--", new {@class = "btn dropdown-toggle form-control", @id = "stt6List", @syntax = ".+"})
-                        
-                        @Html.DropDownList("enumList", new SelectList(Model.STT3List, "name", "desc"), "--请选择科技板块(6)--", new { @class = "btn dropdown-toggle form-control", @id = "stt3List", @syntax = ".+" })
-
-
+                    <div id="sttBody">                       
+                        @Html.DropDownList("enumList", new SelectList(Model.STT6List, "name", "desc"), "--请选择科技板块(6)--", new {@class = "btn dropdown-toggle form-control", @id = "stt6List", @syntax = ".+"})                   
+                        @Html.DropDownList("enumList", new SelectList(Model.STT3List, "name", "desc"), "--请选择科技板块(3)--", new { @class = "btn dropdown-toggle form-control", @id = "stt3List", @syntax = ".+" })
+                        @Html.DropDownList("enumList", new SelectList(Model.STT3List, "name", "desc"), "--请选择升级科技--", new { @class = "btn dropdown-toggle form-control", @id = "updatekj", @syntax = ".+" })
                     </div>
 
                 </div>
@@ -506,14 +498,25 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
                         $("#syntax").val("upgrade {0} to {1}".format(clickObj.position,"TC"));
                     break;
                 case "TradeCenter":
+                case "ResearchLab":
                     //$("#myModalLabel").text("新增");
-                        $('#myModal').modal();
-                    $("#sttBody").hide();
+                        //如果是ResearchLab
+                    if (clickObj.typename=="ResearchLab"){
+                                                $("#").html('<option value="">--请选择升级建筑--</option><option value="AC1">AC1</option><option value="AC2">AC2</option>')
+                                        $("#sttBody").show();
+                    }
+                        else{
+                        $("#").html('<option value="">--请选择升级建筑--</option><option value="RL">ResearchLab</option><option value="SH">SH</option>')
+                                                $("#sttBody").hide();
+                        }
+                     $('#myModal').modal();
+
                     $("#updateBuildList").change(function() {
-                        if ($(this).val() == "RL") {
-                            $("#sttBody").show();
-                        } else {
+                        //SH
+                        if ($(this).val() == "SH") {
                             $("#sttBody").hide();
+                        } else {
+                            $("#sttBody").show();
                         }
                         //alert(2);
                     });
@@ -542,9 +545,9 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
 //                            $('#myModal').modal('hide');
 //                    });
                     break;
-                case "ResearchLab":
-                        $("#syntax").val("upgrade {0} to {1}".format(clickObj.position,"AC"));
-                    break;
+                //case "ResearchLab":
+                        //$("#syntax").val("upgrade {0} to {1}".format(clickObj.position,"AC"));
+                    //break;
                 case "Academy":
                     
                     break;
