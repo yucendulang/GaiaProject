@@ -26,7 +26,10 @@ namespace GaiaCore.Gaia
         /// </summary>
         public bool m_IntialFlag;
 
-        public int PlayerIndex { get => m_PlayerIndex - 1; }
+        /// <summary>
+        /// 4个玩家 0-3
+        /// </summary>
+        public int PlayerIndex { get => m_PlayerIndex - 1; set => m_PlayerIndex = value + 1; }
         /// <summary>
         /// 玩家人数
         /// </summary>
@@ -88,7 +91,7 @@ namespace GaiaCore.Gaia
             }
         }
         /// <summary>
-        /// 所有人都选完返回0
+        /// 所有人都选完返回True 不包括特殊的Xenos
         /// </summary>
         /// <returns></returns>
         public bool NextPlayerForIntial()

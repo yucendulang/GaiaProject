@@ -32,7 +32,8 @@ namespace GaiaCore.Gaia
                 log = "至少需要一块Q";
                 return false;
             }
-
+            //矿石铲子
+            int oreTF = 0;
             if (map.HexArray[row, col].TFTerrain == Terrain.Green)
             {
                 isGreenPlanet = true;
@@ -47,19 +48,20 @@ namespace GaiaCore.Gaia
             else
             {
                 transNumNeed = Math.Min(7 - Math.Abs(map.HexArray[row, col].OGTerrain - OGTerrain), Math.Abs(map.HexArray[row, col].OGTerrain - OGTerrain));
-                if (Math.Max((transNumNeed - TerraFormNumber), 0) * GetTransformCost > Ore)
+                oreTF = Math.Max((transNumNeed - TerraFormNumber), 0);
+                if (oreTF * GetTransformCost > Ore)
                 {
                     log = string.Format("原始地形为{0},需要地形{1},需要矿石为{2}或者使用action行动获取铲子", map.HexArray[row, col].OGTerrain.ToString(), OGTerrain.ToString(), transNumNeed * GetTransformCost);
                     return false;
                 }
             }
-            if (!(Mines.Count >=1 && Credit >= m_MineCreditCost && Ore >= m_MineOreCost+ Math.Max((transNumNeed - TerraFormNumber), 0) * GetTransformCost))
+            if (!(Mines.Count >= 1 && Credit >= m_MineCreditCost && Ore >= m_MineOreCost + Math.Max((transNumNeed - TerraFormNumber), 0) * GetTransformCost))
             {
                 log = "资源不够";
                 return false;
             }
 
-            if (!isGaiaPlanet&&!(map.HexArray[row, col].Building == null && map.HexArray[row, col].FactionBelongTo == null))
+            if (!isGaiaPlanet && !(map.HexArray[row, col].Building == null && map.HexArray[row, col].FactionBelongTo == null))
             {
                 log = "该地点已经有人占领了";
                 return false;
@@ -74,7 +76,7 @@ namespace GaiaCore.Gaia
             //扣资源建建筑
             Action queue = () =>
             {
-                Ore -= m_MineOreCost + transNumNeed * GetTransformCost;
+                Ore -= m_MineOreCost + oreTF * GetTransformCost;
                 Credit -= m_MineCreditCost;
                 if (isGaiaPlanet)
                 {
@@ -503,6 +505,7 @@ namespace GaiaCore.Gaia
             "eco",
             "sci",
         };
+        
 
         public bool IsUseAction2 { get; internal set; }
         /// <summary>
@@ -724,9 +727,9 @@ namespace GaiaCore.Gaia
                 return false;
             }
 
-            if (list.Sum(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].Building.MagicLevel) < 7)
+            if (list.Sum(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].Building.MagicLevel) < m_allianceMagicLevel)
             {
-                log = "魔力等级不够7级";
+                log = string.Format("魔力等级不够{0}级", m_allianceMagicLevel);
                 return false;
             }
 
@@ -1021,9 +1024,9 @@ namespace GaiaCore.Gaia
                 newhex.ToList().ForEach(x => allianceQueue.Enqueue(x));
                 newhex.ToList().ForEach(x => allianceList.Add(x));
             }
-            if (allianceList.Sum(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].Building == null ? 0 : GaiaGame.Map.HexArray[x.Item1, x.Item2].Building.MagicLevel) < 7)
+            if (allianceList.Sum(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].Building == null ? 0 : GaiaGame.Map.HexArray[x.Item1, x.Item2].Building.MagicLevel) < m_allianceMagicLevel)
             {
-                log = "魔力等级不够7级";
+                log = string.Format("魔力等级不够{0}级", m_allianceMagicLevel);
                 return false;
             }
 

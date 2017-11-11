@@ -69,9 +69,10 @@ namespace GaiaCore.Gaia
             GaiaGame.MapActionMrg.AddMapActionList(ActionList, PredicateActionList);
             GaiaPlanetNumber = 0;
             IsUpgradeAdvTechTrack=false;
+            m_allianceMagicLevel = 7;
         }
 
-        internal bool FinishIntialMines()
+        public virtual bool FinishIntialMines()
         {
             if (GameConstNumber.MineCount - Mines.Count == 2)
             {
@@ -85,36 +86,40 @@ namespace GaiaCore.Gaia
 
         public FactionName FactionName { get; }
         public List<GameTiles> GameTileList { set; get; }
-        private int m_credit;
-        private int m_ore;
-        private int m_knowledge;
-        private int m_QICs;
-        private int m_powerToken1;
-        private int m_powerToken2;
-        private int m_powerToken3;
-        private int m_powerTokenGaia;
-        private int m_TransformLevel;
-        private int m_ShipLevel;
-        private int m_AILevel;
-        private int m_GaiaLevel;
-        private int m_EconomicLevel;
-        private int m_ScienceLevel;
-        private const int m_MineOreCost = 1;
-        private const int m_MineCreditCost = 2;
+        protected int m_credit;
+        protected int m_ore;
+        protected int m_knowledge;
+        protected int m_QICs;
+        protected int m_powerToken1;
+        protected int m_powerToken2;
+        protected int m_powerToken3;
+        protected int m_powerTokenGaia;
+        protected int m_TransformLevel;
+        protected int m_ShipLevel;
+        protected int m_AILevel;
+        protected int m_GaiaLevel;
+        protected int m_EconomicLevel;
+        protected int m_ScienceLevel;
+        protected int m_allianceMagicLevel;
 
-        private const int m_TradeCenterOreCost = 2;
-        private const int m_TradeCenterCreditCostCluster = 3;
-        private const int m_TradeCenterCreditCostAlone = 6;
-        private const int m_TradeCenterCount = 4;
-        private const int m_ReaserchLabOreCost = 3;
-        private const int m_ReaserchLabCreditCost = 5;
-        private const int m_ReaserchLabCount = 3;
-        private const int m_AcademyOreCost = 6;
-        private const int m_AcademyCreditCost = 6;
-        private const int m_AcademyCount = 2;
-        private const int m_StrongHoldOreCost = 4;
-        private const int m_StrongHoldCreditCost = 6;
-        private const int m_StrongHoldCount = 1;
+        protected const int m_MineOreCost = 1;
+        protected const int m_MineCreditCost = 2;
+
+        protected const int m_TradeCenterOreCost = 2;
+        protected const int m_TradeCenterCreditCostCluster = 3;
+        protected const int m_TradeCenterCreditCostAlone = 6;
+        protected const int m_TradeCenterCount = 4;
+        protected const int m_ReaserchLabOreCost = 3;
+        protected const int m_ReaserchLabCreditCost = 5;
+        protected const int m_ReaserchLabCount = 3;
+        protected const int m_AcademyOreCost = 6;
+        protected const int m_AcademyCreditCost = 6;
+        protected const int m_AcademyCount = 2;
+        protected const int m_StrongHoldOreCost = 4;
+        protected const int m_StrongHoldCreditCost = 6;
+        protected const int m_StrongHoldCount = 1;
+
+
         #region 临时变量 判断动作完成与否 需要清零
         private int m_TerraFormNumber = 0;
         private int m_TempShip = 0;
@@ -257,11 +262,16 @@ namespace GaiaCore.Gaia
         {
             if (StrongHold == null)
             {
-                PowerIncrease(4);
+                CallSHIncome();
             }
 
             PowerIncrease(GameTileList.Sum(x => x.GetPowerIncome()));
             PowerToken1 += GameTileList.Sum(x => x.GetPowerTokenIncome());
+        }
+
+        protected virtual void CallSHIncome()
+        {
+            PowerIncrease(4);
         }
 
         public virtual int PowerIncrease(int i)

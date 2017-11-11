@@ -47,12 +47,15 @@ namespace GaiaCore.Gaia
                     ret = ProcessSyntaxIntialMines(syntax, ref log);
                     if (ret)
                     {
-                        GameStatus.NextPlayerForIntial();
-                    }
-                    if (ret && FactionList.All(x => x.FinishIntialMines()))
-                    {
-                        ChangeGameStatus(Stage.SELECTROUNDBOOSTER);
-                        GameStatus.SetPlayerIndexLast();
+                        if (FactionList.All(x => x.FinishIntialMines()))
+                        {
+                            ChangeGameStatus(Stage.SELECTROUNDBOOSTER);
+                            GameStatus.SetPlayerIndexLast();
+                        }
+                        if (GameStatus.NextPlayerForIntial())
+                        {
+                            GameStatus.PlayerIndex = FactionList.FindIndex(x=>!x.FinishIntialMines());
+                        }
                     }
                     return ret;
                 case Stage.SELECTROUNDBOOSTER:
