@@ -415,7 +415,10 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
 
     </div>
 </div>
-<h1>魔力行动</h1>
+          
+          <div>
+
+   <h1>魔力行动</h1>
         @foreach (var item in Model.MapActionMrg.mapActList)
         {
             if (item.IsUsed)
@@ -426,22 +429,35 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
             {
                 <div>@item.GetType().Name @item.desc</div>
             }
-        }
-    <h1>Advance Tech</h1>
-    @foreach (var item in Model.ATTList)
+        }     
+     
+     <table>
+         <tr>
+             @foreach (var item in Model.ATTList)
     {
-        <p>@item.GetType().Name @item.desc</p>
+        <td>@item.GetType().Name @item.desc</td>
     }
+         </tr>
+                  <tr>
+                 @foreach (var item in Model.STT6List)
+    {
+        <td>@item.GetType().Name @item.desc</td>
+    }
+         </tr>
+                  <tr>
+                 @foreach (var item in Model.STT3List)
+    {
+        <td>@item.GetType().Name @item.desc</td>
+    }
+         </tr>
+         </table>
+     
+         <h1>Advance Tech</h1>
+
     <h1>Standard Tech For 6</h1>
-    @foreach (var item in Model.STT6List)
-    {
-        <p>@item.GetType().Name @item.desc</p>
-    }
+
     <h1>Standard Tech For 3</h1>
-    @foreach (var item in Model.STT3List)
-    {
-        <p>@item.GetType().Name @item.desc</p>
-    }
+
     <h1>Final Score</h1>
     @foreach (var item in Model.FSTList)
     {
@@ -457,6 +473,10 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
     {
         <p>@item</p>
     }
+     
+          </div>
+
+
 
 <script type='text/javascript' language='javascript' src='~/js/site.js'></script>
 
