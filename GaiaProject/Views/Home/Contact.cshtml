@@ -45,21 +45,33 @@
                                 <li class="list-group-item">
                                     3.缩写<br />
 
-                                    M:矿场<br />
+                                    o: 矿石<br />
+                                    c: 信用点<br />
+                                    pw: 能量<br />
+                                    q: 量子智能方块<br />
+                                    k: 知识<br />
+                                    PG: 盖亚区的能量<br />
+                                    Gaia Unit: 盖亚改造单元<br />
+                                    M: 矿场<br />
                                     TC：贸易中心<br />
                                     RL：实验室<br />
                                     AC：大学院<br />
                                     SH：星际要塞<br />
                                     G：盖亚星球<br />
-                                    M（G）：在盖亚星球的矿场<br />
+                                    M（G）：位于盖亚星球的矿场<br />
                                     ALT：联邦板块<br />
                                     STT：基础科技板块<br />
                                     ATT：高级科技板块<br />
                                     RA：研究区域<br />
                                     TF：地形改造<br />
                                     SC：星域<br />
-                                    P_TYPE:星球种类<br />
+                                    P_TYPE: 星球种类<br />
                                     VP：分数<br />
+                                    Tf Level： 地形改造等级，1级为3矿石执行1次地形改造，2级为2矿石，3级为1矿石<br />
+                                    Ship Level： 航行等级，用于建造矿场和进行盖亚改造，初始范围为1（相邻），不影响其他玩家建造或升级时获得能量与升级贸易中心减费的范围<br />
+                                    +资源缩写： 生产阶段获得相应资源<br />
+                                    资源缩写（无+号）： 一次性立即获得相应资源<br />
+
                                 </li>
                                 <li class="list-group-item">
                                     4.入口<br />
@@ -89,81 +101,64 @@
                                 <li class="list-group-item">
                                     3.build 坐标<br />
                                     例如:build F5<br />
-                                    在F5建造矿场。(若需要改造点数，会直接按改造科技等级使用矿石进行扣减)
-
+                                    在F5建造矿场。(若需要改造点数，会直接按改造科技等级使用矿石进行扣减，若航行等级不足，会直接扣减q)
                                 </li>
                                 <li class="list-group-item">
-                                    5.qicship X.build 坐标<br />
-                                    例如:qicship 1.build F5<br />
-                                    花费1Qic，增加2点临时航海，将F5改造为自己的星球并且建造矿场。X为花费Qic数量，可增加X*2临时航海距离(若需要额外改造点数，会直接按改造科技等级使用矿石进行扣减)
-
-                                </li>
-                                <li class="list-group-item">
-                                    6.action rbtX.build 坐标<br />
+                                    4.action rbtX.build 坐标<br />
                                     例如:action rbt1.build F5<br />
-                                    使用rbt1的行动，获得1点改造点数，将F5改造为自己的星球并且建造矿场。X为rbt板块编号(若需要额外改造点数，会直接按改造科技等级使用矿石进行扣减)
+                                    使用rbt1的行动，获得1点改造点数，将F5改造为自己的星球并且建造矿场。X为rbt板块编号(若需要改造点数，会直接按改造科技等级使用矿石进行扣减，若航行等级不足，会直接扣减q)
 
                                 </li>
                                 <li class="list-group-item">
-                                    7.action rbtX.qicship Y.build 坐标<br />
-                                    例如:action rbt1.qicship 1.transform 1.build F5<br />
-                                    使用rbt1的行动，获得1点改造点数，花费1Qic，增加2点临时航海，将F5改造为自己的星球并且建造矿场。X为rbt板块编号，Y为花费Qic数量(若需要额外改造点数，会直接按改造科技等级使用矿石进行扣减)
-
-                                </li>
-                                <li class="list-group-item">
-                                    8.upgrade 坐标 to 贸易中心/星际要塞<br />
+                                    5.upgrade 坐标 to 贸易中心/星际要塞<br />
                                     例如:upgrade F5 to TC<br />
                                     将位置为F5的矿场升级为贸易中心
 
                                 </li>
                                 <li class="list-group-item">
-                                    9.upgrade 坐标 to 实验室/大学院.+sttX.（advance tf|ai|eco|gaia|sci|ship）<br />
+                                    6.upgrade 坐标 to 实验室/大学院.+sttX.（advance tf|ai|eco|gaia|sci|ship）<br />
                                     例如:upgrade F5 to RL.+stt8.<br />
                                     将位置为F5的矿场升级为实验室，获得8号基础科技（若需要自选研究轨道，则需要加入advance指令）
 
                                 </li>
                                 <li class="list-group-item">
-                                    10.pass 回合助推板块<br />
+                                    7.pass 回合助推板块<br />
                                     例如:pass rbt1<br />
                                     放弃行动，并且将回合助推板块1退回
                                 </li>
                                 <li class="list-group-item">
-                                    11.gaia 位置<br />
+                                    8.gaia 位置<br />
                                     例如:gaia F5<br />
                                     在F5进行盖亚行动
+
                                 </li>
                                 <li class="list-group-item">
-                                    12.action 能量行动<br />
-                                    例如:action act1<br />
-                                    进行act1行动
-                                </li>
-                                <li class="list-group-item">
-                                    13.satellite （卫星）坐标,坐标,坐标...<br />
+                                    9.satellite （卫星）坐标,坐标,坐标...<br />
                                     例如:satellite F5,F6,G9,R2<br />
                                     在F5,F6,G9,R2放置卫星并且建立联邦
                                 </li>
                                 <li class="list-group-item">
-                                    14.alliance （星球）坐标,坐标,坐标...<br />
+                                    10.alliance （星球）坐标,坐标,坐标...<br />
                                     例如:alliance F5,F6<br />
                                     在F5,F6两个星球上不放置卫星直接建立联邦
                                 </li>
                                 <li class="list-group-item">
-                                    15.advance tf|ai|eco|gaia|sci|ship<br />
+                                    11.advance tf|ai|eco|gaia|sci|ship<br />
                                     例如:advance ai<br />
-                                    花费4点知识，提升ai研究轨道1格
+                                    花费4点知识，提升人工智能研究轨道1格
                                 </li>
                                 <li class="list-group-item">
-                                    16.action actX<br />
+                                    12.action actX（能量或量子智能方块行动）<br />
                                     例如:action act7<br />
                                     执行7号能量行动，花费3点能量，获得2点能量指示物。
                                 </li>
                                 <li class="list-group-item">
-                                    17.convert Xpw to Y<br />
+                                    13.convert X to Y<br />
                                     例如:convert 3pw to 1o<br />
                                     使用3点能量转换1点矿石。（该行动为自由行动，需搭配上述主要行动共同使用,暂不支持跨级转换，如QIC→C）
                                 </li>
                                 <li class="list-group-item">
-                                    16.burn X<br />
+                                    14.burn X<br />
                                     例如:burn 2.action act7<br />
                                     移除2号区1点能量，将2号区1点能量移动到3号区，执行7号能量行动，花费3点能量，获得2点能量指示物。（该行动为自由行动，需搭配上述主要行动共同使用）
                                 </li>
