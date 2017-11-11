@@ -308,12 +308,6 @@ namespace GaiaCore.Gaia
                         if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
                         {
                             var index = (tile as StandardTechnology).Index.GetValueOrDefault();
-                            if (tile.CanAction)
-                            {
-                                faction.PredicateActionList.Add(tile.GetType().Name.ToLower(), tile.PredicateGameTileAction);
-                                faction.ActionList.Add(tile.GetType().Name.ToLower(), tile.InvokeGameTileAction);
-                            }
-
                             faction.LimitTechAdvance = Faction.ConvertTechIndexToStr(index);
                             if (faction.IsUpgradeAdvTechTrack&&faction.IsIncreateTechValide(faction.LimitTechAdvance))
                             {
@@ -324,6 +318,11 @@ namespace GaiaCore.Gaia
                         else if (STT3List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
                         {
                             STT3List.Remove(tile as StandardTechnology);
+                        }
+                        if (tile.CanAction)
+                        {
+                            faction.PredicateActionList.Add(tile.GetType().Name.ToLower(), tile.PredicateGameTileAction);
+                            faction.ActionList.Add(tile.GetType().Name.ToLower(), tile.InvokeGameTileAction);
                         }
                     };
                     faction.ActionQueue.Enqueue(queue);
