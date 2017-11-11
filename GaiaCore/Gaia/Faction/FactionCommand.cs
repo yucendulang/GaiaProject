@@ -82,7 +82,6 @@ namespace GaiaCore.Gaia
                 map.HexArray[row, col].Building = Mines.First();
                 map.HexArray[row, col].FactionBelongTo = FactionName;
                 Mines.RemoveAt(0);
-                GaiaGame.SetLeechPowerQueue(FactionName, row, col);
                 if (!isGaiaPlanet && isGreenPlanet)
                 {
                     QICs = QICs;
@@ -93,6 +92,7 @@ namespace GaiaCore.Gaia
                     TriggerRST(typeof(RST4));
                     GaiaPlanetNumber++;
                 }
+                GaiaGame.SetLeechPowerQueue(FactionName, row, col);
                 TriggerRST(typeof(RST1));
                 TriggerRST(typeof(ATT4));
                 for (int i = 0; i < transNumNeed; i++)
@@ -455,6 +455,11 @@ namespace GaiaCore.Gaia
                 log = "获取高级科技必须退回一个低级科技";
                 return true;
             }
+            if (PlanetGet != 0)
+            {
+                log = "死星没有被放置在地图上";
+                return true;
+            }
             return false;
         }
 
@@ -477,6 +482,7 @@ namespace GaiaCore.Gaia
             TempOre = 0;
             TempQICs = 0;
             TechReturn = 0;
+            PlanetGet = 0;
         }
 
 
@@ -495,6 +501,7 @@ namespace GaiaCore.Gaia
         /// 代表需要退回的板子数量
         /// </summary>
         public int TechReturn { get; internal set; }
+        public int PlanetGet { get; internal set; }
 
         internal static string ConvertTechIndexToStr(int v)
         {
@@ -626,6 +633,52 @@ namespace GaiaCore.Gaia
 
             ActionQueue.Enqueue(action);
             m_AllianceTileGet++;
+        }
+
+        internal bool BuildBlackPlanet(int row, int col, out string log)
+        {
+            log = string.Empty;
+            var hex = GaiaGame.Map.HexArray[row, col];
+            if (hex == null)
+            {
+                log = "出界了兄弟";
+                return false;
+            }
+            if (hex.TFTerrain != Terrain.Empty)
+            {
+                log = "死星必须建立在太空中";
+                return false;
+            }
+            if (hex.Satellite.Any())
+            {
+                log = "不能建在别人的卫星上";
+                return false;
+            }
+            var distanceNeed = GaiaGame.Map.CalShipDistanceNeed(row, col, FactionName);
+
+            if (QICs * 2 < distanceNeed - GetShipDistance)
+            {
+                log = string.Format("死星距离太偏远了,需要{0}个Q来加速", (distanceNeed - GetShipDistance + 1) / 2);
+                return false;
+            }
+
+            Action action = () =>
+            {
+                hex.TFTerrain = Terrain.Black;
+                hex.Building = new Mine();
+                hex.FactionBelongTo = FactionName;
+                var surroundhex = GaiaGame.Map.GetSurroundhex(row, col, FactionName);
+                if (surroundhex.Exists(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].IsAlliance))
+                {
+                    GaiaGame.Map.HexArray[row, col].IsAlliance = true;
+                }
+                QICs -= Math.Max((distanceNeed - GetShipDistance + 1) / 2,0);
+                GaiaGame.SetLeechPowerQueue(FactionName, row, col);
+                TriggerRST(typeof(RST1));
+                TriggerRST(typeof(ATT4));
+            };
+            ActionQueue.Enqueue(action);
+            return true;
         }
 
         internal bool ForgingAllianceCheckAllWithOutSatellite(List<Tuple<int, int>> list, out string log)

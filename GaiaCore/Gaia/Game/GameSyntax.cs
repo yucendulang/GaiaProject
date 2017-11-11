@@ -93,6 +93,7 @@ namespace GaiaCore.Gaia
             ret.Add(ALTRegex);
             ret.Add(ConvertRegex);
             ret.Add(ReturnTechTilesRegex);
+            ret.Add(PlanetRegex);
             return ret;
         } 
         public static Regex burningRegex = new Regex("burn ([0-9])");
@@ -121,5 +122,7 @@ namespace GaiaCore.Gaia
         /// 退回板子的正则
         /// </summary>
         public static Regex ReturnTechTilesRegex = new Regex("-stt[1-9]{1}");
+        public static string planet = "planet";
+        public static Regex PlanetRegex = new Regex(planet + " ([a-z][0-9]{1,2})");
     }
 }

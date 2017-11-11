@@ -346,6 +346,10 @@ namespace GaiaCore.Gaia
 
                     if (faction.IsIncreateTechValide(tech))
                     {
+                        if ("ship".Equals(tech) && faction.ShipLevel == 4)
+                        {
+                            faction.PlanetGet++;
+                        }
                         Action queue = () =>
                         {
                             faction.IncreaseTech(tech);
@@ -512,6 +516,18 @@ namespace GaiaCore.Gaia
                         faction.GameTileList.Remove(tile);
                     };
                     faction.TechReturn--;
+                }
+                else if (GameFreeSyntax.PlanetRegex.IsMatch(item))
+                {
+                    faction.PlanetGet--;
+                    var match = GameFreeSyntax.PlanetRegex.Match(item);
+                    var pos = match.Groups[1].Value;
+                    ConvertPosToRowCol(pos, out int row, out int col);
+                    if (!faction.BuildBlackPlanet(row,col,out log))
+                    {
+                        return false;
+                    }
+
                 }
                 else
                 {

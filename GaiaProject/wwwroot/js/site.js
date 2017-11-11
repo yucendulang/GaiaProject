@@ -342,7 +342,9 @@ function ConvertIntToColor(i) {
         case 200:
             return "#D19FE8";
         case 300:
-            return "#FFFFFF"
+            return "#FFFFFF";
+        case 400:
+            return "#000000";
             // return "#d4d4d2";
         default:
             return "#FFFFFF";
