@@ -56,7 +56,7 @@ function DrawMap() {
 function DrawOneHex(ctx, col, row, color, isCenter, hex) {
 
     //console.log(color);
-    var loc = hexCenter(col, row)
+    var loc = hexCenter(col, row);
     //console.log(loc[0], loc[1]);
     var name = String.fromCharCode(65 + row) + col;
 
@@ -180,7 +180,7 @@ function makeHexPath(ctx, x, y, size, color,name) {
     ctx.stroke();
 
     //添加元素
-    if (color == "#D19FE8") {
+    if (color === "#D19FE8") {
         //建筑对象
         buildingObj.typename = "gaizao";
     }

@@ -64,7 +64,9 @@ namespace GaiaCore.Gaia.Tiles
             for (int i = 0; i < n; i++)
             {
                 var remove = list.RandomRemove(random);
-                result.AddRange(listALL.FindAll(x=>x.GetType()== remove.GetType()));
+                var temp = listALL.FindAll(x => x.GetType() == remove.GetType());
+                temp.ForEach(x => x.Index = i);
+                result.AddRange(temp);
             }
             return result;
         }
@@ -118,6 +120,7 @@ namespace GaiaCore.Gaia.Tiles
 
     public abstract class StandardTechnology : GameTiles
     {
+        public virtual int? Index { set; get; }
         public StandardTechnology()
         {
             this.name = this.GetType().Name;

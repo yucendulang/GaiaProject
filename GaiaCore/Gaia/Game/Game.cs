@@ -305,7 +305,7 @@ namespace GaiaCore.Gaia
                         }
                         if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
                         {
-                            var index = STT6List.FindIndex(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
+                            var index = (tile as StandardTechnology).Index.GetValueOrDefault();
                             if (tile.CanAction)
                             {
                                 faction.PredicateActionList.Add(tile.GetType().Name.ToLower(), tile.PredicateGameTileAction);

@@ -721,6 +721,25 @@ namespace GaiaCore.Gaia
                 return false;
             }
 
+            var isConnectList = new List<Tuple<int, int>>();
+            var allianceQueue = new Queue<Tuple<int, int>>();
+            allianceQueue.Enqueue(list.First());
+            while (allianceQueue.Any())
+            {
+                var hex = allianceQueue.Dequeue();
+                var surroundHex = GaiaGame.Map.GetSatellitehex(hex.Item1, hex.Item2, FactionName,new List<Tuple<int, int>>());
+                var newlist = surroundHex.Where(x => list.Exists(y => y.Item1 == x.Item1 && y.Item2 == x.Item2))
+                    .Where(x => !isConnectList.Exists(y => y.Item1 == x.Item1 && y.Item2 == x.Item2)).ToList();
+                newlist.ForEach(x => allianceQueue.Enqueue(x));
+                isConnectList.AddRange(newlist);
+            }
+
+            if (isConnectList.Count != list.Count)
+            {
+                log = "没有组成连通的地块";
+                return false;
+            }
+
             return true;
         }
 
