@@ -165,6 +165,23 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
             </h3>
         </div>
         <div class="panel-body">
+            
+            @foreach (var leech in item.LeechPowerQueue)
+            {
+                <div>From @leech.Item2 leech @leech.Item1 power</div>
+            }
+            @foreach (var it in item.GameTileList)
+            {
+                if (it.IsUsed)
+                {
+                    <s>@it.GetType().Name @it.desc</s>
+                }
+                else
+                {
+                    <div>@it.GetType().Name @it.desc</div>
+                }
+            }
+
             <table class="table" width="50%">
                 <tr>
                     <td>@item.Credit C </td>
@@ -222,21 +239,7 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
         </div>
     </div>
 
-    @foreach (var leech in item.LeechPowerQueue)
-     {
-         <div>From @leech.Item2 leech @leech.Item1 power</div>
-     }
-    @foreach (var it in item.GameTileList)
-     {
-         if (it.IsUsed)
-         {
-             <s>@it.GetType().Name @it.desc</s>
-         }
-         else
-         {
-             <div>@it.GetType().Name @it.desc</div>
-         }
-     }
+
                 @*<p>---分割线---</p>*@
 
 }
@@ -627,13 +630,20 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
                     });
 
                     $("#updateQuery").click(function () {
-                        if ($("#stt6List").val() != "") {
-                            $("#syntax").val("upgrade {0} to {1}.+{2}.".format(clickObj.position,
-                                $("#updateBuildList").val(),
-                                $("#stt6List").val()));
 
+                        var upJz = $("#updateBuildList").val();
+                        if (upJz == "SH") {
+                            $("#syntax").val("upgrade {0} to {1}.".format(clickObj.position,
+                                upJz));
                         } else {
-                            $("#syntax").val("upgrade {0} to {1}.+{2}. advance tf".format(clickObj.position, $("#updateBuildList").val(), $("#stt3List").val()));
+                            
+                            if ($("#stt6List").val() != "") {
+                                $("#syntax").val("upgrade {0} to {1}.+{2}.".format(clickObj.position,
+                                    upJz, $("#stt6List").val()));
+
+                            } else {
+                                $("#syntax").val("upgrade {0} to {1}.+{2}. advance tf".format(clickObj.position, upJz, $("#stt3List").val()));
+                            }
                         }
                         $('#myModal').modal('hide');
                     });
