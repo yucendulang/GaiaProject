@@ -8,7 +8,13 @@ namespace GaiaCore.Gaia
     {
         public Itar(GaiaGame gg) :base(FactionName.Itar, gg)
         {
+            m_ore += 1;
+            m_powerToken1 += 2;
+        }
 
+        protected override void CallAC1Income()
+        {
+            Knowledge += 3;
         }
         public override Terrain OGTerrain { get => Terrain.White; }
     }

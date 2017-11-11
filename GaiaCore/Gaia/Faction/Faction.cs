@@ -242,10 +242,15 @@ namespace GaiaCore.Gaia
             Knowledge += 4 - ResearchLabs.Count;
             if (Academy1 == null)
             {
-                Knowledge += 2;
+                CallAC1Income();
             }
 
             Knowledge += GameTileList.Sum(x => x.GetKnowledgeIncome());
+        }
+
+        protected virtual void CallAC1Income()
+        {
+            Knowledge += 2;
         }
 
         protected virtual void CalQICIncome()
