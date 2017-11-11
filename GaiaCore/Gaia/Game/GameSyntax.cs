@@ -87,7 +87,6 @@ namespace GaiaCore.Gaia
         {
             var ret = new List<Regex>();
             ret.Add(burningRegex);
-            ret.Add(QICShip);
             ret.Add(getTechTilesRegex);
             ret.Add(advTechRegex);
             ret.Add(actionRegex);

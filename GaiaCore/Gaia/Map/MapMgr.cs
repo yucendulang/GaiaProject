@@ -445,5 +445,17 @@ namespace GaiaCore.Gaia
             }
             return ret;
         }
+
+        internal int CalShipDistanceNeed(int row, int col, FactionName factionName)
+        {
+            for(int i = 1; i < m_mapHeight; i++)
+            {
+                if (CalIsBuildValidate(row, col, factionName, i))
+                {
+                    return i;
+                }
+            }
+            throw new Exception("无法结算航海距离");
+        }
     }
 }

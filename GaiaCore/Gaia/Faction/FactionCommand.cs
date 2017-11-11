@@ -31,6 +31,7 @@ namespace GaiaCore.Gaia
             if (map.HexArray[row, col].TFTerrain == Terrain.Green)
             {
                 isGreenPlanet = true;
+                TempQICs -= 1;
                 if (map.HexArray[row, col].TFTerrain == Terrain.Green
                     && map.HexArray[row, col].Building is GaiaBuilding
                     && map.HexArray[row, col].FactionBelongTo == FactionName)
@@ -62,9 +63,11 @@ namespace GaiaCore.Gaia
                 log = "该地点已经有人占领了";
                 return false;
             }
-            if (!map.CalIsBuildValidate(row, col, FactionName, GetShipDistance))
+            var distanceNeed = map.CalShipDistanceNeed(row, col, FactionName);
+
+            if (QICs * 2 < distanceNeed - GetShipDistance)
             {
-                log = "航海距离不够";
+                log = string.Format("建筑距离太偏远了,需要{0}个Q来加速", (distanceNeed - GetShipDistance + 1) / 2);
                 return false;
             }
             //扣资源建建筑
@@ -82,7 +85,8 @@ namespace GaiaCore.Gaia
                 GaiaGame.SetLeechPowerQueue(FactionName, row, col);
                 if (!isGaiaPlanet && isGreenPlanet)
                 {
-                    QICs -= 1;
+                    QICs = QICs;
+                    TempQICs = 0;
                 }
                 if (isGreenPlanet)
                 {
@@ -95,11 +99,12 @@ namespace GaiaCore.Gaia
                 {
                     TriggerRST(typeof(RST7));
                 }
-                var surroundhex = map.GetSurroundhex(row,col,FactionName);
+                var surroundhex = map.GetSurroundhex(row, col, FactionName);
                 if (surroundhex.Exists(x => map.HexArray[x.Item1, x.Item2].IsAlliance))
                 {
-                    map.HexArray[row,col].IsAlliance=true;
+                    map.HexArray[row, col].IsAlliance = true;
                 }
+                QICs -= Math.Max((distanceNeed - GetShipDistance + 1) / 2, 0);
             };
             ActionQueue.Enqueue(queue);
             TerraFormNumber = 0;
@@ -151,7 +156,7 @@ namespace GaiaCore.Gaia
                 log = "魔力豆资源不够";
                 return false;
             }
-            if (map.HexArray[row, col].TFTerrain !=Terrain.Purple)
+            if (map.HexArray[row, col].TFTerrain != Terrain.Purple)
             {
                 log = "必须为紫星";
                 return false;
@@ -161,9 +166,11 @@ namespace GaiaCore.Gaia
                 log = "该地点已经有人占领了";
                 return false;
             }
-            if (!map.CalIsBuildValidate(row, col, FactionName, GetShipDistance))
+            var distanceNeed = map.CalShipDistanceNeed(row, col, FactionName);
+
+            if (QICs * 2 < distanceNeed - GetShipDistance)
             {
-                log = "航海距离不够";
+                log = string.Format("建筑距离太偏远了,需要{0}个Q来加速", (distanceNeed - GetShipDistance + 1) / 2);
                 return false;
             }
             //扣资源建建筑
@@ -174,6 +181,7 @@ namespace GaiaCore.Gaia
                 map.HexArray[row, col].FactionBelongTo = FactionName;
                 PowerTokenGaia += GetGaiaCost();
                 Gaias.RemoveAt(0);
+                QICs -= Math.Max((distanceNeed - GetShipDistance + 1) / 2, 0);
             };
             ActionQueue.Enqueue(queue);
             TempShip = 0;
@@ -491,27 +499,6 @@ namespace GaiaCore.Gaia
         internal static string ConvertTechIndexToStr(int v)
         {
             return TechStrList[v];
-        }
-
-        internal bool SetQICShip(int num, out string log)
-        {
-            log = string.Empty;
-            if (num > QICs)
-            {
-                log = string.Format("使用{0}QICSHIP需要足够的Q", num);
-                return false;
-            }
-            
-            Action queue = () =>
-            {
-                QICs = QICs;
-                TempQICs = 0;
-            };
-            ActionQueue.Enqueue(queue);
-
-            TempQICs -= num;
-            TempShip += num*2;
-            return true;
         }
 
         internal void IncreaseTech(string tech)

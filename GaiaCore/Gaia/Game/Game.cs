@@ -248,15 +248,6 @@ namespace GaiaCore.Gaia
                         return false;
                     }
                 }
-                else if (GameFreeSyntax.QICShip.IsMatch(item))
-                {
-                    var match = GameFreeSyntax.QICShip.Match(item);
-                    var num = match.Groups[1].Value.ParseToInt(0);
-                    if (!faction.SetQICShip(num, out log))
-                    {
-                        return false;
-                    }
-                }
                 else if (GameFreeSyntax.getTechTilesRegex.IsMatch(item))
                 {
                     var techTileStr = item.Substring(1);
