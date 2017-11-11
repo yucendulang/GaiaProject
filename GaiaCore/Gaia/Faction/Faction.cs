@@ -12,20 +12,34 @@ namespace GaiaCore.Gaia
         public Faction(FactionName name, GaiaGame gg)
         {
             FactionName = name;
-            m_credit = 50;
-            m_knowledge = 20;
-            m_ore = 30;
-            m_QICs = 3;
+            if (gg.IsTestGame)
+            {
+                m_credit = 50;
+                m_knowledge = 20;
+                m_ore = 30;
+                m_QICs = 4;
+                m_powerToken3 = 30;
+                m_ShipLevel = 4;
+            }
+            else
+            {
+                m_credit = 15;
+                m_knowledge = 3;
+                m_ore = 4;
+                m_QICs = 1;
+                m_powerToken3 = 0;
+                m_ShipLevel = 0;
+            }
+            
             m_powerToken1 = 2;
             m_powerToken2 = 4;
-            m_powerToken3 = 5;
             m_powerTokenGaia = 0;
             m_TransformLevel = 0;
             m_AILevel = 0;
             m_EconomicLevel = 0;
             m_GaiaLevel = 0;
             m_ScienceLevel = 0;
-            m_ShipLevel = 4;
+
             Mines = new List<Mine>();
             for (int i = 0; i < GameConstNumber.MineCount; i++)
             {

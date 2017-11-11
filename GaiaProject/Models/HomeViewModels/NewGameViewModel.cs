@@ -26,5 +26,7 @@ namespace GaiaProject.Models.HomeViewModels
         [EmailAddress]
         [Display(Name = "玩家4")]
         public string Player4 { set; get; }
+        [Display(Name = "是否为测试局")]
+        public bool IsTestGame { set; get; }
     }
 }

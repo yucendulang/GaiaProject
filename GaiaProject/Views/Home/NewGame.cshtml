@@ -47,6 +47,16 @@
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
+            <div class="checkbox">
+                <label asp-for="IsTestGame">
+                    <input asp-for="IsTestGame" />
+                    @Html.DisplayNameFor(m => m.IsTestGame)
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
             <button type="submit" class="btn btn-default">创建</button>
         </div>
     </div>

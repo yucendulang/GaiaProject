@@ -905,6 +905,8 @@ namespace GaiaCore.Gaia
         [JsonProperty]
         public string[] Username { set; get; }
         public Dictionary<string,List<Faction>> UserDic { set; get; }
+        [JsonProperty]
+        public bool IsTestGame { get; set; }
         #endregion
     }
 }
