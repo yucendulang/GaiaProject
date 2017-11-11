@@ -131,6 +131,8 @@ namespace GaiaCore.Gaia
 
         private void TriggerRST(Type type)
         {
+            if (GaiaGame.GameStatus.stage <= Stage.SELECTROUNDBOOSTER)
+                return;
             if (GaiaGame.RSTList[(GaiaGame.GameStatus.RoundCount - 1)].GetType()==type)
             {
                 Score += GaiaGame.RSTList[(GaiaGame.GameStatus.RoundCount - 1)].GetTriggerScore;
@@ -212,7 +214,14 @@ namespace GaiaCore.Gaia
                 select g;
             return q.Count();
         }
-
+        public virtual void PowerBurnSpecialPreview(int v)
+        {
+            return;
+        }
+        public virtual void PowerBurnSpecialActual(int v)
+        {
+            return;
+        }
         private void RemovePowerToken(int n)
         {
             if (PowerToken1 + PowerToken2 + PowerToken3 <n)

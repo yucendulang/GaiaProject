@@ -12,6 +12,23 @@ namespace GaiaCore.Gaia
             m_powerToken1 += 2;
         }
 
+        protected override void CallSpecialFreeIncome()
+        {
+            m_powerToken1++;
+        }
+
+        public override void PowerBurnSpecialPreview(int v)
+        {
+            TempPowerTokenGaia += v;
+            return;
+        }
+        public override void PowerBurnSpecialActual(int v)
+        {
+            PowerTokenGaia = PowerTokenGaia;
+            TempPowerTokenGaia = 0;
+            return;
+        }
+
         protected override void CallAC1Income()
         {
             Knowledge += 3;

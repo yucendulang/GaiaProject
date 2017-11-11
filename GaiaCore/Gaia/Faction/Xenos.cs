@@ -8,7 +8,7 @@ namespace GaiaCore.Gaia
     {
         public Xenos(GaiaGame gg) : base(FactionName.Xenos, gg)
         {
-            m_GaiaLevel += 1;
+            IncreaseTech("ai");
             m_allianceMagicLevel -= 1;
         }
 

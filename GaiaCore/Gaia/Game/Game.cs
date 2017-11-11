@@ -51,6 +51,7 @@ namespace GaiaCore.Gaia
                         {
                             ChangeGameStatus(Stage.SELECTROUNDBOOSTER);
                             GameStatus.SetPlayerIndexLast();
+                            return ret;
                         }
                         if (GameStatus.NextPlayerForIntial())
                         {
@@ -483,10 +484,12 @@ namespace GaiaCore.Gaia
                         log = item + "需要" + v * 2 + "魔力";
                         return false;
                     }
+                    faction.PowerBurnSpecialPreview(v);
                     faction.TempPowerToken2 -= v * 2;
                     faction.TempPowerToken3 += v;
                     Action action = () =>
                     {
+                        faction.PowerBurnSpecialActual(v);
                         faction.PowerToken2 = faction.PowerToken2;
                         faction.PowerToken3 = faction.PowerToken3;
                         faction.TempPowerToken2 = 0;

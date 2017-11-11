@@ -323,9 +323,9 @@ namespace GaiaCore.Gaia
         }
         public bool CalIsBuildValidate(int x, int y, FactionName name, int distance)
         {
-            for (int i = Math.Max(x - distance, 0); i <= Math.Min(x + distance, m_mapHeight); i++)
+            for (int i = Math.Max(x - distance, 0); i <= Math.Min(x + distance, m_mapHeight - 1); i++)
             {
-                for (int j = Math.Max(y - distance, 0); j <= Math.Min(j + distance, m_mapWidth); j++)
+                for (int j = Math.Max(y - distance, 0); j <= Math.Min(j + distance, m_mapWidth - 1); j++)
                 {
                     if (HexArray[i, j] != null && CalTwoHexDistance(x, y, i, j) <= distance)
                     {

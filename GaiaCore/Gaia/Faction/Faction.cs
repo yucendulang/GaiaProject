@@ -130,6 +130,7 @@ namespace GaiaCore.Gaia
         public int TempPowerToken1 = 0;
         public int TempPowerToken2 = 0;
         public int TempPowerToken3 = 0;
+        public int TempPowerTokenGaia = 0;
 
         public int TempCredit = 0;
         public int TempOre = 0;
@@ -148,6 +149,12 @@ namespace GaiaCore.Gaia
             CalPowerIncome();
             CalQICIncome();
             CallTechIncome();
+            CallSpecialFreeIncome();
+        }
+
+        protected virtual void CallSpecialFreeIncome()
+        {
+            return;
         }
 
         private void CallTechIncome()
@@ -277,6 +284,7 @@ namespace GaiaCore.Gaia
         protected virtual void CallSHIncome()
         {
             PowerIncrease(4);
+            m_powerToken1++;
         }
 
         public virtual int PowerIncrease(int i)
@@ -378,7 +386,7 @@ namespace GaiaCore.Gaia
         public int TechTracAdv { get => m_TechTrachAdv; set => m_TechTrachAdv = value; }
         public int TerraFormNumber { get => m_TerraFormNumber; set => m_TerraFormNumber = value; }
         public int TempShip { get => m_TempShip; set => m_TempShip = value; }
-        public int PowerTokenGaia { get => m_powerTokenGaia; set => m_powerTokenGaia = value; }
+        public int PowerTokenGaia { get => m_powerTokenGaia + TempPowerTokenGaia; set => m_powerTokenGaia = value; }
         public int AllianceTileReGet { get => m_AllianceTileReGet; set => m_AllianceTileReGet = value; }
 
         private static List<FieldInfo> list = new List<FieldInfo>()
