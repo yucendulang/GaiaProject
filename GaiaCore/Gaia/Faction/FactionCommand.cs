@@ -95,6 +95,11 @@ namespace GaiaCore.Gaia
                 {
                     TriggerRST(typeof(RST7));
                 }
+                var surroundhex = map.GetSurroundhex(row,col,FactionName);
+                if (surroundhex.Exists(x => map.HexArray[x.Item1, x.Item2].IsAlliance))
+                {
+                    map.HexArray[row,col].IsAlliance=true;
+                }
             };
             ActionQueue.Enqueue(queue);
             TerraFormNumber = 0;

@@ -76,6 +76,7 @@ namespace GaiaCore.Gaia
                 }
             }
         }
+        [JsonProperty]
         public bool IsAlliance = false;
 
         internal void AddSatellite(FactionName factionName)
