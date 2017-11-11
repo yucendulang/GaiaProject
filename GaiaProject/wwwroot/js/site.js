@@ -270,7 +270,7 @@ function DrawSatellite(ctx, row, col, satellite) {
             ctx.restore();
             break;
         case 2:
-            var loc = hexCenter(row, col);
+            loc = hexCenter(row, col);
             loc[1] -= 20;
             loc[0] -= 4;
             ctx.save();
@@ -288,13 +288,13 @@ function DrawSatellite(ctx, row, col, satellite) {
             ctx.restore();
             break;
         case 3:
-            var loc = hexCenter(row, col);
+            loc = hexCenter(row, col);
             DrawSquare(ctx, loc[0] - 4, loc[1] - 18, satellite[0]);
             DrawSquare(ctx, loc[0] + 5, loc[1], satellite[1]);
             DrawSquare(ctx, loc[0] - 10, loc[1], satellite[2]);
             break;
         case 4:
-            var loc = hexCenter(row, col);
+            loc = hexCenter(row, col);
             DrawSquare(ctx, loc[0] - 10, loc[1] - 16, satellite[0]);
             DrawSquare(ctx, loc[0] + 5, loc[1] - 16, satellite[1]);
             DrawSquare(ctx, loc[0] + 5, loc[1], satellite[2]);

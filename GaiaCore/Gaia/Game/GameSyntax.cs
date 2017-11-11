@@ -94,6 +94,7 @@ namespace GaiaCore.Gaia
             ret.Add(ReturnTechTilesRegex);
             ret.Add(PlanetRegex);
             ret.Add(advTechRegex2);
+            ret.Add(NoAdvanceTechTrack);
             return ret;
         } 
         public static Regex burningRegex = new Regex("burn ([0-9])");
@@ -123,5 +124,6 @@ namespace GaiaCore.Gaia
         public static Regex ReturnTechTilesRegex = new Regex("-stt[1-9]{1}");
         public static string planet = "planet";
         public static Regex PlanetRegex = new Regex(planet + " ([a-z][0-9]{1,2})");
+        public static Regex NoAdvanceTechTrack = new Regex("-advance");
     }
 }

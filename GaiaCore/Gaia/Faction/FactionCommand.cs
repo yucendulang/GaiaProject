@@ -27,6 +27,11 @@ namespace GaiaCore.Gaia
                 log = "你必须在星球上进行建造";
                 return false;
             }
+            if (!isGaiaPlanet && isGreenPlanet && QICs < 1)
+            {
+                log = "至少需要一块Q";
+                return false;
+            }
 
             if (map.HexArray[row, col].TFTerrain == Terrain.Green)
             {
@@ -53,11 +58,7 @@ namespace GaiaCore.Gaia
                 log = "资源不够";
                 return false;
             }
-            if (!isGaiaPlanet&&isGreenPlanet && QICs < 1)
-            {
-                log = "至少需要一块Q";
-                return false;
-            }
+
             if (!isGaiaPlanet&&!(map.HexArray[row, col].Building == null && map.HexArray[row, col].FactionBelongTo == null))
             {
                 log = "该地点已经有人占领了";
@@ -461,9 +462,9 @@ namespace GaiaCore.Gaia
                 log = "死星没有被放置在地图上";
                 return true;
             }
-            if (TechTracAdv != 1 && TechTracAdv != 0)
+            if (TechTracAdv != 0)
             {
-                log = "科技轨走到奇怪的逻辑 联系Dulang";
+                log = "可以提升科技,请选择一项科技提升,如果不需要提升科技请使用-advance语句";
                 return true;
             }
             return false;
@@ -509,7 +510,7 @@ namespace GaiaCore.Gaia
         /// </summary>
         public int TechReturn { get; internal set; }
         public int PlanetGet { get; internal set; }
-        public bool IsUpgradeAdvTechTrack { get; private set; }
+        public bool IsUpgradeAdvTechTrack { get; set; }
 
         internal static string ConvertTechIndexToStr(int v)
         {

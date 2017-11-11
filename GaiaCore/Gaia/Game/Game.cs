@@ -309,7 +309,7 @@ namespace GaiaCore.Gaia
                         {
                             var index = (tile as StandardTechnology).Index.GetValueOrDefault();
                             faction.LimitTechAdvance = Faction.ConvertTechIndexToStr(index);
-                            if (faction.IsUpgradeAdvTechTrack&&faction.IsIncreateTechValide(faction.LimitTechAdvance))
+                            if (faction.IsUpgradeAdvTechTrack && faction.IsIncreateTechValide(faction.LimitTechAdvance))
                             {
                                 faction.IncreaseTech(faction.LimitTechAdvance);
                             }
@@ -365,6 +365,17 @@ namespace GaiaCore.Gaia
                     {
                         log = "此科技条不能继续上升";
                         return false;
+                    }
+                }
+                else if (GameFreeSyntax.NoAdvanceTechTrack.IsMatch(item))
+                {
+                    if (faction.IsUpgradeAdvTechTrack && faction.TechTracAdv == 0)
+                    {
+                        faction.IsUpgradeAdvTechTrack = false;
+                    }
+                    else
+                    {
+                        faction.TechTracAdv--;
                     }
                 }
                 else if (GameSyntax.passRegex.IsMatch(item))
@@ -520,7 +531,7 @@ namespace GaiaCore.Gaia
                     var match = GameFreeSyntax.PlanetRegex.Match(item);
                     var pos = match.Groups[1].Value;
                     ConvertPosToRowCol(pos, out int row, out int col);
-                    if (!faction.BuildBlackPlanet(row,col,out log))
+                    if (!faction.BuildBlackPlanet(row, col, out log))
                     {
                         return false;
                     }
