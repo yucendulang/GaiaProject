@@ -375,16 +375,44 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
         }*@
 
 
-        <h4>回合助推板</h4>
-        @foreach (var item in Model.RBTList)
+        <div> 
+<div class="col-md-4"> 
+  <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading">回合助推板</div>
+
+      <ul class="list-group">
+                  @foreach (var item in Model.RBTList)
         {
-            <p>@item.GetType().Name @item.desc</p>
+          <li class="list-group-item">@item.GetType().Name @item.desc</li>
+            <p></p>
         }
-        <h4>回合计分板</h4>
-        @for (int i = 0; i < Model.RSTList.Count; i++)
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-4"> 
+<div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading">回合计分板</div>
+    
+      <!-- List group -->
+      <ul class="list-group">
+                  @for (int i = 0; i < Model.RSTList.Count; i++)
         {
-            <p>Round @(i + 1) @Model.RSTList[i].desc</p>
+          <li class="list-group-item">Round @(i + 1) @Model.RSTList[i].desc</li>
+            <p></p>
         }
+       
+      </ul>
+    </div>
+    </div>
+</div>
+        
+        
+
+
+
+
     </div>
 </div>
 <h1>魔力行动</h1>
