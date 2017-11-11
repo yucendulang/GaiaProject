@@ -55,7 +55,7 @@ function DrawMap() {
 
 function DrawOneHex(ctx, col, row, color, isCenter, hex) {
 
-    //console.log("DrawHex");
+    //console.log(color);
     var loc = hexCenter(col, row)
     //console.log(loc[0], loc[1]);
     var name = String.fromCharCode(65 + row) + col;
@@ -154,7 +154,7 @@ function makeHexPath(ctx, x, y, size, color,name) {
     for (var i = 0; i < 6; i++) {
         ctx.lineTo(x, y);
 
-        
+        //保存
         switch (i) {
         case 0:
             buildingObj.xmax = x;
@@ -180,7 +180,11 @@ function makeHexPath(ctx, x, y, size, color,name) {
     ctx.stroke();
 
     //添加元素
-    //console.log(obj);
+    if (color == "#D19FE8") {
+        //建筑对象
+        buildingObj.typename = "gaizao";
+    }
+    //console.log(color);
     activeObjList.push(buildingObj);
     //activeObjList.push({ "name": name, "row": row, "col": col });
 }
@@ -322,6 +326,9 @@ function fillBuilding(ctx, name) {
 }
 
 function ConvertIntToColor(i) {
+    //if(i==window.roundColorIndex){
+    //        alert(2);   
+    //}
     switch (i) {
         case 0:
             return cycle[0];
@@ -338,9 +345,9 @@ function ConvertIntToColor(i) {
         case 6:
             return cycle[6];
         case 100:
-            return "#80F080";
+            return "#80F080";//绿色
         case 200:
-            return "#D19FE8";
+            return "#D19FE8";//紫色
         case 300:
             return "#FFFFFF"
             // return "#d4d4d2";

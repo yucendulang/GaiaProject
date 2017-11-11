@@ -1,10 +1,11 @@
-﻿@model GaiaCore.Gaia.GaiaGame
+﻿@using System.Numerics
+@model GaiaCore.Gaia.GaiaGame
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {
-<script type='text/javascript' language='javascript' src='~/js/site.js'></script>
+
 @if (@Model.GameStatus.stage==GaiaCore.Gaia.Stage.ROUNDWAITLEECHPOWER)
 {
     <p>等待以下吸魔行动</p>
@@ -72,7 +73,7 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
 }
 else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.INITIALMINES)
 {
-    <p>现在等待 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 建造初始房子 </p>
+    <p>现在等待<span style="color:  @Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()"> @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName </span>建造初始房子 </p>
 }
 else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.SELECTROUNDBOOSTER)
 {
@@ -112,26 +113,29 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
 }
 @if (User.Identity.Name.Equals(Model.GetCurrentUserName()))
 {
-<form asp-controller="Home" asp-action="ViewGame" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-    <div asp-validation-summary="All" class="text-danger"></div>
+    <form asp-controller="Home" asp-action="ViewGame" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+        <div asp-validation-summary="All" class="text-danger"></div>
 
-    <label class="col-md-1 control-label">syntax</label> 
-    <div class="col-md-4">
-        <input name="syntax" class="form-control" id="syntax"/>
-    </div>
-    <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden"/>
-    @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
-    {
-        <input name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden" />
-    }
+        <label class="col-md-1 control-label">命令</label>
+        <div class="col-md-4">
+            <input name="syntax" class="form-control" id="syntax"/>
+        </div>
+        <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden"/>
+        @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
+        {
+            <input name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden"/>
+        }
     @*<div class="col-md-1">
         <button type="button" class="btn btn-default">Preview</button>
-    </div>*@
-    <div class="col-md-1">
-        <button type="submit" class="btn btn-default">Save</button>
-    </div>
-</form>
-}
+    </div>*@<div class="col-md-1">
+            <button type="submit" class="btn btn-default">保存</button>
+        </div>
+    </form>
+
+        }
+
+
+
 <div class="row">
     <div class="col-md-7">
         <canvas id="myCanvas" width="950" height="740" style="border:1px solid #c3c3c3;">
@@ -165,6 +169,7 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
     <script type="text/javascript">
         var legendData = [];
         var seriesData = [];
+        @*var roundColorIndex = @((int)(Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain));*@
     </script>
 
     @foreach (var item in Model.FactionList)
@@ -251,8 +256,8 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
                 @*<p>---分割线---</p>*@
 
     }
-
-        <script src="~/js/echarts.min.js"></script>
+        
+    <script src="~/js/echarts.min.js"></script>
     <div id="main" style="width: 600px; height: 400px;"></div>
     <script type="text/javascript">
         // 基于准备好的dom，初始化echarts实例
@@ -285,17 +290,46 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
             ],
             yAxis: [
                 {
-                    type: 'value'
+                    interval :1,
+                    type: 'value',
+                    //min : -1,
+                    max : 6
                 }
             ],
             series: seriesData
 
         };
 
-        console.log(legendData);
-        console.log(seriesData);
+       // console.log(legendData);
+        //console.log(seriesData);
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
+
+        //下面是需要添加的方法内容  
+//点击柱状图跳转相应页面的功能，其中param.name参数为横坐标的值   
+        //var ecConfig = echarts.config;
+        //var ecConfig = require('echarts/config');
+        function eConsole(param) {  
+            if (typeof param.seriesIndex != 'undefined') {  
+                switch (param.name) {  
+                case "新浪":      
+                    window.location.href = "http://www.sina.com";  
+                    window.open("http://www.sina.com", "_blank");//在新页面打开  
+                    break;  
+                case "百度":    
+                    window.location.href = "http://www.baidu.com";  
+                    break;  
+                case "腾讯":    
+                    window.location.href = "http://www.qq.com";  
+                    break;  
+                default:  
+                    break;  
+                }  
+            }  
+            console.log(param);
+        }  
+        myChart.on("click", eConsole);  
+        //myChart.on(ecConfig.EVENT.CLICK, eConsole); 
     </script>
         @*<h4>种族</h4>
         @foreach (var item in Model.FactionList)
@@ -393,7 +427,7 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
         <p>@item</p>
     }
 
-
+<script type='text/javascript' language='javascript' src='~/js/site.js'></script>
 
     <script type="text/javascript">
         var c = document.getElementById("myCanvas");
@@ -507,8 +541,13 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
                         //alert("不能继续升级");
                     break;
                 case "GaiaBuilding":
+                    $("#syntax").val("build " + clickObj.position);
                        //alert("不能继续升级");
                     break;
+                case "gaizao":
+                        $("#syntax").val("gaia " + clickObj.position);
+                    //alert("不能继续升级");
+                    break;                  
                 default:
                         console.log("不能继续升级");
                 }
