@@ -68,7 +68,6 @@ namespace GaiaCore.Gaia
             PredicateActionList = new Dictionary<string, Func<Faction, bool>>();
             GaiaGame.MapActionMrg.AddMapActionList(ActionList, PredicateActionList);
             GaiaPlanetNumber = 0;
-            IsUpgradeAdvTechTrack=false;
             m_allianceMagicLevel = 7;
         }
 

@@ -147,14 +147,33 @@ namespace GaiaCore.Gaia
             {
                 var itar = faction as Itar;
                 //只支持+stt行动
-                if (!commandList.ToList().TrueForAll(x => GameFreeSyntax.getTechTilesRegex.IsMatch(x) || GameFreeSyntax.ReturnTechTilesRegex.IsMatch(x)))
+                if (!commandList.ToList().TrueForAll(x => GameFreeSyntax.getTechTilesRegex.IsMatch(x) 
+                || GameFreeSyntax.ReturnTechTilesRegex.IsMatch(x) 
+                || GameFreeSyntax.advTechRegex2.IsMatch(x)
+                || GameFreeSyntax.NoAdvanceTechTrack.IsMatch(x)))
                 {
                     log = "只支持拿板子行动";
+                    return false;
+                }
+                if (commandList.ToList().Sum(x => GameFreeSyntax.getTechTilesRegex.IsMatch(x) == true ? 1 : 0) != 1)
+                {
+                    log = "语句中必须包含且只包含一次拿板子行动";
+                    return false;
+                }
+                if (faction.PowerTokenGaia < GameConstNumber.ItarGaiaGetTechTileCost)
+                {
+                    log = "盖亚区至少有四点魔力豆";
                     return false;
                 }
                 itar.SpecialGetTechTile();
                 var ret = ProcessCommandWithBackup(commandList.ToArray(), faction, out log);
                 faction.ResetUnfinishAction();
+
+
+                if(faction.PowerTokenGaia < GameConstNumber.ItarGaiaGetTechTileCost)
+                {
+                    GaiaPhase();
+                }
                 return ret;
             }
             else
@@ -246,7 +265,7 @@ namespace GaiaCore.Gaia
             //非免费行动只能执行一个
             var NoneFreeActionCount=commandList.Sum(y => GameFreeSyntax.GetRegexList().Exists(x => x.IsMatch(y)) ? 0 : 1);
             if (NoneFreeActionCount == 0 && commandList.ToList().Exists(x => GameFreeSyntax.advTechRegex2.IsMatch(x))){
-                //
+                faction.IsSingleAdvTechTrack = true;
             }
             else if (NoneFreeActionCount != 1)
             {
@@ -308,11 +327,18 @@ namespace GaiaCore.Gaia
                 {
 
                     string tech;
-                    if (faction.TechTracAdv == 0 && faction.Knowledge < 4)
+                    if (faction.TechTracAdv <= 0 && !faction.IsSingleAdvTechTrack)
                     {
-                        log = "没有建立RL或者AC或者科技不足四点";
+                        log = "没有拿到科技板";
                         return false;
                     }
+
+                    if(faction.Knowledge<4&& faction.IsSingleAdvTechTrack)
+                    {
+                        log = "科技不足四点";
+                        return false;
+                    }
+
 
                     var match = GameFreeSyntax.advTechRegex2.Match(item);
                     tech = match.Groups[1].Value;
@@ -328,7 +354,7 @@ namespace GaiaCore.Gaia
                             faction.IncreaseTech(tech);
                         };
                         faction.ActionQueue.Enqueue(queue);
-                        if (faction.TechTracAdv != 0)
+                        if (faction.TechTracAdv > 0)
                         {
                             faction.TechTracAdv--;
                         }
@@ -345,14 +371,8 @@ namespace GaiaCore.Gaia
                 }
                 else if (GameFreeSyntax.NoAdvanceTechTrack.IsMatch(item))
                 {
-                    if (faction.IsUpgradeAdvTechTrack && faction.TechTracAdv == 0)
-                    {
-                        faction.IsUpgradeAdvTechTrack = false;
-                    }
-                    else
-                    {
-                        faction.TechTracAdv--;
-                    }
+                    faction.TechTracAdv--;
+                    faction.IsNoAdvTechTrack = true;
                 }
                 else if (GameSyntax.passRegex.IsMatch(item))
                 {
@@ -539,6 +559,7 @@ namespace GaiaCore.Gaia
             log = string.Empty;
             var techTileStr = item.Substring(1);
             GameTiles tile;
+            faction.TechTracAdv++;
             if (ATTList.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
             {
                 tile = ATTList.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
@@ -567,10 +588,7 @@ namespace GaiaCore.Gaia
             }
             else if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
             {
-                if (faction.IsUpgradeAdvTechTrack)
-                {
-                    faction.TechTracAdv--;
-                }
+                faction.TechTracAdv--;
                 tile = STT6List.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
             }
             else
@@ -596,7 +614,7 @@ namespace GaiaCore.Gaia
                 {
                     var index = (tile as StandardTechnology).Index.GetValueOrDefault();
                     faction.LimitTechAdvance = Faction.ConvertTechIndexToStr(index);
-                    if (faction.IsUpgradeAdvTechTrack && faction.IsIncreateTechValide(faction.LimitTechAdvance))
+                    if (faction.IsNoAdvTechTrack == false && faction.IsIncreateTechValide(faction.LimitTechAdvance))
                     {
                         faction.IncreaseTech(faction.LimitTechAdvance);
                     }

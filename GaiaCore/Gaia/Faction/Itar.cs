@@ -38,7 +38,7 @@ namespace GaiaCore.Gaia
         public void SpecialGetTechTile()
         {
             TechTilesGet++;
-            TempPowerTokenGaia = -4;
+            TempPowerTokenGaia = -GameConstNumber.ItarGaiaGetTechTileCost;
             Action action = () =>
             {
                 PowerTokenGaia = PowerTokenGaia;

@@ -363,8 +363,6 @@ namespace GaiaCore.Gaia
             if (syn == BuildingSyntax.RL|| syn == BuildingSyntax.AC1 || syn == BuildingSyntax.AC2)
             {
                 TechTilesGet++;
-                TechTracAdv++;
-                IsUpgradeAdvTechTrack=true;
             }
             //扣资源,执行操作
             Action queue = () =>
@@ -482,9 +480,19 @@ namespace GaiaCore.Gaia
                 log = "死星没有被放置在地图上";
                 return true;
             }
-            if (TechTracAdv != 0)
+            if (TechTracAdv > 0)
             {
                 log = "可以提升科技,请选择一项科技提升,如果不需要提升科技请使用-advance语句";
+                return true;
+            }
+            if (TechTracAdv <-1)
+            {
+                log = "科技升级多咯";
+                return true;
+            }
+            if (TechTracAdv == -1 && !IsNoAdvTechTrack)
+            {
+                log = "多升级了一次科技";
                 return true;
             }
             return false;
@@ -511,7 +519,8 @@ namespace GaiaCore.Gaia
             TempQICs = 0;
             TechReturn = 0;
             PlanetGet = 0;
-            IsUpgradeAdvTechTrack = false;
+            IsSingleAdvTechTrack = false;
+            IsNoAdvTechTrack = false;
         }
 
 
@@ -532,7 +541,8 @@ namespace GaiaCore.Gaia
         /// </summary>
         public int TechReturn { get; internal set; }
         public int PlanetGet { get; internal set; }
-        public bool IsUpgradeAdvTechTrack { get; set; }
+        public bool IsSingleAdvTechTrack { get; internal set; }
+        public bool IsNoAdvTechTrack { get; internal set; }
 
         internal static string ConvertTechIndexToStr(int v)
         {
