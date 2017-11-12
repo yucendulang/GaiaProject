@@ -15,6 +15,7 @@ namespace GaiaCore.Gaia
 
             log = string.Empty;
             bool isGreenPlanet = false;
+            //判断是否是Gaia改变过的绿色星球
             bool isGaiaPlanet = false;
             int transNumNeed = 0;
             if (map.HexArray[row, col].TFTerrain == Terrain.Purple)
@@ -68,7 +69,7 @@ namespace GaiaCore.Gaia
             }
             var distanceNeed = map.CalShipDistanceNeed(row, col, FactionName);
 
-            if (QICs * 2 < distanceNeed - GetShipDistance)
+            if (!isGaiaPlanet && QICs * 2 < distanceNeed - GetShipDistance)
             {
                 log = string.Format("建筑距离太偏远了,需要{0}个Q来加速", (distanceNeed - GetShipDistance + 1) / 2);
                 return false;
@@ -107,7 +108,10 @@ namespace GaiaCore.Gaia
                 {
                     map.HexArray[row, col].IsAlliance = true;
                 }
-                QICs -= Math.Max((distanceNeed - GetShipDistance + 1) / 2, 0);
+                if (!isGaiaPlanet)
+                {
+                    QICs -= Math.Max((distanceNeed - GetShipDistance + 1) / 2, 0);
+                }
             };
             ActionQueue.Enqueue(queue);
             TerraFormNumber = 0;
