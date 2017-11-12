@@ -172,6 +172,7 @@ namespace GaiaCore.Gaia
             }
             else
             {
+                //开始新回合
                 ChangeGameStatus(Stage.ROUNDINCOME);
                 FactionList.ForEach(x => x.CalIncome());
                 ChangeGameStatus(Stage.ROUNDGAIAPHASE);
@@ -359,14 +360,14 @@ namespace GaiaCore.Gaia
                     var rbtStr = match.Groups[1].Value;
                     if (!ProcessGetRoundBooster(rbtStr, faction, out log))
                     {
+                        Action action = () =>
+                        {
+                            FactionNextTurnList.Add(faction);
+                            GameStatus.SetPassPlayerIndex(FactionList.IndexOf(faction));
+                        };
+                        faction.ActionQueue.Enqueue(action);
                         return false;
                     }
-                    Action action = () =>
-                    {
-                        FactionNextTurnList.Add(faction);
-                        GameStatus.SetPassPlayerIndex(FactionList.IndexOf(faction));
-                    };
-                    faction.ActionQueue.Enqueue(action);
                 }
                 else if (GameSyntax.actionRegex.IsMatch(item))
                 {
@@ -630,10 +631,21 @@ namespace GaiaCore.Gaia
             }
             var rbtStr = command.Substring(1);
 
-            return ProcessGetRoundBooster(rbtStr, faction, out log);
+            if(ProcessGetRoundBooster(rbtStr, faction, out log))
+            {
+                foreach (var item in faction.ActionQueue)
+                {
+                    item.Invoke();
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        private bool ProcessGetRoundBooster(string rbtStr,Faction faction,out string log)
+        private bool ProcessGetRoundBooster(string rbtStr, Faction faction, out string log)
         {
             log = string.Empty;
             var rbt = RBTList.Find(x => x.GetType().Name.Equals(rbtStr, StringComparison.OrdinalIgnoreCase));
@@ -642,22 +654,28 @@ namespace GaiaCore.Gaia
                 log = string.Format("{0}板子不存在", rbtStr);
                 return false;
             }
-            if(faction.GameTileList.Exists(x=>x is RoundBooster))
+            Action action = () =>
             {
-                var ret = faction.GameTileList.Find(x => x is RoundBooster) as RoundBooster;
-                RBTList.Add(ret);
-                faction.GameTileList.Remove(ret);
-                ret.IsUsed = false; ;
-                faction.PredicateActionList.Remove(ret.GetType().Name.ToLower());
-                faction.ActionList.Remove(ret.GetType().Name.ToLower());
-            }
-            faction.GameTileList.Add(rbt);
-            if (rbt.CanAction)
-            {
-                faction.PredicateActionList.Add(rbt.GetType().Name.ToLower(), rbt.PredicateGameTileAction);
-                faction.ActionList.Add(rbt.GetType().Name.ToLower(), rbt.InvokeGameTileAction);
-            }
-            RBTList.Remove(rbt);
+            //回合结束计分
+                faction.GameTileList.ForEach(y => faction.Score += y.GetTurnEndScore(faction));
+                if (faction.GameTileList.Exists(x => x is RoundBooster))
+                {
+                    var ret = faction.GameTileList.Find(x => x is RoundBooster) as RoundBooster;
+                    RBTList.Add(ret);
+                    faction.GameTileList.Remove(ret);
+                    ret.IsUsed = false; ;
+                    faction.PredicateActionList.Remove(ret.GetType().Name.ToLower());
+                    faction.ActionList.Remove(ret.GetType().Name.ToLower());
+                }
+                faction.GameTileList.Add(rbt);
+                if (rbt.CanAction)
+                {
+                    faction.PredicateActionList.Add(rbt.GetType().Name.ToLower(), rbt.PredicateGameTileAction);
+                    faction.ActionList.Add(rbt.GetType().Name.ToLower(), rbt.InvokeGameTileAction);
+                }
+                RBTList.Remove(rbt);
+            };
+            faction.ActionQueue.Enqueue(action);
             return true;
         }
 
