@@ -794,8 +794,8 @@ namespace GaiaCore.Gaia
                     
                     if (!FactionList.Exists(x => x.FactionName == result))
                     {
-
                         SetupFaction(user,result);
+                        GameStatus.NextPlayer();
                     }
                     else
                     {
