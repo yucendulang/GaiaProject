@@ -369,11 +369,11 @@ namespace GaiaCore.Gaia
                 {
                     return 3;
                 }
-                else if (m_TransformLevel == 2 | m_TransformLevel == 3)
+                else if (m_TransformLevel == 2)
                 {
                     return 2;
                 }
-                else if (m_TransformLevel == 4 | m_TransformLevel == 5)
+                else if (m_TransformLevel == 3 | m_TransformLevel == 4 | m_TransformLevel == 5)
                 {
                     return 1;
                 }
