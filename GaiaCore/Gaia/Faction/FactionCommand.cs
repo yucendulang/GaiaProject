@@ -612,6 +612,9 @@ namespace GaiaCore.Gaia
                     }else if (m_EconomicLevel == 5)
                     {
                         GameTileList.Find(x => x is AllianceTile && x.IsUsed == false).IsUsed = true;
+                        Ore = +3;
+                        Credit = +6;
+                        PowerIncrease(6);
                     }
                     break;
                 case "gaia":
@@ -648,6 +651,7 @@ namespace GaiaCore.Gaia
                     else if (m_ScienceLevel == 5)
                     {
                         GameTileList.Find(x => x is AllianceTile && x.IsUsed == false).IsUsed = true;
+                        Knowledge += 9;
                     }
                     break;
                 case "ship":
@@ -664,7 +668,7 @@ namespace GaiaCore.Gaia
                     else if (m_AILevel == 5)
                     {
                         GameTileList.Find(x => x is AllianceTile && x.IsUsed == false).IsUsed = true;
-                        throw new NotImplementedException("黑星科技没有完成");
+                        //throw new NotImplementedException("黑星科技没有完成");
                     }
                     break;
                 default:

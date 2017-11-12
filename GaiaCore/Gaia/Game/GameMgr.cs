@@ -71,7 +71,10 @@ namespace GaiaCore.Gaia
             }
             else
             {
-                var result = GetAllGame(userName).ToList().Find(x => GameMgr.GetGameByName(x).GetCurrentUserName().Equals(userName));
+                var result = GetAllGame(userName).ToList().Find(x => {
+                    var gg = GetGameByName(x);
+                    return gg.UserDic.Count > 1 && gg.GetCurrentUserName().Equals(userName);
+                });
                 return result;
             }
         }

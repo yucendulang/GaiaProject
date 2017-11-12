@@ -733,6 +733,7 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
         setTimeout('GetNextGame()', 10000); //指定1秒刷新一次
         $("#isMyTurn").hide();
         $("p#username").hide();
+
         function GetNextGame() {
             if ($("#isMyTurn").text().indexOf("True") == -1) {
                 $.post("/home/GetNextGame",
