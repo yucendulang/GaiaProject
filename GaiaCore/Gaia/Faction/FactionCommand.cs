@@ -94,6 +94,7 @@ namespace GaiaCore.Gaia
                 if (isGreenPlanet)
                 {
                     TriggerRST(typeof(RST4));
+                    TriggerRST(typeof(STT2));
                     GaiaPlanetNumber++;
                 }
                 GaiaGame.SetLeechPowerQueue(FactionName, row, col);
@@ -503,6 +504,7 @@ namespace GaiaCore.Gaia
             TempPowerToken1 = 0;
             TempPowerToken2 = 0;
             TempPowerToken3 = 0;
+            TempPowerTokenGaia = 0;
             TempCredit = 0;
             TempKnowledge = 0;
             TempOre = 0;

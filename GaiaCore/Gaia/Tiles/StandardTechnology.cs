@@ -163,6 +163,8 @@ namespace GaiaCore.Gaia.Tiles
                 return "M(G) >> 3VP";
             }
         }
+
+        public override int GetTriggerScore => 3;
     }
     /// <summary>
     /// 获得7分

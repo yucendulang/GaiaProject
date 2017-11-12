@@ -360,14 +360,14 @@ namespace GaiaCore.Gaia
                     var rbtStr = match.Groups[1].Value;
                     if (!ProcessGetRoundBooster(rbtStr, faction, out log))
                     {
-                        Action action = () =>
-                        {
-                            FactionNextTurnList.Add(faction);
-                            GameStatus.SetPassPlayerIndex(FactionList.IndexOf(faction));
-                        };
-                        faction.ActionQueue.Enqueue(action);
                         return false;
                     }
+                    Action action = () =>
+                    {
+                        FactionNextTurnList.Add(faction);
+                        GameStatus.SetPassPlayerIndex(FactionList.IndexOf(faction));
+                    };
+                    faction.ActionQueue.Enqueue(action);
                 }
                 else if (GameSyntax.actionRegex.IsMatch(item))
                 {

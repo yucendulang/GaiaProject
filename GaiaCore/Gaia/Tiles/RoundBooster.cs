@@ -205,7 +205,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "pass-vp:G*4,4C";
+                return "pass-vp:G*1,4C";
             }
         }
 
@@ -215,7 +215,7 @@ namespace GaiaCore.Gaia.Tiles
         }
         public override int GetTurnEndScore(Faction faction)
         {
-            return faction.GaiaPlanetNumber * 4;
+            return faction.GaiaPlanetNumber * 1;
         }
     }
     public class RBT8 : RoundBooster
