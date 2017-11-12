@@ -82,11 +82,12 @@ namespace GaiaCore.Gaia
             Action action = () =>
             {
                 faction.PowerUse(ResourceCost);
+                IsUsed = true;
             };
             faction.ActionQueue.Enqueue(action);
             faction.TerraFormNumber+=2;
             faction.IsUseAction2=true;
-            return base.InvokeGameTileAction(faction);
+            return true;
         }
     }
 
@@ -148,10 +149,11 @@ namespace GaiaCore.Gaia
             Action action = () =>
             {
                 faction.PowerUse(ResourceCost);
+                IsUsed = true;
             };
             faction.ActionQueue.Enqueue(action);
             faction.TerraFormNumber += 1;
-            return base.InvokeGameTileAction(faction);
+            return true;
         }
     }
     public class ACT7 : MapAction

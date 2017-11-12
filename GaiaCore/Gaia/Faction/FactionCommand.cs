@@ -28,11 +28,7 @@ namespace GaiaCore.Gaia
                 log = "你必须在星球上进行建造";
                 return false;
             }
-            if (!isGaiaPlanet && isGreenPlanet && QICs < 1)
-            {
-                log = "至少需要一块Q";
-                return false;
-            }
+
             //矿石铲子
             int oreTF = 0;
             if (map.HexArray[row, col].TFTerrain == Terrain.Green)
@@ -44,6 +40,14 @@ namespace GaiaCore.Gaia
                     && map.HexArray[row, col].FactionBelongTo == FactionName)
                 {
                     isGaiaPlanet = true;
+                }
+                else
+                {
+                    if (QICs < 0)
+                    {
+                        log = "至少需要一块Q";
+                        return false;
+                    }
                 }
             }
             else
