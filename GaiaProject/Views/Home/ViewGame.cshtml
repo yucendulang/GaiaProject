@@ -79,6 +79,10 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
 {
     <p>游戏结束 @string.Join("|",@Model.FactionList.OrderBy(x=>x.Score).Select(x=>string.Format("{0}:{1}",x.FactionName,x.Score)))</p>
 }
+else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
+{
+    <p>现在等待 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 做Gaia行动 Pass跳过此行动阶段 +sttx/attx获取板子 多块板子用.间隔</p>
+}
 
 @if (Model.UserDic.ContainsKey(User.Identity.Name))
 {

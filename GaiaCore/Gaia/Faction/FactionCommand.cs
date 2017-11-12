@@ -453,9 +453,13 @@ namespace GaiaCore.Gaia
                 log = "还存在没使用的QICSHIP";
                 return true;
             }
-            if (TechTilesGet != 0)
+            if (TechTilesGet > 0)
             {
                 log = "还存在没拿取的科技版";
+                return true;
+            }else if (TechTilesGet < 0)
+            {
+                log = "板子拿多了喂！想干嘛兄弟";
                 return true;
             }
             if (m_AllianceTileGet != 0)

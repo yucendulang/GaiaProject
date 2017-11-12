@@ -11,5 +11,6 @@ namespace GaiaCore.Gaia
         public const int TradeCenterCount = 4;
         public const int ResearchLabCount = 3;
         public const int GameRoundCount = 3;
+        public const int ItarGaiaGetTechTileCost = 4;
     }
 }

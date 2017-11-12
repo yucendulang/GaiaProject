@@ -34,5 +34,17 @@ namespace GaiaCore.Gaia
             Knowledge += 3;
         }
         public override Terrain OGTerrain { get => Terrain.White; }
+
+        public void SpecialGetTechTile()
+        {
+            TechTilesGet++;
+            TempPowerTokenGaia = -4;
+            Action action = () =>
+            {
+                PowerTokenGaia = PowerTokenGaia;
+                TempPowerTokenGaia = 0;
+            };
+            ActionQueue.Enqueue(action);
+        }
     }
 }

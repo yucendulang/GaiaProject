@@ -131,6 +131,7 @@ namespace GaiaCore.Gaia
         ROUNDINCOME,
         ROUNDSTART,
         ROUNDWAITLEECHPOWER,
+        ROUNDGAIAPHASE,
         GAMEEND
     }
 }

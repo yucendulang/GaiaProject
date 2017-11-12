@@ -115,8 +115,51 @@ namespace GaiaCore.Gaia
                         return ret;
                     }
                     return false;
+                case Stage.ROUNDGAIAPHASE:
+                    ret = ProcessSyntaxGaiaPhase(syntax, ref log);
+                    if (ret)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 default:
                     return false;
+            }
+        }
+
+        private bool ProcessSyntaxGaiaPhase(string syntax, ref string log)
+        {
+            if(!ValidateSyntaxCommand(syntax, ref log, out string commmand,out Faction faction))
+            {
+                return false;
+            }
+            if (GameSpecialSyntax.PassRegex.IsMatch(commmand))
+            {
+                GaiaPhase();
+                return true;
+            }
+
+            var commandList = commmand.Split('.').Where(x => !string.IsNullOrEmpty(x));
+            if(faction is Itar)
+            {
+                var itar = faction as Itar;
+                //只支持+stt行动
+                if (!commandList.ToList().TrueForAll(x => GameFreeSyntax.getTechTilesRegex.IsMatch(x) || GameFreeSyntax.ReturnTechTilesRegex.IsMatch(x)))
+                {
+                    log = "只支持拿板子行动";
+                    return false;
+                }
+                itar.SpecialGetTechTile();
+                var ret = ProcessCommandWithBackup(commandList.ToArray(), faction, out log);
+                faction.ResetUnfinishAction();
+                return ret;
+            }
+            else
+            {
+                throw new Exception("其他种族暂时不支持Gaia阶段行动");
             }
         }
 
@@ -131,11 +174,16 @@ namespace GaiaCore.Gaia
             {
                 ChangeGameStatus(Stage.ROUNDINCOME);
                 FactionList.ForEach(x => x.CalIncome());
-                GaiaPhase();
-                GameStatus.NewRoundReset();
-                FactionList.ForEach(x => x.GameTileList.ForEach(y => y.IsUsed = false));
-                MapActionMrg.Reset();
-                ChangeGameStatus(Stage.ROUNDSTART);
+                ChangeGameStatus(Stage.ROUNDGAIAPHASE);
+                var spFaction = FactionList.Find(x => x is Itar);
+                if (spFaction != null && spFaction.PowerTokenGaia >= GameConstNumber.ItarGaiaGetTechTileCost)
+                {
+                    GameStatus.PlayerIndex = FactionList.FindIndex(x => x is Itar);
+                }
+                else
+                {
+                    GaiaPhase();
+                }
             }
         }
 
@@ -165,6 +213,10 @@ namespace GaiaCore.Gaia
                 x.PowerToken1 += x.PowerTokenGaia;
                 x.PowerTokenGaia = 0;
             });
+            GameStatus.NewRoundReset();
+            FactionList.ForEach(x => x.GameTileList.ForEach(y => y.IsUsed = false));
+            MapActionMrg.Reset();
+            ChangeGameStatus(Stage.ROUNDSTART);
         }
 
         private bool ProcessSyntaxLeechPower(string syntax, ref string log)
@@ -200,23 +252,15 @@ namespace GaiaCore.Gaia
                 log = "能且只能执行一个普通行动";
                 return false;
             }
-
-            //faction.Backup();
-            if (!ProcessCommandWithBackup(commandList.ToArray(),faction,out log))
-            {
-                faction.ResetUnfinishAction();
-                //faction.Rollback();
-                return false;
-            }
+            var ret=ProcessCommandWithBackup(commandList.ToArray(),faction,out log);
             faction.ResetUnfinishAction();
-            return true;
-
+            return ret;
         }
         
         private bool ProcessCommandWithBackup(string[] commandList,Faction faction,out string log)
         {
             log = string.Empty;
-            faction.ResetUnfinishAction();
+            //faction.ResetUnfinishAction();
 
             foreach (var itemT in commandList)
             {
@@ -254,83 +298,10 @@ namespace GaiaCore.Gaia
                 }
                 else if (GameFreeSyntax.getTechTilesRegex.IsMatch(item))
                 {
-                    var techTileStr = item.Substring(1);
-                    GameTiles tile;
-                    if (ATTList.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
+                    if(!GetTechTile(item,faction,out log))
                     {
-                        tile = ATTList.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
-                        if ((tile as AdavanceTechnology).isPicked)
-                        {
-                            log = "板子已经被拿走了";
-                            return false;
-                        }
-                        var index = ATTList.IndexOf(tile as AdavanceTechnology);
-                        var level = faction.GetTechLevelbyIndex(index);
-                        if (!(level == 4 || level == 5))
-                        {
-                            log = "拿取该高级科技版对应科技等级不够";
-                            return false;
-                        }
-                        if (!faction.GameTileList.Exists(x => x is AllianceTile && x.IsUsed == false))
-                        {
-                            log = "没有没翻面的城邦";
-                            return false;
-                        }
-                        faction.TechReturn++;
-                    }
-                    else if (STT3List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
-                    {
-                        tile = STT3List.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
-                    }
-                    else if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
-                    {
-                        if (faction.IsUpgradeAdvTechTrack)
-                        {
-                            faction.TechTracAdv--;
-                        }
-                        tile = STT6List.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
-                    }
-                    else
-                    {
-                        log = string.Format("{0}这块板子不存在", techTileStr);
                         return false;
                     }
-                    if (faction.GameTileList.Exists(x => x.GetType().Name.Equals(tile.GetType().Name)))
-                    {
-                        log = string.Format("玩家已经获得该板块{0}", tile.GetType().Name);
-                        return false;
-                    }
-                    Action queue = () =>
-                    {
-                        faction.GameTileList.Add(tile);
-                        tile.OneTimeAction(faction);
-                        if (ATTList.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
-                        {
-                            (tile as AdavanceTechnology).isPicked = true;
-                            faction.GameTileList.Find(x => x is AllianceTile && x.IsUsed == false).IsUsed = true;
-                        }
-                        if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
-                        {
-                            var index = (tile as StandardTechnology).Index.GetValueOrDefault();
-                            faction.LimitTechAdvance = Faction.ConvertTechIndexToStr(index);
-                            if (faction.IsUpgradeAdvTechTrack && faction.IsIncreateTechValide(faction.LimitTechAdvance))
-                            {
-                                faction.IncreaseTech(faction.LimitTechAdvance);
-                            }
-                            STT6List.Remove(tile as StandardTechnology);
-                        }
-                        else if (STT3List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
-                        {
-                            STT3List.Remove(tile as StandardTechnology);
-                        }
-                        if (tile.CanAction)
-                        {
-                            faction.PredicateActionList.Add(tile.GetType().Name.ToLower(), tile.PredicateGameTileAction);
-                            faction.ActionList.Add(tile.GetType().Name.ToLower(), tile.InvokeGameTileAction);
-                        }
-                    };
-                    faction.ActionQueue.Enqueue(queue);
-                    faction.TechTilesGet--;
                 }
                 else if (GameFreeSyntax.advTechRegex2.IsMatch(item))
                 {
@@ -562,6 +533,88 @@ namespace GaiaCore.Gaia
             return true;
         }
 
+        private bool GetTechTile(string item,Faction faction,out string log)
+        {
+            log = string.Empty;
+            var techTileStr = item.Substring(1);
+            GameTiles tile;
+            if (ATTList.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
+            {
+                tile = ATTList.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
+                if ((tile as AdavanceTechnology).isPicked)
+                {
+                    log = "板子已经被拿走了";
+                    return false;
+                }
+                var index = ATTList.IndexOf(tile as AdavanceTechnology);
+                var level = faction.GetTechLevelbyIndex(index);
+                if (!(level == 4 || level == 5))
+                {
+                    log = "拿取该高级科技版对应科技等级不够";
+                    return false;
+                }
+                if (!faction.GameTileList.Exists(x => x is AllianceTile && x.IsUsed == false))
+                {
+                    log = "没有没翻面的城邦";
+                    return false;
+                }
+                faction.TechReturn++;
+            }
+            else if (STT3List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
+            {
+                tile = STT3List.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
+            }
+            else if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
+            {
+                if (faction.IsUpgradeAdvTechTrack)
+                {
+                    faction.TechTracAdv--;
+                }
+                tile = STT6List.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
+            }
+            else
+            {
+                log = string.Format("{0}这块板子不存在", techTileStr);
+                return false;
+            }
+            if (faction.GameTileList.Exists(x => x.GetType().Name.Equals(tile.GetType().Name)))
+            {
+                log = string.Format("玩家已经获得该板块{0}", tile.GetType().Name);
+                return false;
+            }
+            Action queue = () =>
+            {
+                faction.GameTileList.Add(tile);
+                tile.OneTimeAction(faction);
+                if (ATTList.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
+                {
+                    (tile as AdavanceTechnology).isPicked = true;
+                    faction.GameTileList.Find(x => x is AllianceTile && x.IsUsed == false).IsUsed = true;
+                }
+                if (STT6List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
+                {
+                    var index = (tile as StandardTechnology).Index.GetValueOrDefault();
+                    faction.LimitTechAdvance = Faction.ConvertTechIndexToStr(index);
+                    if (faction.IsUpgradeAdvTechTrack && faction.IsIncreateTechValide(faction.LimitTechAdvance))
+                    {
+                        faction.IncreaseTech(faction.LimitTechAdvance);
+                    }
+                    STT6List.Remove(tile as StandardTechnology);
+                }
+                else if (STT3List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
+                {
+                    STT3List.Remove(tile as StandardTechnology);
+                }
+                if (tile.CanAction)
+                {
+                    faction.PredicateActionList.Add(tile.GetType().Name.ToLower(), tile.PredicateGameTileAction);
+                    faction.ActionList.Add(tile.GetType().Name.ToLower(), tile.InvokeGameTileAction);
+                }
+            };
+            faction.ActionQueue.Enqueue(queue);
+            faction.TechTilesGet--;
+            return true;
+        }
 
         private bool ProcessSyntaxRoundBoosterSelect(string syntax, ref string log)
         {

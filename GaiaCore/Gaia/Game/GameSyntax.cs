@@ -126,4 +126,12 @@ namespace GaiaCore.Gaia
         public static Regex PlanetRegex = new Regex(planet + " ([a-z][0-9]{1,2})");
         public static Regex NoAdvanceTechTrack = new Regex("-advance");
     }
+
+    public static class GameSpecialSyntax
+    {
+        /// <summary>
+        /// 跳过特殊行动的语句
+        /// </summary>
+        public static Regex PassRegex = new Regex("pass");
+    }
 }
