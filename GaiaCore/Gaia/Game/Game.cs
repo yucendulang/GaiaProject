@@ -196,7 +196,7 @@ namespace GaiaCore.Gaia
                 FactionList.ForEach(x => x.CalIncome());
                 ChangeGameStatus(Stage.ROUNDGAIAPHASE);
                 var spFaction = FactionList.Find(x => x is Itar);
-                if (spFaction != null && spFaction.PowerTokenGaia >= GameConstNumber.ItarGaiaGetTechTileCost)
+                if (spFaction != null && spFaction.PowerTokenGaia >= GameConstNumber.ItarGaiaGetTechTileCost && spFaction.StrongHold == null)
                 {
                     GameStatus.PlayerIndex = FactionList.FindIndex(x => x is Itar);
                 }

@@ -389,10 +389,17 @@ namespace GaiaCore.Gaia
                 }else if (syn == BuildingSyntax.TC)
                 {
                     TriggerRST(typeof(ATT5));
+                }else if (syn == BuildingSyntax.SH)
+                {
+                    CallSpecialSHBuild();
                 }
             };
             ActionQueue.Enqueue(queue);
             return true;
+        }
+
+        protected virtual void CallSpecialSHBuild()
+        {
         }
 
         internal int GetTechLevelbyIndex(int index)
@@ -807,7 +814,8 @@ namespace GaiaCore.Gaia
                     TempPowerToken3 -= rFNum;
                     TempPowerToken1 += rFNum;
                     TempQICs += rTNum;
-                    Action action=() =>{
+                    Action action = () =>
+                    {
                         PowerToken3 = PowerToken3;
                         PowerToken1 = PowerToken1;
                         QICs = QICs;
@@ -830,7 +838,8 @@ namespace GaiaCore.Gaia
                     TempPowerToken3 -= rFNum;
                     TempPowerToken1 += rFNum;
                     TempOre += rTNum;
-                    action = () => {
+                    action = () =>
+                    {
                         PowerToken3 = PowerToken3;
                         PowerToken1 = PowerToken1;
                         Ore = Ore;
@@ -853,7 +862,8 @@ namespace GaiaCore.Gaia
                     TempPowerToken3 -= rFNum;
                     TempPowerToken1 += rFNum;
                     TempKnowledge += rTNum;
-                    action = () => {
+                    action = () =>
+                    {
                         PowerToken3 = PowerToken3;
                         PowerToken1 = PowerToken1;
                         Knowledge = Knowledge;
@@ -876,7 +886,8 @@ namespace GaiaCore.Gaia
                     TempPowerToken3 -= rFNum;
                     TempPowerToken1 += rFNum;
                     TempCredit += rTNum;
-                    action = () => {
+                    action = () =>
+                    {
                         PowerToken3 = PowerToken3;
                         PowerToken1 = PowerToken1;
                         Credit = Credit;
@@ -898,7 +909,8 @@ namespace GaiaCore.Gaia
                     }
                     TempQICs -= rFNum;
                     TempOre += rTNum;
-                    action = () => {
+                    action = () =>
+                    {
                         QICs = QICs;
                         Ore = Ore;
                         TempQICs = 0;
@@ -918,7 +930,8 @@ namespace GaiaCore.Gaia
                     }
                     TempKnowledge -= rFNum;
                     TempCredit += rTNum;
-                    action = () => {
+                    action = () =>
+                    {
                         Knowledge = Knowledge;
                         Credit = Credit;
                         TempKnowledge = 0;
@@ -938,7 +951,8 @@ namespace GaiaCore.Gaia
                     }
                     TempOre -= rFNum;
                     TempCredit += rTNum;
-                    action = () => {
+                    action = () =>
+                    {
                         Ore = Ore;
                         Credit = Credit;
                         TempOre = 0;
@@ -958,7 +972,8 @@ namespace GaiaCore.Gaia
                     }
                     TempOre -= rFNum;
                     TempPowerToken1 += rTNum;
-                    action = () => {
+                    action = () =>
+                    {
                         Ore = Ore;
                         PowerToken1 = PowerToken1;
                         TempOre = 0;
@@ -966,8 +981,51 @@ namespace GaiaCore.Gaia
                     };
                     ActionQueue.Enqueue(action);
                     break;
+                case "qc":
+                    if (rFNum != rTNum * 1)
+                    {
+                        log = "兑换比例为1：1";
+                        return false;
+                    }
+                    if (Ore < rFNum)
+                    {
+                        log = "Q不够";
+                    }
+                    TempQICs -= rFNum;
+                    TempCredit += rTNum;
+                    action = () =>
+                    {
+                        QICs = QICs;
+                        Credit = Credit;
+                        TempQICs = 0;
+                        TempCredit = 0;
+                    };
+                    ActionQueue.Enqueue(action);
+                    break;
+                case "qpwt":
+                    if (rFNum != rTNum * 1)
+                    {
+                        log = "兑换比例为1：1";
+                        return false;
+                    }
+                    if (Ore < rFNum)
+                    {
+                        log = "q不够";
+                    }
+                    TempQICs -= rFNum;
+                    TempPowerToken1 += rTNum;
+                    action = () =>
+                    {
+                        QICs = QICs;
+                        PowerToken1 = PowerToken1;
+                        TempQICs = 0;
+                        TempPowerToken1 = 0;
+                    };
+                    ActionQueue.Enqueue(action);
+                    break;
                 default:
-                    throw new Exception("不支持这种转换");
+                    log = "不支持这种转换";
+                    return false;
             }
             return true;
         }

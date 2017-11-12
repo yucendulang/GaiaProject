@@ -37,6 +37,10 @@ namespace GaiaCore.Gaia
 
         public void SpecialGetTechTile()
         {
+            if (StrongHold != null)
+            {
+                throw new Exception("无SH不能执行盖亚能力");
+            }
             TechTilesGet++;
             TempPowerTokenGaia = -GameConstNumber.ItarGaiaGetTechTileCost;
             Action action = () =>

@@ -9,7 +9,6 @@ namespace GaiaCore.Gaia
         public Xenos(GaiaGame gg) : base(FactionName.Xenos, gg)
         {
             IncreaseTech("ai");
-            m_allianceMagicLevel -= 1;
         }
 
 
@@ -19,6 +18,10 @@ namespace GaiaCore.Gaia
             m_QICs += 1;
         }
         public override Terrain OGTerrain { get => Terrain.Yellow; }
+        protected override void CallSpecialSHBuild()
+        {
+            m_allianceMagicLevel -= 1;
+        }
 
         public override bool FinishIntialMines()
         {
