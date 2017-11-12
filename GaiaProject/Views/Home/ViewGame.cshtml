@@ -56,7 +56,7 @@ else if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDSTART)
 }
 else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
 {
-    <p>现在等待 @Model.Username[Model.GameStatus.PlayerIndex] 选种族 setup xxx</p>
+    <p>现在等待 @Model.Username[Model.GameStatus.PlayerIndex] 选种族 setup xxx.Xenos Itar完成其余均是白板</p>
 
     ViewBag.enums = Enum.GetValues(typeof(GaiaCore.Gaia.FactionName)).Cast<GaiaCore.Gaia.FactionName>();
     @Html.DropDownList("enumList", new SelectList(ViewBag.enums),"--请选择种族--", new { @class = "btn dropdown-toggle form-control selectchange", @id="zhongzuList", @syntax="setup " })
@@ -90,7 +90,7 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
 {
     @foreach (var leech in fac.LeechPowerQueue)
     {
-            <form asp-controller="Home" asp-action="LeechPower" method = "post" class="form-horizontal">
+            <form asp-controller="Home" asp-action="LeechPower" asp-route-returnurl="/Home/Contact" method = "post" class="form-horizontal">
                 <div>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力</div>
                 <input name = "name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
                 <input name = "factionName" class="form-control" value="@fac.FactionName" type="hidden" />
@@ -102,6 +102,25 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
     }
 }
 }
+    <script>
+    $(document).ready(function () {
+        $("button#syn").click(function () {
+            $.post("/home/Syntax",
+                {
+                    name: $("#test1").val(),
+                    syntax: $("#syntax").val(),
+                    factionName: $("#test3").val(),
+                },
+                function (data, status) {
+                    if (data.indexOf("error") != -1) {
+                        alert(data);
+                    } else {
+                        location.reload();
+                    }     
+                });
+        });
+    });</script>
+    
 
 @if (ViewData["log"] != null)
 {
@@ -116,19 +135,15 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
         <div class="col-md-4">
             <input name="syntax" class="form-control" id="syntax"/>
         </div>
-        <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden"/>
+        <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden"/>
         @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
         {
-            <input name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden"/>
+            <input id="test3" name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden"/>
         }
-    @*<div class="col-md-1">
-        <button type="button" class="btn btn-default">Preview</button>
-    </div>*@<div class="col-md-1">
-            <button type="submit" class="btn btn-default">保存</button>
-        </div>
+        
     </form>
-
-        }
+    <button id="syn">保存</button>
+}
 
 
 
@@ -146,7 +161,7 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
     var legendData = [];
     var seriesData = [];
     @*var roundColorIndex = @((int)(Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain));*@
-</script>
+    </script>
 
 @foreach (var item in Model.FactionList)
 {

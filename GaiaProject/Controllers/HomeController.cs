@@ -129,6 +129,42 @@ namespace GaiaProject.Controllers
         }
 
         [HttpPost]
+        public string Syntax(string name, string syntax, string factionName)
+        {
+            var task = _userManager.GetUserAsync(HttpContext.User);
+            Task[] taskarray = new Task[] { task };
+            Task.WaitAll(taskarray, millisecondsTimeout: 1000);
+            if (task.Result != null)
+            {
+
+                if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(syntax))
+                {
+                    return "error:空语句";
+                }
+
+                if (!string.IsNullOrEmpty(factionName))
+                {
+                    syntax = string.Format("{0}:{1}", factionName, syntax);
+                }
+                GameMgr.GetGameByName(name).Syntax(syntax, out string log, task.Result.UserName);
+
+                if (!string.IsNullOrEmpty(log))
+                {
+                    return "error:" + log;
+                }
+                else
+                {
+                    return "ok";
+                }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "没有获取到用户名");
+                return "error:未登入用户";
+            }
+        }
+
+        [HttpPost]
         public IActionResult LeechPower(string name,FactionName factionName, int power, FactionName leechFactionName, bool isLeech)
         {
             var faction = GameMgr.GetGameByName(name).FactionList.Find(x => x.FactionName.ToString().Equals(name));
