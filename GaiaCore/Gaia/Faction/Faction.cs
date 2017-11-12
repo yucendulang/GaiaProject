@@ -365,7 +365,7 @@ namespace GaiaCore.Gaia
         {
             get
             {
-                if (m_TransformLevel == 0 | m_TransformLevel == 1)
+                if (m_TransformLevel == 0 || m_TransformLevel == 1)
                 {
                     return 3;
                 }
@@ -373,7 +373,7 @@ namespace GaiaCore.Gaia
                 {
                     return 2;
                 }
-                else if (m_TransformLevel == 3 | m_TransformLevel == 4 | m_TransformLevel == 5)
+                else if (m_TransformLevel == 3 || m_TransformLevel == 4 || m_TransformLevel == 5)
                 {
                     return 1;
                 }
