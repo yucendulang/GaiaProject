@@ -12,6 +12,11 @@ namespace GaiaCore.Gaia
         public Faction(FactionName name, GaiaGame gg)
         {
             FactionName = name;
+            if (gg == null)
+            {
+                gg=new GaiaGame(new String[]{});
+                return;
+            }
             if (gg.IsTestGame)
             {
                 m_credit = 50;
@@ -118,6 +123,16 @@ namespace GaiaCore.Gaia
         protected const int m_StrongHoldCreditCost = 6;
         protected const int m_StrongHoldCount = 1;
 
+        /// <summary>
+        /// 中文名称
+        /// </summary>
+        public string ChineseName { get; set; }
+        
+        public  string[] colorList= new string[]{ "#6bd8f3", "#f23c4d", "#ea8736", "#facd2f", "#ad5e2f", "#a3a3a3", "#d3f1f5" }; 
+        /// <summary>
+        /// 种族颜色代码
+        /// </summary>
+        public string ColorCode { get; set; }
 
         #region 临时变量 判断动作完成与否 需要清零
         private int m_TerraFormNumber = 0;

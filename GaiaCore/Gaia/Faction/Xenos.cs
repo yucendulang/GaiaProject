@@ -8,7 +8,12 @@ namespace GaiaCore.Gaia
     {
         public Xenos(GaiaGame gg) : base(FactionName.Xenos, gg)
         {
-            IncreaseTech("ai");
+            this.ChineseName = "异空族";
+
+            if (gg != null)
+            {
+                IncreaseTech("ai");
+            }
         }
 
 

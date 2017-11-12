@@ -1,131 +1,176 @@
-﻿@using System.Numerics
+﻿@using System
+@using System.Collections.Generic
+@using System.Linq
+@using System.Numerics
+@using GaiaCore.Gaia
+@using Microsoft.AspNetCore.Mvc.Rendering
 @model GaiaCore.Gaia.GaiaGame
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+    
+
+    
+
 @if (SignInManager.IsSignedIn(User))
 {
-<p id="username">@User.Identity.Name</p>
-<p id="isMyTurn">@User.Identity.Name.Equals(Model.GetCurrentUserName()).ToString()</p>
-@if (@Model.GameStatus.stage==GaiaCore.Gaia.Stage.ROUNDWAITLEECHPOWER)
-{
-    <p>等待以下吸魔行动</p>
-    foreach (var fac in Model.UserDic[User.Identity.Name])
-    {
-        foreach (var leech in fac.LeechPowerQueue)
-        {
-            <p>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力</p>
-        }
+    <div id="gameTopInfo"  style="font-size:20px">
+    @if (@Model.FactionList.Count > @Model.GameStatus.PlayerIndex)
+     {
+         <script>
+             $("#gameTopInfo").css("background-color","@Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode");
+         </script>
+         @*<div style="background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode;text-align:center">*@
     }
-}
-else if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDSTART)
-{
-    <p>现在是Round @Model.GameStatus.RoundCount,Turn @Model.GameStatus.TurnCount</p>
-    <p>现在是 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 的回合,颜色是 @Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()</p>
 
-    <!-- 模态框（Modal） -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        &times;
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel">
-                        选择要升级的建筑
-                    </h4>
-                </div>
-                <div class="modal-body">                
-                    <select class="btn dropdown-toggle form-control" id="updateBuildList">
-                    </select>
-                    <div id="sttBody">                       
-                        @Html.DropDownList("enumList", new SelectList(Model.STT6List, "name", "desc"), "--请选择科技板块(6)--", new {@class = "btn dropdown-toggle form-control", @id = "stt6List", @syntax = ".+"})                   
-                        @Html.DropDownList("enumList", new SelectList(Model.STT3List, "name", "desc"), "--请选择科技板块(3)--", new { @class = "btn dropdown-toggle form-control", @id = "stt3List", @syntax = ".+" })
-                        @Html.DropDownList("enumList", new SelectList(Model.STT3List, "name", "desc"), "--请选择升级科技--", new { @class = "btn dropdown-toggle form-control", @id = "updatekj", @syntax = ".+" })
+
+        <p id="username">@User.Identity.Name</p>
+        <p id="isMyTurn">@User.Identity.Name.Equals(Model.GetCurrentUserName()).ToString()</p>
+        @if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDWAITLEECHPOWER)
+        {
+            <p>等待以下吸魔行动</p>
+            foreach (var fac in Model.UserDic[User.Identity.Name])
+            {
+                foreach (var leech in fac.LeechPowerQueue)
+                {
+                    <p>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力</p>
+                }
+            }
+        }
+        else if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDSTART)
+        {
+            <p>现在是Round @Model.GameStatus.RoundCount,Turn @Model.GameStatus.TurnCount</p>
+                    <p>现在是 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 的回合,颜色是 @Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()</p>
+
+            <!-- 模态框（Modal） -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                        &times;
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        选择要升级的建筑
+                                    </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <select class="btn dropdown-toggle form-control" id="updateBuildList"></select>
+                                    <div id="sttBody">
+                                        @Html.DropDownList("enumList", new SelectList(Model.STT6List, "name", "desc"), "--请选择科技板块(6)--", new { @class = "btn dropdown-toggle form-control", @id = "stt6List", @syntax = ".+" })
+                                        @Html.DropDownList("enumList", new SelectList(Model.STT3List, "name", "desc"), "--请选择科技板块(3)--", new { @class = "btn dropdown-toggle form-control", @id = "stt3List", @syntax = ".+" })
+                                        @Html.DropDownList("enumList", new SelectList(Model.STT3List, "name", "desc"), "--请选择升级科技--", new { @class = "btn dropdown-toggle form-control", @id = "updatekj", @syntax = ".+" })
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+
+                                    <button type="button" class="btn btn-primary" id="updateQuery">
+                                        确定
+                                    </button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal -->
                     </div>
-
-                </div>
-                <div class="modal-footer">
-
-                    <button type="button" class="btn btn-primary" id="updateQuery">
-                        确定
-                    </button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
-    </div>
-}
-else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
-{
-    <p>现在等待 @Model.Username[Model.GameStatus.PlayerIndex] 选种族 setup xxx.Xenos Itar完成其余均是白板</p>
-
-    ViewBag.enums = Enum.GetValues(typeof(GaiaCore.Gaia.FactionName)).Cast<GaiaCore.Gaia.FactionName>();
-    @Html.DropDownList("enumList", new SelectList(ViewBag.enums),"--请选择种族--", new { @class = "btn dropdown-toggle form-control selectchange", @id="zhongzuList", @syntax="setup " })
-
-
-}
-else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.INITIALMINES)
-{
-    <p>现在等待<span style="color:  @Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()"> @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName </span>建造初始房子 </p>
-}
-else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.SELECTROUNDBOOSTER)
-{
-    <p>现在等待 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 选择回合助推板 +rbtx</p>
-
-    @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"),"--请选择回合助推板--", new { @class = "btn dropdown-toggle form-control selectchange",@id="rbtList", @syntax = "+" })
-
-
-}
-else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
-{
-    <p>游戏结束 @string.Join("|",@Model.FactionList.OrderBy(x=>x.Score).Select(x=>string.Format("{0}:{1}",x.FactionName,x.Score)))</p>
-}
-else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
-{
-    <p>现在等待 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 做Gaia行动 Pass跳过此行动阶段 +sttx/attx获取板子 多块板子用.间隔</p>
-}
-
-@if (Model.UserDic.ContainsKey(User.Identity.Name))
-{
-@foreach (var fac in Model.UserDic[User.Identity.Name])
-{
-    @foreach (var leech in fac.LeechPowerQueue)
-    {
-            <form asp-controller="Home" asp-action="LeechPower" asp-route-returnurl="/Home/Contact" method = "post" class="form-horizontal">
-                <div>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力</div>
-                <input name = "name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
-                <input name = "factionName" class="form-control" value="@fac.FactionName" type="hidden" />
-                <input name = "power" class="form-control" value="@leech.Item1" type="hidden" />
-                <input name = "leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
-                <button type = "submit" name="isLeech" class="btn btn-default" value="true">是</button>
-                <button type = "submit" name="isLeech" class="btn btn-default" value="false">否</button>
-            </form>
-    }
-}
-}
-    
-@if (ViewData["log"] != null)
-{
-    <p>@ViewData["log"]</p>
-}
-@if (User.Identity.Name.Equals(Model.GetCurrentUserName()))
-{
-    <form asp-controller="Home" asp-action="ViewGame" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-        <div asp-validation-summary="All" class="text-danger"></div>
-
-        <label class="col-md-1 control-label">命令</label>
-        <div class="col-md-4">
-            <input name="syntax" class="form-control" id="syntax"/>
-        </div>
-        <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden"/>
-        @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
-        {
-            <input id="test3" name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden"/>
         }
-        
-    </form>
-    <button id="syn">保存</button>
-}
+        else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
+        {
+            <p>现在等待 @Model.Username[Model.GameStatus.PlayerIndex] 选种族 setup xxx.Xenos Itar完成其余均是白板</p>
+
+            //ViewBag.enums = Enum.GetValues(typeof(GaiaCore.Gaia.FactionName)).Cast<GaiaCore.Gaia.FactionName>();
+            @Html.DropDownList("enumList", new SelectList(new List<Faction>() { new Lantida(null), new Terraner(null), new Ambas(null), new Taklons(null), new Firaks(null), new MadAndroid(null), new BalTak(null), new Geoden(null), new Hive(null), new HadschHalla(null), new Itar(null), new Nevla(null), new Gleen(null), new Xenos(null) }, "FactionName", "ChineseName"), "--请选择种族--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "zhongzuList", @syntax = "setup " })
+
+
+        }
+        else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.INITIALMINES)
+        {
+            <p>现在等待 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 建造初始房子 </p>
+        }
+        else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.SELECTROUNDBOOSTER)
+        {
+            <p>现在等待 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 选择回合助推板 +rbtx</p>
+
+                    @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"), "--请选择回合助推板--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "rbtList", @syntax = "+" })
+
+
+        }
+        else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
+        {
+            <p>游戏结束 @string.Join("|", @Model.FactionList.OrderBy(x => x.Score).Select(x => string.Format("{0}:{1}", x.FactionName, x.Score)))</p>
+        }
+        else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
+        {
+            <p>现在等待 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 做Gaia行动 Pass跳过此行动阶段 +sttx/attx获取板子 多块板子用.间隔</p>
+        }
+
+        @if (Model.UserDic.ContainsKey(User.Identity.Name))
+        {
+            @foreach (var fac in Model.UserDic[User.Identity.Name])
+            {
+                @foreach (var leech in fac.LeechPowerQueue)
+                {
+                    <form asp-controller="Home" asp-action="LeechPower" asp-route-returnurl="/Home/Contact" method="post" class="form-horizontal">
+                        <div>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力</div>
+                        <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
+                        <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
+                        <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
+                        <input name="leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
+                        <button type="submit" name="isLeech" class="btn btn-default" value="true">是</button>
+                        <button type="submit" name="isLeech" class="btn btn-default" value="false">否</button>
+                    </form>
+                }
+            }
+        }
+
+        @if (ViewData["log"] != null)
+        {
+            <p>@ViewData["log"]</p>
+        }
+
+
+    </div>
+
+        @if (User.Identity.Name.Equals(Model.GetCurrentUserName()))
+        {
+
+            <div class="row">
+                <form asp-controller="Home" asp-action="ViewGame" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="col-lg-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">命令</span>
+                        <input id="syntax" name="syntax" type="text" class="form-control" aria-label="Text input with multiple buttons">
+                        <div class="input-group-btn">
+                            <button  id="syn" type="button" class="btn btn-default">保存</button>
+                        </div>
+                        <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
+                        @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
+                        {
+                            <input id="test3" name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden" />
+                        }
+                    </div><!-- /.input-group -->
+                </div><!-- /.col-lg-6 -->
+                </form>
+            </div>
+
+            @*<div class="panel panel-default">
+                <div class="panel-body">
+                    <form asp-controller="Home" asp-action="ViewGame" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+
+                        <label class="col-md-1 control-label">命令</label>
+                        <div class="col-md-4">
+                            <input name="syntax" class="form-control" id="syntax" />
+                        </div>
+
+
+                    </form>
+                    <button id="syn">保存</button>
+                </div>
+            </div>*@
+        }
+
+
 
 
 
@@ -143,26 +188,32 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
     var legendData = [];
     var seriesData = [];
     @*var roundColorIndex = @((int)(Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain));*@
-    </script>
+</script>
 
 @foreach (var item in Model.FactionList)
 {
     <script type="text/javascript">
-        legendData.push('@item.FactionName');
+        legendData.push('@item.ChineseName');
         seriesData.push({
-            name: '@item.FactionName',
+            name: '@item.ChineseName',
             type: 'bar',
             data: [
                 @item.TransformLevel, @item.ShipLevel, @item.AILevel, @item.GaiaLevel,
                 @item.EconomicLevel, @item.ScienceLevel
-            ]
+            ],
+            itemStyle:{
+                normal:{
+                    color:'@item.ColorCode'
+                }
+            },
+            //color:'@item.ColorCode'
         });
 
     </script>
 
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title"><span class="badge">@item.Score VP</span> <span style="color: @item.OGTerrain.ToString()">@item.FactionName</span>
+        <div class="panel-heading" style="background-color: @item.ColorCode">
+            <h3 class="panel-title"><span class="badge">@item.Score VP</span> <span>@item.ChineseName @item.FactionName</span>
             </h3>
         </div>
         <div class="panel-body">
@@ -331,7 +382,10 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
         
         <div class="col-md-6">
             <script src="~/js/echarts.min.js"></script>
-            <div style="background: url(/images/development.png);background-size:100% 80%;">
+            @*<div style="background: url(/images/development.png);background-size:100% 80%;">
+                <div id="main" style="width: 100%; height: 400px;"></div>
+            </div>*@
+            <div >
                 <div id="main" style="width: 100%; height: 400px;"></div>
             </div>
             <script type="text/javascript">

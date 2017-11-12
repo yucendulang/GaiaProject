@@ -8,6 +8,8 @@ namespace GaiaCore.Gaia
     {
         public Hive(GaiaGame gg) :base(FactionName.Hive, gg)
         {
+            this.ChineseName = "蜂人";
+            this.ColorCode = colorList[1];
 
         }
         public override Terrain OGTerrain { get => Terrain.Red; }

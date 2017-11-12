@@ -8,6 +8,7 @@ namespace GaiaCore.Gaia
     {
         public Geoden(GaiaGame gg) :base(FactionName.Geoden,gg)
         {
+            this.ChineseName = "晶矿星人";
 
         }
         public override Terrain OGTerrain { get => Terrain.Orange; }

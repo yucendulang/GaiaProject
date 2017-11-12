@@ -8,6 +8,8 @@ namespace GaiaCore.Gaia
     {
         public MadAndroid(GaiaGame gg) :base(FactionName.MadAndroid, gg)
         {
+            this.ChineseName = "疯狂机器";
+            this.ColorCode = colorList[5];
 
         }
         public override Terrain OGTerrain { get => Terrain.Gray; }

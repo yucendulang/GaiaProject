@@ -8,6 +8,8 @@ namespace GaiaCore.Gaia
     {
         public Firaks(GaiaGame gg) :base(FactionName.Firaks, gg)
         {
+            this.ChineseName = "章鱼人";
+            this.ColorCode = colorList[5];
 
         }
         public override Terrain OGTerrain { get => Terrain.Gray; }
