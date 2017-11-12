@@ -655,10 +655,12 @@ namespace GaiaCore.Gaia
                 {
                     item.Invoke();
                 }
+                faction.ResetUnfinishAction();
                 return true;
             }
             else
             {
+                faction.ResetUnfinishAction();
                 return false;
             }
         }
