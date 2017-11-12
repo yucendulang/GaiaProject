@@ -60,8 +60,20 @@ namespace GaiaCore.Gaia
             {
                 var result=from p in m_dic where p.Value.Username.Contains(userName) select p.Key;
                 return result;
+            }   
+        }
+
+        public static string GetNextGame(string userName = null)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                return string.Empty;
             }
-            
+            else
+            {
+                var result = GetAllGame(userName).ToList().Find(x => GameMgr.GetGameByName(x).GetCurrentUserName().Equals(userName));
+                return result;
+            }
         }
 
         public static bool BackupDictionary()

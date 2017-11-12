@@ -5,7 +5,8 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-
+<p id="username">@User.Identity.Name</p>
+<p id="isMyTurn">@User.Identity.Name.Equals(Model.GetCurrentUserName()).ToString()</p>
 @if (@Model.GameStatus.stage==GaiaCore.Gaia.Stage.ROUNDWAITLEECHPOWER)
 {
     <p>等待以下吸魔行动</p>
@@ -102,26 +103,7 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
     }
 }
 }
-    <script>
-    $(document).ready(function () {
-        $("button#syn").click(function () {
-            $.post("/home/Syntax",
-                {
-                    name: $("#test1").val(),
-                    syntax: $("#syntax").val(),
-                    factionName: $("#test3").val(),
-                },
-                function (data, status) {
-                    if (data.indexOf("error") != -1) {
-                        alert(data);
-                    } else {
-                        location.reload();
-                    }     
-                });
-        });
-    });</script>
     
-
 @if (ViewData["log"] != null)
 {
     <p>@ViewData["log"]</p>
@@ -551,6 +533,7 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
     </div>
 
 
+<script type='text/javascript' language='javascript' src='~/lib/jquery/dist/jquery.min.js'></script>
 <script type='text/javascript' language='javascript' src='~/js/site.js'></script>
 
     <script type="text/javascript">
@@ -728,8 +711,49 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
         });
     </script>
 
-    }
-    else
-    {
+    <script>
+        $(document).ready(function () {
+            $("button#syn").click(function () {
+                $.post("/home/Syntax",
+                    {
+                        name: $("#test1").val(),
+                        syntax: $("#syntax").val(),
+                        factionName: $("#test3").val(),
+                    },
+                    function (data, status) {
+                        if (data.indexOf("error") != -1) {
+                            alert(data);
+                        } else {
+                            location.reload();
+                        }
+                    });
+            });
+        });
+
+        setTimeout('GetNextGame()', 10000); //指定1秒刷新一次
+        
+        function GetNextGame() {
+            if ($("#isMyTurn").text().indexOf("True") == -1) {
+                $.post("/home/GetNextGame",
+                    {
+                        name: $("p#username").text()
+                    },
+                    function (data, status) {
+                        if (data == undefined) {
+                            console.log(data);
+                        } else {
+                            window.location.href = "/home/viewgame/" + data;
+                            alert("你的回合");
+                        }
+                        
+                    });
+            }
+            setTimeout('GetNextGame()', 10000);
+        }
+    </script>
+
+}
+else
+{
     <p>没做完不好意思啊</p>
     }

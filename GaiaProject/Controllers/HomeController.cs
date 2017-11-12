@@ -173,6 +173,11 @@ namespace GaiaProject.Controllers
             GameMgr.GetGameByName(name).Syntax(syntax, out string log);
             return Redirect("/home/viewgame/" + name);
         }
+        [HttpPost]
+        public string GetNextGame(string name)
+        {
+            return GameMgr.GetNextGame(name);
+        }
 
         #region 管理工具
         public IActionResult BackupData()
