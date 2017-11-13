@@ -10,7 +10,10 @@ namespace GaiaCore.Gaia
         {
             this.ChineseName = "圣禽族";
             this.ColorCode = colorList[1];
-            IncreaseTech("eco");
+            if (gg != null)
+            {
+                IncreaseTech("eco");
+            }
         }
         public override Terrain OGTerrain { get => Terrain.Red; }
         public override void CalIncome()
