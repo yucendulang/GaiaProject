@@ -33,8 +33,6 @@ namespace GaiaCore.Gaia
         public bool ProcessSyntax(string user, string syntax, out string log)
         {
             log = string.Empty;
-            if (syntax.StartsWith("#"))
-                return true;
             syntax = syntax.ToLower();
             bool ret;
             switch (GameStatus.stage)
@@ -833,6 +831,9 @@ namespace GaiaCore.Gaia
 
         public void Syntax(string syntax, out string log, string user = "")
         {
+            log = string.Empty;
+            if (syntax.StartsWith("#"))
+                return;
             if (ProcessSyntax(user,syntax, out log))
             {
                 UserActionLog += syntax.AddEnter();
@@ -841,7 +842,7 @@ namespace GaiaCore.Gaia
             }
             else
             {
-                UserActionLog += "#"+DateTime.Now.ToString()+"#"+syntax.AddEnter();
+                UserActionLog += "##"+DateTime.Now.ToString()+"#"+syntax.AddEnter();
             }
         }
 
