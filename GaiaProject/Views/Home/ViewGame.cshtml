@@ -459,6 +459,10 @@
                         <ul class="list-group">
                             @for (int i = 0; i < Model.RSTList.Count; i++)
                             {
+                                @if (@Model.GameStatus.RoundCount == i)
+                                 {
+
+                                 }
                                 <li class="list-group-item">Round @(i + 1) @Model.RSTList[i].desc</li>
                             }
 
@@ -477,77 +481,13 @@
                
     <div class="row">
         
-        <div class="col-md-6">
+        <div class="col-md-5">
             <script src="~/js/echarts.min.js"></script>
             @*<div style="background: url(/images/development.png);background-size:100% 80%;">
                 <div id="main" style="width: 100%; height: 400px;"></div>
             </div>*@
             <div >
                 <div id="main" style="width: 100%; height: 400px;"></div>
-            </div>
-            <div style="text-align: center">    
-                <!-- 按钮触发模态框 -->
-                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModalInfo">
-                    科技奖励说明
-                </button>
-                <!-- 模态框（Modal） -->
-                <div class="modal fade" id="myModalInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" style="width: 800px;height: 800px;">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                    &times;
-                                </button>
-                                <h4 class="modal-title" id="myModalLabel">
-                                    详细
-                                </h4>
-                            </div>
-                            <div class="modal-body">			
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <td>Level</td>
-                                        <td>地形改造</td>
-                                        <td>航行</td>
-                                        <td>人工智能</td>
-                                        <td>盖亚计划</td>
-                                        <td>经济</td>
-                                        <td>科学</td>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>5(12vp)</td>
-                                        <td>ALTX</td>
-                                        <td>Ship Level 4
-                                            Lost Planet</td>
-                                        <td>4q</td>
-                                        <td>4vp+1vp*M(G)</td>
-                                        <td>3o,6c,6pw</td>
-                                        <td>9k</td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                
-                            </div>
-                            
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default center-block" data-dismiss="modal">关闭
-                                </button>
-                            </div>
-
-                        </div><!-- /.modal-content -->
-                    </div><!-- /.modal -->
-                </div>
             </div>
             <script type="text/javascript">
                 // 基于准备好的dom，初始化echarts实例
@@ -622,7 +562,7 @@
                 //myChart.on(ecConfig.EVENT.CLICK, eConsole); 
             </script>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-7">
 
 
             
@@ -659,28 +599,69 @@
                 <tbody>
                 
                 
-                <tr>
-                    <td>5(12vp)</td>
-                    <td>ALTX</td>
-                    <td>Ship Level 4
-                        Lost Planet</td>
-                    <td>4q</td>
-                    <td>4vp+1vp*M(G)</td>
-                    <td>3o,6c,6pw</td>
-                    <td>9k</td>
+                    <tr style="background-color: #c3c3c3">
+                        <td>5(12vp)</td>
+                        <td>ALTX</td>
+                        <td>
+                            Ship Level 4
+                            Lost Planet
+                        </td>
+                        <td>4q</td>
+                        <td>4vp+1vp*M(G)</td>
+                        <td>3o,6c,6pw</td>
+                        <td>9k</td>
+                    </tr>
+                    <tr style="background-color: #c3c3c3">
+                        <td>4(8vp)</td>
+                        <td>2o</td>
+                        <td>Ship Level 3</td>
+                        <td>2q</td>
+                        <td>
+                            3 Gaia Unit
+                            3pw Gaia Cost
+                        </td>
+                        <td>+2o,+4c,+4pw</td>
+                        <td>+4k</td>
+                    </tr>
+                <tr style="background-color: #c3c3c3">
+
+                    <td>3(4vp)</td>
+                    <td>Tf Level 3</td>
+                    <td>1q</td>
+                    <td>2q</td>
+                    <td>
+                        2 Gaia Unit
+                        4pw Gaia Cost
+                    </td>
+                    <td>+1o,+3c,+3pw</td>
+                    <td>+3k</td>
                 </tr>
                 <tr>
-                    <td>5(12vp)</td>
-                    <td>ALTX</td>
-                    <td>
-                        Ship Level 4
-                        Lost Planet
-                    </td>
-                    <td>4q</td>
-                    <td>4vp+1vp*M(G)</td>
-                    <td>3o,6c,6pw</td>
-                    <td>9k</td>
-                </tr>                    
+                    <td class="text-center" colspan="6">3pw</td>
+                </tr>
+                <tr style="background-color: #c3c3c3">
+
+                        <td>2</td>
+                        <td>Tf Level 2</td>
+                        <td>Ship Level 2</td>
+                        <td>1q</td>
+                        <td>3pwt</td>
+                        <td>+1o,+2c,+2pw</td>
+                        <td>+2k</td>
+                    </tr>
+                <tr style="background-color: #c3c3c3">
+
+                        <td>1</td>
+                        <td>2o</td>
+                        <td>1q</td>
+                        <td>1q</td>
+                        <td>
+                            1 Gaia Unit
+                            6pw Gaia Cost
+                        </td>
+                        <td>+2c,+1pw</td>
+                        <td>+1k</td>
+                    </tr>                   
                     
 
                 <tr>
