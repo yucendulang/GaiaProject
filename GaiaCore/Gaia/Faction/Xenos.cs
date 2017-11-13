@@ -9,6 +9,7 @@ namespace GaiaCore.Gaia
         public Xenos(GaiaGame gg) : base(FactionName.Xenos, gg)
         {
             this.ChineseName = "异空族";
+            this.ColorCode = colorList[3];
 
             if (gg != null)
             {

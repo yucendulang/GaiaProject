@@ -9,7 +9,7 @@ namespace GaiaCore.Gaia
         public Taklons(GaiaGame gg) :base(FactionName.Taklons,gg)
         {
             this.ChineseName = "利爪族";
-            this.ColorCode = colorList[2];
+            this.ColorCode = colorList[4];
 
         }
         public override Terrain OGTerrain { get => Terrain.Brown; }

@@ -9,7 +9,7 @@ namespace GaiaCore.Gaia
         public Ambas(GaiaGame gg) :base(FactionName.Ambas, gg)
         {
             this.ChineseName = "大使星人";
-            this.ColorCode = colorList[2];
+            this.ColorCode = colorList[4];
 
         }
         public override Terrain OGTerrain { get => Terrain.Brown; }
