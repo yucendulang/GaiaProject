@@ -670,7 +670,7 @@
                     </td>
                     @foreach (var item in Model.ATTList)
                     {
-                        <td>@item.desc</td>
+                        <td  title="@item.name">@item.desc</td>
                     }
                 </tr>
                 <tr>
@@ -679,7 +679,7 @@
                     </td>
                     @foreach (var item in Model.STT6ListGroup)
                     {
-                        <td>@item.desc (@item.count)</td>
+                        <td title="@item.name">@item.desc (@item.count)</td>
                     }
                 </tr>
                 <tr>
@@ -688,7 +688,7 @@
                     </td>
                     @foreach (var item in Model.STT3ListGroup)
                     {
-                        <td colspan="2" style="text-align: center">@item.desc (@item.count)</td>
+                        <td colspan="2" style="text-align: center"  title="@item.name">@item.desc (@item.count)</td>
                     }
                 </tr>
                 </tbody>
