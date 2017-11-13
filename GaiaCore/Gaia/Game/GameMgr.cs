@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Linq;
 using GaiaCore.Util;
+using System.Net.Http;
 
 namespace GaiaCore.Gaia
 {
@@ -119,15 +120,20 @@ namespace GaiaCore.Gaia
 
         public static IEnumerable<string> RestoreDictionary(string filename)
         {
-            if (string.IsNullOrEmpty(filename))
-            {
-                var d = new DirectoryInfo(BackupDataPath);
-                filename = (from p in d.EnumerateFiles() orderby p.Name descending select p.Name).FirstOrDefault() ;
-            }
-            System.Diagnostics.Debug.WriteLine("读取文件" + filename);
-            var logPath = Path.Combine(BackupDataPath, filename);
-            var logReader = File.ReadAllText(logPath);
-            var temp = JsonConvert.DeserializeObject<Dictionary<string,GaiaGame>>(logReader);
+            string logReader = GetLastestBackupData(filename);
+            return RestoreAllGames(logReader);
+        }
+
+        public static async System.Threading.Tasks.Task<IEnumerable<string>> RestoreDictionaryFromServerAsync()
+        {
+            HttpClient client = new HttpClient();
+            var logReader = await client.GetStringAsync("http://gaiaproject.chinacloudsites.cn/home/GetLastestActionLog");
+            return RestoreAllGames(logReader);
+        }
+
+        private static IEnumerable<string> RestoreAllGames(string logReader)
+        {
+            var temp = JsonConvert.DeserializeObject<Dictionary<string, GaiaGame>>(logReader);
             m_dic = new Dictionary<string, GaiaGame>();
             foreach (var item in temp)
             {
@@ -149,6 +155,23 @@ namespace GaiaCore.Gaia
                 }
             }
             return m_dic.Keys;
+        }
+        /// <summary>
+        /// 返回读取到的文件
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static string GetLastestBackupData(string filename = null)
+        {
+            if (string.IsNullOrEmpty(filename))
+            {
+                var d = new DirectoryInfo(BackupDataPath);
+                filename = (from p in d.EnumerateFiles() orderby p.Name descending select p.Name).FirstOrDefault();
+            }
+            System.Diagnostics.Debug.WriteLine("读取文件" + filename);
+            var logPath = Path.Combine(BackupDataPath, filename);
+            var logReader = File.ReadAllText(logPath);
+            return logReader;
         }
 
         public static IEnumerable<string> GetAllBackupDataName()
