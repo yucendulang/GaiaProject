@@ -533,6 +533,28 @@ namespace GaiaCore.Gaia
                     }
 
                 }
+                else if (GameFreeSyntax.AllianceTileReGexRegex.IsMatch(item))
+                {
+                    if (faction.AllianceTileReGet <= 0)
+                    {
+                        log = "没有重新计分星盟板块的资格";
+                        return false;
+                    }
+                    faction.AllianceTileReGet--;
+                    var match = GameFreeSyntax.AllianceTileReGexRegex.Match(item);
+                    var altStr = match.Groups[1].Value;
+                    var alt = faction.GameTileGet(altStr) as AllianceTile;
+                    if (alt == null)
+                    {
+                        log = string.Format("你并没有{0}星盟版", altStr);
+                        return false;
+                    }
+                    Action action = () =>
+                    {
+                        alt.OneTimeAction(faction);
+                    };
+                    faction.ActionQueue.Enqueue(action);
+                }
                 else
                 {
                     log = "语句还不支持";

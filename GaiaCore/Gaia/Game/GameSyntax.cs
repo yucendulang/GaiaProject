@@ -95,6 +95,7 @@ namespace GaiaCore.Gaia
             ret.Add(PlanetRegex);
             ret.Add(advTechRegex2);
             ret.Add(NoAdvanceTechTrack);
+            ret.Add(AllianceTileReGexRegex);
             return ret;
         } 
         public static Regex burningRegex = new Regex("burn ([0-9])");
@@ -125,6 +126,7 @@ namespace GaiaCore.Gaia
         public static string planet = "planet";
         public static Regex PlanetRegex = new Regex(planet + " ([a-z][0-9]{1,2})");
         public static Regex NoAdvanceTechTrack = new Regex("-advance");
+        public static Regex AllianceTileReGexRegex = new Regex("re (alt[0-9]{1})");
     }
 
     public static class GameSpecialSyntax

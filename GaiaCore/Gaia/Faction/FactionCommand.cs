@@ -506,6 +506,10 @@ namespace GaiaCore.Gaia
                 log = "多升级了一次科技";
                 return true;
             }
+            if (AllianceTileReGet != 0)
+            {
+                log = "选择要重新积分的城版";
+            }
             return false;
         }
 
@@ -532,6 +536,7 @@ namespace GaiaCore.Gaia
             PlanetGet = 0;
             IsSingleAdvTechTrack = false;
             IsNoAdvTechTrack = false;
+            AllianceTileReGet = 0;
         }
 
 
@@ -677,6 +682,12 @@ namespace GaiaCore.Gaia
             TriggerRST(typeof(RST6));
             TriggerRST(typeof(ATT6));
             return;
+        }
+
+        internal GameTiles GameTileGet(string str)
+        {
+            var ret= GameTileList.Find(x => x.GetType().Name.Equals(str, StringComparison.OrdinalIgnoreCase));
+            return ret;
         }
 
         internal void ForgingAllianceGetTileWithOutSatellite(List<Tuple<int, int>> list)
