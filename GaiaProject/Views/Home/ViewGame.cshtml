@@ -86,7 +86,7 @@
         }
         else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
         {
-            <p>现在等待 @Model.Username[Model.GameStatus.PlayerIndex] 选种族 setup xxx.Xenos Itar完成其余均是白板</p>
+            <p>现在等待 @Model.Username[Model.GameStatus.PlayerIndex] 选种族 setup xxx.姨塔星人 异星人 圣禽族 完成其余均是白板</p>
 
             //ViewBag.enums = Enum.GetValues(typeof(GaiaCore.Gaia.FactionName)).Cast<GaiaCore.Gaia.FactionName>();
             @Html.DropDownList("enumList", new SelectList(new List<Faction>() { new Lantida(null), new Terraner(null), new Ambas(null), new Taklons(null), new Firaks(null), new MadAndroid(null), new BalTak(null), new Geoden(null), new Hive(null), new HadschHalla(null), new Itar(null), new Nevla(null), new Gleen(null), new Xenos(null) }, "FactionName", "ChineseName"), "--请选择种族--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "zhongzuList", @syntax = "setup " })

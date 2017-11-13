@@ -816,7 +816,7 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        internal bool ConvertOneResourceToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log)
+        internal virtual bool ConvertOneResourceToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log)
         {
             log = string.Empty;
             var str = rFKind + rTKind;
