@@ -19,9 +19,13 @@
         <p><a href="/home/BackupData">备份所有游戏</a></p>
         <p><a href="/home/RestoreData">恢复所有游戏</a></p>
         <p><a href="/home/GetAllGame">获取所有游戏列表</a></p>
+        <environment names="Development">
+            <p><a href="/home/RestoreDataFromServer">从服务器恢复所有游戏</a></p>
+        </environment>
     }
 }
 else
 {
     <p>不对未注册用户开放</p>
 }
+

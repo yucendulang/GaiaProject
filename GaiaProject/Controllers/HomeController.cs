@@ -66,8 +66,8 @@ namespace GaiaProject.Controllers
                 model.Name = Guid.NewGuid().ToString();
             }
             string[] username = new string[] { model.Player1, model.Player2, model.Player3, model.Player4 };
-            GameMgr.CreateNewGame(model.Name, username, out GaiaGame result, isTestGame:model.IsTestGame);
-            
+            GameMgr.CreateNewGame(model.Name, username, out GaiaGame result, isTestGame: model.IsTestGame);
+
             ViewData["ReturnUrl"] = "/Home/ViewGame/" + model.Name;
             return Redirect("/home/viewgame/" + model.Name);
         }
@@ -113,7 +113,7 @@ namespace GaiaProject.Controllers
                 {
                     syntax = string.Format("{0}:{1}", factionName, syntax);
                 }
-                GameMgr.GetGameByName(name).Syntax( syntax, out string log, task.Result.UserName);
+                GameMgr.GetGameByName(name).Syntax(syntax, out string log, task.Result.UserName);
 
                 if (!string.IsNullOrEmpty(log))
                 {
@@ -165,13 +165,18 @@ namespace GaiaProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult LeechPower(string name,FactionName factionName, int power, FactionName leechFactionName, bool isLeech)
+        public IActionResult LeechPower(string name, FactionName factionName, int power, FactionName leechFactionName, bool isLeech)
         {
             var faction = GameMgr.GetGameByName(name).FactionList.Find(x => x.FactionName.ToString().Equals(name));
             var leech = isLeech ? "leech" : "decline";
             var syntax = string.Format("{0}:{1} {2} from {3}", factionName, leech, power, leechFactionName);
             GameMgr.GetGameByName(name).Syntax(syntax, out string log);
             return Redirect("/home/viewgame/" + name);
+        }
+
+        public string GetLastestActionLog()
+        {
+            return GameMgr.GetLastestBackupData();
         }
         [HttpPost]
         public string GetNextGame(string name)
@@ -195,6 +200,15 @@ namespace GaiaProject.Controllers
         {
             ViewData["nameList"] = string.Join(",", GameMgr.GetAllGame());
             return View();
+        }
+
+        public IActionResult RestoreDataFromServer()
+        {
+            Task<IEnumerable<string>> task = GameMgr.RestoreDictionaryFromServerAsync();
+            task.Wait();
+            var ret = task.Result;
+            ViewData["nameList"] = string.Join(",", ret);
+            return Redirect("/home/getallgame");
         }
         #endregion
     }

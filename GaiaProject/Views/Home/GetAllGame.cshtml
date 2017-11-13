@@ -1,1 +1,4 @@
-﻿<p>@ViewData["nameList"]</p>
+﻿@foreach (var item in @ViewData["nameList"].ToString().Split(','))
+{
+    <p><a href="/home/viewgame/@item">@item</a></p>
+}

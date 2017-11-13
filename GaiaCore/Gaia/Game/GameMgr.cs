@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Linq;
 using GaiaCore.Util;
+using System.Net.Http;
 
 namespace GaiaCore.Gaia
 {
@@ -34,6 +35,19 @@ namespace GaiaCore.Gaia
             }           
         }
 
+        public static void RemoveOldBackupData()
+        {
+            var d = new DirectoryInfo(BackupDataPath);
+            var filename = (from p in d.EnumerateFiles() orderby p.Name descending select p.Name).Take(5);
+            foreach (var item in d.EnumerateFiles())
+            {
+                if (!filename.Contains(item.Name))
+                {
+                    System.IO.File.Delete(System.IO.Path.Combine(BackupDataPath, item.Name));
+                }
+            }
+        }
+
         public static GaiaGame GetGameByName(string name)
         {
             if (name == null)
@@ -48,6 +62,19 @@ namespace GaiaCore.Gaia
             {
                 return null;
             }
+        }
+
+        public static bool RemoveAndBackupGame(string name)
+        {
+            JsonSerializerSettings jsetting = new JsonSerializerSettings();
+            jsetting.ContractResolver = new LimitPropsContractResolver(new string[] { "UserActionLog", "Username", "IsTestGame" });
+            var str = JsonConvert.SerializeObject(m_dic[name], Formatting.Indented, jsetting);
+            var logPath = System.IO.Path.Combine(FinishGamePath, name + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt");
+            var logWriter = System.IO.File.CreateText(logPath);
+            logWriter.Write(str);
+            logWriter.Dispose();
+            m_dic.Remove(name);
+            return true;
         }
 
         public static IEnumerable<string> GetAllGame(string userName=null)
@@ -93,15 +120,20 @@ namespace GaiaCore.Gaia
 
         public static IEnumerable<string> RestoreDictionary(string filename)
         {
-            if (string.IsNullOrEmpty(filename))
-            {
-                var d = new DirectoryInfo(BackupDataPath);
-                filename = (from p in d.EnumerateFiles() orderby p.Name descending select p.Name).FirstOrDefault() ;
-            }
-            System.Diagnostics.Debug.WriteLine("读取文件" + filename);
-            var logPath = Path.Combine(BackupDataPath, filename);
-            var logReader = File.ReadAllText(logPath);
-            var temp = JsonConvert.DeserializeObject<Dictionary<string,GaiaGame>>(logReader);
+            string logReader = GetLastestBackupData(filename);
+            return RestoreAllGames(logReader);
+        }
+
+        public static async System.Threading.Tasks.Task<IEnumerable<string>> RestoreDictionaryFromServerAsync()
+        {
+            HttpClient client = new HttpClient();
+            var logReader = await client.GetStringAsync("http://gaiaproject.chinacloudsites.cn/home/GetLastestActionLog");
+            return RestoreAllGames(logReader);
+        }
+
+        private static IEnumerable<string> RestoreAllGames(string logReader)
+        {
+            var temp = JsonConvert.DeserializeObject<Dictionary<string, GaiaGame>>(logReader);
             m_dic = new Dictionary<string, GaiaGame>();
             foreach (var item in temp)
             {
@@ -124,6 +156,23 @@ namespace GaiaCore.Gaia
             }
             return m_dic.Keys;
         }
+        /// <summary>
+        /// 返回读取到的文件
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static string GetLastestBackupData(string filename = null)
+        {
+            if (string.IsNullOrEmpty(filename))
+            {
+                var d = new DirectoryInfo(BackupDataPath);
+                filename = (from p in d.EnumerateFiles() orderby p.Name descending select p.Name).FirstOrDefault();
+            }
+            System.Diagnostics.Debug.WriteLine("读取文件" + filename);
+            var logPath = Path.Combine(BackupDataPath, filename);
+            var logReader = File.ReadAllText(logPath);
+            return logReader;
+        }
 
         public static IEnumerable<string> GetAllBackupDataName()
         {
@@ -140,6 +189,18 @@ namespace GaiaCore.Gaia
                     Directory.CreateDirectory("backupdata");
                 }
                 return System.IO.Path.Combine(Directory.GetCurrentDirectory(), "backupdata");
+            }
+        }
+
+        private static string FinishGamePath
+        {
+            get
+            {
+                if (!Directory.Exists("finishgame"))
+                {
+                    Directory.CreateDirectory("finishgame");
+                }
+                return System.IO.Path.Combine(Directory.GetCurrentDirectory(), "finishgame");
             }
         }
     }
