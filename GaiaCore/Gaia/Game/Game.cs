@@ -518,6 +518,10 @@ namespace GaiaCore.Gaia
                     Action queue = () =>
                     {
                         faction.GameTileList.Remove(tile);
+                        if(tile is STT9)
+                        {
+                            (tile as STT9).ReturnGameTile(faction);
+                        }
                     };
                     faction.TechReturn--;
                 }

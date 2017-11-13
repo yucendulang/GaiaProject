@@ -285,35 +285,45 @@ namespace GaiaCore.Gaia.Tiles
 
         public override bool OneTimeAction(Faction faction)
         {
+            return MagicLevelChange(faction, 1);
+        }
+
+        private static bool MagicLevelChange(Faction faction, int v)
+        {
             if (faction.Academy1 != null)
             {
-                faction.Academy1.MagicLevelIncrease += 1;
+                faction.Academy1.MagicLevelIncrease += v;
             }
             if (faction.Academy2 != null)
             {
-                faction.Academy2.MagicLevelIncrease += 1;
+                faction.Academy2.MagicLevelIncrease += v;
             }
             if (faction.StrongHold != null)
             {
-                faction.StrongHold.MagicLevelIncrease += 1;
+                faction.StrongHold.MagicLevelIncrease += v;
             }
 
             foreach (var item in faction.GaiaGame.Map.HexArray)
             {
-                if (item==null||item.Building == null || item.FactionBelongTo != faction.FactionName)
+                if (item == null || item.Building == null || item.FactionBelongTo != faction.FactionName)
                 {
                     continue;
                 }
                 if (item.Building is Academy)
                 {
-                    (item.Building as Academy).MagicLevelIncrease += 1;
+                    (item.Building as Academy).MagicLevelIncrease += v;
                 }
                 if (item.Building is StrongHold)
                 {
-                    (item.Building as StrongHold).MagicLevelIncrease += 1;
+                    (item.Building as StrongHold).MagicLevelIncrease += v;
                 }
             }
             return true;
+        }
+
+        public void ReturnGameTile(Faction faction)
+        {
+            MagicLevelChange(faction, -1);
         }
     }
 }
