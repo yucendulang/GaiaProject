@@ -316,7 +316,7 @@ namespace GaiaCore.Gaia
                 }
                 else if (GameFreeSyntax.getTechTilesRegex.IsMatch(item))
                 {
-                    if(!GetTechTile(item,faction,out log))
+                    if (!GetTechTile(item, faction, out log))
                     {
                         return false;
                     }
@@ -331,7 +331,7 @@ namespace GaiaCore.Gaia
                         return false;
                     }
 
-                    if(faction.Knowledge<4&& faction.IsSingleAdvTechTrack)
+                    if (faction.Knowledge < 4 && faction.IsSingleAdvTechTrack)
                     {
                         log = "科技不足四点";
                         return false;
@@ -371,6 +371,15 @@ namespace GaiaCore.Gaia
                 {
                     faction.TechTracAdv--;
                     faction.IsNoAdvTechTrack = true;
+                    if (faction.PlanetAlready)
+                    {
+                        log = "建立死星则不允许不升级科技";
+                        return false;
+                    }
+                    else if (faction.PlanetGet == 1)
+                    {
+                        faction.PlanetGet--;
+                    }
                 }
                 else if (GameSyntax.passRegex.IsMatch(item))
                 {
@@ -518,7 +527,7 @@ namespace GaiaCore.Gaia
                     Action queue = () =>
                     {
                         faction.GameTileList.Remove(tile);
-                        if(tile is STT9)
+                        if (tile is STT9)
                         {
                             (tile as STT9).ReturnGameTile(faction);
                         }
@@ -528,6 +537,7 @@ namespace GaiaCore.Gaia
                 else if (GameFreeSyntax.PlanetRegex.IsMatch(item))
                 {
                     faction.PlanetGet--;
+                    faction.PlanetAlready = true;
                     var match = GameFreeSyntax.PlanetRegex.Match(item);
                     var pos = match.Groups[1].Value;
                     ConvertPosToRowCol(pos, out int row, out int col);
@@ -614,6 +624,15 @@ namespace GaiaCore.Gaia
             {
                 faction.TechTracAdv--;
                 tile = STT6List.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
+                var index = (tile as StandardTechnology).Index.GetValueOrDefault();
+                faction.LimitTechAdvance = Faction.ConvertTechIndexToStr(index);
+                if (faction.IsIncreateTechValide(faction.LimitTechAdvance))
+                {
+                    if ("ship".Equals(faction.LimitTechAdvance) && faction.ShipLevel == 4)
+                    {
+                        faction.PlanetGet++;
+                    }
+                }
             }
             else
             {

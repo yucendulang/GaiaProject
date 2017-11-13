@@ -541,6 +541,7 @@ namespace GaiaCore.Gaia
             IsSingleAdvTechTrack = false;
             IsNoAdvTechTrack = false;
             AllianceTileReGet = 0;
+            PlanetAlready = false;
         }
 
 
@@ -563,6 +564,7 @@ namespace GaiaCore.Gaia
         public int PlanetGet { get; internal set; }
         public bool IsSingleAdvTechTrack { get; internal set; }
         public bool IsNoAdvTechTrack { get; internal set; }
+        public bool PlanetAlready { get; internal set; }
 
         internal static string ConvertTechIndexToStr(int v)
         {
