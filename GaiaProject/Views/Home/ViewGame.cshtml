@@ -207,7 +207,7 @@
             
             
             <div class="row">
-                <div class="col-lg-10  pull-left" style="padding-left:50px">
+                <div class="col-md-5" style="padding-left:50px">
                     <div class="row" id="actBody">
     
                         @foreach (var item in Model.MapActionMrg.mapActList)
@@ -221,11 +221,7 @@
                                 else
                                 {
                                     <a href="#"  style="color:green">@item.GetText()</a>
-            @*<div>@item.GetType().Name @item.desc</div>*@
                                 }
-                                @*<script>
-                $("#actConst").append('<div class="col-xs-6 col-md-2" style="height: 30px; width: 60px;">@item.GetConst()</div>')
-            </script>*@
                             </div>
                         }
                     </div>
@@ -239,40 +235,36 @@
                         }
                     </div>
                 </div>
-            </div>
-            
-            <div class="row" style="background-color: #c3c3c3">
-                未完成功能:
+                
+                <div class="col-md-5" style="background-color: #c3c3c3">
 
-                @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActList, "code", "name"), "--未完成快速行动--", new {@class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert "})
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <input type="text" class="form-control selectchange" placeholder="输入数值" syntax="burn ">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default actionGp" type="button" syntax="burn ">牺牲</button>
+                            </span>
+                        </div>
+                    </div>
+                    
 
-                <div class="col-lg-2">
-                    <div class="input-group">
-                        <input type="text" class="form-control selectchange" placeholder="输入数值" syntax="burn ">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default actionGp" type="button" syntax="burn ">牺牲</button>
-                        </span>
+                    <div class="col-md-5">
+                        @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActList, "code", "name"), "--未完成快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert " })
                     </div>
                 </div>
-
-
-
             </div>
             
+
+            
             <div class="row">
-                <div class="btn-group btn-group-lg" role="group" aria-label="Large button group" id="">
-                    <button type="button" class="btn btn-default" id="createAl">选择卫星位置</button>
-                        
-                    <button type="button" class="btn btn-default" id="createZjAl">直接建立联邦</button>
-                        
+                <div class="btn-group btn-group-lg col-md-4" role="group" aria-label="Large button group" id="">
+                    <button type="button" class="btn btn-default" id="createAl">选择卫星位置</button>                       
+                    <button type="button" class="btn btn-default" id="createZjAl">直接建立联邦</button>                      
                     <button type="button" class="btn btn-default actionGp" id="quxiaoAl">确认成立联邦</button>
-
-
                 </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-lg-2">
+                
+                
+                <div class="col-md-3">
                     <div class="input-group">
                         
                         <select class="btn dropdown-toggle form-control selectchange" id="updatekjaction" name="enumList" syntax="advance "><option value="">--请选择升级科技--</option>
@@ -289,11 +281,7 @@
                     </div>
                 </div>
 
-            </div>
-            
-
-            <div class="row">
-                <div class="col-lg-2">
+                <div class="col-md-3">
                     <div class="input-group">
                 
                         @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"), "--请选择回合助推板--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "rbtPassList", @syntax = "pass " })
@@ -303,16 +291,13 @@
                         </span>
                     </div>
                 </div>
-
             </div>
             
             <div class="row">
 
             </div>
             
-            <div class="row">
 
-            </div>
         </div>
     </div>
 
@@ -323,10 +308,22 @@
             <canvas id="myCanvas" width="950" height="740" style="border:1px solid #c3c3c3;">
                 Your browser does not support the canvas element.
             </canvas>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    当前回合玩家:
+                    @foreach (var orderPlayer in Model.FactionList.Except(Model.FactionNextTurnList))
+                    {
+                        <span style="background-color: @orderPlayer.ColorCode">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span>
+                    }
+                    跳过回合玩家:
+                    @foreach (var orderPlayer in Model.FactionNextTurnList)
+                    {
+                        <span style="background-color: @orderPlayer.ColorCode">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span>
+                    }
+                </div>
+            </div>
         </div>
         <div class="col-md-5">
-
-
 
             <script type="text/javascript">
                 var legendData = [];
@@ -358,8 +355,8 @@
                 </script>
 
                 <div class="panel panel-default">
-                    <div class="panel-heading" style="background-color: @item.ColorCode">
-                        <h3 class="panel-title"><span class="badge">@item.Score VP</span> <span>@item.ChineseName @item.FactionName</span>
+                    <div class="panel-heading" >
+                        <h3 class="panel-title"><span class="badge">@item.Score VP</span> <span style="background-color: @item.ColorCode">@item.ChineseName @item.FactionName </span>
                         </h3>
                     </div>
                     <div class="panel-body">
@@ -438,95 +435,6 @@
                 </div>
 
             }
-
-
-            @*<h4>种族</h4>
-        @foreach (var item in Model.FactionList)
-        {
-            <div>@item.FactionName|分数:@item.Score|Color:@item.OGTerrain.ToString()|C:@item.Credit|O:@item.Ore|Q:@item.QICs|K:@item.Knowledge|PG:@item.PowerTokenGaia|Power:@item.PowerToken1/@item.PowerToken2/@item.PowerToken3</div>
-            <div>铲子:@item.TransformLevel|航海:@item.ShipLevel|AI:@item.AILevel|盖亚:@item.GaiaLevel|经济:@item.EconomicLevel|科技:@item.ScienceLevel</div>
-            @foreach (var it in item.GameTileList)
-            {
-                if (it.IsUsed)
-                {
-                    <s>@it.GetType().Name @it.desc</s>
-                }
-                else
-                {
-                    <div>@it.GetType().Name @it.desc</div>
-                }
-            }
-            <div>
-                建筑物 M @(8-item.Mines.Count) /8 | TC @(4-item.TradeCenters.Count) /4 |RL @(3-item.ResearchLabs.Count) /3 |板子上有的盖亚 @item.Gaias.Count
-                |AC1 @if (item.Academy1 == null)
-                { <a>1/1</a> }
-                else
-                { <a>0/1</a>}
-                |AC2 @if (item.Academy2 == null)
-                { <a>1/1</a>}
-                else
-                { <a>0/1</a>}
-                |SH @if (item.StrongHold == null)
-                { <a>1/1</a>}
-                else
-                { <a>0/1</a>}
-            </div>
-
-            @foreach (var leech in item.LeechPowerQueue)
-            {
-                <div>From @leech.Item2 leech @leech.Item1 power</div>
-            }
-            <p>---分割线---</p>
-
-        }*@
-
-
-            <div>
-                <div class="col-md-6">
-                    <div class="panel panel-default">
-                        <!-- Default panel contents -->
-                        <div class="panel-heading">回合助推板</div>
-
-                        <ul class="list-group">
-                            @foreach (var item in Model.RBTList)
-                            {
-                                <li class="list-group-item">@item.GetType().Name @item.desc</li>
-                            }
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="panel panel-default">
-                        <!-- Default panel contents -->
-                        <div class="panel-heading">回合计分板</div>
-
-                        <!-- List group -->
-                        <ul class="list-group">
-                            @for (int i = 0; i < Model.RSTList.Count; i++)
-                            {
-                                @if (@Model.GameStatus.RoundCount == i+1)
-                                 {
-                                     <li class="list-group-item" style="background-color: #c3c3c3">Round @(i + 1) @Model.RSTList[i].desc</li>
-                                }
-                                else if (@Model.GameStatus.RoundCount > i+1)
-                                {
-                                    <li class="list-group-item" style="background-color: #c3c3c3">Round @(i + 1) @Model.RSTList[i].desc</li>
-                                }
-                                else
-                                {
-                                    <li class="list-group-item">Round @(i + 1) @Model.RSTList[i].desc</li>
-                                }
-                            }
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-
-
-
-
 
         </div>
     </div>
@@ -658,7 +566,7 @@
                             Ship Level 4
                             Lost Planet
                         </td>
-                        <td>4q</td>
+                        <td>4q<span style="background-color: #">&nbsp;&nbsp;</span></td>
                         <td>4vp+1vp*M(G)</td>
                         <td>3o,6c,6pw</td>
                         <td>9k</td>
@@ -667,7 +575,7 @@
                         <td>4(8vp)</td>
                         <td>2o</td>
                         <td>Ship Level 3</td>
-                        <td>2q</td>
+                        <td>2q<span style="background-color: #=">&nbsp;&nbsp;</span></td>
                         <td>
                             3 Gaia Unit
                             3pw Gaia Cost
@@ -680,7 +588,7 @@
                     <td>3(4vp)</td>
                     <td>Tf Level 3</td>
                     <td>1q</td>
-                    <td>2q</td>
+                    <td>2q<span style="background-color: #=">&nbsp;&nbsp;</span><span style="background-color: #=">&nbsp;&nbsp;</span></td>
                     <td>
                         2 Gaia Unit
                         4pw Gaia Cost
@@ -762,36 +670,84 @@
 
         <div class="col-md-5">
             
-            <div class="panel panel-default">
-                <!-- Default panel contents -->
-                <div class="panel-heading">Final Score</div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">回合助推板</div>
 
-                <ul class="list-group">
-                    @foreach (var item in Model.FSTList)
-                    {
-                        <li class="list-group-item">@item.GetType().Name @item.desc</li>
-                    }
-                </ul>
+                        <ul class="list-group">
+                            @foreach (var item in Model.RBTList)
+                            {
+                                <li class="list-group-item">@item.GetType().Name @item.desc</li>
+                            }
+                        </ul>
+                    </div>
+                    
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">终局计分板</div>
+
+                        <ul class="list-group">
+                            @foreach (var item in Model.FSTList)
+                            {
+                                <li class="list-group-item">@item.GetType().Name @item.desc</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">回合计分板</div>
+
+                        <!-- List group -->
+                        <ul class="list-group">
+                            @for (int i = 0; i < Model.RSTList.Count; i++)
+                            {
+                                @if (@Model.GameStatus.RoundCount == i+1)
+                                 {
+                                     <li class="list-group-item" style="background-color: #c3c3c3">Round @(i + 1) @Model.RSTList[i].desc</li>
+                                 }
+                                 else if (@Model.GameStatus.RoundCount > i+1)
+                                 {
+                                     <li class="list-group-item" style="background-color: #c3c3c3">Round @(i + 1) @Model.RSTList[i].desc</li>
+                                 }
+                                 else
+                                 {
+                                     <li class="list-group-item">Round @(i + 1) @Model.RSTList[i].desc</li>
+                                 }
+                            }
+
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="panel panel-default">
-                <!-- Default panel contents -->
-                <div class="panel-heading">Alliance Tile</div>
 
-                <ul class="list-group">
-                    @foreach (var item in Model.ALTList)
-                    {
-                        <li class="list-group-item">@item.GetType().Name @item.desc</li>
-                    }
-                </ul>
+            <div class="row">
+
             </div>
 
         </div>
+
         <div class="col-md-5">
-            
             
             <div class="panel panel-default">
                 <!-- Default panel contents -->
-                <div class="panel-heading">LogHistory</div>
+                <div class="panel-heading">联邦板块</div>
+
+                <ul class="list-group">
+                    @foreach (var item in Model.ALTList.GroupBy(a => a.desc).Select(g => new  { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name) }))
+                    {
+                        <li class="list-group-item">@item.name @item.desc (@item.count)</li>
+                    }
+                </ul>
+            </div>
+
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">操作日志</div>
 
                 <ul class="list-group">
                     @foreach (var item in Model.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
