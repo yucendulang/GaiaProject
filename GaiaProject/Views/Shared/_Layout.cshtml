@@ -35,13 +35,48 @@
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">盖亚计划</a>
             </div>
             <div class="navbar-collapse collapse">
+                
+@*                <div class="container-fluid">*@
+@*                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">*@
+@*                        <ul class="nav navbar-nav">*@
+@*                            <li><a href="#">首页</a></li>*@
+@*                            <li><a href="#">Link</a></li>*@
+@*                            <li><a href="#">Link</a></li>*@
+@*                        </ul>*@
+@*                    </div><!-- /.navbar-collapse -->*@
+@*                </div>*@
+
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">首页</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">关于</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">帮助</a></li>
-                    <li><a asp-area="" asp-controller="Account" asp-action="Register2">注册</a></li>
-                    <li><a asp-area="" asp-controller="Account" asp-action="Login">登陆</a></li>
+@*                    @if (@User.Identity != null)*@
+@*                    {*@
+@*                        <li>*@
+@*                             Single button *@
+@*                            <div class="btn-group">*@
+@*                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">*@
+@*                                    Action <span class="caret"></span>*@
+@*                                </button>*@
+@*                                <ul class="dropdown-menu">*@
+@*                                    <li><a href="#">Action</a></li>*@
+@*                                    <li><a href="#">Another action</a></li>*@
+@*                                    <li><a href="#">Something else here</a></li>*@
+@*                                    <li role="separator" class="divider"></li>*@
+@*                                    <li><a href="#">Separated link</a></li>*@
+@*                                </ul>*@
+@*                            </div>*@
+@*                        </li>*@
+@**@
+@*                    }*@
+@*                    else*@
+@*                    {*@
+@*                        <li><a asp-area="" asp-controller="Account" asp-action="Register2">注册</a></li>*@
+@*                        <li><a asp-area="" asp-controller="Account" asp-action="Login">登陆 </a></li>*@
+@*                    }*@
+
                 </ul>
+
                 @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>

@@ -2,6 +2,7 @@
 @using System.Collections.Generic
 @using System.Linq
 @using System.Numerics
+@using System.Text.RegularExpressions
 @using GaiaCore.Gaia
 @using Microsoft.AspNetCore.Mvc.Rendering
 @model GaiaCore.Gaia.GaiaGame
@@ -15,13 +16,13 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <div id="gameTopInfo"  style="font-size:20px">
-    @if (@Model.FactionList.Count > @Model.GameStatus.PlayerIndex)
-     {
-         <script>
-             $("#gameTopInfo").css("background-color","@Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode");
-         </script>
+        @if (@Model.FactionList.Count > @Model.GameStatus.PlayerIndex)
+        {
+            <script>
+                $("#gameTopInfo").css("background-color","@Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode");
+            </script>
          @*<div style="background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode;text-align:center">*@
-    }
+        }
 
 
         <p id="username">@User.Identity.Name</p>
@@ -40,38 +41,38 @@
         else if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDSTART)
         {
             <p>现在是Round @Model.GameStatus.RoundCount,Turn @Model.GameStatus.TurnCount</p>
-                    <p>现在是 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 的回合,颜色是 @Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()</p>
+            <p>现在是 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 的回合,颜色是 @Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()</p>
 
             <!-- 模态框（Modal） -->
-                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                        &times;
-                                    </button>
-                                    <h4 class="modal-title" id="myModalLabel">
-                                        选择要升级的建筑
-                                    </h4>
-                                </div>
-                                <div class="modal-body">
-                                    <select class="btn dropdown-toggle form-control" id="updateBuildList"></select>
-                                    <div id="sttBody">
-                                        @Html.DropDownList("enumList", new SelectList(Model.STT6List, "name", "desc"), "--请选择科技板块(6)--", new { @class = "btn dropdown-toggle form-control", @id = "stt6List", @syntax = ".+" })
-                                        @Html.DropDownList("enumList", new SelectList(Model.STT3List, "name", "desc"), "--请选择科技板块(3)--", new { @class = "btn dropdown-toggle form-control", @id = "stt3List", @syntax = ".+" })
-                                        @Html.DropDownList("enumList", new SelectList(Model.STT3List, "name", "desc"), "--请选择升级科技--", new { @class = "btn dropdown-toggle form-control", @id = "updatekj", @syntax = ".+" })
-                                    </div>
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">
+                                选择要升级的建筑
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <select class="btn dropdown-toggle form-control" id="updateBuildList"></select>
+                            <div id="sttBody">
+                                @Html.DropDownList("enumList", new SelectList(Model.STT6List, "name", "desc"), "--请选择科技板块(6)--", new { @class = "btn dropdown-toggle form-control", @id = "stt6List", @syntax = ".+" })
+                                @Html.DropDownList("enumList", new SelectList(Model.STT3List, "name", "desc"), "--请选择科技板块(3)--", new { @class = "btn dropdown-toggle form-control", @id = "stt3List", @syntax = ".+" })
+                                @Html.DropDownList("enumList", new SelectList(Model.STT3List, "name", "desc"), "--请选择升级科技--", new { @class = "btn dropdown-toggle form-control", @id = "updatekj", @syntax = ".+" })
+                            </div>
 
-                                </div>
-                                <div class="modal-footer">
+                        </div>
+                        <div class="modal-footer">
 
-                                    <button type="button" class="btn btn-primary" id="updateQuery">
-                                        确定
-                                    </button>
-                                </div>
-                            </div><!-- /.modal-content -->
-                        </div><!-- /.modal -->
-                    </div>
+                            <button type="button" class="btn btn-primary" id="updateQuery">
+                                确定
+                            </button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+            </div>
         }
         else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
         {
@@ -90,7 +91,7 @@
         {
             <p>现在等待 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 选择回合助推板 +rbtx</p>
 
-                    @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"), "--请选择回合助推板--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "rbtList", @syntax = "+" })
+            @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"), "--请选择回合助推板--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "rbtList", @syntax = "+" })
 
 
         }
@@ -106,20 +107,20 @@
         @if (Model.UserDic.ContainsKey(User.Identity.Name))
         {
             @foreach (var fac in Model.UserDic[User.Identity.Name])
-            {
-                @foreach (var leech in fac.LeechPowerQueue)
-                {
-                    <form asp-controller="Home" asp-action="LeechPower" asp-route-returnurl="/Home/Contact" method="post" class="form-horizontal">
-                        <div>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力</div>
-                        <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
-                        <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
-                        <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
-                        <input name="leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
-                        <button type="submit" name="isLeech" class="btn btn-default" value="true">是</button>
-                        <button type="submit" name="isLeech" class="btn btn-default" value="false">否</button>
-                    </form>
-                }
-            }
+             {
+                 @foreach (var leech in fac.LeechPowerQueue)
+                  {
+                      <form asp-controller="Home" asp-action="LeechPower" asp-route-returnurl="/Home/Contact" method="post" class="form-horizontal">
+                          <div>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力</div>
+                          <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
+                          <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
+                          <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
+                          <input name="leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
+                          <button type="submit" name="isLeech" class="btn btn-default" value="true">是</button>
+                          <button type="submit" name="isLeech" class="btn btn-default" value="false">否</button>
+                      </form>
+                  }
+             }
         }
 
         @if (ViewData["log"] != null)
@@ -130,174 +131,243 @@
 
     </div>
 
-        @if (User.Identity.Name.Equals(Model.GetCurrentUserName()))
-        {
+    @if (User.Identity.Name.Equals(Model.GetCurrentUserName()))
+     {
 
-            <div class="row">
-                <form asp-controller="Home" asp-action="ViewGame" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-                    <div asp-validation-summary="All" class="text-danger"></div>
+         <div class="row">
+             <form asp-controller="Home" asp-action="ViewGame" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                 <div asp-validation-summary="All" class="text-danger"></div>
 
-                <div class="col-lg-3">
-                    <div class="input-group">
-                        <span class="input-group-addon">命令</span>
-                        <input id="syntax" name="syntax" type="text" class="form-control" aria-label="Text input with multiple buttons">
-                        <div class="input-group-btn">
-                            <button  id="syn" type="button" class="btn btn-default">保存</button>
-                        </div>
-                        <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
-                        @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
-                        {
-                            <input id="test3" name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden" />
-                        }
-                    </div><!-- /.input-group -->
-                </div><!-- /.col-lg-6 -->
-                </form>
-            </div>
+                 <div class="col-lg-3">
+                     <div class="input-group">
+                         <span class="input-group-addon">命令</span>
+                         <input id="syntax" name="syntax" type="text" class="form-control" aria-label="Text input with multiple buttons">
+                         <div class="input-group-btn">
+                             <button  id="syn" type="button" class="btn btn-default">保存</button>
+                         </div>
+                         <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
+                         @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
+                         {
+                             <input id="test3" name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden" />
+                         }
+                     </div><!-- /.input-group -->
+                 </div><!-- /.col-lg-6 -->
+             </form>
+         </div>
 
-            @*<div class="panel panel-default">
-                <div class="panel-body">
-                    <form asp-controller="Home" asp-action="ViewGame" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+     }
 
-                        <label class="col-md-1 control-label">命令</label>
-                        <div class="col-md-4">
-                            <input name="syntax" class="form-control" id="syntax" />
-                        </div>
-
-
-                    </form>
-                    <button id="syn">保存</button>
-                </div>
-            </div>*@
-        }
-
-
-
-
-
-<div class="row">
-    <div class="col-md-7">
-        <canvas id="myCanvas" width="950" height="740" style="border:1px solid #c3c3c3;">
-            Your browser does not support the canvas element.
-        </canvas>
-    </div>
-<div class="col-md-5">
-
-
-
-<script type="text/javascript">
-    var legendData = [];
-    var seriesData = [];
-    @*var roundColorIndex = @((int)(Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain));*@
-</script>
-
-@foreach (var item in Model.FactionList)
-{
-    <script type="text/javascript">
-        legendData.push('@item.ChineseName');
-        seriesData.push({
-            name: '@item.ChineseName',
-            type: 'bar',
-            data: [
-                @item.TransformLevel, @item.ShipLevel, @item.AILevel, @item.GaiaLevel,
-                @item.EconomicLevel, @item.ScienceLevel
-            ],
-            itemStyle:{
-                normal:{
-                    color:'@item.ColorCode'
-                }
-            },
-            //color:'@item.ColorCode'
-        });
-
-    </script>
 
     <div class="panel panel-default">
-        <div class="panel-heading" style="background-color: @item.ColorCode">
-            <h3 class="panel-title"><span class="badge">@item.Score VP</span> <span>@item.ChineseName @item.FactionName</span>
-            </h3>
+        <div class="panel-heading">
+            <h3 class="panel-title">行动区域</h3>
         </div>
         <div class="panel-body">
             
-            @foreach (var leech in item.LeechPowerQueue)
-            {
-                <div>From @leech.Item2 leech @leech.Item1 power</div>
-            }
-            @foreach (var it in item.GameTileList)
-            {
-                if (it.IsUsed)
-                {
-                    <s>@it.GetType().Name @it.desc</s>
-                }
-                else
-                {
-                    <div>@it.GetType().Name @it.desc</div>
-                }
-            }
-
-            <table class="table" width="50%">
-                <tr>
-                    <td>@item.Credit C </td>
-                    <td>@item.Ore O</td>
-                    <td>@item.QICs Q</td>
-                    <td>@item.Knowledge K</td>
-                    <td>@item.PowerTokenGaia PG</td>
-                    <td></td>
-                    <td>@item.PowerToken1/@item.PowerToken2/@item.PowerToken3 pw</td>
-
-                </tr>
-                <tr>
-                    <td>M </td>
-                    <td>TC</td>
-                    <td>RL</td>
-                    <td>AC1</td>
-                    <td>AC2</td>
-                    <td>SH</td>
-                    <td>Gaia</td>
-                </tr>
-                <tr>
-                    <td>@(8 - item.Mines.Count)/8</td>
-                    <td>@(4 - item.TradeCenters.Count)/4</td>
-                    <td>@(3 - item.ResearchLabs.Count)/3</td>
-                    <td>
-                        @if (item.Academy1 == null)
+            
+            <div class="row">
+                <div class="col-lg-10  pull-left" style="padding-left:50px">
+                    <div class="row" id="actBody">
+    
+                        @foreach (var item in Model.MapActionMrg.mapActList)
                         {
-                            <span>1/1</span>
+                            <div class="col-xs-6 col-md-2" style="height: 60px; width: 60px; text-align: center; line-height: 60px; background: url(/images/pwactionbg.gif);" id="@item.GetType().Name">
+                   
+                                @if (item.IsUsed)
+                                {
+                                    <a href="#" style="color:red">@item.GetText()</a>
+                                }
+                                else
+                                {
+                                    <a href="#"  style="color:green">@item.GetText()</a>
+            @*<div>@item.GetType().Name @item.desc</div>*@
+                                }
+                                @*<script>
+                $("#actConst").append('<div class="col-xs-6 col-md-2" style="height: 30px; width: 60px;">@item.GetConst()</div>')
+            </script>*@
+                            </div>
                         }
-                        else
-                        {
-                            <span>0/1</span>}
-                    </td>
-                    <td>
-                        @if (item.Academy2 == null)
-                        {
-                            <span>1/1</span>}
-                        else
-                        {
-                            <span>0/1</span>}
-                    </td>
-                    <td>
-                        @if (item.StrongHold == null)
-                        {
-                            <span>1/1</span>}
-                        else
-                        {
-                            <span>0/1</span>}
-                    </td>
-                    <td>@item.Gaias.Count</td>
-                </tr>
-            </table>
+                    </div>
+                    <div class="row" id="actConst">
 
+                        @foreach (var name in new string[] { "-7pw", "-5pw", "-4pw", "-4pw", "-4pw", "-3pw", "-3pw", "-4Q", "-3Q", "-2Q" })
+                        {
+                            <div class="col-xs-6 col-md-2" style="height: 30px; width: 60px;">
+                                @name
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                
+                @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActList,"code","name"), "--请选择快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert " })
+                
+                
+  
+                <div class="col-lg-2">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="输入数值">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Go!</button>
+                        </span>
+                    </div>
+                </div>
 
+                
+
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="btn-group btn-group-lg" role="group" aria-label="Large button group" id="">
+                        <button type="button" class="btn btn-default" id="createAl">建立联邦</button>
+                        <button type="button" class="btn btn-default" id="quxiaoAl">取消行动</button>
+                    </div>
+                </div>
+                <script>
+                    $("#createAl").click(function() {
+
+                    });
+                    $("#quxiaoAl").click(function() {
+
+                    });
+                </script>
+
+            </div>
+            
+            <div class="row">
+                
+            </div>
         </div>
     </div>
 
 
-                @*<p>---分割线---</p>*@
 
-}
+    <div class="row">
+        <div class="col-md-7">
+            <canvas id="myCanvas" width="950" height="740" style="border:1px solid #c3c3c3;">
+                Your browser does not support the canvas element.
+            </canvas>
+        </div>
+        <div class="col-md-5">
 
 
-@*<h4>种族</h4>
+
+            <script type="text/javascript">
+                var legendData = [];
+                var seriesData = [];
+                @*var roundColorIndex = @((int)(Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain));*@
+            </script>
+    
+
+            @foreach (var item in Model.FactionList)
+            {
+
+                <script type="text/javascript">
+                    legendData.push("@Html.Raw(@item.ChineseName)");
+                    seriesData.push({
+                        name: "@Html.Raw(@item.ChineseName)",
+                        type: 'bar',
+                        data: [
+                            @item.TransformLevel, @item.ShipLevel, @item.AILevel, @item.GaiaLevel,
+                            @item.EconomicLevel, @item.ScienceLevel
+                        ],
+                        itemStyle:{
+                            normal:{
+                                color:'@item.ColorCode'
+                            }
+                        },
+                        //color:'@item.ColorCode'
+                    });
+
+                </script>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="background-color: @item.ColorCode">
+                        <h3 class="panel-title"><span class="badge">@item.Score VP</span> <span>@item.ChineseName @item.FactionName</span>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+            
+                        @foreach (var leech in item.LeechPowerQueue)
+                        {
+                            <div>From @leech.Item2 leech @leech.Item1 power</div>
+                        }
+                        @foreach (var it in item.GameTileList)
+                        {
+                            if (it.IsUsed)
+                            {
+                                <s>@it.GetType().Name @it.desc</s>
+                            }
+                            else
+                            {
+                                <div>@it.GetType().Name @it.desc</div>
+                            }
+                        }
+
+                        <table class="table" width="50%">
+                            <tr>
+                                <td>@item.Credit C </td>
+                                <td>@item.Ore O</td>
+                                <td>@item.QICs Q</td>
+                                <td>@item.Knowledge K</td>
+                                <td>@item.PowerTokenGaia PG</td>
+                                <td></td>
+                                <td>@item.PowerToken1/@item.PowerToken2/@item.PowerToken3 pw</td>
+
+                            </tr>
+                            <tr>
+                                <td>M </td>
+                                <td>TC</td>
+                                <td>RL</td>
+                                <td>AC1</td>
+                                <td>AC2</td>
+                                <td>SH</td>
+                                <td>Gaia</td>
+                            </tr>
+                            <tr>
+                                <td>@(8 - item.Mines.Count)/8</td>
+                                <td>@(4 - item.TradeCenters.Count)/4</td>
+                                <td>@(3 - item.ResearchLabs.Count)/3</td>
+                                <td>
+                                    @if (item.Academy1 == null)
+                                    {
+                                        <span>1/1</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0/1</span>}
+                                </td>
+                                <td>
+                                    @if (item.Academy2 == null)
+                                    {
+                                        <span>1/1</span>}
+                                    else
+                                    {
+                                        <span>0/1</span>}
+                                </td>
+                                <td>
+                                    @if (item.StrongHold == null)
+                                    {
+                                        <span>1/1</span>}
+                                    else
+                                    {
+                                        <span>0/1</span>}
+                                </td>
+                                <td>@item.Gaias.Count</td>
+                            </tr>
+                        </table>
+
+
+                    </div>
+                </div>
+
+            }
+
+
+            @*<h4>种族</h4>
         @foreach (var item in Model.FactionList)
         {
             <div>@item.FactionName|分数:@item.Score|Color:@item.OGTerrain.ToString()|C:@item.Credit|O:@item.Ore|Q:@item.QICs|K:@item.Knowledge|PG:@item.PowerTokenGaia|Power:@item.PowerToken1/@item.PowerToken2/@item.PowerToken3</div>
@@ -338,46 +408,45 @@
         }*@
 
 
-<div>
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <!-- Default panel contents -->
-            <div class="panel-heading">回合助推板</div>
+            <div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">回合助推板</div>
 
-            <ul class="list-group">
-                @foreach (var item in Model.RBTList)
-                {
-                    <li class="list-group-item">@item.GetType().Name @item.desc</li>
-                }
-            </ul>
+                        <ul class="list-group">
+                            @foreach (var item in Model.RBTList)
+                            {
+                                <li class="list-group-item">@item.GetType().Name @item.desc</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">回合计分板</div>
+
+                        <!-- List group -->
+                        <ul class="list-group">
+                            @for (int i = 0; i < Model.RSTList.Count; i++)
+                            {
+                                <li class="list-group-item">Round @(i + 1) @Model.RSTList[i].desc</li>
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <!-- Default panel contents -->
-            <div class="panel-heading">回合计分板</div>
-
-            <!-- List group -->
-            <ul class="list-group">
-                @for (int i = 0; i < Model.RSTList.Count; i++)
-                {
-                    <li class="list-group-item">Round @(i + 1) @Model.RSTList[i].desc</li>
-                }
-
-            </ul>
-        </div>
-    </div>
-</div>
-
-
-
-
-
-
-</div>
-</div>
-          
-        
+               
     <div class="row">
         
         <div class="col-md-6">
@@ -387,6 +456,70 @@
             </div>*@
             <div >
                 <div id="main" style="width: 100%; height: 400px;"></div>
+            </div>
+            <div style="text-align: center">    
+                <!-- 按钮触发模态框 -->
+                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModalInfo">
+                    科技奖励说明
+                </button>
+                <!-- 模态框（Modal） -->
+                <div class="modal fade" id="myModalInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" style="width: 800px;height: 800px;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    &times;
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">
+                                    详细
+                                </h4>
+                            </div>
+                            <div class="modal-body">			
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <td>Level</td>
+                                        <td>地形改造</td>
+                                        <td>航行</td>
+                                        <td>人工智能</td>
+                                        <td>盖亚计划</td>
+                                        <td>经济</td>
+                                        <td>科学</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>5(12vp)</td>
+                                        <td>ALTX</td>
+                                        <td>Ship Level 4
+                                            Lost Planet</td>
+                                        <td>4q</td>
+                                        <td>4vp+1vp*M(G)</td>
+                                        <td>3o,6c,6pw</td>
+                                        <td>9k</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                            
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default center-block" data-dismiss="modal">关闭
+                                </button>
+                            </div>
+
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal -->
+                </div>
             </div>
             <script type="text/javascript">
                 // 基于准备好的dom，初始化echarts实例
@@ -462,69 +595,94 @@
             </script>
         </div>
         <div class="col-md-6">
-            <div>
-                <div class="row" id="actBody">
-    
-                    @foreach (var item in Model.MapActionMrg.mapActList)
-                    {
-                        <div class="col-xs-6 col-md-2" style="height: 60px; width: 60px; text-align: center; line-height: 60px; background: url(/images/pwactionbg.gif);" id="@item.GetType().Name">
-                   
-                            @if (item.IsUsed)
-                            {
-                                <a href="#" style="color:red">@item.GetText()</a>
-                            }
-                            else
-                            {
-                                <a href="#"  style="color:green">@item.GetText()</a>
-            @*<div>@item.GetType().Name @item.desc</div>*@
-                            }
-                            @*<script>
-                $("#actConst").append('<div class="col-xs-6 col-md-2" style="height: 30px; width: 60px;">@item.GetConst()</div>')
-            </script>*@
-                        </div>
-                    }
-                </div>
-                <div class="row" id="actConst">
 
-                    @foreach (var name in new string[] { "-7pw", "-5pw", "-4pw", "-4pw", "-4pw", "-3pw", "-3pw", "-4Q", "-3Q", "-2Q" })
-                    {
-                        <div class="col-xs-6 col-md-2" style="height: 30px; width: 60px;">
-                            @name
-                        </div>
-                    }
-                </div>
-            </div>
-            <div class="row">
-                <p></p>
-            </div>
+
+            
             <table class="table">
+                <thead>
+
+                </thead>
+                <tbody>
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+  
+            <table class="table">
+                <thead>
+                <tr>
+                    <td>Level</td>
+                    <td>地形改造</td>
+                    <td>航行</td>
+                    <td>人工智能</td>
+                    <td>盖亚计划</td>
+                    <td>经济</td>
+                    <td>科学</td>
+                </tr>              
+                </thead>
+                <tbody>
+                
+                
+                <tr>
+                    <td>5(12vp)</td>
+                    <td>ALTX</td>
+                    <td>Ship Level 4
+                        Lost Planet</td>
+                    <td>4q</td>
+                    <td>4vp+1vp*M(G)</td>
+                    <td>3o,6c,6pw</td>
+                    <td>9k</td>
+                </tr>
+                <tr>
+                    <td>5(12vp)</td>
+                    <td>ALTX</td>
+                    <td>
+                        Ship Level 4
+                        Lost Planet
+                    </td>
+                    <td>4q</td>
+                    <td>4vp+1vp*M(G)</td>
+                    <td>3o,6c,6pw</td>
+                    <td>9k</td>
+                </tr>                    
+                    
+
                 <tr>
                     <td>
-                        Advance Tech
+                        高级科技
                     </td>
                     @foreach (var item in Model.ATTList)
                     {
-                        <td>@item.GetType().Name @item.desc</td>
+                        <td>@item.desc</td>
                     }
                 </tr>
                 <tr>
                     <td>
-                        Standard Tech For 6
+                        基础科技(6)
                     </td>
-                    @foreach (var item in Model.STT6List)
+                    @foreach (var item in Model.STT6List.GroupBy(a => a.name).Select(g => new {count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name)}))
                     {
-                        <td>@item.GetType().Name @item.desc</td>
+                        <td>@item.desc (@item.count)</td>
                     }
                 </tr>
                 <tr>
                     <td>
-                        Standard Tech For 3
+                        基础科技(3)
                     </td>
-                    @foreach (var item in Model.STT3List)
+                    @foreach (var item in Model.STT3List.GroupBy(a => a.name).Select(g => new {count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name)}))
                     {
-                        <td>@item.GetType().Name @item.desc</td>
+                        <td colspan="2" style="text-align: center">@item.desc (@item.count)</td>
                     }
                 </tr>
+                </tbody>
             </table>
 
 
@@ -587,8 +745,8 @@
     </div>
 
 
-<script type='text/javascript' language='javascript' src='~/lib/jquery/dist/jquery.min.js'></script>
-<script type='text/javascript' language='javascript' src='~/js/site.js'></script>
+    <script type='text/javascript' language='javascript' src='~/lib/jquery/dist/jquery.min.js'></script>
+    <script type='text/javascript' language='javascript' src='~/js/site.js'></script>
 
     <script type="text/javascript">
         var c = document.getElementById("myCanvas");
@@ -744,7 +902,7 @@
 
 
     <script>
-        //选择种族，选择回合版
+        //选择种族，选择回合版,快速行动
         $(".selectchange").change(function () {
             var obj = $(this);
             var syntax = obj.attr("syntax");
@@ -812,4 +970,4 @@
 else
 {
     <p>没做完不好意思啊</p>
-    }
+}
