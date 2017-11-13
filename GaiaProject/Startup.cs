@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using GaiaProject.Data;
 using GaiaProject.Models;
 using GaiaProject.Services;
+using ManageTool;
 
 namespace GaiaProject
 {
@@ -32,6 +33,9 @@ namespace GaiaProject
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+            GaiaCore.Gaia.GameMgr.RestoreDictionary(string.Empty);
+            DaemonMgr.StartAll();
+
         }
 
         public IConfigurationRoot Configuration { get; }

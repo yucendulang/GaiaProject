@@ -34,6 +34,19 @@ namespace GaiaCore.Gaia
             }           
         }
 
+        public static void RemoveOldBackupData()
+        {
+            var d = new DirectoryInfo(BackupDataPath);
+            var filename = (from p in d.EnumerateFiles() orderby p.Name descending select p.Name).Take(5);
+            foreach (var item in d.EnumerateFiles())
+            {
+                if (!filename.Contains(item.Name))
+                {
+                    System.IO.File.Delete(System.IO.Path.Combine(BackupDataPath, item.Name));
+                }
+            }
+        }
+
         public static GaiaGame GetGameByName(string name)
         {
             if (name == null)
@@ -48,6 +61,19 @@ namespace GaiaCore.Gaia
             {
                 return null;
             }
+        }
+
+        public static bool RemoveAndBackupGame(string name)
+        {
+            JsonSerializerSettings jsetting = new JsonSerializerSettings();
+            jsetting.ContractResolver = new LimitPropsContractResolver(new string[] { "UserActionLog", "Username", "IsTestGame" });
+            var str = JsonConvert.SerializeObject(m_dic[name], Formatting.Indented, jsetting);
+            var logPath = System.IO.Path.Combine(FinishGamePath, name + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt");
+            var logWriter = System.IO.File.CreateText(logPath);
+            logWriter.Write(str);
+            logWriter.Dispose();
+            m_dic.Remove(name);
+            return true;
         }
 
         public static IEnumerable<string> GetAllGame(string userName=null)
@@ -140,6 +166,18 @@ namespace GaiaCore.Gaia
                     Directory.CreateDirectory("backupdata");
                 }
                 return System.IO.Path.Combine(Directory.GetCurrentDirectory(), "backupdata");
+            }
+        }
+
+        private static string FinishGamePath
+        {
+            get
+            {
+                if (!Directory.Exists("finishgame"))
+                {
+                    Directory.CreateDirectory("finishgame");
+                }
+                return System.IO.Path.Combine(Directory.GetCurrentDirectory(), "finishgame");
             }
         }
     }

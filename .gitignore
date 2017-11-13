@@ -207,6 +207,7 @@ Generated_Code/
 # because we have git ;-)
 _UpgradeReport_Files/
 Backup*/
+finishgam*/
 UpgradeLog*.XML
 UpgradeLog*.htm
 
