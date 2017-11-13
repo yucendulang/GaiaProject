@@ -329,7 +329,7 @@ namespace GaiaCore.Gaia
                 {
                     if (HexArray[i, j] != null && CalTwoHexDistance(x, y, i, j) <= distance)
                     {
-                        if (HexArray[i, j].FactionBelongTo == name)
+                        if (HexArray[i, j].FactionBelongTo == name && !(HexArray[i, j].Building is GaiaBuilding))
                         {
                             return true;
                         }
