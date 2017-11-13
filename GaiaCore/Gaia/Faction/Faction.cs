@@ -444,7 +444,16 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-
+        public void AddGameTiles(GameTiles tile)
+        {
+            GameTileList.Add(tile);
+            if (tile.CanAction)
+            {
+                PredicateActionList.Add(tile.GetType().Name.ToLower(), tile.PredicateGameTileAction);
+                ActionList.Add(tile.GetType().Name.ToLower(), tile.InvokeGameTileAction);
+            }
+            tile.OneTimeAction(this);
+        }
         //private int m_TransformLevel;
 
         //       private int m_ShipLevel;

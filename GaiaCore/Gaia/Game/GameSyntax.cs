@@ -78,7 +78,7 @@ namespace GaiaCore.Gaia
         public static Regex forgingAlliance = new Regex("satellite [a-z][0-9]{1,2}(,[a-z][0-9]{1,2})*");
         public static string alliance = "alliance";
         public static Regex forgingAlliance2 = new Regex(alliance+" [a-z][0-9]{1,2}(,[a-z][0-9]{1,2})*");
-
+        public static Regex swapRegex = new Regex("swap ([a-z][0-9]{1,2}),([a-z][0-9]{1,2})");
     }
 
     public static class GameFreeSyntax
@@ -109,6 +109,7 @@ namespace GaiaCore.Gaia
             "rbt2",
             "act2",
             "act6",
+            "amb"
         };
         public static Regex actionRegex = new Regex(string.Format("{0} ({1})", GameSyntax.action, string.Join("|", turnActionList)));
         /// <summary>

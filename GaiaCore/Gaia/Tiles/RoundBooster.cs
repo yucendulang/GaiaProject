@@ -153,7 +153,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "pass-vp:RL*2,1K";
+                return "pass-vp:RL*3,1K";
             }
         }
         public override int GetKnowledgeIncome()
@@ -163,7 +163,7 @@ namespace GaiaCore.Gaia.Tiles
 
         public override int GetTurnEndScore(Faction faction)
         {
-            return (GameConstNumber.ResearchLabCount - faction.ResearchLabs.Count) * 2;
+            return (GameConstNumber.ResearchLabCount - faction.ResearchLabs.Count) * 3;
         }
     }
     public class RBT6 : RoundBooster
