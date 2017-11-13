@@ -10,7 +10,7 @@ namespace GaiaCore.Gaia
     public abstract partial class Faction
     {
 
-        internal bool BuildMine(Map map, int row, int col, out string log)
+        internal virtual bool BuildMine(Map map, int row, int col, out string log)
         {
 
             log = string.Empty;
@@ -226,6 +226,13 @@ namespace GaiaCore.Gaia
                 group h by h.TFTerrain into g
                 select g;
             return q.Count();
+        }
+
+        internal bool IsPlanetTypeExist(Terrain terrain)
+        {
+            var hexList = GaiaGame.Map.GetHexList();
+
+            return hexList.ToList().Exists(x => x.FactionBelongTo == FactionName && !(x.Building is GaiaBuilding) && x.TFTerrain == terrain);
         }
         public virtual void PowerBurnSpecialPreview(int v)
         {
