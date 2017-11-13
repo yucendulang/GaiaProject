@@ -292,7 +292,7 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        internal bool UpdateBuilding(Map map, int row, int col, string buildStr, out string log)
+        internal bool UpgradeBuilding(Map map, int row, int col, string buildStr, out string log)
         {
             log = string.Empty;
             var hex = map.HexArray[row, col];
@@ -554,8 +554,8 @@ namespace GaiaCore.Gaia
             "eco",
             "sci",
         };
-        
 
+#region 临时变量 退出前需要清除
         public bool IsUseAction2 { get; internal set; }
         /// <summary>
         /// 代表需要退回的板子数量
@@ -565,6 +565,8 @@ namespace GaiaCore.Gaia
         public bool IsSingleAdvTechTrack { get; internal set; }
         public bool IsNoAdvTechTrack { get; internal set; }
         public bool PlanetAlready { get; internal set; }
+        public int FactionSpecialAbility { get; set; }
+#endregion
 
         internal static string ConvertTechIndexToStr(int v)
         {

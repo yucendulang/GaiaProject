@@ -290,7 +290,7 @@ namespace GaiaCore.Gaia
                     var pos = match.Groups[1].Value;
                     var buildStr = match.Groups[2].Value;
                     ConvertPosToRowCol(pos, out int row, out int col);
-                    if (!faction.UpdateBuilding(Map, row, col, buildStr, out log))
+                    if (!faction.UpgradeBuilding(Map, row, col, buildStr, out log))
                     {
                         return false;
                     }
@@ -569,6 +569,24 @@ namespace GaiaCore.Gaia
                         alt.OneTimeAction(faction);
                     };
                     faction.ActionQueue.Enqueue(action);
+                }
+                else if (GameSyntax.swapRegex.IsMatch(item))
+                {
+                    if (!(faction is Ambas))
+                    {
+                        log = "只有Ambas能使用该SH能力";
+                    }
+                    var ambas = faction as Ambas;
+                    if (faction.FactionSpecialAbility > 0)
+                    {
+                        log = "action amb才能使用swap语句";
+                    }
+                    var match = GameSyntax.swapRegex.Match(item);
+                    ConvertPosToRowCol(match.Groups[1].Value, out int row, out int col);
+                    var pos1 = new Tuple<int, int>(row, col);
+                    ConvertPosToRowCol(match.Groups[2].Value, out row, out col);
+                    var pos2 = new Tuple<int, int>(row, col);
+                    return ambas.ExcuteSHAbility(pos1, pos2,out log);
                 }
                 else
                 {
