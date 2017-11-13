@@ -506,11 +506,11 @@
                             {
                                 @if (@Model.GameStatus.RoundCount == i+1)
                                  {
-                                     <li class="list-group-item" style="background-color: green">Round @(i + 1) @Model.RSTList[i].desc</li>
+                                     <li class="list-group-item" style="background-color: #c3c3c3">Round @(i + 1) @Model.RSTList[i].desc</li>
                                 }
                                 else if (@Model.GameStatus.RoundCount > i+1)
                                 {
-                                    <li class="list-group-item" style="background-color: red">Round @(i + 1) @Model.RSTList[i].desc</li>
+                                    <li class="list-group-item" style="background-color: #c3c3c3">Round @(i + 1) @Model.RSTList[i].desc</li>
                                 }
                                 else
                                 {
