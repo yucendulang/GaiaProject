@@ -178,12 +178,12 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "pass-vp:RL*2";
+                return "pass-vp:RL*3";
             }
         }
         public override int GetTurnEndScore(Faction faction)
         {
-            return (GameConstNumber.ResearchLabCount - faction.ResearchLabs.Count) * 2;
+            return (GameConstNumber.ResearchLabCount - faction.ResearchLabs.Count) * 3;
         }
 
     }
