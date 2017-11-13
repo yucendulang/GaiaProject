@@ -2,6 +2,7 @@
 using GaiaCore.Util;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -1050,6 +1051,43 @@ namespace GaiaCore.Gaia
         public Dictionary<string,List<Faction>> UserDic { set; get; }
         [JsonProperty]
         public bool IsTestGame { get; set; }
+
+
+        /// <summary>
+        /// 分组
+        /// </summary>
+        public List<STTInfo> STT6ListGroup {
+            set { }
+            get
+            {
+                return STT6List.GroupBy(a => a.name).Select(g => new STTInfo { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name) }).ToList();
+            }
+        }
+        /// <summary>
+        /// 分组
+        /// </summary>
+        public List<STTInfo> STT3ListGroup
+        {
+            set {}
+            get
+            {
+                return STT3List.GroupBy(a => a.name).Select(g => new STTInfo { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name) }).ToList();
+            }
+        }
+
+        public class STTInfo
+        {
+            public STTInfo()
+            {
+                
+            }
+            public int count;
+            public string desc;
+            public string name;
+
+        }
+
+
         #endregion
     }
 }

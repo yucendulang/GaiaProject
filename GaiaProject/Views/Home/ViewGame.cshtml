@@ -58,9 +58,19 @@
                         <div class="modal-body">
                             <select class="btn dropdown-toggle form-control" id="updateBuildList"></select>
                             <div id="sttBody">
-                                @Html.DropDownList("enumList", new SelectList(Model.STT6List, "name", "desc"), "--请选择科技板块(6)--", new { @class = "btn dropdown-toggle form-control", @id = "stt6List", @syntax = ".+" })
-                                @Html.DropDownList("enumList", new SelectList(Model.STT3List, "name", "desc"), "--请选择科技板块(3)--", new { @class = "btn dropdown-toggle form-control", @id = "stt3List", @syntax = ".+" })
-                                @Html.DropDownList("enumList", new SelectList(Model.STT3List, "name", "desc"), "--请选择升级科技--", new { @class = "btn dropdown-toggle form-control", @id = "updatekj", @syntax = ".+" })
+                                @Html.DropDownList("enumList", new SelectList(Model.STT6List.GroupBy(a => a.name).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name) }), "name", "desc"), "--请选择科技板块(6)--", new { @class = "btn dropdown-toggle form-control", @id = "stt6List", @syntax = ".+" })
+                                <div class="form-inline">
+                                    @Html.DropDownList("enumList", new SelectList(Model.STT3List.GroupBy(a => a.name).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name) }), "name", "desc"), "--请选择科技板块(3)--", new { @class = "btn dropdown-toggle form-control", @id = "stt3List", @syntax = ".+" })
+                                    <select class="btn dropdown-toggle form-control" id="updatekj" name="enumList" syntax=".+"><option value="">--请选择升级科技--</option>
+                                        <option value="tf">地形改造</option>
+                                        <option value="ship">航行</option>
+                                        <option value="ai">人工智能</option>
+                                        <option value="gaia">盖亚计划</option>
+                                        <option value="eco">经济</option>
+                                        <option value="sci">科学</option>
+                                    </select>
+
+                                </div>
                             </div>
 
                         </div>
@@ -197,26 +207,26 @@
                 </div>
             </div>
             
-            <div class="row">
-                
-                @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActList,"code","name"), "--请选择快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert " })
-                
-                
-  
+            <div class="row" style="background-color: #c3c3c3">
+                未完成功能:
+
+                @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActList, "code", "name"), "--未完成快速行动--", new {@class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert "})
+
                 <div class="col-lg-2">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="输入数值">
+                        <input type="text" class="form-control selectchange" placeholder="输入数值" syntax="burn ">
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">Go!</button>
+                            <button class="btn btn-default actionGp" type="button" syntax="burn ">牺牲</button>
                         </span>
                     </div>
                 </div>
 
-                
+
 
             </div>
             
-            <div class="row">
+            <div class="row"  style="background-color: #c3c3c3">
+                未完成功能:
                 <div class="col-lg-2">
                     <div class="btn-group btn-group-lg" role="group" aria-label="Large button group" id="">
                         <button type="button" class="btn btn-default" id="createAl">建立联邦</button>
@@ -235,7 +245,28 @@
             </div>
             
             <div class="row">
-                
+                <div class="col-lg-2">
+                    <div class="input-group">
+                        
+                        <select class="btn dropdown-toggle form-control selectchange" id="updatekjaction" name="enumList" syntax="advance "><option value="">--请选择升级科技--</option>
+                            <option value="tf">地形改造</option>
+                            <option value="ship">航行</option>
+                            <option value="ai">人工智能</option>
+                            <option value="gaia">盖亚计划</option>
+                            <option value="eco">经济</option>
+                            <option value="sci">科学</option>
+                        </select>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default actionGp" type="button">确定升级</button>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+            
+
+            <div class="row">
+
             </div>
         </div>
     </div>
@@ -665,7 +696,7 @@
                     <td>
                         基础科技(6)
                     </td>
-                    @foreach (var item in Model.STT6List.GroupBy(a => a.name).Select(g => new {count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name)}))
+                    @foreach (var item in Model.STT6ListGroup)
                     {
                         <td>@item.desc (@item.count)</td>
                     }
@@ -674,7 +705,7 @@
                     <td>
                         基础科技(3)
                     </td>
-                    @foreach (var item in Model.STT3List.GroupBy(a => a.name).Select(g => new {count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name)}))
+                    @foreach (var item in Model.STT3ListGroup)
                     {
                         <td colspan="2" style="text-align: center">@item.desc (@item.count)</td>
                     }
@@ -855,7 +886,7 @@
                                     upJz, $("#stt6List").val()));
 
                             } else {
-                                $("#syntax").val("upgrade {0} to {1}.+{2}. advance tf".format(clickObj.position, upJz, $("#stt3List").val()));
+                                $("#syntax").val("upgrade {0} to {1}.+{2}. advance {3}".format(clickObj.position, upJz, $("#stt3List").val(), $("#updatekj").val()));
                             }
                         }
                         $('#myModal').modal('hide');
@@ -918,24 +949,39 @@
 
             //alert($(this).find("a").css("color"));
         });
+        //执行行动
+        $(".actionGp").click(function() {
+            //$("#syntax").val("{0}-{1}".format($(this).attr("syntax"), $($(this).attr("valueid")).val()));
+            submitData();
+        });
     </script>
 
     <script>
+        //提交命令
+        function submitData() {
+            var value = $("#syntax").val();
+            if (value == "") {
+                alert("请先选择行动");
+                return;
+            }
+            $.post("/home/Syntax",
+                {
+                    name: $("#test1").val(),
+                    syntax: value,
+                    factionName: $("#test3").val(),
+                },
+                function (data, status) {
+                    if (data.indexOf("error") != -1) {
+                        alert(data);
+                    } else {
+                        location.reload();
+                    }
+                });
+        }
+
         $(document).ready(function () {
             $("button#syn").click(function () {
-                $.post("/home/Syntax",
-                    {
-                        name: $("#test1").val(),
-                        syntax: $("#syntax").val(),
-                        factionName: $("#test3").val(),
-                    },
-                    function (data, status) {
-                        if (data.indexOf("error") != -1) {
-                            alert(data);
-                        } else {
-                            location.reload();
-                        }
-                    });
+                submitData();
             });
         });
 
