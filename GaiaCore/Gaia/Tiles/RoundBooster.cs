@@ -55,8 +55,12 @@ namespace GaiaCore.Gaia.Tiles
 
         public override bool InvokeGameTileAction(Faction faction)
         {
+            Action action = () =>
+            {
+                IsUsed = true;
+            };
+            faction.ActionQueue.Enqueue(action);
             faction.TerraFormNumber += 1;
-            IsUsed = true;
             return true;
         }
         public override bool CanAction => true;
@@ -83,7 +87,11 @@ namespace GaiaCore.Gaia.Tiles
         public override bool InvokeGameTileAction(Faction faction)
         {
             faction.TempShip += 3;
-            IsUsed = true;
+            Action action = () =>
+            {
+                IsUsed = true;
+            };
+            faction.ActionQueue.Enqueue(action);
             return true;
         }
         public override bool CanAction => true;

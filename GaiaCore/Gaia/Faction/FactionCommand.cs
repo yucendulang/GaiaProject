@@ -31,6 +31,8 @@ namespace GaiaCore.Gaia
 
             //矿石铲子
             int oreTF = 0;
+            //航海的Q
+            int QSHIP = 0;
             if (map.HexArray[row, col].TFTerrain == Terrain.Green)
             {
                 isGreenPlanet = true;
@@ -78,6 +80,7 @@ namespace GaiaCore.Gaia
                 log = string.Format("建筑距离太偏远了,需要{0}个Q来加速", (distanceNeed - GetShipDistance + 1) / 2);
                 return false;
             }
+            QSHIP=Math.Max((distanceNeed - GetShipDistance + 1) / 2, 0);
             //扣资源建建筑
             Action queue = () =>
             {
@@ -94,6 +97,7 @@ namespace GaiaCore.Gaia
                 {
                     QICs = QICs;
                     TempQICs = 0;
+
                 }
                 if (isGreenPlanet)
                 {
@@ -115,7 +119,7 @@ namespace GaiaCore.Gaia
                 }
                 if (!isGaiaPlanet)
                 {
-                    QICs -= Math.Max((distanceNeed - GetShipDistance + 1) / 2, 0);
+                    QICs -= QSHIP;
                 }
             };
             ActionQueue.Enqueue(queue);
