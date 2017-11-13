@@ -674,7 +674,7 @@ namespace GaiaCore.Gaia
                         QICs += 1;
                         PowerIncrease(GameConstNumber.TechLv2toLv3BonusPower);
                     }
-                    else if (m_AILevel == 5)
+                    else if (m_ShipLevel == 5)
                     {
                         GameTileList.Find(x => x is AllianceTile && x.IsUsed == false).IsUsed = true;
                         //throw new NotImplementedException("黑星科技没有完成");
