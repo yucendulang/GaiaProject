@@ -83,6 +83,40 @@
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal -->
             </div>
+
+
+            <!-- 模态框（Modal） -->
+            <div class="modal fade" id="myModalCanves" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog" style="width: 1000px;height: 800px">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">
+                                请选择位置
+                            </h4>
+                        </div>
+                        <div class="modal-body" id="canvasSelectMap">
+                            <div class="btn-group" role="group" aria-label="..." id="alPosList">
+                                @*<button type="button" class="btn btn-default">Left</button>
+                                <button type="button" class="btn btn-default">Middle</button>
+                                <button type="button" class="btn btn-default">Right</button>*@
+                            </div>
+                            <canvas id="myCanvasSelect" width="950" height="740" style="border: 1px solid #c3c3c3;">
+                                Your browser does not support the canvas element.
+                            </canvas>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button type="button" class="btn btn-primary" id="queryPosList">
+                                确定
+                            </button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+            </div>
         }
         else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
         {
@@ -225,23 +259,16 @@
 
             </div>
             
-            <div class="row"  style="background-color: #c3c3c3">
-                未完成功能:
-                <div class="col-lg-2">
-                    <div class="btn-group btn-group-lg" role="group" aria-label="Large button group" id="">
-                        <button type="button" class="btn btn-default" id="createAl">建立联邦</button>
-                        <button type="button" class="btn btn-default" id="quxiaoAl">取消行动</button>
-                    </div>
+            <div class="row">
+                <div class="btn-group btn-group-lg" role="group" aria-label="Large button group" id="">
+                    <button type="button" class="btn btn-default" id="createAl">选择卫星位置</button>
+                        
+                    <button type="button" class="btn btn-default" id="createZjAl">直接建立联邦</button>
+                        
+                    <button type="button" class="btn btn-default actionGp" id="quxiaoAl">确认成立联邦</button>
+
+
                 </div>
-                <script>
-                    $("#createAl").click(function() {
-
-                    });
-                    $("#quxiaoAl").click(function() {
-
-                    });
-                </script>
-
             </div>
             
             <div class="row">
@@ -266,6 +293,24 @@
             
 
             <div class="row">
+                <div class="col-lg-2">
+                    <div class="input-group">
+                
+                        @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"), "--请选择回合助推板--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "rbtPassList", @syntax = "pass " })
+
+                        <span class="input-group-btn">
+                            <button class="btn btn-default actionGp" type="button" syntax="pass ">结束回合</button>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="row">
+
+            </div>
+            
+            <div class="row">
 
             </div>
         </div>
@@ -274,7 +319,7 @@
 
 
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-7" id="myCanvasDiv">
             <canvas id="myCanvas" width="950" height="740" style="border:1px solid #c3c3c3;">
                 Your browser does not support the canvas element.
             </canvas>
@@ -459,11 +504,18 @@
                         <ul class="list-group">
                             @for (int i = 0; i < Model.RSTList.Count; i++)
                             {
-                                @if (@Model.GameStatus.RoundCount == i)
+                                @if (@Model.GameStatus.RoundCount == i+1)
                                  {
-
-                                 }
-                                <li class="list-group-item">Round @(i + 1) @Model.RSTList[i].desc</li>
+                                     <li class="list-group-item" style="background-color: green">Round @(i + 1) @Model.RSTList[i].desc</li>
+                                }
+                                else if (@Model.GameStatus.RoundCount > i+1)
+                                {
+                                    <li class="list-group-item" style="background-color: red">Round @(i + 1) @Model.RSTList[i].desc</li>
+                                }
+                                else
+                                {
+                                    <li class="list-group-item">Round @(i + 1) @Model.RSTList[i].desc</li>
+                                }
                             }
 
                         </ul>
@@ -758,12 +810,7 @@
     <script type='text/javascript' language='javascript' src='~/js/site.js'></script>
 
     <script type="text/javascript">
-        var c = document.getElementById("myCanvas");
-        var cxt = c.getContext("2d");
         var model = @Html.Raw(Json.Serialize(Model));
-        console.log("js start");
-        DrawMap();
-
 
         var list = canvasobjList;
 
@@ -789,12 +836,14 @@
             }
         };
 
-        String.prototype.format = function(args) {
+
+
+        String.prototype.format = function (args) {
             var result = this;
-            if (arguments.length > 0) {    
+            if (arguments.length > 0) {
                 if (arguments.length == 1 && typeof (args) == "object") {
                     for (var key in args) {
-                        if(args[key]!=undefined){
+                        if (args[key] != undefined) {
                             var reg = new RegExp("({" + key + "})", "g");
                             result = result.replace(reg, args[key]);
                         }
@@ -804,7 +853,7 @@
                     for (var i = 0; i < arguments.length; i++) {
                         if (arguments[i] != undefined) {
                             //var reg = new RegExp("({[" + i + "]})", "g");//这个在索引大于9时会有问题，谢谢何以笙箫的指出
-                            var reg= new RegExp("({)" + i + "(})", "g");
+                            var reg = new RegExp("({)" + i + "(})", "g");
                             result = result.replace(reg, arguments[i]);
                         }
                     }
@@ -813,98 +862,11 @@
             return result;
         }
 
-        c.addEventListener('click', function (e) {
-            //console.log(list);
-            var xy = getEventPosition(e);
-            var clickObj = getClickObj(xy.x, xy.y);
-            if (clickObj.typename != undefined) {
-                switch (clickObj.typename) {
-                case "Mine":
-                    $("#syntax").val("upgrade {0} to {1}".format(clickObj.position,"TC"));
-                    break;
-                case "TradeCenter":
-                case "ResearchLab":
-                    //$("#myModalLabel").text("新增");
-                    //如果是ResearchLab
-                    if (clickObj.typename=="ResearchLab"){
-                        $("#updateBuildList").html('<option value="">--请选择升级建筑--</option><option value="AC1">AC1</option><option value="AC2">AC2</option>')
-                        $("#sttBody").show();
-                    }
-                    else{
-                        $("#updateBuildList").html('<option value="">--请选择升级建筑--</option><option value="RL">ResearchLab</option><option value="SH">SH</option>')
-                        $("#sttBody").hide();
-                    }
-                    $('#myModal').modal();
+        createMap("myCanvas","build");
 
-                    $("#updateBuildList").change(function() {
-                        //SH
-                        if ($(this).val() == "SH") {
-                            $("#sttBody").hide();
-                        } else {
-                            $("#sttBody").show();
-                        }
-                        //alert(2);
-                    });
-                    $("#stt6List").change(function() {
-                        //if ($("#stt6List").val()!=)
-                        $("#stt3List").val("");
-                    });
-                    $("#stt3List").change(function() {
-                        //if ($("#stt6List").val()!=)
-                        $("#stt6List").val("");
-                    });
 
-                    $("#updateQuery").click(function () {
 
-                        var upJz = $("#updateBuildList").val();
-                        if (upJz == "SH") {
-                            $("#syntax").val("upgrade {0} to {1}.".format(clickObj.position,
-                                upJz));
-                        } else {
-                            
-                            if ($("#stt6List").val() != "") {
-                                $("#syntax").val("upgrade {0} to {1}.+{2}.".format(clickObj.position,
-                                    upJz, $("#stt6List").val()));
 
-                            } else {
-                                $("#syntax").val("upgrade {0} to {1}.+{2}. advance {3}".format(clickObj.position, upJz, $("#stt3List").val(), $("#updatekj").val()));
-                            }
-                        }
-                        $('#myModal').modal('hide');
-                    });
-//                        $("#updateBuildList li").click(function() {
-//                            $("#syntax").val("upgrade {0} to {1}.+".format(clickObj.position, this.id));
-//                            $('#myModal').modal('hide');
-//                    });
-                    break;
-                //case "ResearchLab":
-                //$("#syntax").val("upgrade {0} to {1}".format(clickObj.position,"AC"));
-                //break;
-                case "Academy":
-                    
-                    break;
-                case "StrongHold":
-                    //alert("不能继续升级");
-                    break;
-                case "GaiaBuilding":
-                    $("#syntax").val("build " + clickObj.position);
-                    //alert("不能继续升级");
-                    break;
-                case "gaizao":
-                    $("#syntax").val("gaia " + clickObj.position);
-                    //alert("不能继续升级");
-                    break;                  
-                default:
-                    console.log("不能继续升级");
-                }
-            } else {
-                $("#syntax").val("build " + clickObj.position);
-            }
-            
-            console.log(clickObj);
-            //console.log("f");
-            //alert(getEventPosition(e).x+"/"+getEventPosition(e).y);
-        }, false);
 
 
     </script>
@@ -925,7 +887,16 @@
                 alert("行动以被执行");
             }
             else
-            {            $("#syntax").val("action {0}".format(value));
+            {
+                $("#syntax").val("action {0}".format(value));
+                if (value == "ACT6" || value == "ACT2" ) {
+                    $("#myModalCanves").modal();
+                    createMap("myCanvasSelect","act");
+
+                    //$("#canvasSelectMap").html($("#myCanvasDiv").html());
+                } else {
+                    
+                }
             }
 
             //alert($(this).find("a").css("color"));
@@ -934,6 +905,17 @@
         $(".actionGp").click(function() {
             //$("#syntax").val("{0}-{1}".format($(this).attr("syntax"), $($(this).attr("valueid")).val()));
             submitData();
+        });
+        //卫星建立联邦
+        $("#createAl").click(function () {
+            
+            $("#myModalCanves").modal();
+            createMap("myCanvasSelect","al1");
+        });
+        //直接建立联邦
+        $("#createZjAl").click(function () {            
+            $("#myModalCanves").modal();
+            createMap("myCanvasSelect","al2");
         });
     </script>
 

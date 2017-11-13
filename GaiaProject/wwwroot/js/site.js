@@ -3,18 +3,188 @@ var hex_size = 30;
 var hex_width = hex_size * Math.sqrt(3);
 var hex_height = hex_size * 1.5;
 
-function DrawMap() {
+//第一次运行，加载事件
+var isFirstAct = true;
+var isFirstAl = true;
+
+function createMap(id,type) {
+    var c = document.getElementById(id);
+    var contentx = c.getContext("2d");
+    console.log("js start");
+    DrawMap(contentx);
+
+    if (type == undefined || type == "build") {
+        c.addEventListener('click', function (e) {
+            //console.log(list);
+            var xy = getEventPosition(e);
+            var clickObj = getClickObj(xy.x, xy.y);
+            if (clickObj.typename != undefined) {
+                switch (clickObj.typename) {
+                case "Mine":
+                    $("#syntax").val("upgrade {0} to {1}".format(clickObj.position, "TC"));
+                    break;
+                case "TradeCenter":
+                case "ResearchLab":
+                    //$("#myModalLabel").text("新增");
+                    //如果是ResearchLab
+                    if (clickObj.typename == "ResearchLab") {
+                        $("#updateBuildList").html('<option value="">--请选择升级建筑--</option><option value="AC1">AC1</option><option value="AC2">AC2</option>')
+                        $("#sttBody").show();
+                    }
+                    else {
+                        $("#updateBuildList").html('<option value="">--请选择升级建筑--</option><option value="RL">ResearchLab</option><option value="SH">SH</option>')
+                        $("#sttBody").hide();
+                    }
+                    $('#myModal').modal();
+
+                    $("#updateBuildList").change(function () {
+                        //SH
+                        if ($(this).val() == "SH") {
+                            $("#sttBody").hide();
+                        } else {
+                            $("#sttBody").show();
+                        }
+                        //alert(2);
+                    });
+                    $("#stt6List").change(function () {
+                        //if ($("#stt6List").val()!=)
+                        $("#stt3List").val("");
+                    });
+                    $("#stt3List").change(function () {
+                        //if ($("#stt6List").val()!=)
+                        $("#stt6List").val("");
+                    });
+
+                    $("#updateQuery").click(function () {
+
+                        var upJz = $("#updateBuildList").val();
+                        if (upJz == "SH") {
+                            $("#syntax").val("upgrade {0} to {1}.".format(clickObj.position,
+                                upJz));
+                        } else {
+
+                            if ($("#stt6List").val() != "") {
+                                $("#syntax").val("upgrade {0} to {1}.+{2}.".format(clickObj.position,
+                                    upJz, $("#stt6List").val()));
+
+                            } else {
+                                $("#syntax").val("upgrade {0} to {1}.+{2}. advance {3}".format(clickObj.position, upJz, $("#stt3List").val(), $("#updatekj").val()));
+                            }
+                        }
+                        $('#myModal').modal('hide');
+                    });
+                    //                        $("#updateBuildList li").click(function() {
+                    //                            $("#syntax").val("upgrade {0} to {1}.+".format(clickObj.position, this.id));
+                    //                            $('#myModal').modal('hide');
+                    //                    });
+                    break;
+                //case "ResearchLab":
+                //$("#syntax").val("upgrade {0} to {1}".format(clickObj.position,"AC"));
+                //break;
+                case "Academy":
+
+                    break;
+                case "StrongHold":
+                    //alert("不能继续升级");
+                    break;
+                case "GaiaBuilding":
+                    $("#syntax").val("build " + clickObj.position);
+                    //alert("不能继续升级");
+                    break;
+                case "gaizao":
+                    $("#syntax").val("gaia " + clickObj.position);
+                    //alert("不能继续升级");
+                    break;
+                default:
+                    console.log("不能继续升级");
+                }
+            } else {
+                $("#syntax").val("build " + clickObj.position);
+            }
+
+            console.log(clickObj);
+            //console.log("f");
+            //alert(getEventPosition(e).x+"/"+getEventPosition(e).y);
+        }, false);
+    }
+    else if (type == "act") {
+        if (isFirstAct == true) {
+            isFirstAct = false;
+            c.addEventListener('click', function (e) {
+                //console.log(list);
+                var xy = getEventPosition(e);
+                var clickObj = getClickObj(xy.x, xy.y);
+                if (clickObj.typename != undefined) {
+                    alert("不能选择已经有建筑的地点");
+                } else {
+                    $("#syntax").val($("#syntax").val() + ".build " + clickObj.position);
+                    $('#myModalCanves').modal('hide');
+
+                }
+
+            }, false);
+        }
+
+    }
+    else if (type == "al1" || type == "al2") {
+        if (isFirstAl == true) {
+            isFirstAl = false;
+            //确认点事件
+            $("#queryPosList").click(function() {
+                var posList = "";
+                $("#alPosList button").each(function () {
+                    //alert($(this).text());
+                    posList = posList + $(this).text()+",";
+                });
+                posList = posList.substring(0, posList.length - 1);
+                //设置命令
+                var value;
+                if (type == "al1") {
+                    value = "satellite " + posList
+                }
+                else if (type == "al2") {
+                    value = "alliance " + posList
+                }
+                $("#syntax").val(value);
+                //隐藏和清空
+                $('#myModalCanves').modal('hide');
+                $("#alPosList").html("");
+            });
+
+            c.addEventListener('click', function (e) {
+                //console.log(list);
+                var xy = getEventPosition(e);
+                var clickObj = getClickObj(xy.x, xy.y);
+                if (type == "al1" && clickObj.typename != undefined) {
+                    alert("不能选择已经有建筑的地点");
+                }
+                if (type == "al2" && clickObj.typename == undefined) {
+                    alert("不能选择空白的地点");
+                } else {
+                    //添加位置
+                    $("#alPosList").append('<button type="button" class="btn btn-default" onclick="$(this).remove();">'+clickObj.position+'</button>');
+                }
+
+            }, false);
+        }
+
+    }
+
+
+}
+
+function DrawMap(ctx) {
     console.log("DrawMap");
     //console.log(model);
     var array = model["map"]["hexArray"];
     console.log(array);
-    renderColorCycle(cxt);
+    renderColorCycle(ctx);
     for (var i = 0; i < 20; i++) {
         for (var j = 0; j < 20; j++) {
 
             if (array[i][j] !== null) {
                 //console.log(i, j, array[i][j].ogTerrain, ConvertIntToColor(array[i][j].ogTerrain), array[i][j].isCenter);
-                DrawOneHex(cxt, j, i, ConvertIntToColor(array[i][j].tfTerrain), array[i][j].isCenter, array[i][j]);
+                DrawOneHex(ctx, j, i, ConvertIntToColor(array[i][j].tfTerrain), array[i][j].isCenter, array[i][j]);
                 //console.log(i, j, array[i][j].building);
                 if (array[i][j].building !== null) {
                     //建筑对象
@@ -22,29 +192,29 @@ function DrawMap() {
                     //画房子
                     switch (array[i][j].building.name) {
                         case "Mine":
-                            DrawMine(cxt, j, i, array[i][j].factionBelongTo);
+                            DrawMine(ctx, j, i, array[i][j].factionBelongTo);
                             break;
                         case "TradeCenter":
-                            DrawTradingPost(cxt, j, i, array[i][j].factionBelongTo);
+                            DrawTradingPost(ctx, j, i, array[i][j].factionBelongTo);
                             break;
                         case "ResearchLab":
-                            DrawResearchLab(cxt, j, i, array[i][j].factionBelongTo);
+                            DrawResearchLab(ctx, j, i, array[i][j].factionBelongTo);
                             break;
                         case "Academy":
-                            DrawAcademy(cxt, j, i, array[i][j].factionBelongTo);
+                            DrawAcademy(ctx, j, i, array[i][j].factionBelongTo);
                             break;
                         case "StrongHold":
-                            DrawStronghold(cxt, j, i, array[i][j].factionBelongTo);
+                            DrawStronghold(ctx, j, i, array[i][j].factionBelongTo);
                             break;
                         case "GaiaBuilding":
-                            DrawGaiaBuilding(cxt, j, i, array[i][j].factionBelongTo);
+                            DrawGaiaBuilding(ctx, j, i, array[i][j].factionBelongTo);
                             break;
                         default:
                             console.log(array[i][j].building.name + "不支持");
                     }
                 }
                 if (array[i][j].satellite !== null) {
-                    DrawSatellite(cxt, j, i, array[i][j].satellite);
+                    DrawSatellite(ctx, j, i, array[i][j].satellite);
                 }
 
             }
@@ -111,10 +281,10 @@ var activeObjList = new MikuDrawedObjList();
 function textHexName(ctx, row, col, name, color) {
     //console.log("textHexName" +row + col + name);
     ctx.beginPath();
-    cxt.font = "10px Verdana";
-    cxt.fillStyle = ConvertBackGroundColorToTextColor(color);
+    ctx.font = "10px Verdana";
+    ctx.fillStyle = ConvertBackGroundColorToTextColor(color);
     ctx.fillText(name, row - 11, col + 20);
-    cxt.closePath();
+    ctx.closePath();
 
 
     //console.log({ "name": name, "row": row, "col": col });
@@ -126,10 +296,10 @@ function textHexName(ctx, row, col, name, color) {
 function textSpaceSectorCenterName(ctx, row, col, name) {
     //console.log(row, col, "isCenter");
     ctx.beginPath();
-    cxt.font = "10px Verdana";
-    cxt.fillStyle = "black";
+    ctx.font = "10px Verdana";
+    ctx.fillStyle = "black";
     ctx.fillText(name, row - 8, col - 12);
-    cxt.closePath();
+    ctx.closePath();
 }
 
 function hexCenter(row, col) {
@@ -173,9 +343,9 @@ function makeHexPath(ctx, x, y, size, color,name) {
 
 
     }
-    cxt.strokeStyle = "Black"
-    cxt.fillStyle = color;
-    cxt.fill();
+    ctx.strokeStyle = "Black"
+    ctx.fillStyle = color;
+    ctx.fill();
     ctx.closePath();
     ctx.stroke();
 
