@@ -192,12 +192,12 @@ namespace GaiaCore.Gaia
         protected override int ResourceCost => 3;
         public override bool PredicateGameTileAction(Faction faction)
         {
+            faction.AllianceTileReGet++;
             return base.PredicateGameTileAction(faction) && faction.QICs >= ResourceCost;
         }
         public override bool InvokeGameTileAction(Faction faction)
         {
             faction.QICs -= ResourceCost;
-            faction.AllianceTileReGet++;
             return base.InvokeGameTileAction(faction);
         }
     }
