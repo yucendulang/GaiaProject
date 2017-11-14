@@ -696,7 +696,9 @@
                     </td>
                     @foreach (var item in Model.STT3ListGroup)
                     {
-                        <td  colspan="2"  title="@item.name" style="line-height: 100px;">@item.desc (@item.count)</td>
+                        <td colspan="2" title="@item.name" >
+                            <div class="sttcss" style="line-height: 100px;">@item.desc (@item.count)</div>
+                        </td>
                     }
                 </tr>
                 </tbody>
