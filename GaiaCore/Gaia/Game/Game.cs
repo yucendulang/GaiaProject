@@ -355,6 +355,25 @@ namespace GaiaCore.Gaia
                     {
                         return false;
                     }
+                }else if (GameSyntax.downgradeRegex.IsMatch(item))
+                {
+                    if(!(faction is Firaks))
+                    {
+                        log = "Firaks专用指令";
+                        return false;
+                    }
+                    if (faction.FactionSpecialAbility <= 0)
+                    {
+                        log = "action fir才能使用DownGrade指令";
+                        return false;
+                    }
+                    var match = GameSyntax.downgradeRegex.Match(item);
+                    var pos = match.Groups[1].Value;
+                    ConvertPosToRowCol(pos, out int row, out int col);
+                    if (!(faction as Firaks).DowngradeBuilding(row, col, out log))
+                    {
+                        return false;
+                    }
                 }
                 else if (GameSyntax.buildRegex.IsMatch(item))
                 {
@@ -637,11 +656,13 @@ namespace GaiaCore.Gaia
                     if (!(faction is Ambas))
                     {
                         log = "只有Ambas能使用该SH能力";
+                        return false;
                     }
                     var ambas = faction as Ambas;
-                    if (faction.FactionSpecialAbility > 0)
+                    if (faction.FactionSpecialAbility <= 0)
                     {
                         log = "action amb才能使用swap语句";
+                        return false;
                     }
                     var match = GameSyntax.swapRegex.Match(item);
                     ConvertPosToRowCol(match.Groups[1].Value, out int row, out int col);

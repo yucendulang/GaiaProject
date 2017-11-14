@@ -15,9 +15,10 @@ namespace GaiaCore.Gaia
             m_powerToken1 += 2;
         }
 
-        protected override void CallSpecialFreeIncome()
+        public override void CalIncome()
         {
             m_powerToken1++;
+            base.CalIncome();
         }
 
         public override void PowerBurnSpecialPreview(int v)

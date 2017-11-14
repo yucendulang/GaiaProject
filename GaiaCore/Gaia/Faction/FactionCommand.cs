@@ -142,7 +142,7 @@ namespace GaiaCore.Gaia
             PowerToken1 += v;
         }
 
-        private void TriggerRST(Type type)
+        protected void TriggerRST(Type type)
         {
             if (GaiaGame.GameStatus.stage <= Stage.SELECTROUNDBOOSTER)
                 return;
@@ -528,6 +528,17 @@ namespace GaiaCore.Gaia
             if (AllianceTileReGet != 0)
             {
                 log = "选择要重新积分的城版";
+                return true;
+            }
+            if (FactionSpecialAbility < 0)
+            {
+                log = "貌似多用了SH能力?";
+                return true;
+            }
+            if (FactionSpecialAbility > 0)
+            {
+                log = "SH能力别忘了使用啊";
+                return true;
             }
             return false;
         }
@@ -557,6 +568,7 @@ namespace GaiaCore.Gaia
             IsNoAdvTechTrack = false;
             AllianceTileReGet = 0;
             PlanetAlready = false;
+            FactionSpecialAbility = 0;
         }
 
 

@@ -38,6 +38,11 @@ namespace GaiaCore.Gaia
         public const string upgrade = "upgrade";
         public static Regex upgradeRegex = new Regex(upgrade + " ([a-z][0-9]{1,2}) to ([a-z0-9]{1,3})");
         /// <summary>
+        /// Update语句正则
+        /// </summary>
+        public const string downgrade = "downgrade";
+        public static Regex downgradeRegex = new Regex(downgrade + " ([a-z][0-9]{1,2})");
+        /// <summary>
         /// 吸魔力的正则表达式
         /// </summary>
         public const string leech = "leech";
@@ -109,7 +114,8 @@ namespace GaiaCore.Gaia
             "rbt2",
             "act2",
             "act6",
-            "amb"
+            "amb",
+            "fir"
         };
         public static Regex actionRegex = new Regex(string.Format("{0} ({1})", GameSyntax.action, string.Join("|", turnActionList)));
         /// <summary>
