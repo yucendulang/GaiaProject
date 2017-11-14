@@ -191,6 +191,8 @@ namespace GaiaCore.Gaia
                 log = string.Format("建筑距离太偏远了,需要{0}个Q来加速", (distanceNeed - GetShipDistance + 1) / 2);
                 return false;
             }
+
+            var QSHIP = Math.Max((distanceNeed - GetShipDistance + 1) / 2, 0);
             //扣资源建建筑
             Action queue = () =>
             {
@@ -199,7 +201,7 @@ namespace GaiaCore.Gaia
                 map.HexArray[row, col].FactionBelongTo = FactionName;
                 PowerTokenGaia += GetGaiaCost();
                 Gaias.RemoveAt(0);
-                QICs -= Math.Max((distanceNeed - GetShipDistance + 1) / 2, 0);
+                QICs -= QSHIP;
             };
             ActionQueue.Enqueue(queue);
             TempShip = 0;
