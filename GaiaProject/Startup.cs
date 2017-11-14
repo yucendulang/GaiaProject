@@ -30,11 +30,14 @@ namespace GaiaProject
                 // For more details on using the user secret store see https://go.microsoft.com/fwlink/?LinkID=532709
                 builder.AddUserSecrets<Startup>();
             }
+            else
+            {
+                DaemonMgr.StartAll();
+                GaiaCore.Gaia.GameMgr.RestoreDictionary(string.Empty);
+            }
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
-            DaemonMgr.StartAll();
-            GaiaCore.Gaia.GameMgr.RestoreDictionary(string.Empty);
         }
 
         public IConfigurationRoot Configuration { get; }
