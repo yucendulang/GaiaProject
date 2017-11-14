@@ -14,6 +14,7 @@ namespace GaiaCore.Gaia
             FactionName = name;
             if (gg == null)
             {
+                gg = new GaiaGame(new string[] { });
                 return;
             }
             if (gg.IsTestGame)
