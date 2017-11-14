@@ -13,12 +13,12 @@ function createMap(id,type) {
     console.log("js start");
     DrawMap(contentx);
 
-    if (type == undefined || type == "build") {
+    if (type === undefined || type === "build") {
         c.addEventListener('click', function (e) {
             //console.log(list);
             var xy = getEventPosition(e);
             var clickObj = getClickObj(xy.x, xy.y);
-            if (clickObj.typename != undefined) {
+            if (clickObj.typename !== undefined) {
                 switch (clickObj.typename) {
                 case "Mine":
                     $("#syntax").val("upgrade {0} to {1}".format(clickObj.position, "TC"));
@@ -27,7 +27,7 @@ function createMap(id,type) {
                 case "ResearchLab":
                     //$("#myModalLabel").text("新增");
                     //如果是ResearchLab
-                    if (clickObj.typename == "ResearchLab") {
+                    if (clickObj.typename === "ResearchLab") {
                         $("#updateBuildList").html('<option value="">--请选择升级建筑--</option><option value="AC1">AC1</option><option value="AC2">AC2</option>')
                         $("#sttBody").show();
                     }
@@ -39,7 +39,7 @@ function createMap(id,type) {
 
                     $("#updateBuildList").change(function () {
                         //SH
-                        if ($(this).val() == "SH") {
+                        if ($(this).val() === "SH") {
                             $("#sttBody").hide();
                         } else {
                             $("#sttBody").show();
@@ -58,12 +58,12 @@ function createMap(id,type) {
                     $("#updateQuery").click(function () {
 
                         var upJz = $("#updateBuildList").val();
-                        if (upJz == "SH") {
+                        if (upJz === "SH") {
                             $("#syntax").val("upgrade {0} to {1}.".format(clickObj.position,
                                 upJz));
                         } else {
 
-                            if ($("#stt6List").val() != "") {
+                            if ($("#stt6List").val() !== "") {
                                 $("#syntax").val("upgrade {0} to {1}.+{2}.".format(clickObj.position,
                                     upJz, $("#stt6List").val()));
 
@@ -107,14 +107,14 @@ function createMap(id,type) {
             //alert(getEventPosition(e).x+"/"+getEventPosition(e).y);
         }, false);
     }
-    else if (type == "act") {
-        if (isFirstAct == true) {
+    else if (type === "act") {
+        if (isFirstAct === true) {
             isFirstAct = false;
             c.addEventListener('click', function (e) {
                 //console.log(list);
                 var xy = getEventPosition(e);
                 var clickObj = getClickObj(xy.x, xy.y);
-                if (clickObj.typename != undefined) {
+                if (clickObj.typename !== undefined) {
                     alert("不能选择已经有建筑的地点");
                 } else {
                     $("#syntax").val($("#syntax").val() + ".build " + clickObj.position);
@@ -126,8 +126,8 @@ function createMap(id,type) {
         }
 
     }
-    else if (type == "al1" || type == "al2") {
-        if (isFirstAl == true) {
+    else if (type === "al1" || type === "al2") {
+        if (isFirstAl === true) {
             isFirstAl = false;
             //确认点事件
             $("#queryPosList").click(function() {
@@ -139,10 +139,10 @@ function createMap(id,type) {
                 posList = posList.substring(0, posList.length - 1);
                 //设置命令
                 var value;
-                if (type == "al1") {
+                if (type === "al1") {
                     value = "satellite " + posList
                 }
-                else if (type == "al2") {
+                else if (type === "al2") {
                     value = "alliance " + posList
                 }
                 value = value + ".+" + $("#alSelectList").val();
@@ -156,10 +156,10 @@ function createMap(id,type) {
                 //console.log(list);
                 var xy = getEventPosition(e);
                 var clickObj = getClickObj(xy.x, xy.y);
-                if (type == "al1" && clickObj.typename != undefined) {
+                if (type === "al1" && clickObj.typename !== undefined) {
                     alert("不能选择已经有建筑的地点");
                 }
-                if (type == "al2" && clickObj.typename == undefined) {
+                if (type === "al2" && clickObj.typename === undefined) {
                     alert("不能选择空白的地点");
                 } else {
                     //添加位置

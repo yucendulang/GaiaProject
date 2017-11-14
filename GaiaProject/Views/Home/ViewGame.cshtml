@@ -201,112 +201,114 @@
 
      }
 
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">行动区域</h3>
-        </div>
-        <div class="panel-body">
+    @if (@Model.GameStatus.RoundCount > 0)
+     {
+         <div class="panel panel-default">
+             <div class="panel-heading">
+                 <h3 class="panel-title">行动区域</h3>
+             </div>
+             <div class="panel-body">
             
             
-            <div class="row">
-                <div class="col-md-5" style="padding-left:50px">
-                    <div class="row" id="actBody">
+                 <div class="row">
+                     <div class="col-md-5" style="padding-left:50px">
+                         <div class="row" id="actBody">
 
 
-                        @foreach (var item in Model.MapActionMrg.mapActList)
-                                    {
-                            <div class="col-xs-6 col-md-2" style="height: 60px; width: 60px; text-align: center; line-height: 60px; background: url(/images/pwactionbg.gif);" id="@item.GetType().Name">
+                             @foreach (var item in Model.MapActionMrg.mapActList)
+                             {
+                                 <div class="col-xs-6 col-md-2" style="height: 60px; width: 60px; text-align: center; line-height: 60px; background: url(/images/pwactionbg.gif);" id="@item.GetType().Name">
 
 
-                                @if (item.IsUsed)
-                                    {
-                                    <a href="#" style="color:red">@item.GetText()</a>
-                                }
-                                else
-                                {
-                                    <a href="#"  style="color:green">@item.GetText()</a>
-                                }
-                            </div>
-                        }
-                    </div>
-                    <div class="row" id="actConst">
+                                     @if (item.IsUsed)
+                                     {
+                                         <a href="#" style="color:red">@item.GetText()</a>
+                                     }
+                                     else
+                                     {
+                                         <a href="#"  style="color:green">@item.GetText()</a>
+                                     }
+                                 </div>
+                             }
+                         </div>
+                         <div class="row" id="actConst">
 
-                        @foreach (var name in new string[] { "-7pw", "-5pw", "-4pw", "-4pw", "-4pw", "-3pw", "-3pw", "-4Q", "-3Q", "-2Q" })
-                        {
-                            <div class="col-xs-6 col-md-2" style="height: 30px; width: 60px;">
-                                @name
-                            </div>
-                        }
-                    </div>
-                </div>
+                             @foreach (var name in new string[] { "-7pw", "-5pw", "-4pw", "-4pw", "-4pw", "-3pw", "-3pw", "-4Q", "-3Q", "-2Q" })
+                             {
+                                 <div class="col-xs-6 col-md-2" style="height: 30px; width: 60px;">
+                                     @name
+                                 </div>
+                             }
+                         </div>
+                     </div>
                 
-                <div class="col-md-5" style="background-color: #c3c3c3">
+                     <div class="col-md-5" style="background-color: #c3c3c3">
 
-                    <div class="col-md-5">
-                        <div class="input-group">
-                            <input type="text" class="form-control selectchange" placeholder="输入数值" syntax="burn ">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default actionGp" type="button" syntax="burn ">牺牲能量</button>
-                            </span>
-                        </div>
-                    </div>
+                         <div class="col-md-5">
+                             <div class="input-group">
+                                 <input type="text" class="form-control selectchange" placeholder="输入数值" syntax="burn ">
+                                 <span class="input-group-btn">
+                                     <button class="btn btn-default actionGp" type="button" syntax="burn ">牺牲能量</button>
+                                 </span>
+                             </div>
+                         </div>
                     
 
-                    <div class="col-md-5">
-                        @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActList, "code", "name"), "--未完成快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert " })
-                    </div>
-                </div>
-            </div>
+                         <div class="col-md-5">
+                             @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActList, "code", "name"), "--未完成快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert " })
+                         </div>
+                     </div>
+                 </div>
             
 
             
-            <div class="row">
-                <div class="btn-group btn-group-lg col-md-4" role="group" aria-label="Large button group" id="">
-                    <button type="button" class="btn btn-default" id="createAl">选择卫星位置</button>                       
-                    <button type="button" class="btn btn-default" id="createZjAl">直接建立联邦</button>                      
-                    <button type="button" class="btn btn-default actionGp" id="quxiaoAl">确认成立联邦</button>
-                </div>
+                 <div class="row">
+                     <div class="btn-group btn-group-lg col-md-4" role="group" aria-label="Large button group" id="">
+                         <button type="button" class="btn btn-default" id="createAl">选择卫星位置</button>                       
+                         <button type="button" class="btn btn-default" id="createZjAl">直接建立联邦</button>                      
+                         <button type="button" class="btn btn-default actionGp" id="quxiaoAl">确认成立联邦</button>
+                     </div>
                 
                 
-                <div class="col-md-3">
-                    <div class="input-group">
+                     <div class="col-md-3">
+                         <div class="input-group">
                         
-                        <select class="btn dropdown-toggle form-control selectchange" id="updatekjaction" name="enumList" syntax="advance "><option value="">--请选择升级科技--</option>
-                            <option value="tf">地形改造</option>
-                            <option value="ship">航行</option>
-                            <option value="ai">人工智能</option>
-                            <option value="gaia">盖亚计划</option>
-                            <option value="eco">经济</option>
-                            <option value="sci">科学</option>
-                        </select>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default actionGp" type="button">确定升级</button>
-                        </span>
-                    </div>
-                </div>
+                             <select class="btn dropdown-toggle form-control selectchange" id="updatekjaction" name="enumList" syntax="advance "><option value="">--请选择升级科技--</option>
+                                 <option value="tf">地形改造</option>
+                                 <option value="ship">航行</option>
+                                 <option value="ai">人工智能</option>
+                                 <option value="gaia">盖亚计划</option>
+                                 <option value="eco">经济</option>
+                                 <option value="sci">科学</option>
+                             </select>
+                             <span class="input-group-btn">
+                                 <button class="btn btn-default actionGp" type="button">确定升级</button>
+                             </span>
+                         </div>
+                     </div>
 
-                <div class="col-md-3">
-                    <div class="input-group">
+                     <div class="col-md-3">
+                         <div class="input-group">
                 
-                        @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"), "--请选择回合助推板--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "rbtPassList", @syntax = "pass " })
+                             @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"), "--请选择回合助推板--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "rbtPassList", @syntax = "pass " })
 
-                        <span class="input-group-btn">
-                            <button class="btn btn-default actionGp" type="button" syntax="pass ">结束回合</button>
-                        </span>
-                    </div>
-                </div>
-            </div>
+                             <span class="input-group-btn">
+                                 <button class="btn btn-default actionGp" type="button" syntax="pass ">结束回合</button>
+                             </span>
+                         </div>
+                     </div>
+                 </div>
             
-            <div class="row">
+                 <div class="row">
 
-            </div>
+                 </div>
             
 
-        </div>
-    </div>
+             </div>
+         </div>
 
-
+     }
+ 
 
     <div class="row">
         <div class="col-md-7" id="myCanvasDiv">
@@ -457,13 +459,23 @@
                     <div class="panel panel-default">
                         <!-- Default panel contents -->
                         <div class="panel-heading">回合助推板</div>
+                        <div class="panel-body">
+                            
+                            @foreach (var item in Model.RBTList)
+                            {
+                                <div style="height: 40px; width: 300px; text-align: center; background: url('/images/rbtback.png');font-size:15px;line-height:40px">@item.GetType().Name @item.desc</div>
+                                <br/>
+                            }
+                            
 
-                        <ul class="list-group">
+                        </div>
+
+                        @*<ul class="list-group">
                             @foreach (var item in Model.RBTList)
                                     {
                                 <li class="list-group-item">@item.GetType().Name @item.desc</li>
                             }
-                        </ul>
+                        </ul>*@
                     </div>
                     
                     
@@ -649,37 +661,29 @@
                                    
                             </td>
                             @foreach (var item in Model.FactionList)
-                                    {
+                            {
+
                                 <td>
                                     <span  style="background-color: @item.ColorCode">@item.ChineseName</span>
 
-
                                 </td>
+                                            
+                                        
                             }
-                        </tr>            
+                        </tr>  
                         @foreach (var item in Model.FSTList)
-                                    {
+                        {
                             <tr>
                                 <td>
                                     @item.GetType().Name @item.desc
                                 </td>
-                                <td>
-                                    0
-                                </td>
-                                <td>
-                                    0
-                                </td>
-                                <td>
-                                    0
-                                </td>
-                                <td>
-                                    0
-                                </td>
+                                @foreach (var fac in Model.FactionList)
+                                {
+                                    <td>0</td>
+                                }
+
                             </tr>
-                                    @*<li class="list-group-item">@item.GetType().Name @item.desc</li>*@
                         }
-
-
 
                     </table>
                 </div>
