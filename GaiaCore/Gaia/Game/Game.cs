@@ -357,6 +357,7 @@ namespace GaiaCore.Gaia
                         Action queue = () =>
                         {
                             faction.IncreaseTech(tech);
+                            faction.Knowledge = faction.Knowledge;
                         };
                         faction.ActionQueue.Enqueue(queue);
                         if (faction.TechTracAdv > 0)
@@ -365,7 +366,7 @@ namespace GaiaCore.Gaia
                         }
                         else
                         {
-                            faction.Knowledge -= 4;
+                            faction.TempKnowledge -= 4;
                         }
                     }
                     else
