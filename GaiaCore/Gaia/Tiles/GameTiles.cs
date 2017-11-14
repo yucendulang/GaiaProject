@@ -21,6 +21,10 @@ namespace GaiaCore.Gaia.Tiles
         /// 板块类型
         /// </summary>
         public string typename { get; set; }
+        /// <summary>
+        /// 显示顺序
+        /// </summary>
+        public int showRank { get; set; }
 
         public virtual int GetOreIncome() { return 0; }
 

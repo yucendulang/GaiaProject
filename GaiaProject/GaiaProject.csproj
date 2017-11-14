@@ -45,5 +45,9 @@
     <ProjectReference Include="..\GaiaCore\GaiaCore.csproj" />
     <ProjectReference Include="..\ManageTool\ManageTool.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\新文件夹1\" />
+    <Folder Include="wwwroot\lib\新文件夹\" />
+  </ItemGroup>
 
 </Project>

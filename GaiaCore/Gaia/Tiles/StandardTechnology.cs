@@ -125,7 +125,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             this.name = this.GetType().Name;
             this.typename = "stt";
-
+            this.showRank = 2;
         }
     }
     /// <summary>

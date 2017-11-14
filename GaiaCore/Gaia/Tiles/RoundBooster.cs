@@ -35,6 +35,7 @@ namespace GaiaCore.Gaia.Tiles
         public RoundBooster()
         {
             this.typename = "rbt";
+            this.showRank = 1;
         }
     }
 
