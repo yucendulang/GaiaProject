@@ -56,9 +56,13 @@ namespace GaiaCore.Gaia
                 log = "两个建筑必须一个是矿场一个是要塞";
                 return false;
             }
-            var tempbuild = hex1.Building;
-            hex1.Building = hex2.Building;
-            hex2.Building = tempbuild;
+            ActionQueue.Enqueue(() =>
+            {
+                var tempbuild = hex1.Building;
+                hex1.Building = hex2.Building;
+                hex2.Building = tempbuild;
+            });
+            FactionSpecialAbility--;
             return true;
         }
         public class Amb : MapAction
@@ -69,7 +73,11 @@ namespace GaiaCore.Gaia
             public override bool InvokeGameTileAction(Faction faction)
             {
                 faction.FactionSpecialAbility++;
-                return base.InvokeGameTileAction(faction);
+                faction.ActionQueue.Enqueue(() =>
+                {
+                    base.InvokeGameTileAction(faction);
+                });
+                return true;
             }
         }
     }
