@@ -271,6 +271,12 @@ namespace GaiaCore.Gaia
                 log = "能且只能执行一个普通行动";
                 return false;
             }
+            //能接建造行动的action也只能用一个
+            if(commandList.Sum(y => GameFreeSyntax.actionRegex.IsMatch(y) ? 1 : 0)!=1)
+            {
+                log = "各种特殊Act一回合只能执行一次";
+                return false;
+            }
             var ret=ProcessCommandWithBackup(commandList.ToArray(),faction,out log);
             faction.ResetUnfinishAction();
             return ret;

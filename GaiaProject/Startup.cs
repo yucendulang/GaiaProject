@@ -33,9 +33,8 @@ namespace GaiaProject
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
-            GaiaCore.Gaia.GameMgr.RestoreDictionary(string.Empty);
             DaemonMgr.StartAll();
-
+            GaiaCore.Gaia.GameMgr.RestoreDictionary(string.Empty);
         }
 
         public IConfigurationRoot Configuration { get; }
