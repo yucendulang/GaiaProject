@@ -105,7 +105,7 @@ namespace GaiaCore.Gaia
                     if (GameSyntax.leechPowerRegex.IsMatch(syntax))
                     {
                         ret = ProcessSyntaxLeechPower(syntax, ref log);
-                        if (ret)
+                        if (ret && FactionList.All(x => x.LeechPowerQueue.Count == 0))
                         {
                             FactionList = FactionNextTurnList;
                             FactionNextTurnList = new List<Faction>();
@@ -304,6 +304,7 @@ namespace GaiaCore.Gaia
             var factionFromStr = match.Groups[3].Value;
             Enum.TryParse(factionFromStr, true, out FactionName factionFrom);
             faction.LeechPower(power, factionFrom, isLeech);
+
             return true;
         }
 
