@@ -14,7 +14,7 @@ namespace GaiaCore.Gaia
             FactionName = name;
             if (gg == null)
             {
-                gg = new GaiaGame(new String[] { });
+                gg = new GaiaGame(new string[] { });
                 return;
             }
             if (gg.IsTestGame)
@@ -35,6 +35,7 @@ namespace GaiaCore.Gaia
                 m_powerToken3 = 0;
                 m_ShipLevel = 0;
             }
+            
 
             m_powerToken1 = 2;
             m_powerToken2 = 4;
@@ -277,11 +278,6 @@ namespace GaiaCore.Gaia
 
         protected virtual void CalQICIncome()
         {
-            if (Academy2 == null)
-            {
-                QICs += 1;
-            }
-
             QICs += GameTileList.Sum(x => x.GetQICIncome());
         }
 
@@ -401,6 +397,7 @@ namespace GaiaCore.Gaia
         public int TechTracAdv { get => m_TechTrachAdv; set => m_TechTrachAdv = value; }
         public int TerraFormNumber { get => m_TerraFormNumber; set => m_TerraFormNumber = value; }
         public int TempShip { get => m_TempShip; set => m_TempShip = value; }
+
         public int PowerTokenGaia { get => m_powerTokenGaia + TempPowerTokenGaia; set { m_powerTokenGaia = value; TempPowerTokenGaia = 0; } }
         public int AllianceTileReGet { get => m_AllianceTileReGet; set => m_AllianceTileReGet = value; }
 

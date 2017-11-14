@@ -10,7 +10,7 @@ namespace GaiaCore.Gaia
     public abstract partial class Faction
     {
 
-        internal bool BuildMine(Map map, int row, int col, out string log)
+        internal virtual bool BuildMine(Map map, int row, int col, out string log)
         {
 
             log = string.Empty;
@@ -191,6 +191,8 @@ namespace GaiaCore.Gaia
                 log = string.Format("建筑距离太偏远了,需要{0}个Q来加速", (distanceNeed - GetShipDistance + 1) / 2);
                 return false;
             }
+
+            var QSHIP = Math.Max((distanceNeed - GetShipDistance + 1) / 2, 0);
             //扣资源建建筑
             Action queue = () =>
             {
@@ -199,7 +201,7 @@ namespace GaiaCore.Gaia
                 map.HexArray[row, col].FactionBelongTo = FactionName;
                 PowerTokenGaia += GetGaiaCost();
                 Gaias.RemoveAt(0);
-                QICs -= Math.Max((distanceNeed - GetShipDistance + 1) / 2, 0);
+                QICs -= QSHIP;
             };
             ActionQueue.Enqueue(queue);
             TempShip = 0;
@@ -226,6 +228,13 @@ namespace GaiaCore.Gaia
                 group h by h.TFTerrain into g
                 select g;
             return q.Count();
+        }
+
+        internal bool IsPlanetTypeExist(Terrain terrain)
+        {
+            var hexList = GaiaGame.Map.GetHexList();
+
+            return hexList.ToList().Exists(x => x.FactionBelongTo == FactionName && !(x.Building is GaiaBuilding) && x.TFTerrain == terrain);
         }
         public virtual void PowerBurnSpecialPreview(int v)
         {
