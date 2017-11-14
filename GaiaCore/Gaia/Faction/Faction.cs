@@ -14,7 +14,7 @@ namespace GaiaCore.Gaia
             FactionName = name;
             if (gg == null)
             {
-                gg=new GaiaGame(new String[]{});
+                gg = new GaiaGame(new String[] { });
                 return;
             }
             if (gg.IsTestGame)
@@ -35,7 +35,7 @@ namespace GaiaCore.Gaia
                 m_powerToken3 = 0;
                 m_ShipLevel = 0;
             }
-            
+
             m_powerToken1 = 2;
             m_powerToken2 = 4;
             m_powerTokenGaia = 0;
@@ -331,11 +331,11 @@ namespace GaiaCore.Gaia
         public Academy Academy1 { set; get; }
         public Academy Academy2 { set; get; }
         public StrongHold StrongHold { set; get; }
-        public int Credit { get => m_credit+TempCredit; set => m_credit = value; }
-        public int Ore { get => m_ore+TempOre; set => m_ore = value; }
-        public int Knowledge { get => m_knowledge+TempKnowledge; set => m_knowledge = value; }
-        public int QICs { get => m_QICs+TempQICs; set => m_QICs = value; }
-        public int PowerToken1 { get => m_powerToken1 + TempPowerToken1; set => m_powerToken1 = value; }
+        public int Credit { get => m_credit + TempCredit; set { m_credit = value; TempCredit = 0; } }
+        public int Ore { get => m_ore + TempOre; set { m_ore = value; TempOre = 0; } }
+        public int Knowledge { get => m_knowledge + TempKnowledge; set { m_knowledge = value; TempKnowledge = 0; } }
+        public int QICs { get => m_QICs + TempQICs; set { m_QICs = value; TempQICs = 0; } }
+        public int PowerToken1 { get => m_powerToken1 + TempPowerToken1; set { m_powerToken1 = value; TempPowerToken1 = 0; } }
         public int PowerToken2 { get => m_powerToken2 + TempPowerToken2; set => m_powerToken2 = value; }
         public int PowerToken3 { get => m_powerToken3 + TempPowerToken3; set => m_powerToken3 = value; }
         public int TransformLevel { get => m_TransformLevel; }
@@ -401,7 +401,7 @@ namespace GaiaCore.Gaia
         public int TechTracAdv { get => m_TechTrachAdv; set => m_TechTrachAdv = value; }
         public int TerraFormNumber { get => m_TerraFormNumber; set => m_TerraFormNumber = value; }
         public int TempShip { get => m_TempShip; set => m_TempShip = value; }
-        public int PowerTokenGaia { get => m_powerTokenGaia + TempPowerTokenGaia; set => m_powerTokenGaia = value; }
+        public int PowerTokenGaia { get => m_powerTokenGaia + TempPowerTokenGaia; set { m_powerTokenGaia = value; TempPowerTokenGaia = 0; } }
         public int AllianceTileReGet { get => m_AllianceTileReGet; set => m_AllianceTileReGet = value; }
 
         private static List<FieldInfo> list = new List<FieldInfo>()
