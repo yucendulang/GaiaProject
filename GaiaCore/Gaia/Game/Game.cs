@@ -131,23 +131,23 @@ namespace GaiaCore.Gaia
 
         private bool ProcessSyntaxGaiaPhase(string syntax, ref string log)
         {
-            if(!ValidateSyntaxCommand(syntax, ref log, out string commmand,out Faction faction))
+            if (!ValidateSyntaxCommand(syntax, ref log, out string commmand, out Faction faction))
             {
                 return false;
             }
             if (GameSpecialSyntax.PassRegex.IsMatch(commmand))
             {
-                GaiaPhase();
+                GaiaNextPlayer();
                 return true;
             }
 
             var commandList = commmand.Split('.').Where(x => !string.IsNullOrEmpty(x));
-            if(faction is Itar)
+            if (faction is Itar)
             {
                 var itar = faction as Itar;
                 //只支持+stt行动
-                if (!commandList.ToList().TrueForAll(x => GameFreeSyntax.getTechTilesRegex.IsMatch(x) 
-                || GameFreeSyntax.ReturnTechTilesRegex.IsMatch(x) 
+                if (!commandList.ToList().TrueForAll(x => GameFreeSyntax.getTechTilesRegex.IsMatch(x)
+                || GameFreeSyntax.ReturnTechTilesRegex.IsMatch(x)
                 || GameFreeSyntax.advTechRegex2.IsMatch(x)
                 || GameFreeSyntax.NoAdvanceTechTrack.IsMatch(x)))
                 {
@@ -169,9 +169,48 @@ namespace GaiaCore.Gaia
                 faction.ResetUnfinishAction();
 
 
-                if(faction.PowerTokenGaia < GameConstNumber.ItarGaiaGetTechTileCost)
+                if (faction.PowerTokenGaia < GameConstNumber.ItarGaiaGetTechTileCost)
                 {
-                    GaiaPhase();
+                    GaiaNextPlayer();
+                }
+                return ret;
+            }
+            else if (faction is Terraner)
+            {
+                var terraner = faction as Terraner;
+                //只支持convert行动
+                if (commandList.Count() != 1)
+                {
+                    log = "一条语句进行一次转换";
+                    return false;
+                }
+                if (!commandList.ToList().TrueForAll(x => GameFreeSyntax.ConvertRegex.IsMatch(x)))
+                {
+                    log = "只支持魔力转换行动";
+                    return false;
+                }
+                var str = commandList.First();
+                var match = GameFreeSyntax.ConvertRegex.Match(str);
+                var RFNum = match.Groups[1].Value.ParseToInt(0);
+                var RFKind = match.Groups[2].Value;
+                var RTNum = match.Groups[3].Value.ParseToInt(0);
+                var RTKind = match.Groups[4].Value;
+                var ret = terraner.ConvertGaiaPowerToAnother(RFNum, RFKind, RTNum, RTKind, out log);
+                if (terraner.IsExitUnfinishFreeAction(out log))
+                {
+                    return false;
+                }
+
+                foreach (var item in faction.ActionQueue)
+                {
+                    item.Invoke();
+                }
+                faction.ResetUnfinishAction();
+
+
+                if (faction.PowerTokenGaia == 0)
+                {
+                    GaiaNextPlayer();
                 }
                 return ret;
             }
@@ -194,15 +233,32 @@ namespace GaiaCore.Gaia
                 ChangeGameStatus(Stage.ROUNDINCOME);
                 FactionList.ForEach(x => x.CalIncome());
                 ChangeGameStatus(Stage.ROUNDGAIAPHASE);
-                var spFaction = FactionList.Find(x => x is Itar);
-                if (spFaction != null && spFaction.PowerTokenGaia >= GameConstNumber.ItarGaiaGetTechTileCost && spFaction.StrongHold == null)
+                var spFaction = FactionList.FindAll(x => x is Itar || x is Terraner);
+                foreach (var item in spFaction)
                 {
-                    GameStatus.PlayerIndex = FactionList.FindIndex(x => x is Itar);
+                    if (item is Itar && item.PowerTokenGaia >= GameConstNumber.ItarGaiaGetTechTileCost && item.StrongHold == null)
+                    {
+                        GameStatus.GaiaPlayerIndexQueue.Enqueue(FactionList.IndexOf(item));
+                    }
+                    else if (item is Terraner && item.PowerTokenGaia > 0 && item.StrongHold == null)
+                    {
+                        GameStatus.GaiaPlayerIndexQueue.Enqueue(FactionList.IndexOf(item));
+                    }
                 }
-                else
-                {
-                    GaiaPhase();
-                }
+                GaiaNextPlayer();
+
+            }
+        }
+
+        private void GaiaNextPlayer()
+        {
+            if (GameStatus.GaiaPlayerIndexQueue.Count == 0)
+            {
+                GaiaPhase();
+            }
+            else
+            {
+                GameStatus.PlayerIndex = GameStatus.GaiaPlayerIndexQueue.Dequeue();
             }
         }
 

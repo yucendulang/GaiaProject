@@ -9,6 +9,7 @@ namespace GaiaCore.Gaia
             m_PlayerIndex = 1;
             m_IntialFlag = false;
             m_PassPlayerIndex = new List<int>();
+            GaiaPlayerIndexQueue = new Queue<int>();
         }
         public Status status = Status.PREPARING;
         public Stage stage = Stage.RANDOMSETUP;
@@ -36,6 +37,10 @@ namespace GaiaCore.Gaia
         public int PlayerNumber { get => m_PlayerNumber; set => m_PlayerNumber = value; }
         public int RoundCount { get => m_RoundCount; set => m_RoundCount = value; }
         public int TurnCount { get => m_TurnCount; set => m_TurnCount = value; }
+        /// <summary>
+        /// 储存Gaia阶段的行动先后顺序
+        /// </summary>
+        public Queue<int> GaiaPlayerIndexQueue { get; internal set; }
 
         public void SetPlayerIndexLast()
         {
