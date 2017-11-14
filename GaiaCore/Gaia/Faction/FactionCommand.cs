@@ -254,6 +254,12 @@ namespace GaiaCore.Gaia
             }
         }
 
+        internal virtual void GaiaPhaseIncome()
+        {
+            PowerToken1 += PowerTokenGaia;
+            PowerTokenGaia = 0;
+        }
+
         private int GetGaiaCost()
         {
             if (m_GaiaLevel == 0)

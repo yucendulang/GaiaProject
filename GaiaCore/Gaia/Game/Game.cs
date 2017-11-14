@@ -227,11 +227,9 @@ namespace GaiaCore.Gaia
                     item.TFTerrain = Terrain.Green;
                 }
             }
-            FactionList.ForEach(x =>
-            {
-                x.PowerToken1 += x.PowerTokenGaia;
-                x.PowerTokenGaia = 0;
-            });
+
+            FactionList.ForEach(x => x.GaiaPhaseIncome());
+
             GameStatus.NewRoundReset();
             FactionList.ForEach(x => x.GameTileList.ForEach(y => y.IsUsed = false));
             MapActionMrg.Reset();
@@ -272,7 +270,7 @@ namespace GaiaCore.Gaia
                 return false;
             }
             //能接建造行动的action也只能用一个
-            if(commandList.Sum(y => GameFreeSyntax.actionRegex.IsMatch(y) ? 1 : 0)!=1)
+            if (commandList.Sum(y => GameFreeSyntax.actionRegex.IsMatch(y) ? 1 : 0) > 1)
             {
                 log = "各种特殊Act一回合只能执行一次";
                 return false;

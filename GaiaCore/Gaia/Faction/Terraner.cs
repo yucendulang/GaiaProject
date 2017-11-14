@@ -10,8 +10,18 @@ namespace GaiaCore.Gaia
         {
             this.ChineseName = "人类";
             this.ColorCode = colorList[0];
+            if (gg != null)
+            {
+                IncreaseTech("gaia");
+            }
 
         }
         public override Terrain OGTerrain { get => Terrain.Blue; }
+
+        internal override void GaiaPhaseIncome()
+        {
+            PowerToken2 += PowerTokenGaia;
+            PowerTokenGaia = 0;
+        }
     }
 }
