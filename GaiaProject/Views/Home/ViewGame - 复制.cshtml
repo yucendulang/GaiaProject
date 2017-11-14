@@ -11,7 +11,7 @@
 
     
 
-<link rel="stylesheet" href="~/css/sitegameview.css?version=2" asp-append-version="true" />    
+    
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -325,9 +325,33 @@
         </div>
         <div class="col-md-5">
 
+            <script type="text/javascript">
+                var legendData = [];
+                var seriesData = [];
+
+            </script>
+    
+
             @foreach (var item in Model.FactionList)
             {
+
                 <script type="text/javascript">
+                    legendData.push("@Html.Raw(@item.ChineseName)");
+                    seriesData.push({
+                        name: "@Html.Raw(@item.ChineseName)",
+                        type: 'bar',
+                        data: [
+                            @item.TransformLevel, @item.ShipLevel, @item.AILevel, @item.GaiaLevel,
+                            @item.EconomicLevel, @item.ScienceLevel
+                        ],
+                        itemStyle:{
+                            normal:{
+                                color:'@item.ColorCode'
+                            }
+                        },
+                        //color:'@item.ColorCode'
+                    });
+
                     $(function () {
                         var span = '<span style="background-color: @item.ColorCode">&nbsp;&nbsp;</span>&nbsp;';
                         $("#tt_l" + @item.TransformLevel).find("td").eq(1).append(span);
@@ -447,56 +471,108 @@
     <div class="row">
         
         <div class="col-md-5">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="panel panel-default">
-                        <!-- Default panel contents -->
-                        <div class="panel-heading">回合助推板</div>
-
-                        <ul class="list-group">
-                            @foreach (var item in Model.RBTList)
-                            {
-                                <li class="list-group-item">@item.GetType().Name @item.desc</li>
-                            }
-                        </ul>
-                    </div>
-                    
-                    
-                </div>
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">回合计分板</div>                        
-                        
-
-                                <ul class="list-group">
-                                    @for (int i = 0; i < Model.RSTList.Count; i++)
-                                    {
-                                        @if (@Model.GameStatus.RoundCount == i + 1)
-                                         {
-                                             <li class="list-group-item" style="background-color: #c3c3c3">Round @(i + 1) @Model.RSTList[i].desc</li>
-                                         }
-                                         else if (@Model.GameStatus.RoundCount > i + 1)
-                                         {
-                                             <li class="list-group-item" style="background-color: #c3c3c3">Round @(i + 1) @Model.RSTList[i].desc</li>
-                                         }
-                                         else
-                                         {
-                                             <li class="list-group-item">Round @(i + 1) @Model.RSTList[i].desc</li>
-                                         }
-                                    }
-
-                                </ul>
-                            
-
-                        </div>
-                    </div>
-                </div>
+            <script src="~/js/echarts.min.js"></script>
+            @*<div style="background: url(/images/development.png);background-size:100% 80%;">
+                <div id="main" style="width: 100%; height: 400px;"></div>
+            </div>*@
+            <div >
+                <div id="main" style="width: 100%; height: 400px;"></div>
             </div>
+            <script type="text/javascript">
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById('main'));
 
+                // 指定图表的配置项和数据
+                option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    legend: {
+                        //data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎','百度','谷歌','必应','其他']
+                        data: legendData
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            //地形改造 航行  人工智能  盖亚计划  经济 科学
+                            data: ['地形改造', '航行', '人工智能', '盖亚计划', '经济', '科学']
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            interval :1,
+                            type: 'value',
+                            //min : -1,
+                            max : 5
+                        }
+                    ],
+                    series: seriesData
+
+                };
+
+                // console.log(legendData);
+                //console.log(seriesData);
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+
+                //下面是需要添加的方法内容  
+//点击柱状图跳转相应页面的功能，其中param.name参数为横坐标的值   
+                //var ecConfig = echarts.config;
+                //var ecConfig = require('echarts/config');
+                function eConsole(param) {  
+                    if (typeof param.seriesIndex != 'undefined') {  
+                        switch (param.name) {  
+                        case "新浪":      
+                            window.location.href = "http://www.sina.com";  
+                            window.open("http://www.sina.com", "_blank");//在新页面打开  
+                            break;  
+                        case "百度":    
+                            window.location.href = "http://www.baidu.com";  
+                            break;  
+                        case "腾讯":    
+                            window.location.href = "http://www.qq.com";  
+                            break;  
+                        default:  
+                            break;  
+                        }  
+                    }  
+                    console.log(param);
+                }  
+                myChart.on("click", eConsole);  
+                //myChart.on(ecConfig.EVENT.CLICK, eConsole); 
+            </script>
         </div>
         <div class="col-md-7">
-       
+
+
+            
+            <table class="table">
+                <thead>
+
+                </thead>
+                <tbody>
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+  
             <table class="table">
                 <thead>
                 <tr>
@@ -622,6 +698,11 @@
                 </tbody>
             </table>
 
+
+
+
+
+
         </div>
 
 
@@ -632,55 +713,66 @@
     <div class="row">
 
         <div class="col-md-5">
+            
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">回合助推板</div>
 
-            <div class="panel panel-default">
-                <!-- Default panel contents -->
-                <div class="panel-heading">终局计分板</div>
-                <div class="panel-body">       
-                            
-                    <table class="table">
-                        <tr>
-                            <td>
-                                   
-                            </td>
-                            @foreach (var item in Model.FactionList)
+                        <ul class="list-group">
+                            @foreach (var item in Model.RBTList)
                             {
-                                <td>
-                                    <span  style="background-color: @item.ColorCode">@item.ChineseName</span>
-                                    
-                                </td>
+                                <li class="list-group-item">@item.GetType().Name @item.desc</li>
                             }
-                        </tr>            
-                        @foreach (var item in Model.FSTList)
-                        {
-                            <tr>
-                                <td>
-                                    @item.GetType().Name @item.desc
-                                </td>
-                                <td>
-                                    0
-                                </td>
-                                <td>
-                                    0
-                                </td>
-                                <td>
-                                    0
-                                </td>
-                                <td>
-                                    0
-                                </td>
-                            </tr>
-                                    @*<li class="list-group-item">@item.GetType().Name @item.desc</li>*@
-                        }
+                        </ul>
+                    </div>
+                    
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">终局计分板</div>
 
-
-
-                    </table>
+                        <ul class="list-group">
+                            @foreach (var item in Model.FSTList)
+                            {
+                                <li class="list-group-item">@item.GetType().Name @item.desc</li>
+                            }
+                        </ul>
+                    </div>
                 </div>
-                          
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">回合计分板</div>
 
+                        <!-- List group -->
+                        <ul class="list-group">
+                            @for (int i = 0; i < Model.RSTList.Count; i++)
+                            {
+                                @if (@Model.GameStatus.RoundCount == i+1)
+                                 {
+                                     <li class="list-group-item" style="background-color: #c3c3c3">Round @(i + 1) @Model.RSTList[i].desc</li>
+                                 }
+                                 else if (@Model.GameStatus.RoundCount > i+1)
+                                 {
+                                     <li class="list-group-item" style="background-color: #c3c3c3">Round @(i + 1) @Model.RSTList[i].desc</li>
+                                 }
+                                 else
+                                 {
+                                     <li class="list-group-item">Round @(i + 1) @Model.RSTList[i].desc</li>
+                                 }
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
 
             </div>
+
         </div>
 
         <div class="col-md-5">
