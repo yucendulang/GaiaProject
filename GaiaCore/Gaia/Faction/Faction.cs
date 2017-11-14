@@ -128,6 +128,7 @@ namespace GaiaCore.Gaia
         /// 中文名称
         /// </summary>
         public string ChineseName { get; set; }
+        public string UserName { get; set; } 
 
         public string[] colorList = new string[] { "#16a0e0", "#d71729", "#d75d0c", "#deb703", "#8b3a0e", "#6b6868", "#ebfafb" };
         //public  string[] colorList= new string[]{ "#6bd8f3", "#f23c4d", "#ea8736", "#facd2f", "#ad5e2f", "#a3a3a3", "#d3f1f5" }; 

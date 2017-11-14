@@ -1047,6 +1047,7 @@ namespace GaiaCore.Gaia
                 user = Username[FactionList.Count - 1];
             }
             UserDic[user].Add(FactionList.Last());
+            FactionList.Last().UserName = user;
         }
 
         private void GameStart(string syntax, int i = 0)
