@@ -278,11 +278,6 @@ namespace GaiaCore.Gaia
 
         protected virtual void CalQICIncome()
         {
-            if (Academy2 == null)
-            {
-                QICs += 1;
-            }
-
             QICs += GameTileList.Sum(x => x.GetQICIncome());
         }
 
