@@ -98,10 +98,13 @@
                             </h4>
                         </div>
                         <div class="modal-body" id="canvasSelectMap">
-                            <div class="btn-group" role="group" aria-label="..." id="alPosList">
-                                @*<button type="button" class="btn btn-default">Left</button>
-                                <button type="button" class="btn btn-default">Middle</button>
-                                <button type="button" class="btn btn-default">Right</button>*@
+
+                            <div class="row">
+                                <div class="btn-group" role="group" aria-label="..." id="alPosList">
+                                </div>
+                                <div>
+                                    @Html.DropDownList("enumList", new SelectList(Model.ALTList.GroupBy(a => a.desc).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name) }), "name", "desc"), "--请选择联邦板块--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList", @syntax = "+" })
+                                </div>
                             </div>
                             <canvas id="myCanvasSelect" width="950" height="740" style="border: 1px solid #c3c3c3;">
                                 Your browser does not support the canvas element.
@@ -149,10 +152,10 @@
         }
 
         @if (Model.UserDic.ContainsKey(User.Identity.Name))
-        {
-            @foreach (var fac in Model.UserDic[User.Identity.Name])
+                                    {
+                                        @foreach (var fac in Model.UserDic[User.Identity.Name])
              {
-                 @foreach (var leech in fac.LeechPowerQueue)
+                                            @foreach (var leech in fac.LeechPowerQueue)
                   {
                       <form asp-controller="Home" asp-action="LeechPower" asp-route-returnurl="/Home/Contact" method="post" class="form-horizontal">
                           <div>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力</div>
@@ -168,7 +171,7 @@
         }
 
         @if (ViewData["log"] != null)
-        {
+                                    {
             <p>@ViewData["log"]</p>
         }
 
@@ -189,7 +192,7 @@
                          </div>
                          <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
                          @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
-                         {
+                                    {
                              <input id="test3" name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden" />
                          }
                      </div><!-- /.input-group -->
@@ -209,13 +212,15 @@
             <div class="row">
                 <div class="col-md-5" style="padding-left:50px">
                     <div class="row" id="actBody">
-    
+
+
                         @foreach (var item in Model.MapActionMrg.mapActList)
-                        {
+                                    {
                             <div class="col-xs-6 col-md-2" style="height: 60px; width: 60px; text-align: center; line-height: 60px; background: url(/images/pwactionbg.gif);" id="@item.GetType().Name">
-                   
+
+
                                 @if (item.IsUsed)
-                                {
+                                    {
                                     <a href="#" style="color:red">@item.GetText()</a>
                                 }
                                 else
@@ -312,12 +317,12 @@
                 <div class="panel-body">
                     当前回合玩家:
                     @foreach (var orderPlayer in Model.FactionList.Except(Model.FactionNextTurnList))
-                    {
+                                    {
                         <span style="background-color: @orderPlayer.ColorCode">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span>
                     }
-                    跳过回合玩家:
+                                    跳过回合玩家:
                     @foreach (var orderPlayer in Model.FactionNextTurnList)
-                    {
+                                    {
                         <span style="background-color: @orderPlayer.ColorCode">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span>
                     }
                 </div>
@@ -326,17 +331,17 @@
         <div class="col-md-5">
 
             @foreach (var item in Model.FactionList)
-            {
+                                    {
                 <script type="text/javascript">
                     $(function () {
-                        var span = '<span style="background-color: @item.ColorCode">&nbsp;&nbsp;</span>&nbsp;';
+                                            var span = '<span style="background-color: @item.ColorCode">&nbsp;&nbsp;</span>&nbsp;';
                         $("#tt_l" + @item.TransformLevel).find("td").eq(1).append(span);
                         $("#tt_l" + @item.ShipLevel).find("td").eq(2).append(span);
                         $("#tt_l" + @item.AILevel).find("td").eq(3).append(span);
                         $("#tt_l" + @item.GaiaLevel).find("td").eq(4).append(span);
                         $("#tt_l" + @item.EconomicLevel).find("td").eq(5).append(span);
                         $("#tt_l" + @item.ScienceLevel).find("td").eq(6).append(span);
-                    });
+                                        });
 
                 </script>
 
@@ -348,8 +353,8 @@
                     <div class="panel-body">
                         <div class="row">
                         @if (@Model.GameStatus.RoundCount > 0)
-                        {
-                            @if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.HadschHalla && @Model.FactionList[0].FactionName == FactionName.HadschHalla && @item.StrongHold==null) //圣擒族
+                                    {
+                                        @if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.HadschHalla && @Model.FactionList[0].FactionName == FactionName.HadschHalla && @item.StrongHold==null) //圣擒族
                              {
                                  <div  class="col-lg-6">
                                      <div class="input-group">
@@ -408,7 +413,7 @@
                                         <td>@(3 - item.ResearchLabs.Count)/3</td>
                                         <td>
                                             @if (item.Academy1 == null)
-                                            {
+                                    {
                                                 <span>1/1</span>
                                             }
                                             else
@@ -417,7 +422,7 @@
                                         </td>
                                         <td>
                                             @if (item.Academy2 == null)
-                                            {
+                                    {
                                                 <span>1/1</span>}
                                             else
                                             {
@@ -425,7 +430,7 @@
                                         </td>
                                         <td>
                                             @if (item.StrongHold == null)
-                                            {
+                                    {
                                                 <span>1/1</span>}
                                             else
                                             {
@@ -455,7 +460,7 @@
 
                         <ul class="list-group">
                             @foreach (var item in Model.RBTList)
-                            {
+                                    {
                                 <li class="list-group-item">@item.GetType().Name @item.desc</li>
                             }
                         </ul>
@@ -473,7 +478,7 @@
                                     @for (int i = 0; i < Model.RSTList.Count; i++)
                                     {
                                         @if (@Model.GameStatus.RoundCount == i + 1)
-                                         {
+                                    {
                                              <li class="list-group-item" style="background-color: #c3c3c3">Round @(i + 1) @Model.RSTList[i].desc</li>
                                          }
                                          else if (@Model.GameStatus.RoundCount > i + 1)
@@ -585,12 +590,14 @@
                     <td></td>
                     <td></td>
                     <td>
-                        
+
+
                     </td>
                     <td></td>
                     <td></td>
-                </tr>                   
-                    
+                </tr>
+
+
 
                 <tr>
                     <td>
@@ -606,7 +613,7 @@
                         基础科技(6)
                     </td>
                     @foreach (var item in Model.STT6ListGroup)
-                    {
+                                    {
                         <td title="@item.name">@item.desc (@item.count)</td>
                     }
                 </tr>
@@ -615,7 +622,7 @@
                         基础科技(3)
                     </td>
                     @foreach (var item in Model.STT3ListGroup)
-                    {
+                                    {
                         <td colspan="2" style="text-align: center"  title="@item.name">@item.desc (@item.count)</td>
                     }
                 </tr>
@@ -634,25 +641,24 @@
         <div class="col-md-5">
 
             <div class="panel panel-default">
-                <!-- Default panel contents -->
-                <div class="panel-heading">终局计分板</div>
-                <div class="panel-body">       
-                            
+                <div class="panel-heading">终局计分板(数量统计未实现功能)</div>
+                <div class="panel-body">                                 
                     <table class="table">
                         <tr>
                             <td>
                                    
                             </td>
                             @foreach (var item in Model.FactionList)
-                            {
+                                    {
                                 <td>
                                     <span  style="background-color: @item.ColorCode">@item.ChineseName</span>
-                                    
+
+
                                 </td>
                             }
                         </tr>            
                         @foreach (var item in Model.FSTList)
-                        {
+                                    {
                             <tr>
                                 <td>
                                     @item.GetType().Name @item.desc
