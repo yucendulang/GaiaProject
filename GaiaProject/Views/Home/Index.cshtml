@@ -4,7 +4,7 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <p>@ViewData["Message"]</p>
+    <p id="username">@ViewData["Message"]</p>
     <p><a href="/home/NewGame">创建新游戏</a></p>
     <h4>你的游戏</h4>
     @if (ViewData["GameList"] != null)
@@ -19,6 +19,7 @@
     <h4>2917-11-14更新如下</h4>
 
     //<s>新增晶石矿人</s>
+    <li>Index也加入待动局提醒</li>
     <li>修正执行advance行动时后续操作如果失败扣除知识的问题</li>
     <li>修正在行动之后使用Convert使资源异常增加的问题</li>
     <li>修正Act2与Act6可以一起用的问题</li>
@@ -33,9 +34,29 @@
             <p><a href="/home/RestoreDataFromServer">从服务器恢复所有游戏</a></p>
         </environment>
     }
+    <script>
+    setTimeout('GetNextGame()', 10000); //指定1秒刷新一次
+
+    function GetNextGame() {
+        if ($("#isMyTurn").text().indexOf("True") == -1) {
+            $.post("/home/GetNextGame",
+                {
+                    name: $("p#username").text()
+                },
+                function (data, status) {
+                    console.log(data);
+                    if (data == undefined || data == "") {
+                    } else {
+                        window.location.href = "/home/viewgame/" + data;
+                        alert("你的回合");
+                    }
+                });
+        }
+        setTimeout('GetNextGame()', 10000);
+    }
+    </script>
 }
 else
 {
     <p>不对未注册用户开放</p>
 }
-
