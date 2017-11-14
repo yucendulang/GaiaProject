@@ -10,6 +10,7 @@ namespace GaiaCore.Gaia
         {
             this.ChineseName = "人类";
             this.ColorCode = colorList[0];
+            m_powerToken1 += 2;
             if (gg != null)
             {
                 IncreaseTech("gaia");
