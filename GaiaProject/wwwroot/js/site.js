@@ -145,7 +145,7 @@ function createMap(id,type) {
                 else if (type == "al2") {
                     value = "alliance " + posList
                 }
-                value = value + " altx " + $("#alSelectList").val();
+                value = value + ".+" + $("#alSelectList").val();
                 $("#syntax").val(value);
                 //隐藏和清空
                 $('#myModalCanves').modal('hide');
