@@ -18,7 +18,7 @@ namespace GaiaCore.Gaia
         public override Terrain OGTerrain { get => Terrain.Gray; }
         public override void CalIncome()
         {
-            m_knowledge += 2;
+            m_knowledge += 1;
             base.CalIncome();
         }
 
