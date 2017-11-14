@@ -121,6 +121,10 @@ namespace GaiaCore.Gaia
         public static IEnumerable<string> RestoreDictionary(string filename)
         {
             string logReader = GetLastestBackupData(filename);
+            if (string.IsNullOrEmpty(logReader))
+            {
+                return null;
+            }
             return RestoreAllGames(logReader);
         }
 
@@ -167,6 +171,10 @@ namespace GaiaCore.Gaia
             {
                 var d = new DirectoryInfo(BackupDataPath);
                 filename = (from p in d.EnumerateFiles() orderby p.Name descending select p.Name).FirstOrDefault();
+            }
+            if (string.IsNullOrEmpty(filename))
+            {
+                return null;
             }
             System.Diagnostics.Debug.WriteLine("读取文件" + filename);
             var logPath = Path.Combine(BackupDataPath, filename);
