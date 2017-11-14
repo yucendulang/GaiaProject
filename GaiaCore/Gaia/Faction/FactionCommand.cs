@@ -254,6 +254,12 @@ namespace GaiaCore.Gaia
             }
         }
 
+        internal virtual void GaiaPhaseIncome()
+        {
+            PowerToken1 += PowerTokenGaia;
+            PowerTokenGaia = 0;
+        }
+
         private int GetGaiaCost()
         {
             if (m_GaiaLevel == 0)
@@ -833,6 +839,7 @@ namespace GaiaCore.Gaia
                     if (PowerToken3 < rFNum)
                     {
                         log = "魔力值不够";
+                        return false;
                     }
                     TempPowerToken3 -= rFNum;
                     TempPowerToken1 += rFNum;
@@ -857,6 +864,7 @@ namespace GaiaCore.Gaia
                     if (PowerToken3 < rFNum)
                     {
                         log = "魔力值不够";
+                        return false;
                     }
                     TempPowerToken3 -= rFNum;
                     TempPowerToken1 += rFNum;
@@ -881,6 +889,7 @@ namespace GaiaCore.Gaia
                     if (PowerToken3 < rFNum)
                     {
                         log = "魔力值不够";
+                        return false;
                     }
                     TempPowerToken3 -= rFNum;
                     TempPowerToken1 += rFNum;
@@ -905,6 +914,7 @@ namespace GaiaCore.Gaia
                     if (PowerToken3 < rFNum)
                     {
                         log = "魔力值不够";
+                        return false;
                     }
                     TempPowerToken3 -= rFNum;
                     TempPowerToken1 += rFNum;
@@ -929,6 +939,7 @@ namespace GaiaCore.Gaia
                     if (QICs < rFNum)
                     {
                         log = "Q不够";
+                        return false;
                     }
                     TempQICs -= rFNum;
                     TempOre += rTNum;
@@ -950,6 +961,7 @@ namespace GaiaCore.Gaia
                     if (Knowledge < rFNum)
                     {
                         log = "知识不够";
+                        return false;
                     }
                     TempKnowledge -= rFNum;
                     TempCredit += rTNum;
@@ -971,6 +983,7 @@ namespace GaiaCore.Gaia
                     if (Ore < rFNum)
                     {
                         log = "矿不够";
+                        return false;
                     }
                     TempOre -= rFNum;
                     TempCredit += rTNum;
@@ -992,6 +1005,7 @@ namespace GaiaCore.Gaia
                     if (Ore < rFNum)
                     {
                         log = "矿不够";
+                        return false;
                     }
                     TempOre -= rFNum;
                     TempPowerToken1 += rTNum;
@@ -1013,6 +1027,7 @@ namespace GaiaCore.Gaia
                     if (Ore < rFNum)
                     {
                         log = "Q不够";
+                        return false;
                     }
                     TempQICs -= rFNum;
                     TempCredit += rTNum;
@@ -1034,6 +1049,7 @@ namespace GaiaCore.Gaia
                     if (Ore < rFNum)
                     {
                         log = "q不够";
+                        return false;
                     }
                     TempQICs -= rFNum;
                     TempPowerToken1 += rTNum;
