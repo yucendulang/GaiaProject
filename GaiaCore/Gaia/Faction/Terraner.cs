@@ -47,7 +47,7 @@ namespace GaiaCore.Gaia
                     Action action = () =>
                     {
                         PowerTokenGaia = PowerTokenGaia;
-                        PowerToken1 = PowerToken1;
+                        PowerToken2 = PowerToken2;
                         QICs = QICs;
                         TempPowerTokenGaia = 0;
                         TempPowerToken2 = 0;
@@ -72,7 +72,7 @@ namespace GaiaCore.Gaia
                     action = () =>
                     {
                         PowerTokenGaia = PowerTokenGaia;
-                        PowerToken1 = PowerToken1;
+                        PowerToken2 = PowerToken2;
                         Ore = Ore;
                         TempPowerTokenGaia = 0;
                         TempPowerToken2 = 0;
@@ -97,7 +97,7 @@ namespace GaiaCore.Gaia
                     action = () =>
                     {
                         PowerTokenGaia = PowerTokenGaia;
-                        PowerToken1 = PowerToken1;
+                        PowerToken2 = PowerToken2;
                         Knowledge = Knowledge;
                         TempPowerTokenGaia = 0;
                         TempPowerToken2 = 0;
@@ -122,7 +122,7 @@ namespace GaiaCore.Gaia
                     action = () =>
                     {
                         PowerTokenGaia = PowerTokenGaia;
-                        PowerToken1 = PowerToken1;
+                        PowerToken2 = PowerToken2;
                         Credit = Credit;
                         TempPowerTokenGaia = 0;
                         TempPowerToken2 = 0;
