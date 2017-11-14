@@ -6,6 +6,7 @@
 {
     <p>@ViewData["Message"]</p>
     <p><a href="/home/NewGame">创建新游戏</a></p>
+    <h4>你的游戏</h4>
     @if (ViewData["GameList"] != null)
     {
         @foreach (var item in (IEnumerable<string>)ViewData["GameList"])
@@ -13,6 +14,13 @@
             <li><a href="/home/ViewGame/@item">@item</a></li>
         }
     }
+    <hr>
+    <p>提示：可用种族为异空族,伊塔星人,圣禽族,大使星人,晶矿星人,其余种族为白板</p>
+    <h4>更新列表</h4>
+
+    <li>新增晶石矿人</li>
+
+    
 
     @if (UserManager.GetUserName(User).Equals("yucenyucen@126.com"))
     {
