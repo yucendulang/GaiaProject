@@ -18,6 +18,13 @@
     <Content Remove="wwwroot/js\faction.js" />
     <Content Remove="wwwroot/js\game.js" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\css\sitegameview.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="wwwroot\css\sitegameview.min.css" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
