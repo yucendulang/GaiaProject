@@ -46,6 +46,9 @@ namespace GaiaCore.Gaia.Tiles
         public AdavanceTechnology()
         {
             isPicked = false;
+
+            this.name = this.GetType().Name;
+
         }
         public virtual bool isPicked { set; get; }
     }
