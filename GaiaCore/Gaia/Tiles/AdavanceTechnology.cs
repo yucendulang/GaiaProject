@@ -48,6 +48,7 @@ namespace GaiaCore.Gaia.Tiles
             isPicked = false;
 
             this.name = this.GetType().Name;
+            this.typename = "att";
 
         }
         public virtual bool isPicked { set; get; }

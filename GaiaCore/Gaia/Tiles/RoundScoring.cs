@@ -31,7 +31,10 @@ namespace GaiaCore.Gaia.Tiles
 
     public abstract class RoundScoring:GameTiles
     {
-        
+        public RoundScoring()
+        {
+            this.typename = "rst";
+        }
     }
     public class RST1 : RoundScoring
     {

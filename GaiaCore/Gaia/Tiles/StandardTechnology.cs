@@ -124,6 +124,8 @@ namespace GaiaCore.Gaia.Tiles
         public StandardTechnology()
         {
             this.name = this.GetType().Name;
+            this.typename = "stt";
+
         }
     }
     /// <summary>

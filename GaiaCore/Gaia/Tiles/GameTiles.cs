@@ -17,6 +17,11 @@ namespace GaiaCore.Gaia.Tiles
 
         public abstract string desc { get; }
 
+        /// <summary>
+        /// 板块类型
+        /// </summary>
+        public string typename { get; set; }
+
         public virtual int GetOreIncome() { return 0; }
 
         public virtual int GetCreditIncome() { return 0; }

@@ -32,6 +32,10 @@ namespace GaiaCore.Gaia.Tiles
     }
     public abstract class RoundBooster:GameTiles
     {
+        public RoundBooster()
+        {
+            this.typename = "rbt";
+        }
     }
 
     public class RBT1 : RoundBooster

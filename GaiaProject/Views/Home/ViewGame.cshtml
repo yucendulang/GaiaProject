@@ -12,6 +12,34 @@
     
 
 <link rel="stylesheet" href="~/css/sitegameview.css?version=2" asp-append-version="true" />    
+<style type="text/css">
+    .brtcss {
+        height: 40px;
+        width: 300px;
+        text-align: center;
+        background: url('/images/rbtback.png');
+        font-size: 15px;
+        line-height: 40px
+    }
+    .brtusedcss {
+        height: 40px;
+        width: 300px;
+        text-align: center;
+        background: url('/images/rbtback.png');
+        font-size: 15px;
+        line-height: 40px;
+        color: red
+    }
+
+    .sttcss {
+        height: 124px;
+        width: 169px;
+        background: url('/images/sttback.png');
+        background-size: 100%;
+        text-align: center;
+        line-height: 100px;
+    }
+</style>
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -354,39 +382,70 @@
                     </div>
                     <div class="panel-body">
                         <div class="row">
-                        @if (@Model.GameStatus.RoundCount > 0)
-                                    {
-                                        @if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.HadschHalla && @Model.FactionList[0].FactionName == FactionName.HadschHalla && @item.StrongHold==null) //圣擒族
-                             {
-                                 <div  class="col-lg-6">
-                                     <div class="input-group">
+                            @if (@Model.GameStatus.RoundCount > 0)
+                            {
+                                @if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.HadschHalla && @Model.FactionList[0].FactionName == FactionName.HadschHalla && @item.StrongHold==null) //圣擒族
+                                 {
+                                     <div  class="col-lg-6">
+                                         <div class="input-group">
                                                            
-                                         @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListHadsch, "code", "name"), "--要塞行动--", new {@class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert "})
+                                             @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListHadsch, "code", "name"), "--要塞行动--", new {@class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert "})
                                     
-                                         <span class="input-group-btn">
-                                             <button class="btn btn-default actionGp" type="button">确定</button>
-                                         </span>
+                                             <span class="input-group-btn">
+                                                 <button class="btn btn-default actionGp" type="button">确定</button>
+                                             </span>
+                                         </div>
                                      </div>
-                                 </div>
-                             }
-                        }
-                            </div>
+                                 }
+                            }
+                        </div>
+                        <div>
+                            @foreach (var it in item.GameTileList)
+                            {
+                                if (it.typename == "rbt")
+                                {
+                                    if (it.IsUsed)
+                                    {
+                                        <div class="brtusedcss">@it.GetType().Name @it.desc</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="brtcss">@it.GetType().Name @it.desc</div>
+                                    }
+                                    //action rbt1
+                                    //action rbt2
+                                }
+                                else if (it.typename=="stt")
+                                {
+                                    if (it.IsUsed)
+                                    {
+                                        <div class="sttcss">@it.GetType().Name @it.desc</div>
+                                    }
+                                    else
+                                    {
+                                        <div  class="sttcss">@it.GetType().Name @it.desc</div>
+                                    }
+                                }
+                                else
+                                {
+                                    if (it.IsUsed)
+                                    {
+                                        <s>@it.GetType().Name @it.desc</s>
+                                    }
+                                    else
+                                    {
+                                        <div>@it.GetType().Name @it.desc</div>
+                                    }
+                                }
+                            }
+                            @**@
+                        </div>
                                 <div>
                                     @foreach (var leech in item.LeechPowerQueue)
                                     {
                                         <div>From @leech.Item2 leech @leech.Item1 power</div>
                                     }
-                                    @foreach (var it in item.GameTileList)
-                                    {
-                                        if (it.IsUsed)
-                                        {
-                                            <s>@it.GetType().Name @it.desc</s>
-                                        }
-                                        else
-                                        {
-                                            <div>@it.GetType().Name @it.desc</div>
-                                        }
-                                    }
+
                                 </div>
 
                                 <table class="table" width="50%">
@@ -453,9 +512,9 @@
                
     <div class="row">
         
-        <div class="col-md-5">
+        <div class="col-md-3">
             <div class="row">
-                <div class="col-md-6">
+                <div>
                     <div class="panel panel-default">
                         <!-- Default panel contents -->
                         <div class="panel-heading">回合助推板</div>
@@ -463,7 +522,7 @@
                             
                             @foreach (var item in Model.RBTList)
                             {
-                                <div style="height: 40px; width: 300px; text-align: center; background: url('/images/rbtback.png');font-size:15px;line-height:40px">@item.GetType().Name @item.desc</div>
+                                <div class="brtcss" style="">@item.GetType().Name @item.desc</div>
                                 <br/>
                             }
                             
@@ -480,41 +539,43 @@
                     
                     
                 </div>
-                <div class="col-md-6">
+
+            </div>
+            <div class="row">
+                <div>
                     <div class="row">
                         <div class="panel panel-default">
                             <div class="panel-heading">回合计分板</div>                        
                         
 
-                                <ul class="list-group">
-                                    @for (int i = 0; i < Model.RSTList.Count; i++)
-                                    {
-                                        @if (@Model.GameStatus.RoundCount == i + 1)
+                            <ul class="list-group">
+                                @for (int i = 0; i < Model.RSTList.Count; i++)
+                                {
+                                        @*@if (@Model.GameStatus.RoundCount == i+2)
                                     {
                                              <li class="list-group-item" style="background-color: #c3c3c3">Round @(i + 1) @Model.RSTList[i].desc</li>
-                                         }
-                                         else if (@Model.GameStatus.RoundCount > i + 1)
-                                         {
-                                             <li class="list-group-item" style="background-color: #c3c3c3">Round @(i + 1) @Model.RSTList[i].desc</li>
-                                         }
-                                         else
-                                         {
-                                             <li class="list-group-item">Round @(i + 1) @Model.RSTList[i].desc</li>
-                                         }
+                                         }*@
+                                    if (@Model.GameStatus.RoundCount >= i+2)
+                                    {
+                                        <li class="list-group-item" style="background-color: #c3c3c3">Round @(i + 1) @Model.RSTList[i].desc</li>
                                     }
+                                    else
+                                    {
+                                        <li class="list-group-item">Round @(i + 1) @Model.RSTList[i].desc</li>
+                                    }
+                                }
 
-                                </ul>
+                            </ul>
                             
 
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-        <div class="col-md-7">
+        <div class="col-md-9">
        
-            <table class="table">
+            <table class="table" style="text-align: center">
                 <thead>
                 <tr>
                     <td>Level</td>
@@ -617,16 +678,16 @@
                     </td>
                     @foreach (var item in Model.ATTList)
                     {
-                        <td title="@item.name">@item.desc</td>
+                        <td title="@item.name"> <div  style="height: 97px; width: 125px; text-align: center; line-height: 97px; background: url('/images/attback.png')">@item.desc</div></td>
                     }
                 </tr>
                 <tr>
-                    <td>
+                    <td style="height: 124px; width: 169px;">
                         基础科技(6)
                     </td>
                     @foreach (var item in Model.STT6ListGroup)
                                     {
-                        <td title="@item.name">@item.desc (@item.count)</td>
+                        <td title="@item.name" class="sttcss" style="line-height: 100px;">@item.desc (@item.count)</td>
                     }
                 </tr>
                 <tr>
@@ -634,8 +695,8 @@
                         基础科技(3)
                     </td>
                     @foreach (var item in Model.STT3ListGroup)
-                                    {
-                        <td colspan="2" style="text-align: center"  title="@item.name">@item.desc (@item.count)</td>
+                    {
+                        <td  colspan="2"  title="@item.name" style="line-height: 100px;">@item.desc (@item.count)</td>
                     }
                 </tr>
                 </tbody>
