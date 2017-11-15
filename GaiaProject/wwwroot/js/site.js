@@ -25,9 +25,9 @@ function createMap(id,type) {
                 if (!userInfo.isRound) {
                     return;
                 }
-                if (clickObj.mapcolor !== userInfo.mapcolor) {
-                    return;
-                }
+                //if (clickObj.mapcolor !== userInfo.mapcolor) {
+                //    return;
+                //}
                 switch (clickObj.typename) {
                 case "Mine":
                         //$("#syntax").val("upgrade {0} to {1}".format(clickObj.position, "TC"));
@@ -138,6 +138,8 @@ function createMap(id,type) {
                 }
                 if (clickObj.mapcolor === userInfo.mapcolor) {
                     openQueryWindow("build " + clickObj.position, "确认进行建造?");
+                } else {
+                    $("#syntax").val("build " + clickObj.position);
                 }
             }
 
