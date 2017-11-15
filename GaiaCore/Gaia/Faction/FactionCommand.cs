@@ -758,12 +758,14 @@ namespace GaiaCore.Gaia
                 return false;
             }
             var distanceNeed = GaiaGame.Map.CalShipDistanceNeed(row, col, FactionName);
-
+            TempShip++;
+            var qicship = Math.Max((distanceNeed - GetShipDistance + 1) / 2, 0);
             if (QICs * 2 < distanceNeed - GetShipDistance)
             {
-                log = string.Format("死星距离太偏远了,需要{0}个Q来加速", (distanceNeed - GetShipDistance + 1) / 2);
+                log = string.Format("死星距离太偏远了,需要{0}个Q来加速", Math.Max((distanceNeed - GetShipDistance + 1) / 2, 0));
                 return false;
             }
+
 
             Action action = () =>
             {
@@ -775,12 +777,13 @@ namespace GaiaCore.Gaia
                 {
                     GaiaGame.Map.HexArray[row, col].IsAlliance = true;
                 }
-                QICs -= Math.Max((distanceNeed - GetShipDistance + 1) / 2,0);
+                QICs -= qicship;
                 GaiaGame.SetLeechPowerQueue(FactionName, row, col);
                 TriggerRST(typeof(RST1));
                 TriggerRST(typeof(ATT4));
             };
             ActionQueue.Enqueue(action);
+            TempShip = 0;
             return true;
         }
 
