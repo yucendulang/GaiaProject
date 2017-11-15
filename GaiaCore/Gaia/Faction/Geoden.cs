@@ -19,9 +19,15 @@ namespace GaiaCore.Gaia
 
         internal override bool BuildMine(Map map, int row, int col, out string log)
         {
+            GetThreeKnowledge(row, col);
+            return base.BuildMine(map, row, col, out log);
+        }
+
+        private void GetThreeKnowledge(int row, int col)
+        {
             if (StrongHold == null)
             {
-                if (!IsPlanetTypeExist(map.HexArray[row, col].TFTerrain))
+                if (!IsPlanetTypeExist(GaiaGame.Map.HexArray[row, col].TFTerrain))
                 {
                     Action action = () =>
                     {
@@ -30,7 +36,12 @@ namespace GaiaCore.Gaia
                     ActionQueue.Enqueue(action);
                 }
             }
-            return base.BuildMine(map, row, col, out log);
+        }
+
+        internal override bool BuildBlackPlanet(int row, int col, out string log)
+        {
+            GetThreeKnowledge(row, col);
+            return BuildBlackPlanet(row, col, out log);
         }
     }
 }

@@ -743,7 +743,7 @@ namespace GaiaCore.Gaia
             m_AllianceTileGet++;
         }
 
-        internal bool BuildBlackPlanet(int row, int col, out string log)
+        internal virtual bool BuildBlackPlanet(int row, int col, out string log)
         {
             log = string.Empty;
             var hex = GaiaGame.Map.HexArray[row, col];
