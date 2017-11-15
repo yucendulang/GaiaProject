@@ -1077,7 +1077,7 @@ namespace GaiaCore.Gaia
                         log = "兑换比例为1：1";
                         return false;
                     }
-                    if (Ore < rFNum)
+                    if (QICs < rFNum)
                     {
                         log = "q不够";
                         return false;
