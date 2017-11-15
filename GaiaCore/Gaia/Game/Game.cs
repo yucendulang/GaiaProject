@@ -287,7 +287,7 @@ namespace GaiaCore.Gaia
             FactionList.ForEach(x => x.GaiaPhaseIncome());
 
             GameStatus.NewRoundReset();
-            FactionList.ForEach(x => x.GameTileList.ForEach(y => y.IsUsed = false));
+            FactionList.ForEach(x => x.GameTileList.Where(y=>!(y is AllianceTile)).ToList().ForEach(y => y.IsUsed = false));
             MapActionMrg.Reset();
             ChangeGameStatus(Stage.ROUNDSTART);
         }
