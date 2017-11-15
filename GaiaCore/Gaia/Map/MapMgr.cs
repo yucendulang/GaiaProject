@@ -225,7 +225,7 @@ namespace GaiaCore.Gaia
             };
             var sslList = new List<int>()
             {
-                1,2,3,4,10,11,12
+                0,1,2,3,10,11,12
             };
             var result = new Map();
             foreach (var item in centerTuple)
