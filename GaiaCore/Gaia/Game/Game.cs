@@ -291,7 +291,7 @@ namespace GaiaCore.Gaia
             FactionList.ForEach(x => x.GaiaPhaseIncome());
 
             GameStatus.NewRoundReset();
-            FactionList.ForEach(x => x.GameTileList.ForEach(y => y.IsUsed = false));
+            FactionList.ForEach(x => x.GameTileList.Where(y=>!(y is AllianceTile)).ToList().ForEach(y => y.IsUsed = false));
             MapActionMrg.Reset();
             ChangeGameStatus(Stage.ROUNDSTART);
         }
@@ -673,7 +673,10 @@ namespace GaiaCore.Gaia
                     var pos1 = new Tuple<int, int>(row, col);
                     ConvertPosToRowCol(match.Groups[2].Value, out row, out col);
                     var pos2 = new Tuple<int, int>(row, col);
-                    return ambas.ExcuteSHAbility(pos1, pos2,out log);
+                    if(!ambas.ExcuteSHAbility(pos1, pos2,out log))
+                    {
+                        return false;
+                    }
                 }
                 else if (item.Contains("qc"))
                 {
@@ -1055,6 +1058,7 @@ namespace GaiaCore.Gaia
                 user = Username[FactionList.Count - 1];
             }
             UserDic[user].Add(FactionList.Last());
+            FactionList.Last().UserName = user;
         }
 
         private void GameStart(string syntax, int i = 0)

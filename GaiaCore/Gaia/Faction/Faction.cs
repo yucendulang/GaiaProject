@@ -91,6 +91,8 @@ namespace GaiaCore.Gaia
 
         public FactionName FactionName { get; }
         public List<GameTiles> GameTileList { set; get; }
+        private FactionBackup backup;
+        //八种资源
         protected int m_credit;
         protected int m_ore;
         protected int m_knowledge;
@@ -99,6 +101,7 @@ namespace GaiaCore.Gaia
         protected int m_powerToken2;
         protected int m_powerToken3;
         protected int m_powerTokenGaia;
+
         protected int m_TransformLevel;
         protected int m_ShipLevel;
         protected int m_AILevel;
@@ -128,6 +131,7 @@ namespace GaiaCore.Gaia
         /// 中文名称
         /// </summary>
         public string ChineseName { get; set; }
+        public string UserName { get; set; } 
 
         public string[] colorList = new string[] { "#16a0e0", "#d71729", "#d75d0c", "#deb703", "#8b3a0e", "#6b6868", "#ebfafb" };
         //public  string[] colorList= new string[]{ "#6bd8f3", "#f23c4d", "#ea8736", "#facd2f", "#ad5e2f", "#a3a3a3", "#d3f1f5" }; 
@@ -155,7 +159,50 @@ namespace GaiaCore.Gaia
         public string LimitTechAdvance { get; set; }
         #endregion
 
+        private void BackupResource()
+        {
+            backup = new FactionBackup()
+            {
+                m_credit = m_credit,
+                m_knowledge = m_knowledge,
+                m_ore = m_ore,
+                m_powerToken1 = m_powerToken1,
+                m_powerToken2 = m_powerToken2,
+                m_powerToken3 = m_powerToken3,
+                m_powerTokenGaia = m_powerTokenGaia,
+                m_QICs = m_QICs
+            };
+        }
 
+        private void RestoreResource()
+        {
+            if (backup != null)
+            {
+                m_credit = backup.m_credit;
+                m_knowledge = backup.m_knowledge;
+                m_ore = backup.m_ore;
+                m_powerToken1 = backup.m_powerToken1;
+                m_powerToken2 = backup.m_powerToken2;
+                m_powerToken3 = backup.m_powerToken3;
+                m_powerTokenGaia = backup.m_powerTokenGaia;
+                m_QICs = backup.m_QICs;
+            };
+        }
+
+        public Dictionary<string, int> CalNextTurnIncome()
+        {
+            var ret = new Dictionary<string, int>();
+            BackupResource();
+            CalIncome();
+            ret.Add("C", m_credit - backup.m_credit);
+            ret.Add("K", m_knowledge - backup.m_knowledge);
+            ret.Add("O", m_ore - backup.m_ore);
+            ret.Add("Q", m_QICs - backup.m_QICs);
+            //ret.Add("PWT", m_powerToken1 - backup.m_powerToken1);
+            ret.Add("PW", m_powerToken2 - backup.m_powerToken2 + (m_powerToken3 - backup.m_powerToken3) * 2);
+            RestoreResource();
+            return ret;
+        }
 
         public virtual void CalIncome()
         {
@@ -165,12 +212,6 @@ namespace GaiaCore.Gaia
             CalPowerIncome();
             CalQICIncome();
             CallTechIncome();
-            CallSpecialFreeIncome();
-        }
-
-        protected virtual void CallSpecialFreeIncome()
-        {
-            return;
         }
 
         private void CallTechIncome()

@@ -68,8 +68,11 @@ namespace GaiaCore.Gaia.Tiles
         public override bool InvokeGameTileAction(Faction faction)
         {
             faction.Ore += 3;
-            return true;
+
+            return base.InvokeGameTileAction(faction);
         }
+
+        public override bool CanAction => true;
     }
     public class ATT2 : AdavanceTechnology
     {
@@ -84,8 +87,11 @@ namespace GaiaCore.Gaia.Tiles
         public override bool InvokeGameTileAction(Faction faction)
         {
             faction.Knowledge += 3;
-            return true;
+
+            return base.InvokeGameTileAction(faction);
         }
+
+        public override bool CanAction => true;
     }
     public class ATT3 : AdavanceTechnology
     {
@@ -100,7 +106,8 @@ namespace GaiaCore.Gaia.Tiles
         public override bool InvokeGameTileAction(Faction faction)
         {
             faction.QICs += 1;
-            return true;
+
+            return base.InvokeGameTileAction(faction);
         }
 
         public override bool OneTimeAction(Faction faction)
@@ -108,6 +115,8 @@ namespace GaiaCore.Gaia.Tiles
             faction.Credit += 5;
             return true;
         }
+
+        public override bool CanAction => true;
     }
     public class ATT4 : AdavanceTechnology
     {
