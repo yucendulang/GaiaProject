@@ -19,6 +19,7 @@ namespace GaiaCore.Gaia
 
         public GaiaGame(string[] username)
         {
+            UserCount = username.Count(x => !string.IsNullOrEmpty(x));
             GameStatus = new GameStatus();
             GameStatus.PlayerNumber = username.ToList().Where(x => !string.IsNullOrEmpty(x)).Count();
             FactionList = new List<Faction>();
@@ -988,6 +989,18 @@ namespace GaiaCore.Gaia
                 GameStart(syntax, seed);
                 ChangeGameStatus(Stage.FACTIONSELECTION);
                 return true;
+            }else if (GameSyntax.setupMapRegex.IsMatch(syntax))
+            {
+                var match = GameSyntax.setupMapRegex.Match(syntax);
+                var str = match.Groups[0].Value;
+                if ("fix".Equals(str))
+                {
+                    IsMapRandom = false;
+                }
+                else
+                {
+                    IsMapRandom = true;
+                }
             }
             return false;
         }
@@ -1079,7 +1092,15 @@ namespace GaiaCore.Gaia
         {
             Seed = i == 0 ? RandomInstance.Next(int.MaxValue) : i;
             var random = new Random(Seed);
-            Map = new MapMgr().GetRandomMap(random);
+            if (UserCount!=2)
+            {
+                Map = new MapMgr().GetRandomMap(random);
+            }
+            else
+            {
+                Map = new MapMgr().GetTwoPlayerFixedMap();
+            }
+
             ATTList = (from items in ATTMgr.GetRandomList(6, random) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();
             STT6List = STTMgr.GetRandomList(6, random);
             STT3List = (from items in STTMgr.GetOtherList(STT6List) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();
@@ -1201,6 +1222,9 @@ namespace GaiaCore.Gaia
                 return STT3List.GroupBy(a => a.name).Select(g => new STTInfo { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name) }).ToList();
             }
         }
+
+        public bool IsMapRandom { get; private set; }
+        public int UserCount { get; private set; }
 
         public class STTInfo
         {

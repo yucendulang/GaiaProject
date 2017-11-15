@@ -15,6 +15,7 @@ namespace GaiaCore.Gaia
         /// </summary>
         public const string setupGame = "setupgame seed";
         public static Regex setupGameRegex = new Regex(setupGame + "[0-9]+");
+        public static Regex setupMapRegex = new Regex("setupmap (random|fix)");
         /// <summary>
         /// Faction selection
         /// </summary>

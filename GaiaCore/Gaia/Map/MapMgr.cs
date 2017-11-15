@@ -138,8 +138,44 @@ namespace GaiaCore.Gaia
                 Terrain.Red,Terrain.Empty,
                 Terrain.Empty
             };
+            var ss52 = new List<Terrain>()
+            {
+                Terrain.White,
+                Terrain.Empty,Terrain.Empty,
+                Terrain.Empty,Terrain.Empty,Terrain.Purple,
+                Terrain.Green,Terrain.Empty,
+                Terrain.Empty,Terrain.Empty,Terrain.Red,
+                Terrain.Empty,Terrain.Empty,
+                Terrain.Empty,Terrain.Empty,Terrain.Empty,
+                Terrain.Orange,Terrain.Empty,
+                Terrain.Empty
+            };
+            var ss62 = new List<Terrain>()
+            {
+                Terrain.Empty,
+                Terrain.Empty,Terrain.Purple,
+                Terrain.Empty,Terrain.Empty,Terrain.Empty,
+                Terrain.Empty,Terrain.Blue,
+                Terrain.Empty,Terrain.Empty,Terrain.Empty,
+                Terrain.Empty,Terrain.Empty,
+                Terrain.Empty,Terrain.Green,Terrain.Yellow,
+                Terrain.Empty,Terrain.Purple,
+                Terrain.Empty
+            };
+            var ss72 = new List<Terrain>()
+            {
+                Terrain.Empty,
+                Terrain.Empty,Terrain.Empty,
+                Terrain.Purple,Terrain.Green,Terrain.Empty,
+                Terrain.Empty,Terrain.Empty,
+                Terrain.Empty,Terrain.Empty,Terrain.Empty,
+                Terrain.Green,Terrain.Brown,
+                Terrain.Empty,Terrain.Empty,Terrain.Empty,
+                Terrain.Empty,Terrain.Empty,
+                Terrain.Gray
+            };
             List<List<Terrain>> terrList = new List<List<Terrain>>()
-            { ss1,ss2,ss3,ss4,ss5,ss6,ss7,ss8,ss9,ss10};
+            { ss1,ss2,ss3,ss4,ss5,ss6,ss7,ss8,ss9,ss10,ss52,ss62,ss72};
             List<List<TerrenHex>> hexList = new List<List<TerrenHex>>();
             foreach (var item in terrList)
             {
@@ -179,6 +215,25 @@ namespace GaiaCore.Gaia
             System.Diagnostics.Debug.WriteLine(randomList.Count);
             return result;
         }
+
+
+        public Map GetTwoPlayerFixedMap()
+        {
+            var centerTuple = new List<Tuple<int, int>>()
+            {
+                { 2,5},{6,2},{6,7},{10,4 },{ 3,10},{7,12},{ 10,9}
+            };
+            var sslList = new List<int>()
+            {
+                1,2,3,4,10,11,12
+            };
+            var result = new Map();
+            foreach (var item in centerTuple)
+            {
+                result.AddSpaceSector(item.Item1, item.Item2, ssl[sslList[centerTuple.IndexOf(item)]], null);
+            }
+            return result;
+        }
     }
 
     public class Map
@@ -207,10 +262,13 @@ namespace GaiaCore.Gaia
             {
                 HexArray[hexList[j].Item1, hexList[j].Item2] = ss.TerranHexArray[j];
             }
-            if (!ValidateMap(hexList))
+            if (random != null)
             {
-                //System.Diagnostics.Debug.WriteLine("发现不合法");
-                AddSpaceSector(x, y, ss.RandomRotato(random), random);
+                if (!ValidateMap(hexList))
+                {
+                    //System.Diagnostics.Debug.WriteLine("发现不合法");
+                    AddSpaceSector(x, y, ss.RandomRotato(random), random);
+                }
             }
         }
 
