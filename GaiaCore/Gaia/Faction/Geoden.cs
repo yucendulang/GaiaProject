@@ -10,6 +10,8 @@ namespace GaiaCore.Gaia
         {
             this.ChineseName = "晶矿星人";
             this.ColorCode = colorList[3];
+            this.ColorMap = colorMapList[3];
+
             if (gg != null)
             {
                 IncreaseTech("tf");

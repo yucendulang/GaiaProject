@@ -10,6 +10,7 @@ namespace GaiaCore.Gaia
         {
             this.ChineseName = "异空族";
             this.ColorCode = colorList[3];
+            this.ColorMap = colorMapList[3];
 
             if (gg != null)
             {

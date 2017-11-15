@@ -134,11 +134,15 @@ namespace GaiaCore.Gaia
         public string UserName { get; set; } 
 
         public string[] colorList = new string[] { "#16a0e0", "#d71729", "#d75d0c", "#deb703", "#8b3a0e", "#6b6868", "#ebfafb" };
-        //public  string[] colorList= new string[]{ "#6bd8f3", "#f23c4d", "#ea8736", "#facd2f", "#ad5e2f", "#a3a3a3", "#d3f1f5" }; 
+        public  string[] colorMapList= new string[]{ "#6bd8f3", "#f23c4d", "#ea8736", "#facd2f", "#ad5e2f", "#a3a3a3", "#d3f1f5" }; 
         /// <summary>
         /// 种族颜色代码
         /// </summary>
         public string ColorCode { get; set; }
+        /// <summary>
+        /// 地图颜色
+        /// </summary>
+        public string ColorMap { get; set; }
 
         #region 临时变量 判断动作完成与否 需要清零
         private int m_TerraFormNumber = 0;

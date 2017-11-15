@@ -67,6 +67,35 @@
     }
 </style>
 
+@{ bool isRound = @Model.GameStatus.RoundCount > 0 && @Model.FactionList[Model.GameStatus.PlayerIndex].UserName == User.Identity.Name;}
+@if (@Model.GameStatus.RoundCount > 0)
+{
+    <script>
+        //var isRound =@isRound;
+        var userInfo = {
+            isRound: '@isRound' === 'True',
+            buildcolor: '@Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode',
+            mapcolor: '@Model.FactionList[Model.GameStatus.PlayerIndex].ColorMap',
+            round:@Model.GameStatus.RoundCount,
+        };
+        //alert(userInfo.isRound);
+    </script>
+}
+else
+{
+    <script>
+        var userInfo = {
+            isRound: false,
+            round:0
+        };
+    </script>
+}
+
+@if (isRound)
+{
+
+}
+
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -191,13 +220,16 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>  
                             <h4 class="modal-title">提示信息</h4>  
                         </div>  
-                        <div class="modal-body">  
-                            <p>您确认要执行吗？</p>  
+                        <div class="modal-body" id="">  
+                            <p id="querytitle">您确认要执行吗？</p>  
+                            <p id="querysyntax"></p>  
+
                         </div>  
                         <div class="modal-footer">  
-                            <input type="hidden" id="url"/>  
                             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>  
-                            <a  class="btn btn-success" data-dismiss="modal" id="querycfmModelYes">确定</a>  
+                            <button type="button" class="btn btn-default" data-dismiss="modal" onclick='$("#syntax").focus();'>手动输入</button>  
+
+                            <a  class="btn btn-success" data-dismiss="modal" id="querycfmModelYes">立即执行</a>  
                         </div>  
                     </div><!-- /.modal-content -->  
                 </div><!-- /.modal-dialog -->  
@@ -445,7 +477,46 @@
                                      <div  class="col-lg-6">
                                          <div class="input-group">
                                                            
-                                             @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListHadsch, "code", "name"), "--要塞行动--", new {@class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert "})
+                                             @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListHadsch, "code", "name"), "--要塞行动--", new {@class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert {0}.qc"})
+                                    
+                                             <span class="input-group-btn">
+                                                 <button class="btn btn-default actionGp" type="button">确定</button>
+                                             </span>
+                                         </div>
+                                     </div>
+                                 }
+                                else if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Nevla && @Model.FactionList[0].FactionName == FactionName.Nevla) //超星人
+                                {
+                                     <div  class="col-lg-6">
+                                         <div class="input-group">
+                                                           
+                                             @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListNevla, "code", "name"), "--快速行动--", new {@class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert {0}.qc"})
+                                    
+                                             <span class="input-group-btn">
+                                                 <button class="btn btn-default actionGp" type="button">确定</button>
+                                             </span>
+                                         </div>
+                                     </div>
+                                 }
+                                else if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.BalTak && @Model.FactionList[0].FactionName == FactionName.BalTak) //炽炎
+                                {
+                                     <div  class="col-lg-6">
+                                         <div class="input-group">
+                                                           
+                                             @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListBalTak, "code", "name"), "--快速行动--", new {@class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert {0}.qc"})
+                                    
+                                             <span class="input-group-btn">
+                                                 <button class="btn btn-default actionGp" type="button">确定</button>
+                                             </span>
+                                         </div>
+                                     </div>
+                                 }
+                                else if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Taklons && @Model.FactionList[0].FactionName == FactionName.Taklons) ////利爪
+                                {
+                                     <div  class="col-lg-6">
+                                         <div class="input-group">
+                                                           
+                                             @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTaklons, "code", "name"), "--快速行动--", new {@class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert {0}.qc"})
                                     
                                              <span class="input-group-btn">
                                                  <button class="btn btn-default actionGp" type="button">确定</button>
@@ -502,7 +573,7 @@
                                                  <div class="sttcss col-md-6" id="@item.FactionName@it.name">@it.GetType().Name<br /> @it.desc</div>
                                                  <script>
                                                      $("#@item.FactionName@it.name").click(function () {
-                                                         openQueryWindow("@it.name");
+                                                         openQueryWindow("action @it.name");
                                                      })
                                                  </script>
                                              }
@@ -526,7 +597,7 @@
                                                  <div class="attcss col-md-6" id="@item.FactionName@it.name">@it.GetType().Name <br />@it.desc</div>
                                                  <script>
                                                      $("#@item.FactionName@it.name").click(function () {
-                                                         openQueryWindow("@it.name");
+                                                         openQueryWindow("action @it.name");
                                                      })
                                                  </script>
                                              }
@@ -1103,7 +1174,7 @@
                 if (value === "ACT6" || value === "ACT2" ) {
                     selectMapPos(value);
                 } else {
-                    openQueryWindow(value);
+                    openQueryWindow("action {0}".format(value));
                     //$("#syntax").val("action {0}".format(value));
                 }
             }
@@ -1127,15 +1198,23 @@
             createMap("myCanvasSelect","al2");
         });
         //弹出确认对话框
-        function openQueryWindow(type) {
-            actType = type;
+        function openQueryWindow(type,title) {
+            //actType = "action {0}".format(actType);
+            //actType = type;
+            $("#syntax").val(type);
+            $("#querysyntax").text(type);
+            if (title != undefined) {
+                $("#querytitle").html(title);
+            } else {
+                //
+                $("#querytitle").html("您确认要执行吗?");
+            }
+
             $("#querycfmModel").modal();
         }
         //确认对话框
-        var actType;
         $("#querycfmModelYes").click(function () {
             //var value = $(this).attr("act");
-            $("#syntax").val("action {0}".format(actType));
             $("#querycfmModel").modal('hide');
             submitData();
         });

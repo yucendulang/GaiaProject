@@ -10,6 +10,7 @@ namespace GaiaCore.Gaia
         {
             this.ChineseName = "利爪族";
             this.ColorCode = colorList[4];
+            this.ColorMap = colorMapList[4];
 
         }
         public override Terrain OGTerrain { get => Terrain.Brown; }

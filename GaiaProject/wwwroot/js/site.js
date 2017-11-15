@@ -20,10 +20,18 @@ function createMap(id,type) {
             //console.log(list);
             var xy = getEventPosition(e);
             var clickObj = getClickObj(xy.x, xy.y);
+            console.log(clickObj);
             if (clickObj.typename !== undefined) {
+                if (!userInfo.isRound) {
+                    return;
+                }
+                if (clickObj.mapcolor !== userInfo.mapcolor) {
+                    return;
+                }
                 switch (clickObj.typename) {
                 case "Mine":
-                    $("#syntax").val("upgrade {0} to {1}".format(clickObj.position, "TC"));
+                        //$("#syntax").val("upgrade {0} to {1}".format(clickObj.position, "TC"));
+                        openQueryWindow("upgrade {0} to {1}".format(clickObj.position, "TC"), "是否要升级{0}建筑".format(clickObj.position));
                     break;
                 case "TradeCenter":
                 case "ResearchLab":
@@ -61,10 +69,10 @@ function createMap(id,type) {
                     });
 
                     $("#updateQuery").click(function () {
-
+                        var execcode;
                         var upJz = $("#updateBuildList").val();
                         if (upJz === "SH") {
-                            $("#syntax").val("upgrade {0} to {1}.".format(clickObj.position,
+                            execcode =("upgrade {0} to {1}.".format(clickObj.position,
                                 upJz));
                         } else {
                             var kj = $("#updatekj").val();
@@ -79,12 +87,12 @@ function createMap(id,type) {
                                     alert("请选择升级科技");
                                     return;
                                 } else {
-                                    $("#syntax").val("upgrade {0} to {1}.+{2}.-{3}. advance {4}".format(clickObj.position, upJz, $("#attList").val(), fg, kj));
+                                    execcode = ("upgrade {0} to {1}.+{2}.-{3}. advance {4}".format(clickObj.position, upJz, $("#attList").val(), fg, kj));
                                 }
                             }
                             //基础科技
                             else if ($("#stt6List").val() !== "") {
-                                $("#syntax").val("upgrade {0} to {1}.+{2}.".format(clickObj.position,
+                                execcode = ("upgrade {0} to {1}.+{2}.".format(clickObj.position,
                                     upJz, $("#stt6List").val()));
 
                             }
@@ -96,20 +104,14 @@ function createMap(id,type) {
                                 }
                                 else
                                 {
-                                    $("#syntax").val("upgrade {0} to {1}.+{2}. advance {3}".format(clickObj.position, upJz, $("#stt3List").val(), $("#updatekj").val()));
+                                    execcode = ("upgrade {0} to {1}.+{2}. advance {3}".format(clickObj.position, upJz, $("#stt3List").val(), $("#updatekj").val()));
                                 }
                             }
                         }
                         $('#myModal').modal('hide');
+                        openQueryWindow(execcode);
                     });
-                    //                        $("#updateBuildList li").click(function() {
-                    //                            $("#syntax").val("upgrade {0} to {1}.+".format(clickObj.position, this.id));
-                    //                            $('#myModal').modal('hide');
-                    //                    });
                     break;
-                //case "ResearchLab":
-                //$("#syntax").val("upgrade {0} to {1}".format(clickObj.position,"AC"));
-                //break;
                 case "Academy":
 
                     break;
@@ -117,18 +119,26 @@ function createMap(id,type) {
                     //alert("不能继续升级");
                     break;
                 case "GaiaBuilding":
-                    $("#syntax").val("build " + clickObj.position);
+                        //$("#syntax").val("build " + clickObj.position);
+                        openQueryWindow("build " + clickObj.position);
                     //alert("不能继续升级");
                     break;
                 case "gaizao":
-                    $("#syntax").val("gaia " + clickObj.position);
-                    //alert("不能继续升级");
+                    //$("#syntax").val("gaia " + clickObj.position);
+                        openQueryWindow("gaia " + clickObj.position,"确认进行盖亚改造?");
                     break;
                 default:
                     console.log("不能继续升级");
                 }
-            } else {
-                $("#syntax").val("build " + clickObj.position);
+            }
+            else {
+                //$("#syntax").val("build " + clickObj.position);
+                if (userInfo.round === 0) {
+                    $("#syntax").val("build " + clickObj.position);
+                }
+                if (clickObj.mapcolor === userInfo.mapcolor) {
+                    openQueryWindow("build " + clickObj.position, "确认进行建造?");
+                }
             }
 
             console.log(clickObj);
@@ -384,6 +394,7 @@ function makeHexPath(ctx, x, y, size, color,name) {
         //建筑对象
         buildingObj.typename = "gaizao";
     }
+    buildingObj.mapcolor = color;
     //console.log(color);
     activeObjList.push(buildingObj);
     //activeObjList.push({ "name": name, "row": row, "col": col });
@@ -558,7 +569,11 @@ function DrawAcademy(ctx, row, col, name) {
 }
 
 function fillBuilding(ctx, name) {
-    ctx.fillStyle = ConvertRaceIntToColor(name);
+    var color = ConvertRaceIntToColor(name);
+    ctx.fillStyle = color;
+    //颜色添加进去
+    buildingObj.buildcolor = color;
+
     ctx.fill();
 
     ctx.strokeStyle = "Black";

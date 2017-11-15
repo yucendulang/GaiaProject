@@ -10,6 +10,7 @@ namespace GaiaCore.Gaia
         {
             this.ChineseName = "大使星人";
             this.ColorCode = colorList[4];
+            this.ColorMap = colorMapList[4];
             if (gg != null)
             {
                 IncreaseTech("ship");

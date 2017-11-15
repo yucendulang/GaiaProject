@@ -10,6 +10,7 @@ namespace GaiaCore.Gaia
         {
             this.ChineseName = "超星人";
             this.ColorCode = colorList[6];
+            this.ColorMap = colorMapList[6];
 
 
         }

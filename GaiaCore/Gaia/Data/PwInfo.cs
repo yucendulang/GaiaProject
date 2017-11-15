@@ -106,7 +106,7 @@ namespace GaiaCore.Gaia.Data
             new PwInfo(){code = "4c to 1q",name = "4点信用点兑换1个量子方块"},
             new PwInfo(){code = "4c to 1k",name = "4点信用点兑换1点知识"},
             new PwInfo(){code = "3c to 1o",name = "3点信用点兑换1个矿石"},
-            new PwInfo(){code = "3c to 1pwt",name = "3点信用点兑换1个能量指示物"},
+            //new PwInfo(){code = "3c to 1pwt",name = "3点信用点兑换1个能量指示物"},
 
 
         };

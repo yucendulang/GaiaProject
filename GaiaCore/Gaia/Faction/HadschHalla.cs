@@ -9,7 +9,8 @@ namespace GaiaCore.Gaia
         public HadschHalla(GaiaGame gg) : base(FactionName.HadschHalla, gg)
         {
             this.ChineseName = "圣禽族";
-            this.ColorCode = colorList[1];
+            this.ColorCode = colorList[1]; this.ColorMap = colorMapList[1];
+
             if (gg != null)
             {
                 IncreaseTech("eco");
