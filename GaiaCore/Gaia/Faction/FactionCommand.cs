@@ -1262,10 +1262,11 @@ namespace GaiaCore.Gaia
             }
         }
 
-        internal bool IsIncreateTechValide(string tech)
+        internal bool IsIncreateTechValide(string tech,out string log)
         {
+            log = string.Empty;
             var index = TechStrList.FindIndex(x=>x.Equals(tech));
-            return IsIncreaseTechLevelByIndexValidate(index);
+            return IsIncreaseTechLevelByIndexValidate(index,out log);
         }
 
         private void ReturnBuilding(Building building)

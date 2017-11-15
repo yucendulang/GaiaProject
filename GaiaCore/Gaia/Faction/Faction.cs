@@ -457,8 +457,9 @@ namespace GaiaCore.Gaia
         };
 
 
-        public bool IsIncreaseTechLevelByIndexValidate(int index)
+        public bool IsIncreaseTechLevelByIndexValidate(int index, out string log)
         {
+            log = string.Empty;
             if (index < 0 | index > 5)
             {
                 throw new Exception("超出科技条边界");
@@ -470,17 +471,21 @@ namespace GaiaCore.Gaia
             }
             else if (level == 4)
             {
-                if (GameTileList.Exists(x => x is AllianceTile && x.IsUsed == false))
+                if (GaiaGame.FactionList.Exists(x => (int)list[index].GetValue(x) == 5))
                 {
-                    return true;
-                }
-                else
-                {
+                    log = "已经有人登顶了,只有一人能登顶";
                     return false;
                 }
+                if (!GameTileList.Exists(x => x is AllianceTile && x.IsUsed == false))
+                {
+                    log = "需要星盟版(ALT)才能继续升级";
+                    return false;
+                }
+                return true;
             }
             else
             {
+                log = "满级情况不能继续升级";
                 return false;
             }
             return true;
