@@ -41,7 +41,6 @@ namespace GaiaCore.Gaia
             if (map.HexArray[row, col].TFTerrain == Terrain.Green)
             {
                 isGreenPlanet = true;
-                TempQICs -= 1;
                 if (map.HexArray[row, col].TFTerrain == Terrain.Green
                     && map.HexArray[row, col].Building is GaiaBuilding
                     && map.HexArray[row, col].FactionBelongTo == FactionName)
@@ -50,6 +49,7 @@ namespace GaiaCore.Gaia
                 }
                 else
                 {
+                    TempQICs -= 1;
                     if (QICs < 0)
                     {
                         log = "至少需要一块Q";

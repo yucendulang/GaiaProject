@@ -184,6 +184,11 @@ namespace GaiaProject.Controllers
             return GameMgr.GetNextGame(name);
         }
 
+        public bool UndoOneStep(string id)
+        {
+            return GameMgr.UndoOneStep(id);
+        }
+
         #region 管理工具
         public IActionResult BackupData()
         {

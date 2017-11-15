@@ -66,8 +66,11 @@
         background: url('/images/altusedback.png');
     }
 </style>
-
-@{ bool isRound = @Model.GameStatus.RoundCount > 0 && @Model.FactionList[Model.GameStatus.PlayerIndex].UserName == User.Identity.Name;}
+@if (User.Identity.Name.Equals("yucenyucen@126.com")|| User.Identity.Name.Equals("qqthomas@163.com"))
+{
+    <button id="undo" type="button" class="btn btn-default">undo</button>
+}
+@{ bool isRound = @Model.GameStatus.RoundCount > 0 && @Model.GetCurrentUserName() == User.Identity.Name;}
 @if (@Model.GameStatus.RoundCount > 0)
 {
     <script>
@@ -108,9 +111,9 @@ else
          @*<div style="background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode;text-align:center">*@
         }
 
-
-        <p id="username">@User.Identity.Name</p>
-        <p id="isMyTurn">@User.Identity.Name.Equals(Model.GetCurrentUserName()).ToString()</p>
+        <input id="username" name="name" class="form-control" value="@User.Identity.Name" type="hidden" />
+        <input id="isMyTurn" name="name" class="form-control" value="@User.Identity.Name.Equals(Model.GetCurrentUserName()).ToString()" type="hidden" />
+        <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
         @if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDWAITLEECHPOWER)
         {
             <p>等待以下吸魔行动</p>
@@ -1250,19 +1253,18 @@ else
         });
 
         setTimeout('GetNextGame()', 10000); //指定1秒刷新一次
-        $("#isMyTurn").hide();
-        $("p#username").hide();
 
         function GetNextGame() {
-            if ($("#isMyTurn").text().indexOf("True") == -1) {
+            if ($("#isMyTurn").val().indexOf("True") == -1) {
                 $.post("/home/GetNextGame",
                     {
-                        name: $("p#username").text()
+                        name: $("input#username").val()
                     },
                     function (data, status) {
-                        if (data == undefined) {
-                            console.log(data);
+                        if (data == undefined || data=="") {
+                            //console.log(data);
                         } else {
+                            //console.log(data);
                             window.location.href = "/home/viewgame/" + data;
                             alert("你的回合");
                         }
@@ -1270,6 +1272,23 @@ else
                     });
             }
             setTimeout('GetNextGame()', 10000);
+        }
+
+
+        $(document).ready(function () {
+            $("button#undo").click(function () {
+                UndoOneStep();
+            });
+        });
+        function UndoOneStep() {
+            var value = $("#test1").val();
+            console.log(value);
+            $.get("/home/UndoOneStep/" + value,
+                function (data, status) {
+                    console.log(data);
+                    location.reload();
+                }
+            );
         }
     </script>
 

@@ -149,39 +149,52 @@ namespace GaiaCore.Gaia
                 System.Diagnostics.Debug.WriteLine("开始恢复" + item.Key);
                 if (!string.IsNullOrEmpty(user))
                 {
-                    for(int i = 0; i < item.Value.Username.Length; i++)
+                    for (int i = 0; i < item.Value.Username.Where(x => !string.IsNullOrEmpty(x)).Count(); i++)
                     {
                         item.Value.Username[i] = user;
                     }
                 }
-                var gg = new GaiaGame(item.Value.Username);
-                gg.IsTestGame = item.Value.IsTestGame;
-                try
-                {
-                    foreach (var str in item.Value.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-
-                        gg.Syntax(str, out string log);
-                        if (!string.IsNullOrEmpty(log))
-                        {
-                            System.Diagnostics.Debug.WriteLine(log);
-                        }
-                        else
-                        {
-                            //System.Diagnostics.Debug.WriteLine(str);
-                        }
-
-                    }
-                }
-                catch(Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine(ex.ToString());
-                }
-                m_dic.Add(item.Key, gg);
+                RestoreGameWithActionLog(item);
 
             }
             return m_dic.Keys;
         }
+
+        private static void RestoreGameWithActionLog(KeyValuePair<string, GaiaGame> item)
+        {
+            var gg = new GaiaGame(item.Value.Username);
+            gg.IsTestGame = item.Value.IsTestGame;
+            try
+            {
+                foreach (var str in item.Value.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
+                {
+
+                    gg.Syntax(str, out string log);
+                    if (!string.IsNullOrEmpty(log))
+                    {
+                        System.Diagnostics.Debug.WriteLine(log);
+                    }
+                    else
+                    {
+                        //System.Diagnostics.Debug.WriteLine(str);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+            }
+            if (m_dic.ContainsKey(item.Key))
+            {
+                m_dic[item.Key] = gg;
+            }
+            else
+            {
+                m_dic.Add(item.Key, gg);
+            }
+        }
+
         /// <summary>
         /// 返回读取到的文件
         /// </summary>
@@ -232,6 +245,19 @@ namespace GaiaCore.Gaia
                 }
                 return System.IO.Path.Combine(Directory.GetCurrentDirectory(), "finishgame");
             }
+        }
+
+        public static bool UndoOneStep(string GameName)
+        {
+            var gg = GetGameByName(GameName);
+            if (gg == null)
+            {
+                return false;
+            }
+            gg.UserActionLog = gg.UserActionLog.Remove(gg.UserActionLog.LastIndexOf("\r\n"));
+            gg.UserActionLog = gg.UserActionLog.Remove(gg.UserActionLog.LastIndexOf("\r\n"));
+            RestoreGameWithActionLog(new KeyValuePair<string, GaiaGame>(GameName, gg));
+            return true;
         }
     }
 }
