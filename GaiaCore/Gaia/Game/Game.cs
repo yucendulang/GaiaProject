@@ -96,7 +96,7 @@ namespace GaiaCore.Gaia
                         else if (ret)
                         {
 #if DEBUG
-                            if (syntax.EndsWith("qc"))
+                            if (!syntax.EndsWith("qc"))
                             {
                                 GameStatus.NextPlayer();
                             }

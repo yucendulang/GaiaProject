@@ -629,6 +629,7 @@ namespace GaiaCore.Gaia
                         GameTileList.Find(x => x is AllianceTile && x.IsUsed == false).IsUsed = true;
                         GameTileList.Add(GaiaGame.AllianceTileForTransForm);
                         GaiaGame.AllianceTileForTransForm.OneTimeAction(this);
+                        TriggerRST(typeof(RST5));
                     }
                     break;
                 case "ai":
