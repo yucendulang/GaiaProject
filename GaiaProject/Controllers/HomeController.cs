@@ -210,6 +210,13 @@ namespace GaiaProject.Controllers
             ViewData["nameList"] = string.Join(",", ret);
             return Redirect("/home/getallgame");
         }
+        [HttpGet]
+        public IActionResult RestoreDataFromServerOneGame(string id)
+        {
+            Task<IEnumerable<string>> task = GameMgr.RestoreDictionaryFromServerAsync(id);
+            task.Wait();
+            return Redirect("/home/viewgame/"+ id);
+        }
         #endregion
     }
 }
