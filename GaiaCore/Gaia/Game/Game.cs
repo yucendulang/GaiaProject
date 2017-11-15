@@ -362,9 +362,10 @@ namespace GaiaCore.Gaia
                     {
                         return false;
                     }
-                }else if (GameSyntax.downgradeRegex.IsMatch(item))
+                }
+                else if (GameSyntax.downgradeRegex.IsMatch(item))
                 {
-                    if(!(faction is Firaks))
+                    if (!(faction is Firaks))
                     {
                         log = "Firaks专用指令";
                         return false;
@@ -428,8 +429,7 @@ namespace GaiaCore.Gaia
 
                     var match = GameFreeSyntax.advTechRegex2.Match(item);
                     tech = match.Groups[1].Value;
-
-                    if (faction.IsIncreateTechValide(tech,out log))
+                    if (faction.IsIncreateTechValide(tech, out log, true))
                     {
                         if ("ship".Equals(tech) && faction.ShipLevel == 4)
                         {
@@ -675,7 +675,7 @@ namespace GaiaCore.Gaia
                     var pos1 = new Tuple<int, int>(row, col);
                     ConvertPosToRowCol(match.Groups[2].Value, out row, out col);
                     var pos2 = new Tuple<int, int>(row, col);
-                    if(!ambas.ExcuteSHAbility(pos1, pos2,out log))
+                    if (!ambas.ExcuteSHAbility(pos1, pos2, out log))
                     {
                         return false;
                     }
@@ -732,6 +732,7 @@ namespace GaiaCore.Gaia
                     return false;
                 }
                 faction.TechReturn++;
+                faction.AllianceTileCost++;
             }
             else if (STT3List.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
             {
@@ -743,7 +744,7 @@ namespace GaiaCore.Gaia
                 tile = STT6List.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
                 var index = (tile as StandardTechnology).Index.GetValueOrDefault();
                 faction.LimitTechAdvance = Faction.ConvertTechIndexToStr(index);
-                if (faction.IsIncreateTechValide(faction.LimitTechAdvance,out string t))
+                if (faction.IsIncreateTechValide(faction.LimitTechAdvance,out log))
                 {
                     if ("ship".Equals(faction.LimitTechAdvance) && faction.ShipLevel == 4)
                     {
@@ -993,18 +994,27 @@ namespace GaiaCore.Gaia
 
         public void Syntax(string syntax, out string log, string user = "")
         {
-            log = string.Empty;
-            if (syntax.StartsWith("#"))
-                return;
-            if (ProcessSyntax(user,syntax, out log))
+            try
             {
-                UserActionLog += syntax.AddEnter();
-                UserActionLog += m_TailLog;
-                m_TailLog = string.Empty;
+                log = string.Empty;
+                if (syntax.StartsWith("#"))
+                    return;
+                if (ProcessSyntax(user, syntax, out log))
+                {
+                    UserActionLog += syntax.AddEnter();
+                    UserActionLog += m_TailLog;
+                    m_TailLog = string.Empty;
+                }
+                else
+                {
+                    UserActionLog += "##" + DateTime.Now.ToString() + "#" + syntax.AddEnter();
+                }
             }
-            else
+            catch
             {
-                UserActionLog += "##"+DateTime.Now.ToString()+"#"+syntax.AddEnter();
+                UserActionLog += "##!!##" + DateTime.Now.ToString() + "#" + syntax.AddEnter();
+                log = "引起程序异常,将本局名字报告给TOTO以方便排查问题";
+                return;
             }
         }
 

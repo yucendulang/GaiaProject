@@ -551,6 +551,11 @@ namespace GaiaCore.Gaia
                 log = "SH能力别忘了使用啊";
                 return true;
             }
+            if (AllianceTileCost > GameTileList.Count(x => x is AllianceTile && x.IsUsed == false))
+            {
+                log = "指令消耗的星盟板块数量大于拥有的";
+                return true;
+            }
             return false;
         }
 
@@ -580,6 +585,7 @@ namespace GaiaCore.Gaia
             AllianceTileReGet = 0;
             PlanetAlready = false;
             FactionSpecialAbility = 0;
+            AllianceTileCost = 0;
         }
 
 
@@ -1267,11 +1273,11 @@ namespace GaiaCore.Gaia
             }
         }
 
-        internal bool IsIncreateTechValide(string tech,out string log)
+        internal bool IsIncreateTechValide(string tech, out string log, bool isIncreaseAllianceTileCost = false)
         {
             log = string.Empty;
-            var index = TechStrList.FindIndex(x=>x.Equals(tech));
-            return IsIncreaseTechLevelByIndexValidate(index,out log);
+            var index = TechStrList.FindIndex(x => x.Equals(tech));
+            return IsIncreaseTechLevelByIndexValidate(index, out log, isIncreaseAllianceTileCost);
         }
 
         private void ReturnBuilding(Building building)

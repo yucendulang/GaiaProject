@@ -101,18 +101,19 @@ namespace GaiaCore.Gaia
         protected int m_powerToken2;
         protected int m_powerToken3;
         protected int m_powerTokenGaia;
-
+        //六种科技
         protected int m_TransformLevel;
         protected int m_ShipLevel;
         protected int m_AILevel;
         protected int m_GaiaLevel;
         protected int m_EconomicLevel;
         protected int m_ScienceLevel;
+        //出城需要的魔力等级
         protected int m_allianceMagicLevel;
 
         protected const int m_MineOreCost = 1;
         protected const int m_MineCreditCost = 2;
-
+        //一些不会变的常量
         protected const int m_TradeCenterOreCost = 2;
         protected const int m_TradeCenterCreditCostCluster = 3;
         protected const int m_TradeCenterCreditCostAlone = 6;
@@ -126,7 +127,7 @@ namespace GaiaCore.Gaia
         protected const int m_StrongHoldOreCost = 4;
         protected const int m_StrongHoldCreditCost = 6;
         protected const int m_StrongHoldCount = 1;
-
+        #region 展示用变量 不参与逻辑计算
         /// <summary>
         /// 中文名称
         /// </summary>
@@ -143,6 +144,7 @@ namespace GaiaCore.Gaia
         /// 地图颜色
         /// </summary>
         public string ColorMap { get; set; }
+        #endregion
 
         #region 临时变量 判断动作完成与否 需要清零
         private int m_TerraFormNumber = 0;
@@ -161,6 +163,7 @@ namespace GaiaCore.Gaia
         public int TempKnowledge = 0;
         public int TempQICs = 0;
         public string LimitTechAdvance { get; set; }
+        public int AllianceTileCost = 0;
         #endregion
 
         private void BackupResource()
@@ -457,7 +460,7 @@ namespace GaiaCore.Gaia
         };
 
 
-        public bool IsIncreaseTechLevelByIndexValidate(int index, out string log)
+        public bool IsIncreaseTechLevelByIndexValidate(int index, out string log,bool isIncreaseAllianceTileCost=false)
         {
             log = string.Empty;
             if (index < 0 | index > 5)
@@ -480,6 +483,10 @@ namespace GaiaCore.Gaia
                 {
                     log = "需要星盟版(ALT)才能继续升级";
                     return false;
+                }
+                if (isIncreaseAllianceTileCost)
+                {
+                    AllianceTileCost++;
                 }
                 return true;
             }
