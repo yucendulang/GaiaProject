@@ -40,8 +40,7 @@ namespace GaiaCore.Gaia.Tiles
         public virtual int GetTurnEndScore(Faction faction) { return 0; }
 
         public virtual bool InvokeGameTileAction(Faction faction)
-        {
-
+        { 
             IsUsed = true;
             return true;
         }

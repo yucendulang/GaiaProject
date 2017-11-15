@@ -403,12 +403,13 @@ namespace GaiaCore.Gaia
                 if (syn == BuildingSyntax.AC2)
                 {
                     var tile = new AC2();
-                    GameTileList.Add(tile);
-                    ActionList.Add(tile.GetType().Name.ToLower(), tile.InvokeGameTileAction);
-                }else if (syn == BuildingSyntax.TC)
+                    AddGameTiles(new AC2());
+                }
+                else if (syn == BuildingSyntax.TC)
                 {
                     TriggerRST(typeof(ATT5));
-                }else if (syn == BuildingSyntax.SH)
+                }
+                else if (syn == BuildingSyntax.SH)
                 {
                     CallSpecialSHBuild();
                 }

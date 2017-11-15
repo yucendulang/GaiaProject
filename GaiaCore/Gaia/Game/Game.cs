@@ -95,11 +95,7 @@ namespace GaiaCore.Gaia
                         }
                         else if (ret)
                         {
-                            //不是快速行动
-                            if (!syntax.EndsWith("qc"))
-                            {
-                                GameStatus.NextPlayer();
-                            }
+                            GameStatus.NextPlayer();
                         }
 
                         return ret;
@@ -677,10 +673,6 @@ namespace GaiaCore.Gaia
                     {
                         return false;
                     }
-                }
-                else if (item.Contains("qc"))
-                {
-
                 }
                 else
                 {
