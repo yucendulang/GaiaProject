@@ -18,6 +18,11 @@ namespace GaiaCore.Gaia
             //判断是否是Gaia改变过的绿色星球
             bool isGaiaPlanet = false;
             int transNumNeed = 0;
+            if(map.HexArray[row, col] == null)
+            {
+                log = "出界了兄弟";
+                return false;
+            }
             if (map.HexArray[row, col].TFTerrain == Terrain.Purple)
             {
                 log = "不能在紫色星球上建造";
@@ -1262,10 +1267,11 @@ namespace GaiaCore.Gaia
             }
         }
 
-        internal bool IsIncreateTechValide(string tech)
+        internal bool IsIncreateTechValide(string tech,out string log)
         {
+            log = string.Empty;
             var index = TechStrList.FindIndex(x=>x.Equals(tech));
-            return IsIncreaseTechLevelByIndexValidate(index);
+            return IsIncreaseTechLevelByIndexValidate(index,out log);
         }
 
         private void ReturnBuilding(Building building)

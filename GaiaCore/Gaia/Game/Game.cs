@@ -429,7 +429,7 @@ namespace GaiaCore.Gaia
                     var match = GameFreeSyntax.advTechRegex2.Match(item);
                     tech = match.Groups[1].Value;
 
-                    if (faction.IsIncreateTechValide(tech))
+                    if (faction.IsIncreateTechValide(tech,out log))
                     {
                         if ("ship".Equals(tech) && faction.ShipLevel == 4)
                         {
@@ -452,7 +452,6 @@ namespace GaiaCore.Gaia
                     }
                     else
                     {
-                        log = "此科技条不能继续上升";
                         return false;
                     }
                 }
@@ -744,7 +743,7 @@ namespace GaiaCore.Gaia
                 tile = STT6List.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
                 var index = (tile as StandardTechnology).Index.GetValueOrDefault();
                 faction.LimitTechAdvance = Faction.ConvertTechIndexToStr(index);
-                if (faction.IsIncreateTechValide(faction.LimitTechAdvance))
+                if (faction.IsIncreateTechValide(faction.LimitTechAdvance,out string t))
                 {
                     if ("ship".Equals(faction.LimitTechAdvance) && faction.ShipLevel == 4)
                     {
@@ -775,7 +774,7 @@ namespace GaiaCore.Gaia
                 {
                     var index = (tile as StandardTechnology).Index.GetValueOrDefault();
                     faction.LimitTechAdvance = Faction.ConvertTechIndexToStr(index);
-                    if (faction.IsNoAdvTechTrack == false && faction.IsIncreateTechValide(faction.LimitTechAdvance))
+                    if (faction.IsNoAdvTechTrack == false && faction.IsIncreateTechValide(faction.LimitTechAdvance,out string t))
                     {
                         faction.IncreaseTech(faction.LimitTechAdvance);
                     }

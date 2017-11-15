@@ -128,35 +128,57 @@ namespace GaiaCore.Gaia
             return RestoreAllGames(logReader);
         }
 
-        public static async System.Threading.Tasks.Task<IEnumerable<string>> RestoreDictionaryFromServerAsync()
+        public static async System.Threading.Tasks.Task<IEnumerable<string>> RestoreDictionaryFromServerAsync(string GameName=null)
         {
             HttpClient client = new HttpClient();
             var logReader = await client.GetStringAsync("http://gaiaproject.chinacloudsites.cn/home/GetLastestActionLog");
-            return RestoreAllGames(logReader);
+            return RestoreAllGames(logReader,GameName,"yucenyucen@126.com");
         }
 
-        private static IEnumerable<string> RestoreAllGames(string logReader)
+        private static IEnumerable<string> RestoreAllGames(string logReader,string GameName = null ,string user = null)
         {
             var temp = JsonConvert.DeserializeObject<Dictionary<string, GaiaGame>>(logReader);
             m_dic = new Dictionary<string, GaiaGame>();
             foreach (var item in temp)
             {
-                try
-                {
-                    System.Diagnostics.Debug.WriteLine("开始恢复" + item.Key);
-                    var gg = new GaiaGame(item.Value.Username);
-                    gg.IsTestGame = item.Value.IsTestGame;
-                    foreach (var str in item.Value.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        gg.Syntax(str, out string log);
-                        System.Diagnostics.Debug.WriteLine(log);
-                    }
-                    m_dic.Add(item.Key, gg);
-                }
-                catch
+                if (!string.IsNullOrEmpty(GameName) && !item.Key.Equals(GameName))
                 {
                     continue;
                 }
+
+                System.Diagnostics.Debug.WriteLine("开始恢复" + item.Key);
+                if (!string.IsNullOrEmpty(user))
+                {
+                    for(int i = 0; i < item.Value.Username.Length; i++)
+                    {
+                        item.Value.Username[i] = user;
+                    }
+                }
+                var gg = new GaiaGame(item.Value.Username);
+                gg.IsTestGame = item.Value.IsTestGame;
+                try
+                {
+                    foreach (var str in item.Value.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+
+                        gg.Syntax(str, out string log);
+                        if (!string.IsNullOrEmpty(log))
+                        {
+                            System.Diagnostics.Debug.WriteLine(log);
+                        }
+                        else
+                        {
+                            //System.Diagnostics.Debug.WriteLine(str);
+                        }
+
+                    }
+                }
+                catch(Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.ToString());
+                }
+                m_dic.Add(item.Key, gg);
+
             }
             return m_dic.Keys;
         }
