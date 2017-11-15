@@ -95,7 +95,14 @@ namespace GaiaCore.Gaia
                         }
                         else if (ret)
                         {
+#if DEBUG
+                            if (syntax.EndsWith("qc"))
+                            {
+                                GameStatus.NextPlayer();
+                            }
+#else
                             GameStatus.NextPlayer();
+#endif
                         }
 
                         return ret;
@@ -674,6 +681,12 @@ namespace GaiaCore.Gaia
                         return false;
                     }
                 }
+#if Debug
+                else if (item.Contains("qc"))
+                {
+
+                }
+#endif
                 else
                 {
                     log = "语句还不支持";
@@ -1107,7 +1120,7 @@ namespace GaiaCore.Gaia
         /// </summary>
         public List<Faction> FactionList { set; get; }
         public List<Faction> FactionNextTurnList { set; get; }
-        #region 存档需要save的内容
+#region 存档需要save的内容
         [JsonProperty]
         /// <summary>
         /// 在游戏开始的时候实例化一个Map
@@ -1193,6 +1206,6 @@ namespace GaiaCore.Gaia
         }
 
 
-        #endregion
+#endregion
     }
 }
