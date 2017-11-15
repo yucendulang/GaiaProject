@@ -378,6 +378,11 @@ namespace GaiaCore.Gaia
                 log = string.Format("需要基础建筑类型{0}", build.BaseBuilding.ToString());
                 return false;
             }
+            if (hex.TFTerrain==Terrain.Black)
+            {
+                log = "死星建筑不能升级";
+                return false;
+            }
             if (Ore < oreCost || Credit < creditCost)
             {
                 log = string.Format("资源不够");
