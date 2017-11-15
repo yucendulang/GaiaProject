@@ -113,9 +113,9 @@
                         <div class="modal-body">
                             <select class="btn dropdown-toggle form-control" id="updateBuildList"></select>
                             <div id="sttBody">
-                                @Html.DropDownList("enumList", new SelectList(Model.STT6List.GroupBy(a => a.name).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name) }), "name", "desc"), "--请选择科技板块(6)--", new { @class = "btn dropdown-toggle form-control", @id = "stt6List", @syntax = ".+" })
+                                @Html.DropDownList("enumList", new SelectList(Model.STT6List.GroupBy(a => a.name).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name) }), "name", "desc"), "--请选择科技板块(6)--", new { @class = "btn dropdown-toggle form-control updatettlist", @id = "stt6List", @syntax = ".+" })
                                 <div class="form-inline">
-                                    @Html.DropDownList("enumList", new SelectList(Model.STT3List.GroupBy(a => a.name).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name) }), "name", "desc"), "--请选择科技板块(3)--", new { @class = "btn dropdown-toggle form-control", @id = "stt3List", @syntax = ".+" })
+                                    @Html.DropDownList("enumList", new SelectList(Model.STT3List.GroupBy(a => a.name).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name) }), "name", "desc"), "--请选择科技板块(3)--", new { @class = "btn dropdown-toggle form-control updatettlist", @id = "stt3List", @syntax = ".+" })
                                     <select class="btn dropdown-toggle form-control" id="updatekj" name="enumList" syntax=".+"><option value="">--请选择升级科技--</option>
                                         <option value="tf">地形改造</option>
                                         <option value="ship">航行</option>
@@ -126,6 +126,12 @@
                                     </select>
 
                                 </div>
+                                <div class="form-inline">
+                                    @Html.DropDownList("enumList", new SelectList(Model.ATTList, "name", "desc"), "--请选择高级科技--", new { @class = "btn dropdown-toggle form-control updatettlist", @id = "attList", @syntax = ".+" })
+                                    @Html.DropDownList("enumList", new SelectList(Model.FactionList[Model.GameStatus.PlayerIndex].GameTileList.FindAll(a=>a.typename=="stt"), "name", "desc"), "--请选择被覆盖科技--", new { @class = "btn dropdown-toggle form-control ", @id = "fg_sttList", @syntax = ".+" })
+
+                                </div>
+
                             </div>
 
                         </div>

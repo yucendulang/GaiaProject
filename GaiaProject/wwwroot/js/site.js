@@ -6,6 +6,7 @@ var hex_height = hex_size * 1.5;
 //第一次运行，加载事件
 var isFirstAct = true;
 var isFirstAl = true;
+var isFirstBuild = true;
 
 function createMap(id,type) {
     var c = document.getElementById(id);
@@ -15,6 +16,7 @@ function createMap(id,type) {
 
     if (type === undefined || type === "build") {
         c.addEventListener('click', function (e) {
+
             //console.log(list);
             var xy = getEventPosition(e);
             var clickObj = getClickObj(xy.x, xy.y);
@@ -37,6 +39,12 @@ function createMap(id,type) {
                     }
                     $('#myModal').modal();
 
+                    if (isFirstBuild) {
+                        isFirstBuild = false;
+                    } else {
+                        return;
+                    }
+
                     $("#updateBuildList").change(function () {
                         //SH
                         if ($(this).val() === "SH") {
@@ -44,15 +52,12 @@ function createMap(id,type) {
                         } else {
                             $("#sttBody").show();
                         }
-                        //alert(2);
+                        
                     });
-                    $("#stt6List").change(function () {
-                        //if ($("#stt6List").val()!=)
-                        $("#stt3List").val("");
-                    });
-                    $("#stt3List").change(function () {
-                        //if ($("#stt6List").val()!=)
-                        $("#stt6List").val("");
+
+                        //清空其他选项
+                    $(".updatettlist").change(function() {
+                        $(".updatettlist").not($(this)).val("");
                     });
 
                     $("#updateQuery").click(function () {
@@ -62,13 +67,37 @@ function createMap(id,type) {
                             $("#syntax").val("upgrade {0} to {1}.".format(clickObj.position,
                                 upJz));
                         } else {
-
-                            if ($("#stt6List").val() !== "") {
+                            var kj = $("#updatekj").val();
+                            //高级科技
+                            if ($("#attList").val() !== "") {
+                                var fg = $("#fg_sttList").val();
+                                if (fg === "") {
+                                    alert("请选择覆盖科技");
+                                    return;
+                                }
+                                else if (kj === "") {
+                                    alert("请选择升级科技");
+                                    return;
+                                } else {
+                                    $("#syntax").val("upgrade {0} to {1}.+{2}.-{3}. advance {4}".format(clickObj.position, upJz, $("#attList").val(), fg, kj));
+                                }
+                            }
+                            //基础科技
+                            else if ($("#stt6List").val() !== "") {
                                 $("#syntax").val("upgrade {0} to {1}.+{2}.".format(clickObj.position,
                                     upJz, $("#stt6List").val()));
 
-                            } else {
-                                $("#syntax").val("upgrade {0} to {1}.+{2}. advance {3}".format(clickObj.position, upJz, $("#stt3List").val(), $("#updatekj").val()));
+                            }
+                            //基础科技-选择科技
+                            else {
+                                if (kj === "") {
+                                    alert("请选择升级科技");
+                                    return;
+                                }
+                                else
+                                {
+                                    $("#syntax").val("upgrade {0} to {1}.+{2}. advance {3}".format(clickObj.position, upJz, $("#stt3List").val(), $("#updatekj").val()));
+                                }
                             }
                         }
                         $('#myModal').modal('hide');
