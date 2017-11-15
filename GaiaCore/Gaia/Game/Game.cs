@@ -669,7 +669,10 @@ namespace GaiaCore.Gaia
                     var pos1 = new Tuple<int, int>(row, col);
                     ConvertPosToRowCol(match.Groups[2].Value, out row, out col);
                     var pos2 = new Tuple<int, int>(row, col);
-                    return ambas.ExcuteSHAbility(pos1, pos2,out log);
+                    if(!ambas.ExcuteSHAbility(pos1, pos2,out log))
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
