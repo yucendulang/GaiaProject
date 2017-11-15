@@ -323,9 +323,9 @@
 
                          <div class="col-md-5">
                              <div class="input-group">
-                                 <input type="text" class="form-control selectchange" placeholder="输入数值" syntax="burn ">
+                                 <input type="text" class="form-control selectchange" placeholder="输入数值" syntax="burn {0}.qc">
                                  <span class="input-group-btn">
-                                     <button class="btn btn-default actionGp" type="button" syntax="burn ">牺牲能量</button>
+                                     <button class="btn btn-default actionGp" type="button" syntax="burn {0}.qc">牺牲能量</button>
                                  </span>
                              </div>
                          </div>
@@ -1079,7 +1079,11 @@
         $(".selectchange").change(function () {
             var obj = $(this);
             var syntax = obj.attr("syntax");
-            $("#syntax").val(syntax + $(this).val());
+            if (syntax.indexOf("{0}")>0) {
+                $("#syntax").val(syntax.format($(this).val()));
+            } else {
+                $("#syntax").val(syntax + $(this).val());
+            }
             //alert($(this).val());
         });
         //魔力行动
