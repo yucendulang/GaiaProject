@@ -32,40 +32,41 @@
     }
 
     .sttcss {
-        height: 124px;
-        width: 169px;
+        height: 92px;
+        width: 102px;
         background: url('/images/sttback.png');
         background-size: 100%;
         text-align: center;
-        line-height: 100px;
+        line-height: 30px;
+        margin: auto;
     }
     .sttusedcss {
-        height: 124px;
-        width: 169px;
         background: url('/images/sttback.png');
-        background-size: 100%;
-        text-align: center;
-        line-height: 100px;
-        color: red;
     }
 
     .attcss {
-        height: 97px;
-        width: 125px;
+        height: 92px;
+        width: 102px;
         text-align: center;
-        line-height: 97px;
+        line-height: 30px;
         background: url('/images/attback.png');
+        margin: auto;
     }
     .attusedcss {
-        height: 97px;
-        width: 125px;
-        text-align: center;
-        line-height: 97px;
         background: url('/images/attback.png');
-        color: red;
     }
-
+    .altcss {
+        height: 92px;
+        width: 102px;
+        background: url('/images/alback.png');
+        text-align: center;
+        line-height: 30px
+    }
+    .altusedcss {
+        background: url('/images/altusedback.png');
+    }
 </style>
+
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -97,7 +98,7 @@
             <p>现在是Round @Model.GameStatus.RoundCount,Turn @Model.GameStatus.TurnCount</p>
             <p>现在是 @Model.FactionList[Model.GameStatus.PlayerIndex].FactionName 的回合,颜色是 @Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()</p>
 
-            <!-- 模态框（Modal） -->
+            <!-- 模态框（Modal）升级建筑 -->
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -139,7 +140,7 @@
             </div>
 
 
-            <!-- 模态框（Modal） -->
+            <!-- 模态框（Modal）选择地图 -->
             <div class="modal fade" id="myModalCanves" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog" style="width: 1000px;height: 800px">
                     <div class="modal-content">
@@ -174,7 +175,29 @@
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal -->
             </div>
+
+
+            <!-- 信息确认对话框 -->  
+            <div class="modal fade" id="querycfmModel">  
+                <div class="modal-dialog">  
+                    <div class="modal-content message_align">  
+                        <div class="modal-header">  
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>  
+                            <h4 class="modal-title">提示信息</h4>  
+                        </div>  
+                        <div class="modal-body">  
+                            <p>您确认要执行吗？</p>  
+                        </div>  
+                        <div class="modal-footer">  
+                            <input type="hidden" id="url"/>  
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>  
+                            <a  class="btn btn-success" data-dismiss="modal" id="querycfmModelYes">确定</a>  
+                        </div>  
+                    </div><!-- /.modal-content -->  
+                </div><!-- /.modal-dialog -->  
+            </div><!-- /.modal -->  
         }
+
         else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
         {
             <p>现在等待 @Model.Username[Model.GameStatus.PlayerIndex] 选种族 setup xxx.</p>
@@ -463,22 +486,22 @@
                                 {
                                         @if (it.IsUsed)
                                         {
-                                            <div class="sttcss col-md-6">@it.GetType().Name @it.desc</div>
+                                            <div class="sttcss col-md-6">@it.GetType().Name<br/> @it.desc</div>
                                         }
                                         else
                                         {
                                             @if (it.CanAction)
                                              {
-                                                 <div class="sttcss col-md-6" id="@item.FactionName@it.name">@it.GetType().Name @it.desc</div>
+                                                 <div class="sttcss col-md-6" id="@item.FactionName@it.name">@it.GetType().Name<br /> @it.desc</div>
                                                  <script>
-                                                     $("#@item.FactionName@it.name").click(function() {
-                                                         $("#syntax").val("action {0}".format('@it.name'));
+                                                     $("#@item.FactionName@it.name").click(function () {
+                                                         openQueryWindow("@it.name");
                                                      })
                                                  </script>
                                              }
                                              else
                                              {
-                                                 <div class="sttcss col-md-6">@it.GetType().Name @it.desc</div>
+                                                 <div class="sttcss col-md-6">@it.GetType().Name<br /> @it.desc</div>
                                              }
 
                                         }
@@ -487,22 +510,22 @@
                                 {
                                         @if (it.IsUsed)
                                         {
-                                            <div class="attusedcss col-md-6">@it.GetType().Name @it.desc</div>
+                                            <div class="attusedcss col-md-6">@it.GetType().Name<br /> @it.desc</div>
                                         }
                                         else
                                         {
                                             @if (it.CanAction)
                                              {
-                                                 <div class="attcss col-md-6" id="@item.FactionName@it.name">@it.GetType().Name @it.desc</div>
+                                                 <div class="attcss col-md-6" id="@item.FactionName@it.name">@it.GetType().Name <br />@it.desc</div>
                                                  <script>
-                                                     $("#@item.FactionName@it.name").click(function() {
-                                                         $("#syntax").val("action {0}".format('@it.name'));
+                                                     $("#@item.FactionName@it.name").click(function () {
+                                                         openQueryWindow("@it.name");
                                                      })
                                                  </script>
                                              }
                                              else
                                              {
-                                                 <div class="attcss col-md-6">@it.GetType().Name @it.desc</div>
+                                                 <div class="attcss col-md-6">@it.GetType().Name<br /> @it.desc</div>
                                              }
 
                                         }
@@ -514,7 +537,7 @@
 
                         <div>
                            
-                            <div class="col-md-10">
+                            <div>
                                 <table class="table">
                                     <tr>
                                         <td>@item.Credit C </td>
@@ -857,18 +880,18 @@
                     </td>
                     @foreach (var item in Model.ATTList)
                     {
-                        <td title="@item.name"> <div class="attcss">@item.desc</div></td>
+                        <td title="@item.name"> <div class="attcss">@item.name<br />@item.desc</div></td>
                     }
                 </tr>
                 <tr>
-                    <td style="height: 124px; width: 169px;">
+                    <td >
                         基础科技(6)
                     </td>
                     @foreach (var item in Model.STT6ListGroup)
                                     {
                                         <td title="@item.name">
                                             
-                                            <div class="sttcss">@item.desc (@item.count)</div>
+                                            <div class="sttcss">@item.name (@item.count) <br/> @item.desc </div>
                                         </td>
                     }
                 </tr>
@@ -879,7 +902,7 @@
                     @foreach (var item in Model.STT3ListGroup)
                     {
                         <td colspan="2" title="@item.name" class="">
-                            <div class="sttcss">@item.desc (@item.count)</div>
+                            <div class="sttcss">@item.name (@item.count)<br />@item.desc </div>
                         </td>
                     }
                 </tr>
@@ -943,13 +966,25 @@
             <div class="panel panel-default">
                 <!-- Default panel contents -->
                 <div class="panel-heading">联邦板块</div>
-
-                <ul class="list-group">
-                    @foreach (var item in Model.ALTList.GroupBy(a => a.desc).Select(g => new  { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name) }))
-                    {
-                        <li class="list-group-item">@item.name @item.desc (@item.count)</li>
-                    }
-                </ul>
+                <div class="panel-body">
+                    <div>
+                        @foreach (var item in Model.ALTList.GroupBy(a => a.desc).Select(g => new  { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name) }))
+                        {
+                            if (@item.name == "ALT6")
+                            {
+                                <div style="" class="col-md-6 altcss altusedcss">
+                                    @item.name (@item.count)<br/> @item.desc
+                                </div>
+                            }
+                            else
+                            {
+                                <div style="" class="col-md-6 altcss">
+                                    @item.name (@item.count)<br /> @item.desc
+                                </div> 
+                            }
+                        }
+                    </div>
+                </div>
             </div>
 
             <div class="panel panel-default">
@@ -1057,7 +1092,8 @@
                 if (value === "ACT6" || value === "ACT2" ) {
                     selectMapPos(value);
                 } else {
-                    $("#syntax").val("action {0}".format(value));
+                    openQueryWindow(value);
+                    //$("#syntax").val("action {0}".format(value));
                 }
             }
 
@@ -1078,6 +1114,19 @@
         $("#createZjAl").click(function () {            
             $("#myModalCanves").modal();
             createMap("myCanvasSelect","al2");
+        });
+        //弹出确认对话框
+        function openQueryWindow(type) {
+            actType = type;
+            $("#querycfmModel").modal();
+        }
+        //确认对话框
+        var actType;
+        $("#querycfmModelYes").click(function () {
+            //var value = $(this).attr("act");
+            $("#syntax").val("action {0}".format(actType));
+            $("#querycfmModel").modal('hide');
+            submitData();
         });
     </script>
 

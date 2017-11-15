@@ -95,7 +95,11 @@ namespace GaiaCore.Gaia
                         }
                         else if (ret)
                         {
-                            GameStatus.NextPlayer();
+                            //不是快速行动
+                            if (!syntax.EndsWith("qc"))
+                            {
+                                GameStatus.NextPlayer();
+                            }
                         }
 
                         return ret;
@@ -670,6 +674,10 @@ namespace GaiaCore.Gaia
                     ConvertPosToRowCol(match.Groups[2].Value, out row, out col);
                     var pos2 = new Tuple<int, int>(row, col);
                     return ambas.ExcuteSHAbility(pos1, pos2,out log);
+                }
+                else if (item.Contains("qc"))
+                {
+
                 }
                 else
                 {
