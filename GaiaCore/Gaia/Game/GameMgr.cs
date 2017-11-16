@@ -128,14 +128,14 @@ namespace GaiaCore.Gaia
             return RestoreAllGames(logReader);
         }
 
-        public static async System.Threading.Tasks.Task<IEnumerable<string>> RestoreDictionaryFromServerAsync(string GameName=null)
+        public static async System.Threading.Tasks.Task<IEnumerable<string>> RestoreDictionaryFromServerAsync(string GameName = null, Func<string, bool> DebugInvoke = null)
         {
             HttpClient client = new HttpClient();
             var logReader = await client.GetStringAsync("http://gaiaproject.chinacloudsites.cn/home/GetLastestActionLog");
-            return RestoreAllGames(logReader,GameName,"yucenyucen@126.com");
+            return RestoreAllGames(logReader, GameName, "yucenyucen@126.com", DebugInvoke);
         }
 
-        private static IEnumerable<string> RestoreAllGames(string logReader,string GameName = null ,string user = null)
+        private static IEnumerable<string> RestoreAllGames(string logReader,string GameName = null ,string user = null,Func<string,bool> DebugInvoke=null)
         {
             var temp = JsonConvert.DeserializeObject<Dictionary<string, GaiaGame>>(logReader);
             m_dic = new Dictionary<string, GaiaGame>();
@@ -146,7 +146,6 @@ namespace GaiaCore.Gaia
                     continue;
                 }
 
-                System.Diagnostics.Debug.WriteLine("开始恢复" + item.Key);
                 if (!string.IsNullOrEmpty(user))
                 {
                     for (int i = 0; i < item.Value.Username.Where(x => !string.IsNullOrEmpty(x)).Count(); i++)
@@ -154,13 +153,13 @@ namespace GaiaCore.Gaia
                         item.Value.Username[i] = user;
                     }
                 }
-                RestoreGameWithActionLog(item);
+                RestoreGameWithActionLog(item,DebugInvoke);
 
             }
             return m_dic.Keys;
         }
 
-        private static void RestoreGameWithActionLog(KeyValuePair<string, GaiaGame> item)
+        private static void RestoreGameWithActionLog(KeyValuePair<string, GaiaGame> item, Func<string, bool> DebugInvoke = null)
         {
             var gg = new GaiaGame(item.Value.Username);
             gg.IsTestGame = item.Value.IsTestGame;
@@ -172,17 +171,24 @@ namespace GaiaCore.Gaia
                     gg.Syntax(str, out string log);
                     if (!string.IsNullOrEmpty(log))
                     {
+                        if (DebugInvoke != null)
+                        {
+                            DebugInvoke.Invoke(item.Key+":"+log);
+                        }
                         System.Diagnostics.Debug.WriteLine(log);
                     }
                     else
                     {
                         //System.Diagnostics.Debug.WriteLine(str);
                     }
-
                 }
             }
             catch (Exception ex)
             {
+                if (DebugInvoke != null)
+                {
+                    DebugInvoke.Invoke(item.Key + ":" + ex.ToString());
+                }
                 System.Diagnostics.Debug.WriteLine(ex.ToString());
             }
             if (m_dic.ContainsKey(item.Key))

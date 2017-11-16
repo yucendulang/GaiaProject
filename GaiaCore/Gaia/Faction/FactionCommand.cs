@@ -670,8 +670,8 @@ namespace GaiaCore.Gaia
                     }else if (m_EconomicLevel == 5)
                     {
                         GameTileList.Find(x => x is AllianceTile && x.IsUsed == false).IsUsed = true;
-                        Ore = +3;
-                        Credit = +6;
+                        Ore += 3;
+                        Credit += 6;
                         PowerIncrease(6);
                     }
                     break;
@@ -1166,7 +1166,7 @@ namespace GaiaCore.Gaia
                 dump.Remove(item);
                 if (ForgingAlliance(dump, out log))
                 {
-                    log = string.Format("缺少{0}{1}也能形成星盟", item.Item1, item.Item2);
+                    log = string.Format("缺少{0}{1}也能形成星盟", Convert.ToChar((item.Item1 + Convert.ToByte('A'))), item.Item2);
                     return false;
                 }
             }
