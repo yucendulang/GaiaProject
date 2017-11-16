@@ -19,10 +19,20 @@ namespace GaiaCore.Gaia
         }
 
 
-        protected override void CallSHIncome()
+        protected override int CallSHPowerTokenIncome()
         {
-            PowerIncrease(4);
-            m_QICs += 1;
+            return 0;
+        }
+
+        protected override int CalQICIncome()
+        {
+            var ret = 0;
+            if (StrongHold == null)
+            {
+                ret += 1;
+            }
+            ret += base.CalQICIncome();
+            return ret;
         }
         public override Terrain OGTerrain { get => Terrain.Yellow; }
         protected override void CallSpecialSHBuild()

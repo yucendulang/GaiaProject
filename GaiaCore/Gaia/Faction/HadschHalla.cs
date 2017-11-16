@@ -19,8 +19,12 @@ namespace GaiaCore.Gaia
         public override Terrain OGTerrain { get => Terrain.Red; }
         public override void CalIncome()
         {
-            Credit += 3;
             base.CalIncome();
+        }
+
+        protected override int CalCreditIncome()
+        {
+            return base.CalCreditIncome()+3;
         }
 
         internal override bool ConvertOneResourceToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log)

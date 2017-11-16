@@ -12,6 +12,7 @@ namespace GaiaProjectUnitTesting
         {
             Func<string, bool> func = (string a) =>
               {
+                  System.Diagnostics.Debug.WriteLine(a);
                   Assert.IsNull(a);
                   return true;
               };

@@ -19,14 +19,16 @@ namespace GaiaCore.Gaia
         public override Terrain OGTerrain { get => Terrain.Brown; }
         public override void CalIncome()
         {
-            Ore += 1;
             base.CalIncome();
         }
-
-        protected override void CallSHIncome()
+        protected override int CalOreIncome()
         {
-            PowerIncrease(4);
-            m_powerToken1 += 2;
+            return base.CalOreIncome()+1;
+        }
+
+        protected override int CallSHPowerTokenIncome()
+        {
+            return base.CallSHPowerTokenIncome()+1;
         }
 
         protected override void CallSpecialSHBuild()

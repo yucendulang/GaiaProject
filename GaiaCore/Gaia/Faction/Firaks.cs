@@ -20,8 +20,12 @@ namespace GaiaCore.Gaia
         public override Terrain OGTerrain { get => Terrain.Gray; }
         public override void CalIncome()
         {
-            m_knowledge += 1;
             base.CalIncome();
+        }
+
+        protected override int CalKnowledgeIncome()
+        {
+            return base.CalKnowledgeIncome()+1;
         }
 
         internal bool DowngradeBuilding(int row, int col, out string log)

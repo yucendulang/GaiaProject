@@ -18,8 +18,11 @@ namespace GaiaCore.Gaia
 
         public override void CalIncome()
         {
-            m_powerToken1++;
             base.CalIncome();
+        }
+        protected override int CalPowerTokenIncome()
+        {
+            return base.CalPowerIncome() + 1;
         }
 
         public override void PowerBurnSpecialPreview(int v)
@@ -34,9 +37,9 @@ namespace GaiaCore.Gaia
             return;
         }
 
-        protected override void CallAC1Income()
+        protected override int CallAC1Income()
         {
-            Knowledge += 3;
+            return 3;
         }
         public override Terrain OGTerrain { get => Terrain.White; }
 

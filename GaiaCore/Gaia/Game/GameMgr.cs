@@ -175,7 +175,7 @@ namespace GaiaCore.Gaia
                         {
                             DebugInvoke.Invoke(item.Key+":"+log);
                         }
-                        System.Diagnostics.Debug.WriteLine(log);
+                        System.Diagnostics.Debug.WriteLine(item.Key+":"+log);
                     }
                     else
                     {
@@ -189,7 +189,7 @@ namespace GaiaCore.Gaia
                 {
                     DebugInvoke.Invoke(item.Key + ":" + ex.ToString());
                 }
-                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                System.Diagnostics.Debug.WriteLine(item.Key + ":" +ex.ToString());
             }
             if (m_dic.ContainsKey(item.Key))
             {

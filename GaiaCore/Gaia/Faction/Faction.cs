@@ -199,151 +199,205 @@ namespace GaiaCore.Gaia
         public Dictionary<string, int> CalNextTurnIncome()
         {
             var ret = new Dictionary<string, int>();
-            BackupResource();
-            CalIncome();
-            ret.Add("C", m_credit - backup.m_credit);
-            ret.Add("K", m_knowledge - backup.m_knowledge);
-            ret.Add("O", m_ore - backup.m_ore);
-            ret.Add("Q", m_QICs - backup.m_QICs);
-            //ret.Add("PWT", m_powerToken1 - backup.m_powerToken1);
-            ret.Add("PW", m_powerToken2 - backup.m_powerToken2 + (m_powerToken3 - backup.m_powerToken3) * 2);
-            RestoreResource();
+            var tile = GameTileList.Find(x => x is RoundBooster);
+            if (tile != null)
+            {
+                GameTileList.Remove(tile);
+            }
+            ret.Add("C", CalCreditIncome());
+            ret.Add("K", CalKnowledgeIncome());
+            ret.Add("O", CalOreIncome());
+            ret.Add("Q", CalQICIncome());
+            ret.Add("PWT", CalPowerTokenIncome());
+            ret.Add("PW", CalPowerIncome());
+            if (tile != null)
+            {
+                GameTileList.Add(tile);
+            }
             return ret;
         }
 
         public virtual void CalIncome()
         {
-            CalOreIncome();
-            CalCreditIncome();
-            CalKnowledgeIncome();
-            CalPowerIncome();
-            CalQICIncome();
-            CallTechIncome();
+            Ore += CalOreIncome();
+            Credit += CalCreditIncome();
+            Knowledge += CalKnowledgeIncome();
+            PowerIncrease(CalPowerIncome());
+            PowerToken1 += CalPowerTokenIncome();
+            QICs += CalQICIncome();
         }
 
-        private void CallTechIncome()
+        protected virtual int CalPowerTokenIncome()
         {
+            var ret = 0;
+            ret += GameTileList.Sum(x => x.GetPowerTokenIncome());
+            if (StrongHold == null)
+            {
+                ret += CallSHPowerTokenIncome();
+            }
+            return ret;
+        }
+
+        protected virtual int CalOreIncome()
+        {
+            var ret = 0;
+            if (Mines.Count >= 6 && Mines.Count <= 8)
+            {
+                ret += 9 - Mines.Count;
+            }
+            else if (Mines.Count == 5)
+            {
+                ret += 3;
+            }
+            else if (Mines.Count < 5)
+            {
+                ret += 8 - Mines.Count;
+            }
+
+            ret += GameTileList.Sum(x => x.GetOreIncome());
+
             switch (EconomicLevel)
             {
-                case 1:
-                    Credit += 2;
-                    PowerIncrease(1);
-                    break;
                 case 2:
-                    Credit += 2;
-                    PowerIncrease(2);
-                    Ore += 1;
+                    ret += 1;
                     break;
                 case 3:
-                    Credit += 3;
-                    PowerIncrease(3);
-                    Ore += 1;
+                    ret += 1;
                     break;
                 case 4:
-                    Credit += 4;
-                    PowerIncrease(4);
-                    Ore += 2;
+                    ret += 2;
                     break;
                 case 5:
-                    Credit += 6;
-                    PowerIncrease(6);
-                    Ore += 3;
+                    ret += 3;
                     break;
                 default:
                     break;
             }
-            switch (ScienceLevel)
-            {
-                case 1:
-                    Knowledge += 1;
-                    break;
-                case 2:
-                    Knowledge += 2;
-                    break;
-                case 3:
-                    Knowledge += 3;
-                    break;
-                case 4:
-                    Knowledge += 4;
-                    break;
-            }
+            return ret;
         }
-
-        protected virtual void CalOreIncome()
+        protected virtual int CalCreditIncome()
         {
-            if (Mines.Count >= 6 && Mines.Count <= 8)
-            {
-                Ore += 9 - Mines.Count;
-            }
-            else if (Mines.Count == 5)
-            {
-                Ore += 3;
-            }
-            else if (Mines.Count < 5)
-            {
-                Ore += 8 - Mines.Count;
-            }
-
-            Ore += GameTileList.Sum(x => x.GetOreIncome());
-        }
-        protected virtual void CalCreditIncome()
-        {
+            int ret=0;
             if (TradeCenters.Count == 3)
             {
-                Credit += 3;
+                ret += 3;
             }
             else if (TradeCenters.Count == 2)
             {
-                Credit += 7;
+                ret += 7;
             }
             else if (TradeCenters.Count == 1)
             {
-                Credit += 11;
+                ret += 11;
             }
             else if (TradeCenters.Count == 0)
             {
-                Credit += 16;
+                ret += 16;
             }
-            Credit += GameTileList.Sum(x => x.GetCreditIncome());
+            ret += GameTileList.Sum(x => x.GetCreditIncome());
+            switch (EconomicLevel)
+            {
+                case 1:
+                    ret += 2;
+                    break;
+                case 2:
+                    ret += 2;
+                    break;
+                case 3:
+                    ret += 3;
+                    break;
+                case 4:
+                    ret += 4;
+                    break;
+                case 5:
+                    ret += 6;
+                    break;
+                default:
+                    break;
+            }
+            return ret;
         }
 
 
-        protected virtual void CalKnowledgeIncome()
+        protected virtual int CalKnowledgeIncome()
         {
-            Knowledge += 4 - ResearchLabs.Count;
+            var ret = 0;
+            ret += 4 - ResearchLabs.Count;
             if (Academy1 == null)
             {
-                CallAC1Income();
+                ret += CallAC1Income();
             }
 
-            Knowledge += GameTileList.Sum(x => x.GetKnowledgeIncome());
+            ret += GameTileList.Sum(x => x.GetKnowledgeIncome());
+
+            switch (ScienceLevel)
+            {
+                case 1:
+                    ret += 1;
+                    break;
+                case 2:
+                    ret += 2;
+                    break;
+                case 3:
+                    ret += 3;
+                    break;
+                case 4:
+                    ret += 4;
+                    break;
+            }
+            return ret;
         }
 
-        protected virtual void CallAC1Income()
+        protected virtual int CallAC1Income()
         {
-            Knowledge += 2;
+            return 2;
         }
 
-        protected virtual void CalQICIncome()
+        protected virtual int CalQICIncome()
         {
-            QICs += GameTileList.Sum(x => x.GetQICIncome());
+            var ret = 0;
+            ret += GameTileList.Sum(x => x.GetQICIncome());
+            return ret;
         }
 
-        protected virtual void CalPowerIncome()
+        protected virtual int CalPowerIncome()
         {
+            var ret = 0;
             if (StrongHold == null)
             {
-                CallSHIncome();
+                ret += CallSHPowerIncome();
             }
-
-            PowerIncrease(GameTileList.Sum(x => x.GetPowerIncome()));
-            PowerToken1 += GameTileList.Sum(x => x.GetPowerTokenIncome());
+            ret += GameTileList.Sum(x => x.GetPowerIncome());
+            switch (EconomicLevel)
+            {
+                case 1:
+                    ret += 1;
+                    break;
+                case 2:
+                    ret += 2;
+                    break;
+                case 3:
+                    ret += 3;
+                    break;
+                case 4:
+                    ret += 4;
+                    break;
+                case 5:
+                    ret += 6;
+                    break;
+                default:
+                    break;
+            }
+            return ret;
         }
 
-        protected virtual void CallSHIncome()
+        protected virtual int CallSHPowerIncome()
         {
-            PowerIncrease(4);
-            m_powerToken1++;
+            return 4;
+        }
+        protected virtual int CallSHPowerTokenIncome()
+        {
+            return 1;
         }
 
         public virtual int PowerIncrease(int i)
