@@ -1166,7 +1166,7 @@ namespace GaiaCore.Gaia
                 dump.Remove(item);
                 if (ForgingAlliance(dump, out log))
                 {
-                    log = string.Format("缺少{0}{1}也能形成星盟", item.Item1, item.Item2);
+                    log = string.Format("缺少{0}{1}也能形成星盟", Convert.ToChar((item.Item1 + Convert.ToByte('A'))), item.Item2);
                     return false;
                 }
             }
