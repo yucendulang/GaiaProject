@@ -153,7 +153,7 @@ namespace GaiaCore.Gaia
                         item.Value.Username[i] = user;
                     }
                 }
-                RestoreGameWithActionLog(item,DebugInvoke = null);
+                RestoreGameWithActionLog(item,DebugInvoke);
 
             }
             return m_dic.Keys;
