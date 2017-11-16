@@ -28,5 +28,8 @@ namespace GaiaProject.Models.HomeViewModels
         public string Player4 { set; get; }
         [Display(Name = "是否为测试局")]
         public bool IsTestGame { set; get; }
+        [Display(Name = "地图选择")]
+        public string MapSelction { set; get; }
     }
+
 }

@@ -17,7 +17,7 @@ namespace GaiaCore.Gaia
         {
             m_dic = new Dictionary<string, GaiaGame>();
         }
-        public static bool CreateNewGame(string name, string[] username, out GaiaGame result, int seed = 0, bool isTestGame = false)
+        public static bool CreateNewGame(string name, string[] username, out GaiaGame result, string MapSelection, int seed = 0, bool isTestGame = false)
         {
             if (m_dic.ContainsKey(name))
             {
@@ -29,10 +29,11 @@ namespace GaiaCore.Gaia
                 seed = seed == 0 ? RandomInstance.Next(int.MaxValue) : seed;
                 result = new GaiaGame(username);
                 result.IsTestGame = isTestGame;
-                result.Syntax(GameSyntax.setupGame+ seed,out string log);
+                result.Syntax(GameSyntax.setupmap+" "+MapSelection, out string log);
+                result.Syntax(GameSyntax.setupGame + seed, out log);
                 m_dic.Add(name, result);
                 return true;
-            }           
+            }
         }
 
         public static void RemoveOldBackupData()

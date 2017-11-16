@@ -992,15 +992,8 @@ namespace GaiaCore.Gaia
             }else if (GameSyntax.setupMapRegex.IsMatch(syntax))
             {
                 var match = GameSyntax.setupMapRegex.Match(syntax);
-                var str = match.Groups[0].Value;
-                if ("fix".Equals(str))
-                {
-                    IsMapRandom = false;
-                }
-                else
-                {
-                    IsMapRandom = true;
-                }
+                var str = match.Groups[1].Value;
+                MapSelection = (MapSelection)Enum.Parse(typeof(MapSelection), str, true);
             }
             return false;
         }
@@ -1093,11 +1086,11 @@ namespace GaiaCore.Gaia
         {
             Seed = i == 0 ? RandomInstance.Next(int.MaxValue) : i;
             var random = new Random(Seed);
-            if (UserCount!=2)
+            if (MapSelection == MapSelection.random4p)
             {
                 Map = new MapMgr().GetRandomMap(random);
             }
-            else
+            else if (MapSelection == MapSelection.fix2p)
             {
                 Map = new MapMgr().GetTwoPlayerFixedMap();
             }
@@ -1224,7 +1217,7 @@ namespace GaiaCore.Gaia
             }
         }
 
-        public bool IsMapRandom { get; private set; }
+        public MapSelection MapSelection { get; private set; }
         public int UserCount { get; private set; }
 
         public class STTInfo
