@@ -149,13 +149,13 @@ function createMap(id,type) {
         }, false);
     }
     else if (type === "act") {
-        if (isFirstAct === true) {
+        if (isFirstAct === true){//
             isFirstAct = false;
             c.addEventListener('click', function (e) {
                 //console.log(list);
                 var xy = getEventPosition(e);
                 var clickObj = getClickObj(xy.x, xy.y);
-                if (clickObj.typename !== undefined) {
+                if (clickObj.typename != undefined) {
                     alert("不能选择已经有建筑的地点");
                 } else {
                     $("#syntax").val($("#syntax").val() + ".build " + clickObj.position);
