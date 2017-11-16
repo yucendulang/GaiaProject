@@ -132,9 +132,52 @@ namespace GaiaCore.Gaia
                     {
                         return false;
                     }
+
+                case Stage.ROUNDINCOME:
+                    ret = ProcessSyntaxRoundIncomePhase(syntax, ref log);
+                    if (ret)
+                    {
+                        IncomePhaseNextPlayer();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                    return true;
                 default:
                     return false;
             }
+        }
+
+        private bool ProcessSyntaxRoundIncomePhase(string syntax, ref string log)
+        {
+            log = string.Empty;
+            if (!ValidateSyntaxCommand(syntax, ref log, out string commmand, out Faction faction))
+            {
+                return false;
+            }
+            if (!GameSpecialSyntax.PowerPreview.IsMatch(commmand))
+            {
+                log = "语法错误";
+                return false;
+            }
+            var match = GameSpecialSyntax.PowerPreview.Match(commmand);
+            var p1 = match.Groups[1].Value.ParseToInt(0);
+            var p2 = match.Groups[2].Value.ParseToInt(0);
+            var p3 = match.Groups[3].Value.ParseToInt(0);
+            if (faction.PowerPreview.Exists(x => x.Item1 == p1 && x.Item2 == p2 && x.Item3 == p3))
+            {
+                faction.PowerToken1 = p1;
+                faction.PowerToken2 = p2;
+                faction.PowerToken3 = p3;
+            }
+            else
+            {
+                log = "不能变为此种魔力分配";
+                return false;
+            }
+            faction.PowerPreview.Clear();
+            return true;
         }
 
         private bool ProcessSyntaxGaiaPhase(string syntax, ref string log)
@@ -240,6 +283,24 @@ namespace GaiaCore.Gaia
                 //开始新回合
                 ChangeGameStatus(Stage.ROUNDINCOME);
                 FactionList.ForEach(x => x.CalIncome());
+                FactionList.ForEach(x =>
+                {
+                    x.BuildPowerPreview();
+                    if (x.PowerPreview.Count != 0)
+                    {
+                        GameStatus.IncomePhaseIndexQueue.Enqueue(FactionList.IndexOf(x));
+                    }
+                });
+                GameStatus.NewRoundReset();
+                IncomePhaseNextPlayer();
+                return;
+            }
+        }
+
+        private void IncomePhaseNextPlayer()
+        {
+            if (GameStatus.IncomePhaseIndexQueue.Count==0)
+            {
                 ChangeGameStatus(Stage.ROUNDGAIAPHASE);
                 var spFaction = FactionList.FindAll(x => x is Itar || x is Terraner);
                 foreach (var item in spFaction)
@@ -254,7 +315,10 @@ namespace GaiaCore.Gaia
                     }
                 }
                 GaiaNextPlayer();
-
+            }
+            else
+            {
+                GameStatus.PlayerIndex = GameStatus.IncomePhaseIndexQueue.Dequeue();
             }
         }
 
@@ -293,8 +357,7 @@ namespace GaiaCore.Gaia
             }
 
             FactionList.ForEach(x => x.GaiaPhaseIncome());
-
-            GameStatus.NewRoundReset();
+            GameStatus.PlayerIndex = 0;
             FactionList.ForEach(x => x.GameTileList.Where(y=>!(y is AllianceTile)).ToList().ForEach(y => y.IsUsed = false));
             MapActionMrg.Reset();
             ChangeGameStatus(Stage.ROUNDSTART);

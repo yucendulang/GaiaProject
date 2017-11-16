@@ -131,18 +131,21 @@ else
         <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
         @if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDWAITLEECHPOWER)
         {
+
             <p>等待以下吸取能量</p>
-            foreach (var fac in Model.UserDic[User.Identity.Name])
+            foreach (var fac in @Model.FactionList)
             {
                 foreach (var leech in fac.LeechPowerQueue)
                 {
                     <p>@fac.ChineseName 是否要从 @leech.Item2 吸取 @leech.Item1 点能量</p>
                 }
             }
+            <br>
         }
         else if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDSTART)
         {
             <p>现在是Round @Model.GameStatus.RoundCount,Turn @Model.GameStatus.TurnCount</p>
+            
             <p>现在是 <span class="buildcolor">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 的回合,颜色是 @Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()</p>
 
             <!-- 模态框（Modal）升级建筑 -->
@@ -230,6 +233,7 @@ else
             </div>
 
 
+
             <!-- 信息确认对话框 -->
             <div class="modal fade" id="querycfmModel">
                 <div class="modal-dialog">
@@ -242,10 +246,12 @@ else
                             <p id="querytitle">您确认要执行吗？</p>
                             <p id="querysyntax"></p>
 
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal" onclick='$("#syntax").focus();'>手动输入</button>
+
 
                             <a  class="btn btn-success" data-dismiss="modal" id="querycfmModelYes">立即执行</a>
                         </div>
@@ -273,10 +279,12 @@ else
         }
         else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.INITIALMINES)
         {
+
             <p>现在等待 <span  class="buildcolor">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 建造初始房子 </p>
         }
         else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.SELECTROUNDBOOSTER)
         {
+
             <p>现在等待 <span  class="buildcolor">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 选择回合助推板 +rbtx</p>
 
             @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"), "--请选择回合助推板--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "rbtList", @syntax = "+" })
@@ -285,35 +293,45 @@ else
         }
         else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
         {
+
             <p>游戏结束 @string.Join("|", @Model.FactionList.OrderBy(x => x.Score).Select(x => string.Format("{0}:{1}", x.ChineseName, x.Score)))</p>
         }
         else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
         {
+
             <p>现在等待 @Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName 做Gaia行动 Pass跳过此行动阶段 Itar 用+sttx/attx获取板子 一次只能拿一块 人类正常使用Convert命令 一次只能转换一种资源</p>
         }
 
         @if (Model.UserDic.ContainsKey(User.Identity.Name))
+
         {
                     @foreach (var fac in Model.UserDic[User.Identity.Name])
+
                     {
                         @foreach (var leech in fac.LeechPowerQueue)
+
                         {
-                            <div>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点能量</div>
-                            if (fac.LeechPowerQueue.IndexOf(leech) == 0)
-                            {
-                                <form asp-controller="Home" asp-action="LeechPower" asp-route-returnurl="/Home/Contact" method="post" class="form-horizontal">
-                                    <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
-                                    <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
-                                    <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
-                                    <input name="leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
-                                    <button type="submit" name="isLeech" class="btn btn-default" value="true">是</button>
-                                    <button type="submit" name="isLeech" class="btn btn-default" value="false">否</button>
-                                </form>
-
-                            }
-
+                      <form asp-controller="Home" asp-action="LeechPower" asp-route-returnurl="/Home/Contact" method="post" class="form-horizontal">
+                          <div>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力</div>
+                          <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
+                          <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
+                          <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
+                          <input name="leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
+                          <button type="submit" name="isLeech" class="btn btn-default" value="true">是</button>
+                          <button type="submit" name="isLeech" class="btn btn-default" value="false">否</button>
+                      </form>
                         }
                     }
+            if (User.Identity.Name.Equals(Model.GetCurrentUserName()) && Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDINCOME)
+            {
+                <p>现在是Round @Model.GameStatus.RoundCount,Turn @Model.GameStatus.TurnCount</p>
+                <p>现在等待 <span style="background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 选择想要的魔力分配方式</p>
+                foreach (var item in Model.FactionList[Model.GameStatus.PlayerIndex].PowerPreview)
+                {
+                    <button id="pwincome" class="btn btn-default" value="@item.Item1,@item.Item2,@item.Item3">@item.Item1|@item.Item2|@item.Item3</button>
+                }
+
+            }
         }
 
         @if (ViewData["log"] != null)
@@ -347,6 +365,7 @@ else
 
      }
 
+
     @if (isRound)
                 {
          <div class="panel panel-default">
@@ -354,6 +373,7 @@ else
                  <h3 class="panel-title">行动区域</h3>
              </div>
              <div class="panel-body">
+
 
 
                  <div class="row">
@@ -1312,6 +1332,24 @@ else
                     }
                 });
         }
+
+        $(document).ready(function () {
+            $('button#pwincome').click(function () {
+                $.post("/home/Syntax",
+                    {
+                        name: $("#test1").val(),
+                        syntax: "setpower " + $(this).attr("value"),
+                        factionName: $("#test3").val(),
+                    },
+                    function (data, status) {
+                        if (data.indexOf("error") != -1) {
+                            alert(data);
+                        } else {
+                            location.reload();
+                        }
+                    });
+            });
+        });
 
         $(document).ready(function () {
             $("button#syn").click(function () {

@@ -35,7 +35,7 @@ namespace GaiaCore.Gaia
                 m_powerToken3 = 0;
                 m_ShipLevel = 0;
             }
-            
+
 
             m_powerToken1 = 2;
             m_powerToken2 = 4;
@@ -75,6 +75,7 @@ namespace GaiaCore.Gaia
             GaiaGame.MapActionMrg.AddMapActionList(ActionList, PredicateActionList);
             GaiaPlanetNumber = 0;
             m_allianceMagicLevel = 7;
+            PowerPreview = new List<Tuple<int, int, int>>();
         }
 
         public virtual bool FinishIntialMines()
@@ -132,10 +133,10 @@ namespace GaiaCore.Gaia
         /// 中文名称
         /// </summary>
         public string ChineseName { get; set; }
-        public string UserName { get; set; } 
+        public string UserName { get; set; }
 
         public string[] colorList = new string[] { "#16a0e0", "#d71729", "#d75d0c", "#deb703", "#8b3a0e", "#6b6868", "#ebfafb" };
-        public  string[] colorMapList= new string[]{ "#6bd8f3", "#f23c4d", "#ea8736", "#facd2f", "#ad5e2f", "#a3a3a3", "#d3f1f5" }; 
+        public string[] colorMapList = new string[] { "#6bd8f3", "#f23c4d", "#ea8736", "#facd2f", "#ad5e2f", "#a3a3a3", "#d3f1f5" };
         /// <summary>
         /// 种族颜色代码
         /// </summary>
@@ -166,6 +167,176 @@ namespace GaiaCore.Gaia
         public int AllianceTileCost = 0;
         #endregion
 
+        public virtual int PowerIncrease(int i)
+        {
+            var ret = Math.Min(m_powerToken1 * 2 + m_powerToken2, i);
+            if (m_powerToken1 > i)
+            {
+                m_powerToken1 -= i;
+                m_powerToken2 += i;
+            }
+            else if (m_powerToken1 * 2 + m_powerToken2 > i)
+            {
+                m_powerToken2 = m_powerToken2 - i + m_powerToken1 * 2;
+                m_powerToken3 += i - m_powerToken1;
+                m_powerToken1 = 0;
+            }
+            else
+            {
+                m_powerToken3 += m_powerToken1 + m_powerToken2;
+                m_powerToken2 = 0;
+                m_powerToken1 = 0;
+            }
+            return ret;
+        }
+        public List<GaiaBuilding> Gaias { set; get; }
+        public List<Mine> Mines { set; get; }
+        public List<TradeCenter> TradeCenters { set; get; }
+        public List<ResearchLab> ResearchLabs { set; get; }
+        public Academy Academy1 { set; get; }
+        public Academy Academy2 { set; get; }
+        public StrongHold StrongHold { set; get; }
+        public int Credit { get => m_credit + TempCredit; set { m_credit = value; TempCredit = 0; } }
+        public int Ore { get => m_ore + TempOre; set { m_ore = value; TempOre = 0; } }
+        public int Knowledge { get => m_knowledge + TempKnowledge; set { m_knowledge = value; TempKnowledge = 0; } }
+        public int QICs { get => m_QICs + TempQICs; set { m_QICs = value; TempQICs = 0; } }
+        public int PowerToken1 { get => m_powerToken1 + TempPowerToken1; set { m_powerToken1 = value; TempPowerToken1 = 0; } }
+        public int PowerToken2 { get => m_powerToken2 + TempPowerToken2; set => m_powerToken2 = value; }
+        public int PowerToken3 { get => m_powerToken3 + TempPowerToken3; set => m_powerToken3 = value; }
+        public int TransformLevel { get => m_TransformLevel; }
+        public int ShipLevel { get => m_ShipLevel; }
+        public int AILevel { get => m_AILevel; }
+        public int GaiaLevel { get => m_GaiaLevel; }
+        public int EconomicLevel { get => m_EconomicLevel; }
+        public int ScienceLevel { get => m_ScienceLevel; }
+        public abstract Terrain OGTerrain { get; }
+        public List<Tuple<int,int,int>> PowerPreview { set; get; }
+        public List<Tuple<int, FactionName>> LeechPowerQueue { get; }
+        public int Score { get; set; }
+        public GaiaGame GaiaGame { get; }
+        public Queue<Action> ActionQueue { get; set; }
+
+        public Dictionary<string, Func<Faction, bool>> ActionList { get; set; }
+        public Dictionary<string, Func<Faction, bool>> PredicateActionList { get; set; }
+        public int GaiaPlanetNumber { get; set; }
+        public int GetShipDistance
+        {
+            get
+            {
+                if (m_ShipLevel == 0 | m_ShipLevel == 1)
+                {
+                    return 1 + TempShip;
+                }
+                else if (m_ShipLevel == 2 | m_ShipLevel == 3)
+                {
+                    return 2 + TempShip;
+                }
+                else if (m_ShipLevel == 4)
+                {
+                    return 3 + TempShip;
+                }
+                else if (m_ShipLevel == 5)
+                {
+                    return 4 + TempShip;
+                }
+                throw new Exception("m_ShipLevel数值出错" + m_ShipLevel);
+            }
+        }
+
+        public int GetTransformCost
+        {
+            get
+            {
+                if (m_TransformLevel == 0 || m_TransformLevel == 1)
+                {
+                    return 3;
+                }
+                else if (m_TransformLevel == 2)
+                {
+                    return 2;
+                }
+                else if (m_TransformLevel == 3 || m_TransformLevel == 4 || m_TransformLevel == 5)
+                {
+                    return 1;
+                }
+                throw new Exception("m_Transform数值出错" + m_TransformLevel);
+            }
+        }
+
+        public int TechTilesGet { get => m_TechTilesGet; set => m_TechTilesGet = value; }
+        public int TechTracAdv { get => m_TechTrachAdv; set => m_TechTrachAdv = value; }
+        public int TerraFormNumber { get => m_TerraFormNumber; set => m_TerraFormNumber = value; }
+        public int TempShip { get => m_TempShip; set => m_TempShip = value; }
+
+        public int PowerTokenGaia { get => m_powerTokenGaia + TempPowerTokenGaia; set { m_powerTokenGaia = value; TempPowerTokenGaia = 0; } }
+        public int AllianceTileReGet { get => m_AllianceTileReGet; set => m_AllianceTileReGet = value; }
+
+        private static List<FieldInfo> list = new List<FieldInfo>()
+        {
+            typeof(Faction).GetField("m_TransformLevel",BindingFlags.NonPublic|BindingFlags.Instance),
+            typeof(Faction).GetField("m_ShipLevel",BindingFlags.NonPublic|BindingFlags.Instance),
+            typeof(Faction).GetField("m_AILevel",BindingFlags.NonPublic|BindingFlags.Instance),
+            typeof(Faction).GetField("m_GaiaLevel",BindingFlags.NonPublic|BindingFlags.Instance),
+            typeof(Faction).GetField("m_EconomicLevel",BindingFlags.NonPublic|BindingFlags.Instance),
+            typeof(Faction).GetField("m_ScienceLevel",BindingFlags.NonPublic|BindingFlags.Instance),
+        };
+
+
+        public bool IsIncreaseTechLevelByIndexValidate(int index, out string log, bool isIncreaseAllianceTileCost = false)
+        {
+            log = string.Empty;
+            if (index < 0 | index > 5)
+            {
+                throw new Exception("超出科技条边界");
+            }
+            var level = (int)list[index].GetValue(this);
+            if (level >= 0 && level < 4)
+            {
+                //level++;
+            }
+            else if (level == 4)
+            {
+                if (GaiaGame.FactionList.Exists(x => (int)list[index].GetValue(x) == 5))
+                {
+                    log = "已经有人登顶了,只有一人能登顶";
+                    return false;
+                }
+                if (!GameTileList.Exists(x => x is AllianceTile && x.IsUsed == false))
+                {
+                    log = "需要星盟版(ALT)才能继续升级";
+                    return false;
+                }
+                if (isIncreaseAllianceTileCost)
+                {
+                    AllianceTileCost++;
+                }
+                return true;
+            }
+            else
+            {
+                log = "满级情况不能继续升级";
+                return false;
+            }
+            return true;
+        }
+
+        public void AddGameTiles(GameTiles tile)
+        {
+            GameTileList.Add(tile);
+            if (tile.CanAction)
+            {
+                PredicateActionList.Add(tile.GetType().Name.ToLower(), tile.PredicateGameTileAction);
+                ActionList.Add(tile.GetType().Name.ToLower(), tile.InvokeGameTileAction);
+            }
+            tile.OneTimeAction(this);
+        }
+        //private int m_TransformLevel;
+
+        //       private int m_ShipLevel;
+        //       private int m_AILevel;
+        //       private int m_GaiaLevel;
+        //       private int m_EconomicLevel;
+        //       private int m_ScienceLevel;
         private void BackupResource()
         {
             backup = new FactionBackup()
@@ -222,21 +393,12 @@ namespace GaiaCore.Gaia
             Ore += CalOreIncome();
             Credit += CalCreditIncome();
             Knowledge += CalKnowledgeIncome();
-            PowerIncrease(CalPowerIncome());
-            PowerToken1 += CalPowerTokenIncome();
+            //PowerIncrease(CalPowerIncome());
+            //PowerToken1 += CalPowerTokenIncome();
             QICs += CalQICIncome();
         }
 
-        protected virtual int CalPowerTokenIncome()
-        {
-            var ret = 0;
-            ret += GameTileList.Sum(x => x.GetPowerTokenIncome());
-            if (StrongHold == null)
-            {
-                ret += CallSHPowerTokenIncome();
-            }
-            return ret;
-        }
+
 
         protected virtual int CalOreIncome()
         {
@@ -277,7 +439,7 @@ namespace GaiaCore.Gaia
         }
         protected virtual int CalCreditIncome()
         {
-            int ret=0;
+            int ret = 0;
             if (TradeCenters.Count == 3)
             {
                 ret += 3;
@@ -360,37 +522,64 @@ namespace GaiaCore.Gaia
             return ret;
         }
 
-        protected virtual int CalPowerIncome()
+        protected virtual int CalPowerIncome(List<int> list = null)
         {
-            var ret = 0;
+            List<int> ret;
+            if (list != null)
+            {
+                ret = list;
+            }
+            else
+            {
+                ret = new List<int>();
+            }
+
             if (StrongHold == null)
             {
-                ret += CallSHPowerIncome();
+                ret.Add(CallSHPowerIncome());
             }
-            ret += GameTileList.Sum(x => x.GetPowerIncome());
+            GameTileList.ForEach(x => ret.Add(x.GetPowerIncome()));
             switch (EconomicLevel)
             {
                 case 1:
-                    ret += 1;
+                    ret.Add(1);
                     break;
                 case 2:
-                    ret += 2;
+                    ret.Add(2);
                     break;
                 case 3:
-                    ret += 3;
+                    ret.Add(3);
                     break;
                 case 4:
-                    ret += 4;
+                    ret.Add(4);
                     break;
                 case 5:
-                    ret += 6;
+                    ret.Add(6);
                     break;
                 default:
                     break;
             }
-            return ret;
+            return ret.Sum();
         }
 
+        protected virtual int CalPowerTokenIncome(List<int> list = null)
+        {
+            List<int> ret;
+            if (list != null)
+            {
+                ret = list;
+            }
+            else
+            {
+                ret = new List<int>();
+            }
+            GameTileList.ForEach(x => ret.Add(x.GetPowerTokenIncome()));
+            if (StrongHold == null)
+            {
+                ret.Add(CallSHPowerTokenIncome());
+            }
+            return ret.Sum();
+        }
         protected virtual int CallSHPowerIncome()
         {
             return 4;
@@ -400,175 +589,6 @@ namespace GaiaCore.Gaia
             return 1;
         }
 
-        public virtual int PowerIncrease(int i)
-        {
-            var ret = Math.Min(m_powerToken1 * 2 + m_powerToken2, i);
-            if (m_powerToken1 > i)
-            {
-                m_powerToken1 -= i;
-                m_powerToken2 += i;
-            }
-            else if (m_powerToken1 * 2 + m_powerToken2 > i)
-            {
-                m_powerToken2 = m_powerToken2 - i + m_powerToken1 * 2;
-                m_powerToken3 += i - m_powerToken1;
-                m_powerToken1 = 0;
-            }
-            else
-            {
-                m_powerToken3 += m_powerToken1 + m_powerToken2;
-                m_powerToken2 = 0;
-                m_powerToken1 = 0;
-            }
-            return ret;
-        }
-        public List<GaiaBuilding> Gaias { set; get; }
-        public List<Mine> Mines { set; get; }
-        public List<TradeCenter> TradeCenters { set; get; }
-        public List<ResearchLab> ResearchLabs { set; get; }
-        public Academy Academy1 { set; get; }
-        public Academy Academy2 { set; get; }
-        public StrongHold StrongHold { set; get; }
-        public int Credit { get => m_credit + TempCredit; set { m_credit = value; TempCredit = 0; } }
-        public int Ore { get => m_ore + TempOre; set { m_ore = value; TempOre = 0; } }
-        public int Knowledge { get => m_knowledge + TempKnowledge; set { m_knowledge = value; TempKnowledge = 0; } }
-        public int QICs { get => m_QICs + TempQICs; set { m_QICs = value; TempQICs = 0; } }
-        public int PowerToken1 { get => m_powerToken1 + TempPowerToken1; set { m_powerToken1 = value; TempPowerToken1 = 0; } }
-        public int PowerToken2 { get => m_powerToken2 + TempPowerToken2; set => m_powerToken2 = value; }
-        public int PowerToken3 { get => m_powerToken3 + TempPowerToken3; set => m_powerToken3 = value; }
-        public int TransformLevel { get => m_TransformLevel; }
-        public int ShipLevel { get => m_ShipLevel; }
-        public int AILevel { get => m_AILevel; }
-        public int GaiaLevel { get => m_GaiaLevel; }
-        public int EconomicLevel { get => m_EconomicLevel; }
-        public int ScienceLevel { get => m_ScienceLevel; }
-        public abstract Terrain OGTerrain { get; }
-        public List<Tuple<int, FactionName>> LeechPowerQueue { get; }
-        public int Score { get; set; }
-        public GaiaGame GaiaGame { get; }
-        public Queue<Action> ActionQueue { get; set; }
-
-        public Dictionary<string, Func<Faction, bool>> ActionList { get; set; }
-        public Dictionary<string, Func<Faction, bool>> PredicateActionList { get; set; }
-        public int GaiaPlanetNumber { get; set; }
-        public int GetShipDistance
-        {
-            get
-            {
-                if (m_ShipLevel == 0 | m_ShipLevel == 1)
-                {
-                    return 1 + TempShip;
-                }
-                else if (m_ShipLevel == 2 | m_ShipLevel == 3)
-                {
-                    return 2 + TempShip;
-                }
-                else if (m_ShipLevel == 4)
-                {
-                    return 3 + TempShip;
-                }
-                else if (m_ShipLevel == 5)
-                {
-                    return 4 + TempShip;
-                }
-                throw new Exception("m_ShipLevel数值出错" + m_ShipLevel);
-            }
-        }
-
-        public int GetTransformCost
-        {
-            get
-            {
-                if (m_TransformLevel == 0 || m_TransformLevel == 1)
-                {
-                    return 3;
-                }
-                else if (m_TransformLevel == 2)
-                {
-                    return 2;
-                }
-                else if (m_TransformLevel == 3 || m_TransformLevel == 4 || m_TransformLevel == 5)
-                {
-                    return 1;
-                }
-                throw new Exception("m_Transform数值出错" + m_TransformLevel);
-            }
-        }
-
-        public int TechTilesGet { get => m_TechTilesGet; set => m_TechTilesGet = value; }
-        public int TechTracAdv { get => m_TechTrachAdv; set => m_TechTrachAdv = value; }
-        public int TerraFormNumber { get => m_TerraFormNumber; set => m_TerraFormNumber = value; }
-        public int TempShip { get => m_TempShip; set => m_TempShip = value; }
-
-        public int PowerTokenGaia { get => m_powerTokenGaia + TempPowerTokenGaia; set { m_powerTokenGaia = value; TempPowerTokenGaia = 0; } }
-        public int AllianceTileReGet { get => m_AllianceTileReGet; set => m_AllianceTileReGet = value; }
-
-        private static List<FieldInfo> list = new List<FieldInfo>()
-        {
-            typeof(Faction).GetField("m_TransformLevel",BindingFlags.NonPublic|BindingFlags.Instance),
-            typeof(Faction).GetField("m_ShipLevel",BindingFlags.NonPublic|BindingFlags.Instance),
-            typeof(Faction).GetField("m_AILevel",BindingFlags.NonPublic|BindingFlags.Instance),
-            typeof(Faction).GetField("m_GaiaLevel",BindingFlags.NonPublic|BindingFlags.Instance),
-            typeof(Faction).GetField("m_EconomicLevel",BindingFlags.NonPublic|BindingFlags.Instance),
-            typeof(Faction).GetField("m_ScienceLevel",BindingFlags.NonPublic|BindingFlags.Instance),
-        };
-
-
-        public bool IsIncreaseTechLevelByIndexValidate(int index, out string log,bool isIncreaseAllianceTileCost=false)
-        {
-            log = string.Empty;
-            if (index < 0 | index > 5)
-            {
-                throw new Exception("超出科技条边界");
-            }
-            var level = (int)list[index].GetValue(this);
-            if (level >= 0 && level < 4)
-            {
-                //level++;
-            }
-            else if (level == 4)
-            {
-                if (GaiaGame.FactionList.Exists(x => (int)list[index].GetValue(x) == 5))
-                {
-                    log = "已经有人登顶了,只有一人能登顶";
-                    return false;
-                }
-                if (!GameTileList.Exists(x => x is AllianceTile && x.IsUsed == false))
-                {
-                    log = "需要星盟版(ALT)才能继续升级";
-                    return false;
-                }
-                if (isIncreaseAllianceTileCost)
-                {
-                    AllianceTileCost++;
-                }
-                return true;
-            }
-            else
-            {
-                log = "满级情况不能继续升级";
-                return false;
-            }
-            return true;
-        }
-
-        public void AddGameTiles(GameTiles tile)
-        {
-            GameTileList.Add(tile);
-            if (tile.CanAction)
-            {
-                PredicateActionList.Add(tile.GetType().Name.ToLower(), tile.PredicateGameTileAction);
-                ActionList.Add(tile.GetType().Name.ToLower(), tile.InvokeGameTileAction);
-            }
-            tile.OneTimeAction(this);
-        }
-        //private int m_TransformLevel;
-
-        //       private int m_ShipLevel;
-        //       private int m_AILevel;
-        //       private int m_GaiaLevel;
-        //       private int m_EconomicLevel;
-        //       private int m_ScienceLevel;
     }
 
 
