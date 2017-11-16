@@ -670,8 +670,8 @@ namespace GaiaCore.Gaia
                     }else if (m_EconomicLevel == 5)
                     {
                         GameTileList.Find(x => x is AllianceTile && x.IsUsed == false).IsUsed = true;
-                        Ore = +3;
-                        Credit = +6;
+                        Ore += 3;
+                        Credit += 6;
                         PowerIncrease(6);
                     }
                     break;
