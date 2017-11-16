@@ -207,6 +207,17 @@ namespace GaiaProject.Controllers
             return View();
         }
 
+        public IActionResult DeleteAllGame()
+        {
+            var task = _userManager.GetUserAsync(HttpContext.User);
+            Task[] taskarray = new Task[] { task };
+            Task.WaitAll(taskarray, millisecondsTimeout: 1000);
+            if ("yucenyucen@126.com".Equals(task.Result.UserName)){
+                GameMgr.DeleteAllGame();
+            }
+            return Redirect("/home/index");
+        }
+
         public IActionResult RestoreDataFromServer()
         {
             Task<IEnumerable<string>> task = GameMgr.RestoreDictionaryFromServerAsync();

@@ -202,6 +202,11 @@ namespace GaiaCore.Gaia
             }
         }
 
+        public static void DeleteAllGame()
+        {
+            m_dic.Clear();
+        }
+
         /// <summary>
         /// 返回读取到的文件
         /// </summary>
