@@ -156,12 +156,12 @@ namespace GaiaCore.Gaia
             {
                 return false;
             }
-            if (GameSpecialSyntax.PowerPreview.IsMatch(syntax))
+            if (!GameSpecialSyntax.PowerPreview.IsMatch(commmand))
             {
                 log = "语法错误";
                 return false;
             }
-            var match = GameSpecialSyntax.PowerPreview.Match(syntax);
+            var match = GameSpecialSyntax.PowerPreview.Match(commmand);
             var p1 = match.Groups[1].Value.ParseToInt(0);
             var p2 = match.Groups[2].Value.ParseToInt(0);
             var p3 = match.Groups[3].Value.ParseToInt(0);
@@ -170,6 +170,11 @@ namespace GaiaCore.Gaia
                 faction.PowerToken1 = p1;
                 faction.PowerToken2 = p2;
                 faction.PowerToken3 = p3;
+            }
+            else
+            {
+                log = "不能变为此种魔力分配";
+                return false;
             }
             faction.PowerPreview.Clear();
             return true;
@@ -352,7 +357,7 @@ namespace GaiaCore.Gaia
             }
 
             FactionList.ForEach(x => x.GaiaPhaseIncome());
-
+            GameStatus.PlayerIndex = 0;
             FactionList.ForEach(x => x.GameTileList.Where(y=>!(y is AllianceTile)).ToList().ForEach(y => y.IsUsed = false));
             MapActionMrg.Reset();
             ChangeGameStatus(Stage.ROUNDSTART);
