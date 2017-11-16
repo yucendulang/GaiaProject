@@ -51,7 +51,7 @@
         margin: auto;
     }
     .sttusedcss {
-        background: url('/images/sttback.png');
+        background: url('/images/sttusedback.png');
     }
 
     .attcss {
@@ -715,7 +715,7 @@ else
 
                     </div>
                 </div>
-                <div help="回合助推版">
+                <div help="回合/特权/科技版">
                     @foreach (var it in item.GameTileList.OrderBy(a => a.showRank))
                     {
                         if (it.typename == "rbt")
@@ -746,7 +746,7 @@ else
                         {
                             @if (it.IsUsed)
                              {
-                                 <div class="sttcss col-md-6">@it.GetType().Name<br/> @it.desc</div>
+                                 <div class="sttcss sttusedcss col-md-6">@it.GetType().Name<br/> @it.desc</div>
                              }
                              else
                              {
