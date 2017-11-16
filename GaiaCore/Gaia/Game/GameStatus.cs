@@ -10,6 +10,7 @@ namespace GaiaCore.Gaia
             m_IntialFlag = false;
             m_PassPlayerIndex = new List<int>();
             GaiaPlayerIndexQueue = new Queue<int>();
+            IncomePhaseIndexQueue = new Queue<int>();
         }
         public Status status = Status.PREPARING;
         public Stage stage = Stage.RANDOMSETUP;
@@ -41,6 +42,7 @@ namespace GaiaCore.Gaia
         /// 储存Gaia阶段的行动先后顺序
         /// </summary>
         public Queue<int> GaiaPlayerIndexQueue { get; internal set; }
+        public Queue<int> IncomePhaseIndexQueue { get; internal set; }
 
         public void SetPlayerIndexLast()
         {

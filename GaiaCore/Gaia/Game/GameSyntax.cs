@@ -143,5 +143,7 @@ namespace GaiaCore.Gaia
         /// 跳过特殊行动的语句
         /// </summary>
         public static Regex PassRegex = new Regex("pass");
+
+        public static Regex PowerPreview = new Regex("^setpower ([0-9]{1,2}),([0-9]{1,2}),([0-9]{1,2})$");
     }
 }

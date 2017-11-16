@@ -20,9 +20,19 @@ namespace GaiaCore.Gaia
         {
             base.CalIncome();
         }
-        protected override int CalPowerTokenIncome()
+        protected override int CalPowerTokenIncome(List<int> list = null)
         {
-            return base.CalPowerIncome() + 1;
+            List<int> ret;
+            if (list != null)
+            {
+                ret = list;
+            }
+            else
+            {
+                ret = new List<int>();
+            }
+            ret.Add(1);
+            return base.CalPowerTokenIncome(ret);
         }
 
         public override void PowerBurnSpecialPreview(int v)

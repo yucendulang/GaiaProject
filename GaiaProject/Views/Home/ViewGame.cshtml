@@ -110,13 +110,14 @@ else
         @if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDWAITLEECHPOWER)
         {
             <p>等待以下吸魔行动</p>
-            foreach (var fac in Model.UserDic[User.Identity.Name])
+            foreach (var fac in @Model.FactionList)
             {
                 foreach (var leech in fac.LeechPowerQueue)
                 {
-                    <p>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力</p>
+                    <p>@fac.FactionName 决定是否要从 @leech.Item2 吸取 @leech.Item1 点魔力</p>
                 }
             }
+            <br>
         }
         else if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDSTART)
         {
@@ -271,11 +272,11 @@ else
         }
 
         @if (Model.UserDic.ContainsKey(User.Identity.Name))
-                {
+        {
                     @foreach (var fac in Model.UserDic[User.Identity.Name])
-             {
+                    {
                         @foreach (var leech in fac.LeechPowerQueue)
-                  {
+                        {
                       <form asp-controller="Home" asp-action="LeechPower" asp-route-returnurl="/Home/Contact" method="post" class="form-horizontal">
                           <div>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力</div>
                           <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
@@ -285,8 +286,18 @@ else
                           <button type="submit" name="isLeech" class="btn btn-default" value="true">是</button>
                           <button type="submit" name="isLeech" class="btn btn-default" value="false">否</button>
                       </form>
-                  }
-             }
+                        }
+                    }
+            if (User.Identity.Name.Equals(Model.GetCurrentUserName()) && Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDINCOME)
+            {
+                <p>现在是Round @Model.GameStatus.RoundCount,Turn @Model.GameStatus.TurnCount</p>
+                <p>现在等待 <span style="background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 选择想要的魔力分配方式</p>
+                foreach (var item in Model.FactionList[Model.GameStatus.PlayerIndex].PowerPreview)
+                {
+                    <button id="pwincome" class="btn btn-default" value="@item.Item1,@item.Item2,@item.Item3">@item.Item1|@item.Item2|@item.Item3</button>
+                }
+
+            }
         }
 
         @if (ViewData["log"] != null)
@@ -1253,6 +1264,24 @@ else
                     }
                 });
         }
+
+        $(document).ready(function () {
+            $('button#pwincome').click(function () {
+                $.post("/home/Syntax",
+                    {
+                        name: $("#test1").val(),
+                        syntax: "setpower " + $(this).attr("value"),
+                        factionName: $("#test3").val(),
+                    },
+                    function (data, status) {
+                        if (data.indexOf("error") != -1) {
+                            alert(data);
+                        } else {
+                            location.reload();
+                        }
+                    });
+            });
+        });
 
         $(document).ready(function () {
             $("button#syn").click(function () {

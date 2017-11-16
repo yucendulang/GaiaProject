@@ -292,6 +292,52 @@ namespace GaiaCore.Gaia
             throw new Exception(m_GaiaLevel+"级GaiaLevel出错");
         }
 
+        internal void BuildPowerPreview()
+        {
+            var pl = new List<int>();
+            var ptl = new List<int>();
+            CalPowerIncome(pl);
+            CalPowerTokenIncome(ptl);
+            var pls = new List<Tuple<bool, int>>(); //true为加魔力 false为加pwt
+            pl.Where(x=>x!=0).ToList().ForEach(x => pls.Add(new Tuple<bool, int>(true,x)));
+            ptl.Where(x => x != 0).ToList().ForEach(x => pls.Add(new Tuple<bool, int>(false, x)));
+            for (int i = 0; i < pls.Count; i++)
+            {
+                for (int j = i; j < pls.Count; j++)
+                {
+                    var temp = pls[i];
+                    pls[i] = pls[j];
+                    pls[j] = temp;
+                    BackupResource();
+                    pls.ForEach(x =>
+                    {
+                        if (x.Item1)
+                        {
+                            PowerIncrease(x.Item2);
+                        }
+                        else
+                        {
+                            PowerToken1 += x.Item2;
+                        }
+                    });
+                    System.Diagnostics.Debug.WriteLine(string.Join(",", pls.Select(x => x.Item1.ToString() + x.Item2.ToString())));
+                    if (!PowerPreview.Exists(x => x.Item1 == PowerToken1 && x.Item2 == PowerToken2 && x.Item3 == PowerToken3))
+                    {
+                        PowerPreview.Add(new Tuple<int, int, int>(PowerToken1, PowerToken2, PowerToken3));
+                    }
+                    RestoreResource();
+                }
+            }
+            
+            if (PowerPreview.Count == 1)
+            {
+                PowerToken1 = PowerPreview.FirstOrDefault().Item1;
+                PowerToken2 = PowerPreview.FirstOrDefault().Item2;
+                PowerToken3 = PowerPreview.FirstOrDefault().Item3;
+                PowerPreview.Clear();
+            }
+        }
+
         internal bool BuildIntialMine(Map map, int row, int col, out string log)
         {
             log = string.Empty;
