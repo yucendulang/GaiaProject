@@ -1023,6 +1023,7 @@ namespace GaiaCore.Gaia
                     UserActionLog += "##" + DateTime.Now.ToString() + "#" + syntax.AddEnter();
                 }
             }
+
             catch
             {
                 UserActionLog += "##!!##" + DateTime.Now.ToString() + "#" + syntax.AddEnter();
