@@ -9,8 +9,8 @@ namespace GaiaCore.Gaia
         public BalTak(GaiaGame gg) :base(FactionName.BalTak, gg)
         {
             this.ChineseName = "炽炎族";
-            this.ColorCode = colorList[3];
-            this.ColorMap = colorMapList[3];
+            this.ColorCode = colorList[2];
+            this.ColorMap = colorMapList[2];
 
 
         }
