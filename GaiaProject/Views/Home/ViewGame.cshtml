@@ -293,22 +293,27 @@ else
         }
 
         @if (Model.UserDic.ContainsKey(User.Identity.Name))
-                {
+        {
                     @foreach (var fac in Model.UserDic[User.Identity.Name])
-             {
+                    {
                         @foreach (var leech in fac.LeechPowerQueue)
-                  {
-                      <form asp-controller="Home" asp-action="LeechPower" asp-route-returnurl="/Home/Contact" method="post" class="form-horizontal">
-                          <div>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点能量</div>
-                          <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
-                          <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
-                          <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
-                          <input name="leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
-                          <button type="submit" name="isLeech" class="btn btn-default" value="true">是</button>
-                          <button type="submit" name="isLeech" class="btn btn-default" value="false">否</button>
-                      </form>
-                  }
-             }
+                        {
+                            <div>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点能量</div>
+                            if (fac.LeechPowerQueue.IndexOf(leech) == 0)
+                            {
+                                <form asp-controller="Home" asp-action="LeechPower" asp-route-returnurl="/Home/Contact" method="post" class="form-horizontal">
+                                    <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
+                                    <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
+                                    <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
+                                    <input name="leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
+                                    <button type="submit" name="isLeech" class="btn btn-default" value="true">是</button>
+                                    <button type="submit" name="isLeech" class="btn btn-default" value="false">否</button>
+                                </form>
+
+                            }
+
+                        }
+                    }
         }
 
         @if (ViewData["log"] != null)
