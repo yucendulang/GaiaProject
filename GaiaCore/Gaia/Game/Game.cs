@@ -1141,11 +1141,31 @@ namespace GaiaCore.Gaia
             var random = new Random(Seed);
             if (MapSelection == MapSelection.random4p)
             {
-                Map = new MapMgr().GetRandomMap(random);
+                Map = new MapMgr().Get4PRandomMap(random);
             }
             else if (MapSelection == MapSelection.fix2p)
             {
-                Map = new MapMgr().GetTwoPlayerFixedMap();
+                Map = new MapMgr().Get2PFixedMap();
+            }
+            else if (MapSelection == MapSelection.random2p)
+            {
+                Map = new MapMgr().Get2PRandomMap(random);
+            }
+            else if (MapSelection == MapSelection.random3p)
+            {
+                Map = new MapMgr().Get3PRandomMap(random);
+            }
+            else if (MapSelection == MapSelection.fix3p)
+            {
+                Map = new MapMgr().Get3PFixedMap();
+            }
+            else if (MapSelection == MapSelection.fix4p)
+            {
+                Map = new MapMgr().Get4PFixedMap();
+            }
+            else
+            {
+                Map = new MapMgr().Get4PFixedMap();
             }
 
             ATTList = (from items in ATTMgr.GetRandomList(6, random) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();

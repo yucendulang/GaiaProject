@@ -190,7 +190,7 @@ namespace GaiaCore.Gaia
 
             return result;
         }
-        public Map GetRandomMap(Random random)
+        public Map Get4PRandomMap(Random random)
         {
             var result = new Map();
             result.AddSpaceSector(3, 10, ssl[0], random);
@@ -216,8 +216,54 @@ namespace GaiaCore.Gaia
             return result;
         }
 
+        public Map Get2PRandomMap(Random random)
+        {
+            var result = new Map();
+            result.AddSpaceSector(6, 7, ssl[2], random);
+            var randomList = new List<SpaceSector>()
+            {
+                ssl[0],ssl[1],ssl[3],ssl[10],ssl[11],ssl[12]
+            };
+            var centerTuple = new List<Tuple<int, int>>()
+            {
+                { 2,5},{6,2},{10,4 },{ 3,10},{7,12},{ 10,9}
+            };
 
-        public Map GetTwoPlayerFixedMap()
+            centerTuple.ForEach(x =>
+            {
+                var index = random.Next(randomList.Count);
+                result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random), random);
+                randomList.RemoveAt(index);
+            });
+            System.Diagnostics.Debug.WriteLine(randomList.Count);
+            return result;
+        }
+
+        public Map Get3PRandomMap(Random random)
+        {
+            var result = new Map();
+            result.AddSpaceSector(6, 7, ssl[2], random);
+            var randomList = new List<SpaceSector>()
+            {
+                ssl[0],ssl[1],ssl[3],ssl[4],ssl[5],ssl[6]
+            };
+            var centerTuple = new List<Tuple<int, int>>()
+            {
+                { 2,5},{6,2},{10,4 },{ 3,10},{7,12},{ 10,9}
+            };
+
+            centerTuple.ForEach(x =>
+            {
+                var index = random.Next(randomList.Count);
+                result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random), random);
+                randomList.RemoveAt(index);
+            });
+            System.Diagnostics.Debug.WriteLine(randomList.Count);
+            return result;
+        }
+
+
+        public Map Get2PFixedMap()
         {
             var centerTuple = new List<Tuple<int, int>>()
             {
@@ -234,6 +280,41 @@ namespace GaiaCore.Gaia
             }
             return result;
         }
+        public Map Get3PFixedMap()
+        {
+            var centerTuple = new List<Tuple<int, int>>()
+            {
+                { 2,5},{6,2},{6,7},{10,4 },{ 3,10},{7,12},{ 10,9}
+            };
+            var sslList = new List<int>()
+            {
+                0,1,2,3,4,5,6
+            };
+            var result = new Map();
+            foreach (var item in centerTuple)
+            {
+                result.AddSpaceSector(item.Item1, item.Item2, ssl[sslList[centerTuple.IndexOf(item)]], null);
+            }
+            return result;
+        }
+
+        public Map Get4PFixedMap()
+        {
+            var centerTuple = new List<Tuple<int, int>>()
+            {
+                { 2,5},{ 3,10},{ 3,15},{6,2},{6,7},{7,12},{ 7,17},{10,4 },{ 10,9},{11,14 }
+            };
+            var sslList = new List<int>()
+            {
+                9,0,4,8,1,2,5,7,3,6
+            };
+            var result = new Map();
+            foreach (var item in centerTuple)
+            {
+                result.AddSpaceSector(item.Item1, item.Item2, ssl[sslList[centerTuple.IndexOf(item)]], null);
+            }
+            return result;
+        }
     }
 
     public class Map
@@ -241,11 +322,11 @@ namespace GaiaCore.Gaia
         public const int m_mapWidth = 20;
         public const int m_mapHeight = 20;
         public TerrenHex[,] HexArray = new TerrenHex[m_mapWidth, m_mapHeight];
-        public TerrenHex GetHex(int x,int y)
+        public TerrenHex GetHex(int x, int y)
         {
             return HexArray[x, y];
         }
-        public TerrenHex GetHex(Tuple<int,int> item)
+        public TerrenHex GetHex(Tuple<int, int> item)
         {
             return HexArray[item.Item1, item.Item2];
         }
@@ -487,7 +568,7 @@ namespace GaiaCore.Gaia
         /// <param name="name"></param>
         /// <param name="list">传入的不会返回</param>
         /// <returns></returns>
-        public List<Tuple<int, int>> GetSurroundhexWithBuildingAndSatellite(int x, int y, FactionName name, int? dis = null, List<Tuple<int, int>> list=null)
+        public List<Tuple<int, int>> GetSurroundhexWithBuildingAndSatellite(int x, int y, FactionName name, int? dis = null, List<Tuple<int, int>> list = null)
         {
             //吸魔力大小范围
             var ret = new List<Tuple<int, int>>();
@@ -508,11 +589,11 @@ namespace GaiaCore.Gaia
                     {
                         //System.Diagnostics.Debug.WriteLine("row:" + i + " col:" + j);
 
-                        if (HexArray[i, j] != null && 
+                        if (HexArray[i, j] != null &&
                             ((HexArray[i, j].FactionBelongTo == name && !(HexArray[i, j].Building is GaiaBuilding) ||
                                 HexArray[i, j].Satellite != null && HexArray[i, j].Satellite.Contains(name))))
                         {
-                            if (list==null||(list != null && !list.Exists(z => z.Item1 == x && z.Item2 == y)))
+                            if (list == null || (list != null && !list.Exists(z => z.Item1 == x && z.Item2 == y)))
                             {
                                 ret.Add(new Tuple<int, int>(i, j));
                             }
@@ -541,7 +622,7 @@ namespace GaiaCore.Gaia
                 {
                     if (CalTwoHexDistance(x, y, i, j) <= distance)
                     {
-                        if (HexArray[i, j] != null && HexArray[i,j].TFTerrain==Terrain.Empty && !HexArray[i, j].Satellite.Contains(name))
+                        if (HexArray[i, j] != null && HexArray[i, j].TFTerrain == Terrain.Empty && !HexArray[i, j].Satellite.Contains(name))
                         {
                             var surroundHex = GetSurroundhexWithBuildingAndSatellite(i, j, name);
                             surroundHex.RemoveAll(z => list.Contains(z));
@@ -590,7 +671,7 @@ namespace GaiaCore.Gaia
 
         internal int CalShipDistanceNeed(int row, int col, FactionName factionName)
         {
-            for(int i = 1; i < m_mapHeight; i++)
+            for (int i = 1; i < m_mapHeight; i++)
             {
                 if (CalIsBuildValidate(row, col, factionName, i))
                 {
