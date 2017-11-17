@@ -7,6 +7,7 @@ using GaiaCore.Gaia;
 using GaiaProject.Models.HomeViewModels;
 using Microsoft.AspNetCore.Identity;
 using GaiaProject.Models;
+using GaiaCore.Gaia.User;
 
 namespace GaiaProject.Controllers
 {
@@ -91,6 +92,10 @@ namespace GaiaProject.Controllers
         public IActionResult ViewGame(string id)
         {
             var gg = GameMgr.GetGameByName(id);
+            if (gg == null)
+            {
+                return Redirect("/home/index");
+            }
             return View(gg);
         }
 
@@ -106,7 +111,11 @@ namespace GaiaProject.Controllers
 
                 if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(syntax))
                 {
-                    return View(GameMgr.GetGameByName(name));
+                    return Redirect("/home/index");
+                }
+                if (GameMgr.GetGameByName(name) == null)
+                {
+                    Redirect("/home/index");
                 }
 
                 if (!string.IsNullOrEmpty(factionName))
@@ -186,7 +195,20 @@ namespace GaiaProject.Controllers
 
         public bool UndoOneStep(string id)
         {
+            if (!PowerUser.IsPowerUser(User.Identity.Name))
+            {
+                return false;
+            }
             return GameMgr.UndoOneStep(id);
+        }
+
+        public bool DeleteOneGame(string id)
+        {
+            if (!PowerUser.IsPowerUser(User.Identity.Name))
+            {
+                return false;
+            }
+            return GameMgr.DeleteOneGame(id);
         }
 
         #region 管理工具
@@ -197,6 +219,10 @@ namespace GaiaProject.Controllers
         }
         public IActionResult RestoreData(string filename)
         {
+            if (!PowerUser.IsPowerUser(User.Identity.Name))
+            {
+                return Redirect("/home/index");
+            }
             ViewData["nameList"] = string.Join(",", GameMgr.RestoreDictionary(filename));
             return Redirect("/home/viewgame/" + "test01");
             //return View();
@@ -209,6 +235,10 @@ namespace GaiaProject.Controllers
 
         public IActionResult DeleteAllGame()
         {
+            if (!PowerUser.IsPowerUser(User.Identity.Name))
+            {
+                return Redirect("/home/index");
+            }
             var task = _userManager.GetUserAsync(HttpContext.User);
             Task[] taskarray = new Task[] { task };
             Task.WaitAll(taskarray, millisecondsTimeout: 1000);

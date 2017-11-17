@@ -5,6 +5,7 @@
 @using System.Text.RegularExpressions
 @using GaiaCore.Gaia
 @using Microsoft.AspNetCore.Mvc.Rendering
+@using GaiaCore.Gaia.User
 @model GaiaCore.Gaia.GaiaGame
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
@@ -15,9 +16,10 @@
 <link rel="stylesheet" href="~/css/sitegameview.css?version=2" asp-append-version="true" />    
 
 
-@if (User.Identity.Name.Equals("yucenyucen@126.com")|| User.Identity.Name.Equals("qqthomas@163.com"))
+@if (User.Identity.Name.Equals("yucenyucen@126.com") || User.Identity.Name.Equals("xsssssssch@hotmail.com") || User.Identity.Name.Equals("qqthomas@163.com"))
 {
     <button id="undo" type="button" class="btn btn-default">undo</button>
+    <button id="delete" type="button" class="btn btn-default">delete</button>
 }
 @if (@Model.GameStatus.RoundCount > 0)
 {
@@ -1316,6 +1318,19 @@ else
                 }
             );
         }
+
+        $(document).ready(function () {
+            $("button#delete").click(function () {
+                var value = $("#test1").val();
+                console.log(value);
+                $.get("/home/DeleteOneGame/" + value,
+                    function (data, status) {
+                        console.log(data);
+                        location.reload();
+                    }
+                );
+            });
+        });
     </script>
 
 }

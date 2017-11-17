@@ -203,6 +203,15 @@ namespace GaiaCore.Gaia
             }
         }
 
+        public static bool DeleteOneGame(string id)
+        {
+            if (m_dic.ContainsKey(id))
+            {
+                m_dic.Remove(id);
+            }
+            return true;
+        }
+
         public static void DeleteAllGame()
         {
             m_dic.Clear();
