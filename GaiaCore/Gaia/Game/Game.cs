@@ -1169,7 +1169,7 @@ namespace GaiaCore.Gaia
                 Map = new MapMgr().Get4PFixedMap();
             }
 
-            ATTList = (from items in ATTMgr.GetRandomList(6, random) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();
+            ATTList = ATTMgr.GetRandomList(6, random);
             STT6List = STTMgr.GetRandomList(6, random);
             STT3List = (from items in STTMgr.GetOtherList(STT6List) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();
             RSTList = RSTMgr.GetRandomList(6, random);
