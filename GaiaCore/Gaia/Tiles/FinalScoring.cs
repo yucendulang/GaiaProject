@@ -2,10 +2,31 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using GaiaCore.Util;
 
 namespace GaiaCore.Gaia.Tiles
 {
-
+    public static class FSTMgr
+    {
+        public static List<FinalScoring> GetRandomList(int n, Random random)
+        {
+            var list = new List<FinalScoring>()
+            {
+                new FST1(),
+                new FST2(),
+                new FST3(),
+                new FST4(),
+                new FST5(),
+                new FST6(),
+            };
+            var result = new List<FinalScoring>();
+            for (int i = 0; i < n; i++)
+            {
+                result.Add(list.RandomRemove(random));
+            }
+            return result;
+        }
+    }
     public abstract class FinalScoring : GameTiles
     {
         public virtual bool InvokeGameTileAction(List<Faction> factionList)
