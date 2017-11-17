@@ -241,7 +241,14 @@ namespace GaiaCore.Gaia
         public const int m_mapWidth = 20;
         public const int m_mapHeight = 20;
         public TerrenHex[,] HexArray = new TerrenHex[m_mapWidth, m_mapHeight];
-
+        public TerrenHex GetHex(int x,int y)
+        {
+            return HexArray[x, y];
+        }
+        public TerrenHex GetHex(Tuple<int,int> item)
+        {
+            return HexArray[item.Item1, item.Item2];
+        }
         public IList<TerrenHex> GetHexList()
         {
             var list = new List<TerrenHex>();
@@ -440,7 +447,7 @@ namespace GaiaCore.Gaia
         /// <param name="y"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public List<Tuple<int, int>> GetSurroundhex(int x, int y, FactionName name, int? dis = null)
+        public List<Tuple<int, int>> GetSurroundhexWithBuild(int x, int y, FactionName name, int? dis = null)
         {
             //吸魔力大小范围
             var ret = new List<Tuple<int, int>>();
@@ -467,6 +474,83 @@ namespace GaiaCore.Gaia
                         }
                     }
 
+                }
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// 寻找周围本家建筑与卫星
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <param name="list">传入的不会返回</param>
+        /// <returns></returns>
+        public List<Tuple<int, int>> GetSurroundhexWithBuildingAndSatellite(int x, int y, FactionName name, int? dis = null, List<Tuple<int, int>> list=null)
+        {
+            //吸魔力大小范围
+            var ret = new List<Tuple<int, int>>();
+            int distance = 0;
+            if (dis.HasValue)
+            {
+                distance = dis.Value;
+            }
+            else
+            {
+                distance = 1;
+            }
+            for (int i = Math.Max(x - distance, 0); i <= Math.Min(x + distance, m_mapHeight - 1); i++)
+            {
+                for (int j = Math.Max(y - distance, 0); j <= Math.Min(j + distance, m_mapWidth - 1); j++)
+                {
+                    if (CalTwoHexDistance(x, y, i, j) <= distance)
+                    {
+                        //System.Diagnostics.Debug.WriteLine("row:" + i + " col:" + j);
+
+                        if (HexArray[i, j] != null && 
+                            ((HexArray[i, j].FactionBelongTo == name && !(HexArray[i, j].Building is GaiaBuilding) ||
+                                HexArray[i, j].Satellite != null && HexArray[i, j].Satellite.Contains(name))))
+                        {
+                            if (list==null||(list != null && !list.Exists(z => z.Item1 == x && z.Item2 == y)))
+                            {
+                                ret.Add(new Tuple<int, int>(i, j));
+                            }
+                        }
+                    }
+                }
+            }
+            return ret;
+        }
+        /// <summary>
+        /// 寻找周围的空的能放卫星的格子
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="name"></param>
+        /// <param name="dis"></param>
+        /// <returns></returns>
+        public List<Tuple<int, int>> GetSurroundhex(int x, int y, FactionName name, List<Tuple<int, int>> list)
+        {
+            //吸魔力大小范围
+            var ret = new List<Tuple<int, int>>();
+            int distance = 1;
+            for (int i = Math.Max(x - distance, 0); i <= Math.Min(x + distance, m_mapHeight - 1); i++)
+            {
+                for (int j = Math.Max(y - distance, 0); j <= Math.Min(j + distance, m_mapWidth - 1); j++)
+                {
+                    if (CalTwoHexDistance(x, y, i, j) <= distance)
+                    {
+                        if (HexArray[i, j] != null && HexArray[i,j].TFTerrain==Terrain.Empty && !HexArray[i, j].Satellite.Contains(name))
+                        {
+                            var surroundHex = GetSurroundhexWithBuildingAndSatellite(i, j, name);
+                            surroundHex.RemoveAll(z => list.Contains(z));
+                            if (surroundHex.Count == 0)
+                            {
+                                ret.Add(new Tuple<int, int>(i, j));
+                            }
+                        }
+                    }
                 }
             }
             return ret;

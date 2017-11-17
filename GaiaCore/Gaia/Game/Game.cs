@@ -574,25 +574,7 @@ namespace GaiaCore.Gaia
                         return false;
                     }
                 }
-                else if (GameSyntax.forgingAlliance.IsMatch(item))
-                {
-                    var posStrList = item.Substring(GameSyntax.satellite.Length + 1).Split(',');
-                    List<Tuple<int, int>> list = new List<Tuple<int, int>>();
-                    foreach (var pos in posStrList)
-                    {
-                        ConvertPosToRowCol(pos, out int row, out int col);
-                        list.Add(new Tuple<int, int>(row, col));
-                    }
-                    if (faction.ForgingAllianceCheckAll(list, out log))
-                    {
-                        faction.ForgingAllianceGetTile(list);
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else if (GameSyntax.forgingAlliance2.IsMatch(item))
+                else if (GameSyntax.forgingAllianceV2.IsMatch(item))
                 {
                     var posStrList = item.Substring(GameSyntax.alliance.Length + 1).Split(',');
                     List<Tuple<int, int>> list = new List<Tuple<int, int>>();
@@ -601,9 +583,9 @@ namespace GaiaCore.Gaia
                         ConvertPosToRowCol(pos, out int row, out int col);
                         list.Add(new Tuple<int, int>(row, col));
                     }
-                    if (faction.ForgingAllianceCheckAllWithOutSatellite(list, out log))
+                    if (faction.ForgingAllianceCheck(list, out log))
                     {
-                        faction.ForgingAllianceGetTileWithOutSatellite(list);
+                        faction.ForgingAllianceGetTiles(list);
                     }
                     else
                     {
@@ -1080,8 +1062,9 @@ namespace GaiaCore.Gaia
                 }
             }
 
-            catch
+            catch(Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
                 UserActionLog += "##!!##" + DateTime.Now.ToString() + "#" + syntax.AddEnter();
                 log = "引起程序异常,将本局名字报告给TOTO以方便排查问题";
                 return;

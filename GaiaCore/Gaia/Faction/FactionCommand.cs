@@ -1,4 +1,5 @@
 ﻿using GaiaCore.Gaia.Tiles;
+using GaiaCore.Util;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -117,7 +118,7 @@ namespace GaiaCore.Gaia
                 {
                     TriggerRST(typeof(RST7));
                 }
-                var surroundhex = map.GetSurroundhex(row, col, FactionName);
+                var surroundhex = map.GetSurroundhexWithBuild(row, col, FactionName);
                 if (surroundhex.Exists(x => map.HexArray[x.Item1, x.Item2].IsAlliance))
                 {
                     map.HexArray[row, col].IsAlliance = true;
@@ -381,7 +382,7 @@ namespace GaiaCore.Gaia
                 case BuildingSyntax.TC:
                     build = TradeCenters.First();
                     oreCost = m_TradeCenterOreCost;
-                    if (GaiaGame.FactionList.Where(x => x != this).ToList().Exists(y => GaiaGame.Map.GetSurroundhex(row, col, y.FactionName,2).Count != 0))
+                    if (GaiaGame.FactionList.Where(x => x != this).ToList().Exists(y => GaiaGame.Map.GetSurroundhexWithBuild(row, col, y.FactionName,2).Count != 0))
                     {
                         creditCost = m_TradeCenterCreditCostCluster;
                     }
@@ -789,11 +790,21 @@ namespace GaiaCore.Gaia
             return ret;
         }
 
-        internal void ForgingAllianceGetTileWithOutSatellite(List<Tuple<int, int>> list)
+        internal void ForgingAllianceGetTiles(List<Tuple<int, int>> list)
         {
             Action action = () =>
             {
-                list.ForEach(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].IsAlliance=true);
+                list.ForEach(x =>
+                {
+                    if (GaiaGame.Map.HexArray[x.Item1, x.Item2].TFTerrain == Terrain.Empty)
+                    {
+                        GaiaGame.Map.HexArray[x.Item1, x.Item2].AddSatellite(FactionName);
+                    }
+                    else
+                    {
+                        GaiaGame.Map.HexArray[x.Item1, x.Item2].IsAlliance = true;
+                    }
+                });
                 TriggerRST(typeof(RST5));
             };
 
@@ -835,7 +846,7 @@ namespace GaiaCore.Gaia
                 hex.TFTerrain = Terrain.Black;
                 hex.Building = new Mine();
                 hex.FactionBelongTo = FactionName;
-                var surroundhex = GaiaGame.Map.GetSurroundhex(row, col, FactionName);
+                var surroundhex = GaiaGame.Map.GetSurroundhexWithBuild(row, col, FactionName);
                 if (surroundhex.Exists(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].IsAlliance))
                 {
                     GaiaGame.Map.HexArray[row, col].IsAlliance = true;
@@ -850,16 +861,34 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        internal bool ForgingAllianceCheckAllWithOutSatellite(List<Tuple<int, int>> list, out string log)
+        internal bool ForgingAllianceCheck(List<Tuple<int, int>> list, out string log)
         {
             log = string.Empty;
-            if(!list.TrueForAll(x=>
+            var map = GaiaGame.Map;
+            var SatelliteHexList = list.Where(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].TFTerrain == Terrain.Empty && !GaiaGame.Map.HexArray[x.Item1, x.Item2].Satellite.Contains(FactionName))
+                                    .ToList();
+            var BuildingHexList=list.Where(x =>
+                                            {
+                                                TerrenHex terrenHex = GaiaGame.Map.HexArray[x.Item1, x.Item2];
+                                                return terrenHex.Building != null && terrenHex.FactionBelongTo == FactionName && !(terrenHex.Building is GaiaBuilding);
+                                            })
+                                     .ToList();
+
+            if ((SatelliteHexList.Count + BuildingHexList.Count) != list.Count)
             {
-                TerrenHex terrenHex = GaiaGame.Map.HexArray[x.Item1, x.Item2];
-                return terrenHex.Building != null && terrenHex.FactionBelongTo == FactionName && !(terrenHex.Building is GaiaBuilding);
+                log = "形成星盟的只能是本家的非盖亚建筑物以及未放置本家卫星的空地";
+                return false;
+            }
+
+            if (list.Exists(x =>
+            {
+                var surroundHex = GaiaGame.Map.GetSurroundhexWithBuildingAndSatellite(x.Item1, x.Item2, FactionName,list:list);
+                return surroundHex.Exists(y => map.GetHex(y).IsAlliance
+                || (map.GetHex(y).Satellite != null && map.GetHex(y).Satellite.Contains(FactionName))
+                || (map.GetHex(y).FactionBelongTo == FactionName && !(map.GetHex(y).Building is GaiaBuilding)));
             }))
             {
-                log = "形成星盟的只能是本家的非盖亚建筑物";
+                log = "周围接壤的地块也不能形成过星盟不能有自己种族的卫星不能有自己的建筑";
                 return false;
             }
 
@@ -873,41 +902,82 @@ namespace GaiaCore.Gaia
                 return false;
             }
 
-            if (list.Exists(x =>
+            var TerrenGroup = new List<List<Tuple<int, int>>>();
+            foreach(var item in BuildingHexList)
             {
-                TerrenHex terrenHex = GaiaGame.Map.HexArray[x.Item1, x.Item2];
-                var surroundHex = GaiaGame.Map.GetSurroundhex(x.Item1, x.Item2, FactionName);
-                return surroundHex.Exists(y => GaiaGame.Map.HexArray[y.Item1, y.Item2].IsAlliance);
-            }))
-            {
-                log = "周围接壤的地块也不能形成过星盟";
-                return false;
+                var Dis1List = TerrenGroup.FindAll(x => x.Exists(y => map.CalTwoHexDistance(y.Item1, y.Item2, item.Item1, item.Item2) == 1));
+                if (Dis1List.Any())
+                {
+                    var sum = new List<Tuple<int, int>>();
+                    Dis1List.ForEach(x => {
+                        sum.AddRange(x);
+                        TerrenGroup.Remove(x);
+                    });
+                    sum.Add(item);
+                    TerrenGroup.Add(sum);
+                }
+                else
+                {
+                    TerrenGroup.Add(new List<Tuple<int, int>>() { item});
+                }
             }
+            System.Diagnostics.Debug.WriteLine(TerrenGroup.Count);
 
-            if (list.Sum(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].Building.MagicLevel) < m_allianceMagicLevel)
+            if (BuildingHexList.Sum(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].Building.MagicLevel) < m_allianceMagicLevel)
             {
                 log = string.Format("魔力等级不够{0}级", m_allianceMagicLevel);
                 return false;
             }
 
-            var isConnectList = new List<Tuple<int, int>>();
-            var allianceQueue = new Queue<Tuple<int, int>>();
-            allianceQueue.Enqueue(list.First());
-            while (allianceQueue.Any())
+            foreach(var item in TerrenGroup)
             {
-                var hex = allianceQueue.Dequeue();
-                var surroundHex = GaiaGame.Map.GetSatellitehex(hex.Item1, hex.Item2, FactionName,new List<Tuple<int, int>>());
-                var newlist = surroundHex.Where(x => list.Exists(y => y.Item1 == x.Item1 && y.Item2 == x.Item2))
-                    .Where(x => !isConnectList.Exists(y => y.Item1 == x.Item1 && y.Item2 == x.Item2)).ToList();
-                newlist.ForEach(x => allianceQueue.Enqueue(x));
-                isConnectList.AddRange(newlist);
+                var temp = new List<List<Tuple<int, int>>>(TerrenGroup);
+                temp.Remove(item);
+                if (temp.Sum(y => y.Sum(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].Building.MagicLevel)) >= m_allianceMagicLevel)
+                {
+                    log = string.Format("即使不用建筑{0}也能出城，这不符合规则", string.Join(",", item.Select(x => IntExtensions.ConvertPosToStr(x))));
+                    return false;
+                }
             }
-
-            if (isConnectList.Count != list.Count)
+            var count = 0;
+            if (SatelliteHexList.Count != 0)
             {
-                log = "没有组成连通的地块";
+                var StartHexList = TerrenGroup.First();
+                TerrenGroup.Remove(StartHexList);
+                var NewFarHexList = new List<Tuple<int, int>>(StartHexList);
+                var NextHexList = new List<Tuple<int, int>>();
+                while (TerrenGroup.Count != 0)
+                {
+
+                    NewFarHexList.ForEach(x =>
+                    {
+                        var suround = map.GetSurroundhex(x.Item1, x.Item2, FactionName, BuildingHexList);
+                        NextHexList.AddRange(suround.Where(y => !StartHexList.Contains(y)));
+                    });
+                    NewFarHexList.Clear();
+                    var tempTerrenGroup = new List<List<Tuple<int, int>>>(TerrenGroup.ToList());
+                    foreach (var item in tempTerrenGroup)
+                    {
+                        if (item.Exists(x => map.GetSurroundhex(x.Item1, x.Item2, FactionName, BuildingHexList).Exists(y => NextHexList.Contains(y))))
+                        {
+                            StartHexList.AddRange(item);
+                            TerrenGroup.Remove(item);
+                            NewFarHexList.AddRange(item);
+                        }
+                    }
+                    
+                    NewFarHexList.AddRange(NextHexList);
+                    StartHexList.AddRange(NextHexList);
+                    NextHexList.Clear();
+                    count++;
+                }
+            }
+            if(count!= SatelliteHexList.Count)
+            {
+                log = string.Format("只要{0}个卫星就能出城,请检查卫星方法", count);
                 return false;
             }
+            
 
             return true;
         }
@@ -1173,116 +1243,6 @@ namespace GaiaCore.Gaia
             };
             ActionQueue.Enqueue(action);
             m_AllianceTileGet--;
-            return true;
-        }
-
-        internal void ForgingAllianceGetTile(List<Tuple<int, int>> list)
-        {
-            Action action = () =>
-            {
-                ForgingAlliance(list, out string log, true);
-                TriggerRST(typeof(RST5));
-            };
-            ActionQueue.Enqueue(action);
-            m_AllianceTileGet++;
-        }
-
-        internal bool ForgingAllianceCheckAll(List<Tuple<int, int>> list, out string log)
-        {
-            log = string.Empty;
-            if (PowerToken1 + PowerToken2 + PowerToken3 < list.Count)
-            {
-                log = "魔力豆要比卫星数量多";
-                return false;
-            }
-            if (list.Exists(x => (GaiaGame.Map.HexArray[x.Item1, x.Item2].Satellite != null
-             && GaiaGame.Map.HexArray[x.Item1, x.Item2].Satellite.Contains(FactionName))
-             || GaiaGame.Map.HexArray[x.Item1, x.Item2].TFTerrain != Terrain.Empty))
-            {
-                log = "卫星不能建立在非空地以及形成过星盟的地盘上";
-                return false;
-            }
-            if (!ForgingAlliance(list, out log))
-            {
-                return false;
-            }
-            foreach (var item in list)
-            {
-                var dump = new List<Tuple<int, int>>(list);
-                dump.Remove(item);
-                if (ForgingAlliance(dump, out log))
-                {
-                    log = string.Format("缺少{0}{1}也能形成星盟", Convert.ToChar((item.Item1 + Convert.ToByte('A'))), item.Item2);
-                    return false;
-                }
-            }
-            return true;
-        }
-        internal bool ForgingAlliance(List<Tuple<int, int>> list, out string log, bool isSetFlag = false)
-        {
-            log = string.Empty;
-
-            Queue<Tuple<int, int>> allianceQueue = new Queue<Tuple<int, int>>();
-            List<Tuple<int, int>> allianceList = new List<Tuple<int, int>>();
-            list.ForEach(x => allianceQueue.Enqueue(x));
-            list.ForEach(x => allianceList.Add(x));
-            while (allianceQueue.Any())
-            {
-                var hex = allianceQueue.Dequeue();
-                var surroundHex = GaiaGame.Map.GetSurroundhex(hex.Item1, hex.Item2, FactionName);
-                foreach (var shex in surroundHex)
-                {
-                    if (GaiaGame.Map.HexArray[hex.Item1, hex.Item2].TFTerrain != Terrain.Empty && GaiaGame.Map.HexArray[hex.Item1, hex.Item2].IsAlliance)
-                    {
-                        log = string.Format("跟{0}{1}格接壤,不符合星盟规则");
-                        return false;
-                    }
-                }
-                var newhex = surroundHex.Where(x => !allianceList.Exists(y => x.Item1 == y.Item1 && x.Item2 == y.Item2));
-                newhex.ToList().ForEach(x => allianceQueue.Enqueue(x));
-                newhex.ToList().ForEach(x => allianceList.Add(x));
-            }
-            if (allianceList.Sum(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].Building == null ? 0 : GaiaGame.Map.HexArray[x.Item1, x.Item2].Building.MagicLevel) < m_allianceMagicLevel)
-            {
-                log = string.Format("魔力等级不够{0}级", m_allianceMagicLevel);
-                return false;
-            }
-
-            var isConnectList = new List<Tuple<int, int>>();
-            allianceQueue = new Queue<Tuple<int, int>>();
-            allianceQueue.Enqueue(allianceList.First());
-            while (allianceQueue.Any())
-            {
-                var hex = allianceQueue.Dequeue();
-                var surroundHex = GaiaGame.Map.GetSatellitehex(hex.Item1, hex.Item2, FactionName, list);
-                var newlist = surroundHex.Where(x => allianceList.Exists(y => y.Item1 == x.Item1 && y.Item2 == x.Item2))
-                    .Where(x => !isConnectList.Exists(y => y.Item1 == x.Item1 && y.Item2 == x.Item2)).ToList();
-                newlist.ForEach(x => allianceQueue.Enqueue(x));
-                isConnectList.AddRange(newlist);
-            }
-
-            if (isConnectList.Count != allianceList.Count)
-            {
-                log = "没有组成连通的地块";
-                return false;
-            }
-
-            if (isSetFlag)
-            {
-                allianceList.ForEach(x =>
-                {
-                    if (GaiaGame.Map.HexArray[x.Item1, x.Item2].OGTerrain != Terrain.Empty)
-                    {
-                        GaiaGame.Map.HexArray[x.Item1, x.Item2].IsAlliance = true;
-                    }
-                    else
-                    {
-                        GaiaGame.Map.HexArray[x.Item1, x.Item2].AddSatellite(FactionName);
-                    }
-                });
-                RemovePowerToken(list.Count);
-            }
-
             return true;
         }
 

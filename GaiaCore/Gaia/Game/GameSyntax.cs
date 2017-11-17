@@ -83,8 +83,11 @@ namespace GaiaCore.Gaia
         /// </summary>
         public static string satellite = "satellite";
         public static Regex forgingAlliance = new Regex("satellite [a-z][0-9]{1,2}(,[a-z][0-9]{1,2})*");
+        public static string allianceold = "allianceold";
+        public static Regex forgingAlliance2 = new Regex(allianceold+" [a-z][0-9]{1,2}(,[a-z][0-9]{1,2})*");
+        //最后留下的出城语句
         public static string alliance = "alliance";
-        public static Regex forgingAlliance2 = new Regex(alliance+" [a-z][0-9]{1,2}(,[a-z][0-9]{1,2})*");
+        public static Regex forgingAllianceV2 = new Regex(alliance + " [a-z][0-9]{1,2}(,[a-z][0-9]{1,2})*");
         public static Regex swapRegex = new Regex("swap ([a-z][0-9]{1,2}),([a-z][0-9]{1,2})");
     }
 
