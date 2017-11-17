@@ -29,7 +29,7 @@ namespace GaiaCore.Gaia
                 seed = seed == 0 ? RandomInstance.Next(int.MaxValue) : seed;
                 result = new GaiaGame(username);
                 result.IsTestGame = isTestGame;
-                result.Syntax(GameSyntax.setupmap+" "+MapSelection, out string log);
+                result.Syntax(GameSyntax.setupmap + " " + MapSelection, out string log);
                 result.Syntax(GameSyntax.setupGame + seed, out log);
                 m_dic.Add(name, result);
                 return true;
@@ -78,7 +78,7 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        public static IEnumerable<string> GetAllGame(string userName=null)
+        public static IEnumerable<string> GetAllGame(string userName = null)
         {
             if (string.IsNullOrEmpty(userName))
             {
@@ -86,9 +86,9 @@ namespace GaiaCore.Gaia
             }
             else
             {
-                var result=from p in m_dic where p.Value.Username.Contains(userName) select p.Key;
+                var result = from p in m_dic where p.Value.Username.Contains(userName) select p.Key;
                 return result;
-            }   
+            }
         }
 
         public static string GetNextGame(string userName = null)
@@ -99,9 +99,10 @@ namespace GaiaCore.Gaia
             }
             else
             {
-                var result = GetAllGame(userName).ToList().Find(x => {
+                var result = GetAllGame(userName).ToList().Find(x =>
+                {
                     var gg = GetGameByName(x);
-                    return gg.UserDic.Count > 1 && gg.GetCurrentUserName().Equals(userName)&&gg.GameStatus.stage!=Stage.GAMEEND;
+                    return gg.UserDic.Count > 1 && gg.GetCurrentUserName().Equals(userName) && gg.GameStatus.stage != Stage.GAMEEND;
                 });
                 return result;
             }
@@ -110,10 +111,10 @@ namespace GaiaCore.Gaia
         public static bool BackupDictionary()
         {
             JsonSerializerSettings jsetting = new JsonSerializerSettings();
-            jsetting.ContractResolver = new LimitPropsContractResolver(new string[] { "UserActionLog", "Username" , "IsTestGame" });
-            var str=JsonConvert.SerializeObject(m_dic,Formatting.Indented, jsetting);
-            var logPath = System.IO.Path.Combine(BackupDataPath, DateTime.Now.ToString("yyyyMMddHHmmss")+".txt");
-            var logWriter=System.IO.File.CreateText(logPath);
+            jsetting.ContractResolver = new LimitPropsContractResolver(new string[] { "UserActionLog", "Username", "IsTestGame" });
+            var str = JsonConvert.SerializeObject(m_dic, Formatting.Indented, jsetting);
+            var logPath = System.IO.Path.Combine(BackupDataPath, DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt");
+            var logWriter = System.IO.File.CreateText(logPath);
             logWriter.Write(str);
             logWriter.Dispose();
             return true;
@@ -136,7 +137,7 @@ namespace GaiaCore.Gaia
             return RestoreAllGames(logReader, GameName, "yucenyucen@126.com", DebugInvoke);
         }
 
-        private static IEnumerable<string> RestoreAllGames(string logReader,string GameName = null ,string user = null,Func<string,bool> DebugInvoke=null)
+        private static IEnumerable<string> RestoreAllGames(string logReader, string GameName = null, string user = null, Func<string, bool> DebugInvoke = null)
         {
             var temp = JsonConvert.DeserializeObject<Dictionary<string, GaiaGame>>(logReader);
             m_dic = new Dictionary<string, GaiaGame>();
@@ -154,7 +155,7 @@ namespace GaiaCore.Gaia
                         item.Value.Username[i] = user;
                     }
                 }
-                RestoreGameWithActionLog(item,DebugInvoke);
+                RestoreGameWithActionLog(item, DebugInvoke);
 
             }
             return m_dic.Keys;
@@ -174,9 +175,9 @@ namespace GaiaCore.Gaia
                     {
                         if (DebugInvoke != null)
                         {
-                            DebugInvoke.Invoke(item.Key+":"+log);
+                            DebugInvoke.Invoke(item.Key + ":" + log);
                         }
-                        System.Diagnostics.Debug.WriteLine(item.Key+":"+log);
+                        System.Diagnostics.Debug.WriteLine(item.Key + ":" + log);
                     }
                     else
                     {
@@ -190,7 +191,7 @@ namespace GaiaCore.Gaia
                 {
                     DebugInvoke.Invoke(item.Key + ":" + ex.ToString());
                 }
-                System.Diagnostics.Debug.WriteLine(item.Key + ":" +ex.ToString());
+                System.Diagnostics.Debug.WriteLine(item.Key + ":" + ex.ToString());
             }
             if (m_dic.ContainsKey(item.Key))
             {
@@ -266,8 +267,20 @@ namespace GaiaCore.Gaia
             {
                 return false;
             }
-            gg.UserActionLog = gg.UserActionLog.Remove(gg.UserActionLog.LastIndexOf("\r\n"));
-            gg.UserActionLog = gg.UserActionLog.Remove(gg.UserActionLog.LastIndexOf("\r\n"));
+            var syntaxList = gg.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            if (syntaxList.Last().StartsWith("#"))
+            {
+                while (syntaxList.Last().StartsWith("#"))
+                {
+                    syntaxList.RemoveAt(syntaxList.Count - 1);
+                }
+            }
+
+            syntaxList.RemoveAt(syntaxList.Count - 1);
+
+
+            gg.UserActionLog = string.Join("\r\n", syntaxList);
+
             RestoreGameWithActionLog(new KeyValuePair<string, GaiaGame>(GameName, gg));
             return true;
         }
