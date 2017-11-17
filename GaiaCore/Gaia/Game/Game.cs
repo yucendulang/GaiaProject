@@ -336,14 +336,14 @@ namespace GaiaCore.Gaia
 
         private void CalGameEndScore()
         {
+            FactionList.ForEach(x => x.FinalEndScore = 0);
+            FSTList.ForEach(x => x.InvokeGameTileAction(FactionList));
             foreach (var item in FactionList)
             {
-                for (int i = 0; i < 6; i++)
-                {
-                    item.Score += Math.Max((item.GetTechLevelbyIndex(i) - 2), 0) * 4;
-                }
+
+                item.Score += item.GetFinalEndScore(); 
+                
             }
-            FSTList.ForEach(x => x.InvokeGameTileAction(FactionList));
         }
 
         private void GaiaPhase()

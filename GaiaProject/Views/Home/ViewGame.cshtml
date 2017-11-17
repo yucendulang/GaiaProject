@@ -82,7 +82,7 @@ else
         else if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDSTART)
         {
             <p>现在是Round @Model.GameStatus.RoundCount,Turn @Model.GameStatus.TurnCount</p>
-            
+
             <p>现在是 <span class="buildcolor">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 的回合,颜色是 @Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()</p>
 
             <!-- 模态框（Modal）升级建筑 -->
@@ -115,7 +115,7 @@ else
                                 </div>
                                 <div class="form-inline">
                                     @Html.DropDownList("enumList", new SelectList(Model.ATTList, "name", "desc"), "--请选择高级科技--", new { @class = "btn dropdown-toggle form-control updatettlist", @id = "attList", @syntax = ".+" })
-                                    @Html.DropDownList("enumList", new SelectList(Model.FactionList[Model.GameStatus.PlayerIndex].GameTileList.FindAll(a=>a.typename=="stt"), "name", "desc"), "--请选择被覆盖科技--", new { @class = "btn dropdown-toggle form-control ", @id = "fg_sttList", @syntax = ".+" })
+                                    @Html.DropDownList("enumList", new SelectList(Model.FactionList[Model.GameStatus.PlayerIndex].GameTileList.FindAll(a => a.typename == "stt"), "name", "desc"), "--请选择被覆盖科技--", new { @class = "btn dropdown-toggle form-control ", @id = "fg_sttList", @syntax = ".+" })
 
                                 </div>
 
@@ -202,7 +202,7 @@ else
             <p>现在等待 @Model.Username[Model.GameStatus.PlayerIndex] 选种族 setup xxx.</p>
 
             <div class="btn-group" id="selectfaction" role="group" aria-label="...">
-                @foreach(var fac in (new List<Faction>() { new Lantida(null), new Terraner(null), new Ambas(null), new Taklons(null), new Firaks(null), new MadAndroid(null), new BalTak(null), new Geoden(null), new Hive(null), new HadschHalla(null), new Itar(null), new Nevla(null), new Gleen(null), new Xenos(null) }))
+                @foreach (var fac in (new List<Faction>() { new Lantida(null), new Terraner(null), new Ambas(null), new Taklons(null), new Firaks(null), new MadAndroid(null), new BalTak(null), new Geoden(null), new Hive(null), new HadschHalla(null), new Itar(null), new Nevla(null), new Gleen(null), new Xenos(null) }))
                 {
                     <button type="button" class="btn btn-default" style="background-color: @fac.ColorCode" id="@fac.FactionName" syntax = "setup ">@fac.ChineseName</button>
 
@@ -272,7 +272,7 @@ else
         }
 
         @if (ViewData["log"] != null)
-                {
+        {
             <p>@ViewData["log"]</p>
         }
 
@@ -280,7 +280,7 @@ else
     </div>
 
     @if (User.Identity.Name.Equals(Model.GetCurrentUserName()))
-     {
+    {
 
          <div class="row">
                  <div asp-validation-summary="All" class="text-danger"></div>
@@ -293,18 +293,18 @@ else
                          </div>
                          <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
                          @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
-                {
+                         {
                              <input id="test3" name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden" />
                          }
                      </div><!-- /.input-group -->
                  </div><!-- /.col-lg-6 -->
          </div>
 
-     }
+    }
 
 
     @if (isRound)
-                {
+    {
          <div class="panel panel-default">
              <div class="panel-heading">
                  <h3 class="panel-title">行动区域</h3>
@@ -338,7 +338,7 @@ else
                                      }
                                      <div class="col-xs-6 col-md-2 @pwcssname" id="@item.GetType().Name"> <span  style="font-size: 8px">@item.GetText()</span></div>
                                  }
-                                                              
+
                              }
 
                          </div>
@@ -418,7 +418,7 @@ else
              </div>
          </div>
 
-     }
+    }
 
 
     <div class="row">
@@ -591,7 +591,7 @@ else
         <div class="col-md-5" id="playerFaction">
 
             @foreach (var item in Model.FactionList)
-                {
+            {
                 <script type="text/javascript">
                     $(function () {
                         var span = '<span style="background-color: @item.ColorCode">&nbsp;&nbsp;</span>&nbsp;';
@@ -629,7 +629,7 @@ else
                             <div class="col-lg-6">
                                 <div class="input-group">
 
-                                    @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListHadsch, "code", "name"), "--要塞行动--", new {@class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert {0}.qc"})
+                                    @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListHadsch, "code", "name"), "--要塞行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert {0}.qc" })
 
                                     <span class="input-group-btn">
                                         <button class="btn btn-default actionGp" type="button">确定</button>
@@ -642,7 +642,7 @@ else
                             <div class="col-lg-6">
                                 <div class="input-group">
 
-                                    @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListNevla, "code", "name"), "--快速行动--", new {@class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert {0}.qc"})
+                                    @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListNevla, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert {0}.qc" })
 
                                     <span class="input-group-btn">
                                         <button class="btn btn-default actionGp" type="button">确定</button>
@@ -655,7 +655,7 @@ else
                             <div class="col-lg-6">
                                 <div class="input-group">
 
-                                    @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListBalTak, "code", "name"), "--快速行动--", new {@class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert {0}.qc"})
+                                    @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListBalTak, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert {0}.qc" })
 
                                     <span class="input-group-btn">
                                         <button class="btn btn-default actionGp" type="button">确定</button>
@@ -668,7 +668,7 @@ else
                             <div class="col-lg-6">
                                 <div class="input-group">
 
-                                    @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTaklons, "code", "name"), "--快速行动--", new {@class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert {0}.qc"})
+                                    @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTaklons, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert {0}.qc" })
 
                                     <span class="input-group-btn">
                                         <button class="btn btn-default actionGp" type="button">确定</button>
@@ -758,47 +758,47 @@ else
                                 @if (it.IsUsed)
                                 {
                                     <div class='col-md-6 rbtcss rbtusedcss @it.name @{ @it.name}used'><span>@it.GetType().Name @it.desc</span></div>
-                                }
-                                else
-                                {
+                                        }
+                                        else
+                                        {
                                     <div class="col-md-6 rbtcss  @it.name" id="@item.FactionName@it.name"><span>@it.GetType().Name <br />@it.desc</span></div>
                                     @if (it.CanAction)
-                                     {
+                                    {
                                          <script>
                                              $("#@item.FactionName@it.name").click(function() {
                                                  //
                                                  selectMapPos('@it.name');
                                              })
                                          </script>
-                                     }
+                                    }
 
-                                }
-                                                                              
-                        }
+                                        }
 
-                        else if (it.typename == "stt")
-                        {
+                                        }
+
+                                        else if (it.typename == "stt")
+                                        {
                             <div class="sttcss sttusedcss col-md-6 @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name"><span>@it.GetType().Name<br/> @it.desc</span>
                                                                      </div>
-                        }
-                        else if (it.typename == "att")
-                        {
+    }
+    else if (it.typename == "att")
+    {
                             <div class="attcss attusedcss col-md-6 @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name"><span>@it.GetType().Name<br/> @it.desc</span>
                                                                      </div>                          
-                        }
-                        else
-                        {
+    }
+    else
+    {
                             <div class="altcss col-md-6">@it.GetType().Name<br/> @it.desc</div>
-                        }
+        }
 
-                    }
+    }
                                                                              
                                                                               </div>
 
                 </div>
                 </div>
 
-            }
+    }
 
         </div>
     </div>
@@ -943,19 +943,19 @@ else
                     @foreach (var item in Model.ATTList)
                     {
                         <td title="@item.name"> <div class="attcss @{@item.name}False"><span>@item.name<br />@item.desc</span></div></td>
-                    }
+    }
                 </tr>
                 <tr>
                     <td >
                         基础科技(6)
                     </td>
                     @foreach (var item in Model.STT6ListGroup)
-                                    {
+                    {
                                         <td title="@item.name">
                                             
                                             <div class="sttcss @{@item.name}False"><span>@item.name (@item.count) <br /> @item.desc</span> </div>
                                         </td>
-                    }
+    }
                 </tr>
                 <tr>
                     <td>
@@ -966,7 +966,7 @@ else
                         <td colspan="2" title="@item.name" class="">
                             <div class="sttcss  @{@item.name}False"><span>@item.name (@item.count) <br /> @item.desc</span></div>
                         </td>
-                    }
+    }
                 </tr>
                 </tbody>
             </table>
@@ -1007,13 +1007,33 @@ else
                                 </td>
                                 @foreach (var fac in Model.FactionList)
                                 {
-                                    <td>0</td>
+                                    <td>@item.TargetNumber(fac)</td>
                                 }
 
                             </tr>
                         }
+                        <tr>
+                            <td>
+                                科技计分数量
+                            </td>
+                            @foreach (var fac in Model.FactionList)
+                            {
+                                <td>@fac.GetTechScoreCount()</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                结局总计分
+                            </td>
+                            @{            Model.FactionList.ForEach(x => x.FinalEndScore = 0);
+                                Model.FSTList.ForEach(x => x.InvokeGameTileAction(Model.FactionList)); }
+                            @foreach (var fac in Model.FactionList)
+                            {
+                                <td>@fac.GetFinalEndScorePreview()</td>
+                            }
+                        </tr>
 
-                    </table>
+</table>
                 </div>
                           
 

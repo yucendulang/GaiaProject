@@ -134,12 +134,33 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        internal object GetRemainBuildCount()
+        internal int GetSatelliteCount()
         {
-            var i1 = Academy1 == null ? 0 : 1;
-            var i2 = Academy2 == null ? 0 : 1;
-            var i3 = StrongHold == null ? 0 : 1;
-            return Mines.Count + TradeCenters.Count + ResearchLabs.Count + i1 + i2 + i3;
+            var hexList = GaiaGame.Map.GetHexList();
+            var q =
+                from h in hexList
+                where h.Satellite != null && h.Satellite.Contains(FactionName)
+                select h;
+            return q.Count();
+        }
+
+        internal int GetAllianceBuilding()
+        {
+            var hexList = GaiaGame.Map.GetHexList();
+            var q =
+                from h in hexList
+                where h.FactionBelongTo == FactionName && h.IsAlliance == true && !(h.Building is GaiaBuilding)
+                select h;
+            return q.Count();
+        }
+
+        internal int GetBuildCount()
+        {
+            var i1 = Academy1 == null ? 1 : 0;
+            var i2 = Academy2 == null ? 1 : 0;
+            var i3 = StrongHold == null ? 1 : 0;
+            var i4 = ShipLevel == 5 ? 1 : 0;
+            return m_MineCount - Mines.Count + m_TradeCenterCount - TradeCenters.Count + m_ReaserchLabCount - ResearchLabs.Count + i1 + i2 + i3 + i4;
         }
 
         internal void PowerUse(int v)
@@ -337,6 +358,29 @@ namespace GaiaCore.Gaia
                 PowerToken3 = PowerPreview.FirstOrDefault().Item3;
                 PowerPreview.Clear();
             }
+        }
+        public int GetFinalEndScore()
+        {
+            var ret = 0;
+            ret += GetTechScoreCount() * 4;
+            ret += FinalEndScore;
+            return ret;
+
+        }
+
+        public int GetFinalEndScorePreview()
+        {
+            return GetFinalEndScore() + Score;
+
+        }
+        public int GetTechScoreCount()
+        {
+            var ret = 0;
+            for (int i = 0; i < 6; i++)
+            {
+                ret += Math.Max((GetTechLevelbyIndex(i) - 2), 0);
+            }
+            return ret;
         }
 
         internal bool BuildIntialMine(Map map, int row, int col, out string log)
@@ -657,7 +701,8 @@ namespace GaiaCore.Gaia
         public bool IsNoAdvTechTrack { get; internal set; }
         public bool PlanetAlready { get; internal set; }
         public int FactionSpecialAbility { get; set; }
-#endregion
+        public int FinalEndScore { get; set; }
+        #endregion
 
         internal static string ConvertTechIndexToStr(int v)
         {

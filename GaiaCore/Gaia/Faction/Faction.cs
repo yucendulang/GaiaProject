@@ -112,6 +112,7 @@ namespace GaiaCore.Gaia
         //出城需要的魔力等级
         protected int m_allianceMagicLevel;
 
+        protected const int m_MineCount = 8;
         protected const int m_MineOreCost = 1;
         protected const int m_MineCreditCost = 2;
         //一些不会变的常量
