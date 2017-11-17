@@ -1060,7 +1060,11 @@ else
 
 
     </div>
-
+@if (!string.IsNullOrEmpty(Model.LastErrorLog))
+{
+    <h1>ErrorLog</h1>
+    <p>@Model.LastErrorLog</p>
+}
 
     @*<script type='text/javascript' language='javascript' src='~/lib/jquery/dist/jquery.min.js'></script>*@
     <script type='text/javascript' language='javascript' src='~/js/site.js'></script>

@@ -1064,6 +1064,7 @@ namespace GaiaCore.Gaia
 
             catch(Exception ex)
             {
+                LastErrorLog = ex.ToString();
                 System.Diagnostics.Debug.WriteLine(ex.ToString());
                 UserActionLog += "##!!##" + DateTime.Now.ToString() + "#" + syntax.AddEnter();
                 log = "引起程序异常,将本局名字报告给TOTO以方便排查问题";
@@ -1265,6 +1266,7 @@ namespace GaiaCore.Gaia
 
         public MapSelection MapSelection { get; private set; }
         public int UserCount { get; private set; }
+        public string LastErrorLog { get; private set; }
 
         public class STTInfo
         {

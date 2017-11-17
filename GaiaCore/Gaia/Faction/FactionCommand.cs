@@ -901,8 +901,32 @@ namespace GaiaCore.Gaia
                 log = "有地块已经形成过星盟";
                 return false;
             }
-
             var TerrenGroup = new List<List<Tuple<int, int>>>();
+            foreach (var item in list)
+            {
+                var Dis1List = TerrenGroup.FindAll(x => x.Exists(y => map.CalTwoHexDistance(y.Item1, y.Item2, item.Item1, item.Item2) == 1));
+                if (Dis1List.Any())
+                {
+                    var sum = new List<Tuple<int, int>>();
+                    Dis1List.ForEach(x => {
+                        sum.AddRange(x);
+                        TerrenGroup.Remove(x);
+                    });
+                    sum.Add(item);
+                    TerrenGroup.Add(sum);
+                }
+                else
+                {
+                    TerrenGroup.Add(new List<Tuple<int, int>>() { item });
+                }
+            }
+            if (TerrenGroup.Count != 1)
+            {
+                log = "选择的所有点必须连通";
+                return false;
+            }
+
+            TerrenGroup = new List<List<Tuple<int, int>>>();
             foreach(var item in BuildingHexList)
             {
                 var Dis1List = TerrenGroup.FindAll(x => x.Exists(y => map.CalTwoHexDistance(y.Item1, y.Item2, item.Item1, item.Item2) == 1));

@@ -29,21 +29,21 @@ namespace GaiaCore.Gaia
         {
             if (StrongHold == null)
             {
-                if (!IsPlanetTypeExist(GaiaGame.Map.HexArray[row, col].TFTerrain))
+                TempKnowledge += 3;
+
+                Action action = () =>
                 {
-                    Action action = () =>
-                    {
-                        Knowledge += 3;
-                    };
-                    ActionQueue.Enqueue(action);
-                }
+                    Knowledge = Knowledge;
+                };
+                ActionQueue.Enqueue(action);
+
             }
         }
 
         internal override bool BuildBlackPlanet(int row, int col, out string log)
         {
             GetThreeKnowledge(row, col);
-            return BuildBlackPlanet(row, col, out log);
+            return base.BuildBlackPlanet(row, col, out log);
         }
     }
 }
