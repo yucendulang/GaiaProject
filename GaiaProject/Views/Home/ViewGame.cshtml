@@ -13,72 +13,7 @@
 @{ bool isRound = @Model.GameStatus.RoundCount > 0 && @Model.GetCurrentUserName() == User.Identity.Name;}
 
 <link rel="stylesheet" href="~/css/sitegameview.css?version=2" asp-append-version="true" />    
-<style type="text/css">
-    .rbtcss {
-        height: 90px;
-        width: 100px;
-        text-align: center;
-        background: url('/images/rbtback.png');
-        font-size: 15px;
-        line-height: 30px;
-        word-wrap: break-word;
-        letter-spacing: 0px;
-        font-size: 12px
-    }
-    .rbtusedcss {
-        background: url('/images/rbtusedback.png');
-    }
 
-    .RBT2 {
-        background: url('/images/rbt2back.png');
-
-    }
-    .RBT2 span{
-        display: none
-    }
-
-    .RBT2used {
-        background: url('/images/rbt2usedback.png');
-    }
-
-    .sttcss {
-        height: 92px;
-        width: 102px;
-        background: url('/images/sttback.png');
-        background-size: 100%;
-        text-align: center;
-        line-height: 30px;
-        margin: auto;
-    }
-    .sttusedcss {
-        background: url('/images/sttusedback.png');
-    }
-
-    .attcss {
-        height: 92px;
-        width: 102px;
-        text-align: center;
-        line-height: 30px;
-        background: url('/images/attback.png');
-        margin: auto;
-    }
-    .attusedcss {
-        background: url('/images/attback.png');
-    }
-    .altcss {
-        height: 92px;
-        width: 102px;
-        background: url('/images/alback.png');
-        text-align: center;
-        line-height: 30px
-    }
-    .altusedcss {
-        background: url('/images/altusedback.png');
-    }
-
-
-
-</style>
 
 @if (User.Identity.Name.Equals("yucenyucen@126.com")|| User.Identity.Name.Equals("qqthomas@163.com"))
 {
@@ -382,27 +317,35 @@ else
 
 
                              @foreach (var item in Model.MapActionMrg.mapActList)
-                {
-                                 <div class="col-xs-6 col-md-2" style="height: 60px; width: 60px; text-align: center; line-height: 60px; background: url(/images/pwactionbg.gif);" id="@item.GetType().Name">
-
-
-                                     @if (item.IsUsed)
-                {
-                                         <a href="#" style="color:red">@item.GetText()</a>
+                             {
+                                 {
+                                     //string pwname = @item.GetType().Name;
+                                     string pwdesc = @item.desc;
+                                     string pwcssname;
+                                     if (pwdesc.Contains("Q"))
+                                     {
+                                         pwcssname = "actqcss";
                                      }
                                      else
                                      {
-                                         <a href="#"  style="color:green">@item.GetText()</a>
+                                         pwcssname = "actpwcss";
                                      }
-                                 </div>
+                                     if (item.IsUsed)
+                                     {
+                                         pwcssname += " actusedcss";
+                                     }
+                                     <div class="col-xs-6 col-md-2 @pwcssname" id="@item.GetType().Name"> <span  style="font-size: 8px">@item.GetText()</span></div>
+                                 }
+                                                              
                              }
+
                          </div>
                          <div class="row" id="actConst">
 
                              @foreach (var name in new string[] { "-7pw", "-5pw", "-4pw", "-4pw", "-4pw", "-3pw", "-3pw", "-4Q", "-3Q", "-2Q" })
                              {
-                                 <div class="col-xs-6 col-md-2" style="height: 30px; width: 60px;">
-                                     @name
+                                 <div class="col-xs-6 col-md-2" style="height: 30px; width: 44px;">
+                                     <span style="text-align: center">@name</span>
                                  </div>
                              }
                          </div>
@@ -643,7 +586,7 @@ else
 
             </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-5" id="playerFaction">
 
             @foreach (var item in Model.FactionList)
                 {
@@ -740,84 +683,7 @@ else
 
                     </div>
                 </div>
-                <div help="回合/特权/科技版">
-                    @foreach (var it in item.GameTileList.OrderBy(a => a.showRank))
-                    {
-                        if (it.typename == "rbt")
-                        {
-                            <div>
-                                @if (it.IsUsed)
-                                {
-                                    <div class='rbtcss rbtusedcss @it.name @{ @it.name}used'><span>@it.GetType().Name @it.desc</span></div>
-                                }
-                                else
-                                {
-                                    <div class="rbtcss  @it.name" id="@item.FactionName@it.name"><span>@it.GetType().Name <br />@it.desc</span></div>
-                                    @if (it.CanAction)
-                                     {
-                                         <script>
-                                             $("#@item.FactionName@it.name").click(function() {
-                                                 //
-                                                 selectMapPos('@it.name');
-                                             })
-                                         </script>
-                                     }
 
-                                }
-                            </div>
-                        }
-
-                        else if (it.typename == "stt")
-                        {
-                            @if (it.IsUsed)
-                             {
-                                 <div class="sttcss sttusedcss col-md-6">@it.GetType().Name<br/> @it.desc</div>
-                             }
-                             else
-                             {
-                                 @if (it.CanAction)
-                                  {
-                                      <div class="sttcss col-md-6" id="@item.FactionName@it.name">@it.GetType().Name<br/> @it.desc</div>
-                                      <script>
-                                          $("#@item.FactionName@it.name").click(function() {
-                                              openQueryWindow("action @it.name");
-                                          })
-                                      </script>
-                                  }
-                                  else
-                                  {
-                                      <div class="sttcss col-md-6">@it.GetType().Name<br/> @it.desc</div>
-                                  }
-
-                             }
-                        }
-                        else
-                        {
-                            @if (it.IsUsed)
-                             {
-                                 <div class="attusedcss col-md-6">@it.GetType().Name<br/> @it.desc</div>
-                             }
-                             else
-                             {
-                                 @if (it.CanAction)
-                                  {
-                                      <div class="attcss col-md-6" id="@item.FactionName@it.name">@it.GetType().Name <br/>@it.desc</div>
-                                      <script>
-                                          $("#@item.FactionName@it.name").click(function() {
-                                              openQueryWindow("action @it.name");
-                                          })
-                                      </script>
-                                  }
-                                  else
-                                  {
-                                      <div class="attcss col-md-6">@it.GetType().Name<br/> @it.desc</div>
-                                  }
-
-                             }
-                        }
-                    }
-                    @**@
-                </div>
 
 
                 <div>
@@ -881,6 +747,51 @@ else
                 </div>
 
 
+                <div help="回合/特权/科技版">
+                    @foreach (var it in item.GameTileList.OrderBy(a => a.showRank))
+                    {
+                        if (it.typename == "rbt")
+                        {
+
+                                @if (it.IsUsed)
+                                {
+                                    <div class='col-md-6 rbtcss rbtusedcss @it.name @{ @it.name}used'><span>@it.GetType().Name @it.desc</span></div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-6 rbtcss  @it.name" id="@item.FactionName@it.name"><span>@it.GetType().Name <br />@it.desc</span></div>
+                                    @if (it.CanAction)
+                                     {
+                                         <script>
+                                             $("#@item.FactionName@it.name").click(function() {
+                                                 //
+                                                 selectMapPos('@it.name');
+                                             })
+                                         </script>
+                                     }
+
+                                }
+                                                                              
+                        }
+
+                        else if (it.typename == "stt")
+                        {
+                            <div class="sttcss sttusedcss col-md-6 @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name"><span>@it.GetType().Name<br/> @it.desc</span>
+                                                                     </div>
+                        }
+                        else if (it.typename == "att")
+                        {
+                            <div class="attcss attusedcss col-md-6 @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name"><span>@it.GetType().Name<br/> @it.desc</span>
+                                                                     </div>                          
+                        }
+                        else
+                        {
+                            <div class="altcss col-md-6">@it.GetType().Name<br/> @it.desc</div>
+                        }
+
+                    }
+                                                                             
+                                                                              </div>
 
                 </div>
                 </div>
@@ -1029,7 +940,7 @@ else
                     </td>
                     @foreach (var item in Model.ATTList)
                     {
-                        <td title="@item.name"> <div class="attcss">@item.name<br />@item.desc</div></td>
+                        <td title="@item.name"> <div class="attcss @{@item.name}False"><span>@item.name<br />@item.desc</span></div></td>
                     }
                 </tr>
                 <tr>
@@ -1040,7 +951,7 @@ else
                                     {
                                         <td title="@item.name">
                                             
-                                            <div class="sttcss">@item.name (@item.count) <br/> @item.desc </div>
+                                            <div class="sttcss @{@item.name}False"><span>@item.name (@item.count) <br /> @item.desc</span> </div>
                                         </td>
                     }
                 </tr>
@@ -1051,7 +962,7 @@ else
                     @foreach (var item in Model.STT3ListGroup)
                     {
                         <td colspan="2" title="@item.name" class="">
-                            <div class="sttcss">@item.name (@item.count)<br />@item.desc </div>
+                            <div class="sttcss  @{@item.name}False"><span>@item.name (@item.count) <br /> @item.desc</span></div>
                         </td>
                     }
                 </tr>
@@ -1285,6 +1196,12 @@ else
                 openQueryWindow(this.id,"确认PASS?");
             });
 
+            //特殊行动
+            $("#playerFaction .STT1False").click(function () {
+                    var obj = $(this);
+                    openQueryWindow(obj.attr("syntax") + this.id,"确认执行?");
+                }
+            );
         }
 
         //弹出确认对话框
@@ -1366,7 +1283,7 @@ else
                         name: $("input#username").val()
                     },
                     function (data, status) {
-                        if (data == undefined || data=="") {
+                        if (data == undefined || data==="") {
                             //console.log(data);
                         } else {
                             //console.log(data);

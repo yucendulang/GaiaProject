@@ -1,3 +1,146 @@
 ﻿.container {
     width: 1640px;
 }
+
+
+.rbtcss {
+    height: 90px;
+    width: 100px;
+    text-align: center;
+    background: url('/images/rbtback.png');
+    font-size: 15px;
+    line-height: 30px;
+    word-wrap: break-word;
+    letter-spacing: 0px;
+    font-size: 12px
+}
+.rbtusedcss {
+    background: url('/images/rbtusedback.png');
+}
+
+
+.RBT1 {
+    background: url('/images/rbt1back.png');
+
+}
+.RBT1 span{
+    display: none
+}
+
+.RBT1used {
+    background: url('/images/rbt1usedback.png');
+}
+
+.RBT2 {
+    background: url('/images/rbt2back.png');
+
+}
+.RBT2 span{
+    display: none
+}
+
+.RBT2used {
+    background: url('/images/rbt2usedback.png');
+}
+
+.sttcss {
+    height: 90px;
+    width: 100px;
+    background: url('/images/sttback.png');
+    background-size: 100%;
+    text-align: center;
+    line-height: 30px;
+    margin: auto;
+}
+.sttusedcss {
+    background: url('/images/sttusedback.png');
+}
+
+.STT1False {
+    background: url('/images/stt1back.png');
+}
+.STT1False span {
+    display: none
+}
+.STT1True {
+    background: url('/images/stt1usedback.png');
+}
+.STT1True span {
+    display: none
+}
+
+.attcss {
+    height: 90px;
+    width: 100px;
+    text-align: center;
+    line-height: 30px;
+    background: url('/images/attback.png');
+    margin: auto;
+}
+.attusedcss {
+    background: url('/images/attback.png');
+}
+
+.ATT1False {
+    background: url('/images/att1back.png');
+}
+.ATT1False span {
+    display: none
+}
+
+.ATT1True {
+    background: url('/images/att1usedback.png');
+}
+
+.ATT2False {
+    background: url('/images/att2back.png');
+}
+.ATT2False span {
+    display: none
+}
+.ATT2True {
+    background: url('/images/att2usedback.png');
+}
+
+.ATT3False {
+    background: url('/images/att3back.png');
+}
+.ATT3False span {
+    display: none
+}
+.ATT3True {
+     background: url('/images/att3usedback.png');
+ }
+
+
+.altcss {
+    height: 92px;
+    width: 102px;
+    background: url('/images/alback.png');
+    text-align: center;
+    line-height: 30px
+}
+.altusedcss {
+    background: url('/images/altusedback.png');
+}
+
+.actpwcss {
+    height: 44px;
+    width: 44px;
+    text-align: center;
+    line-height: 44px;
+    background: url(/images/actpwback.png);
+}
+
+.actqcss {
+    height: 44px;
+    width: 44px;
+    text-align: center;
+    line-height: 44px;
+    background: url(/images/actqback.png);
+}
+
+.actusedcss {
+    background: url(/images/actpwusedback.png);
+
+}

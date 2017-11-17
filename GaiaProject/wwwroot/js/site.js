@@ -116,12 +116,9 @@ function createMap(id,type) {
 
                     break;
                 case "StrongHold":
-                    //alert("不能继续升级");
                     break;
                 case "GaiaBuilding":
-                        //$("#syntax").val("build " + clickObj.position);
                         openQueryWindow("build " + clickObj.position);
-                    //alert("不能继续升级");
                     break;
                 case "gaizao":
                     //$("#syntax").val("gaia " + clickObj.position);
@@ -155,12 +152,15 @@ function createMap(id,type) {
                 //console.log(list);
                 var xy = getEventPosition(e);
                 var clickObj = getClickObj(xy.x, xy.y);
-                if (clickObj.typename != undefined) {
+                if (clickObj.typename != undefined && clickObj.typename !=="gaizao") {
                     alert("不能选择已经有建筑的地点");
                 } else {
-                    $("#syntax").val($("#syntax").val() + ".build " + clickObj.position);
+                    if (clickObj.typename === "gaizao") {
+                        $("#syntax").val($("#syntax").val() + ".gaia " + clickObj.position);
+                    } else {
+                        $("#syntax").val($("#syntax").val() + ".build " + clickObj.position);
+                    }
                     $('#myModalCanves').modal('hide');
-
                 }
 
             }, false);
