@@ -805,6 +805,7 @@ namespace GaiaCore.Gaia
                         GaiaGame.Map.HexArray[x.Item1, x.Item2].IsAlliance = true;
                     }
                 });
+                RemovePowerToken(list.Sum(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].TFTerrain == Terrain.Empty ? 1 : 0));
                 TriggerRST(typeof(RST5));
             };
 
@@ -953,54 +954,54 @@ namespace GaiaCore.Gaia
                 return false;
             }
 
-            foreach(var item in TerrenGroup)
-            {
-                var temp = new List<List<Tuple<int, int>>>(TerrenGroup);
-                temp.Remove(item);
-                if (temp.Sum(y => y.Sum(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].Building.MagicLevel)) >= m_allianceMagicLevel)
-                {
-                    log = string.Format("即使不用建筑{0}也能出城，这不符合规则", string.Join(",", item.Select(x => IntExtensions.ConvertPosToStr(x))));
-                    return false;
-                }
-            }
-            var count = 0;
-            if (SatelliteHexList.Count != 0)
-            {
-                var StartHexList = TerrenGroup.First();
-                TerrenGroup.Remove(StartHexList);
-                var NewFarHexList = new List<Tuple<int, int>>(StartHexList);
-                var NextHexList = new List<Tuple<int, int>>();
-                while (TerrenGroup.Count != 0)
-                {
+            //foreach(var item in TerrenGroup)
+            //{
+            //    var temp = new List<List<Tuple<int, int>>>(TerrenGroup);
+            //    temp.Remove(item);
+            //    if (temp.Sum(y => y.Sum(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].Building.MagicLevel)) >= m_allianceMagicLevel)
+            //    {
+            //        log = string.Format("即使不用建筑{0}也能出城，这不符合规则", string.Join(",", item.Select(x => IntExtensions.ConvertPosToStr(x))));
+            //        return false;
+            //    }
+            //}
+            //var count = 0;
+            //if (SatelliteHexList.Count != 0)
+            //{
+            //    var StartHexList = TerrenGroup.First();
+            //    TerrenGroup.Remove(StartHexList);
+            //    var NewFarHexList = new List<Tuple<int, int>>(StartHexList);
+            //    var NextHexList = new List<Tuple<int, int>>();
+            //    while (TerrenGroup.Count != 0)
+            //    {
 
-                    NewFarHexList.ForEach(x =>
-                    {
-                        var suround = map.GetSurroundhex(x.Item1, x.Item2, FactionName, BuildingHexList);
-                        NextHexList.AddRange(suround.Where(y => !StartHexList.Contains(y)));
-                    });
-                    NewFarHexList.Clear();
-                    var tempTerrenGroup = new List<List<Tuple<int, int>>>(TerrenGroup.ToList());
-                    foreach (var item in tempTerrenGroup)
-                    {
-                        if (item.Exists(x => map.GetSurroundhex(x.Item1, x.Item2, FactionName, BuildingHexList).Exists(y => NextHexList.Contains(y))))
-                        {
-                            StartHexList.AddRange(item);
-                            TerrenGroup.Remove(item);
-                            NewFarHexList.AddRange(item);
-                        }
-                    }
+            //        NewFarHexList.ForEach(x =>
+            //        {
+            //            var suround = map.GetSurroundhex(x.Item1, x.Item2, FactionName, BuildingHexList);
+            //            NextHexList.AddRange(suround.Where(y => !StartHexList.Contains(y)));
+            //        });
+            //        NewFarHexList.Clear();
+            //        var tempTerrenGroup = new List<List<Tuple<int, int>>>(TerrenGroup.ToList());
+            //        foreach (var item in tempTerrenGroup)
+            //        {
+            //            if (item.Exists(x => map.GetSurroundhex(x.Item1, x.Item2, FactionName, BuildingHexList).Exists(y => NextHexList.Contains(y))))
+            //            {
+            //                StartHexList.AddRange(item);
+            //                TerrenGroup.Remove(item);
+            //                NewFarHexList.AddRange(item);
+            //            }
+            //        }
                     
-                    NewFarHexList.AddRange(NextHexList);
-                    StartHexList.AddRange(NextHexList);
-                    NextHexList.Clear();
-                    count++;
-                }
-            }
-            if(count!= SatelliteHexList.Count)
-            {
-                log = string.Format("只要{0}个卫星就能出城,请检查卫星方法", count);
-                return false;
-            }
+            //        NewFarHexList.AddRange(NextHexList);
+            //        StartHexList.AddRange(NextHexList);
+            //        NextHexList.Clear();
+            //        count++;
+            //    }
+            //}
+            //if(count!= SatelliteHexList.Count)
+            //{
+            //    log = string.Format("只要{0}个卫星就能出城,请检查卫星方法", count);
+            //    return false;
+            //}
             
 
             return true;
