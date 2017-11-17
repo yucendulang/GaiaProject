@@ -364,6 +364,7 @@ namespace GaiaCore.Gaia
             var ret = 0;
             ret += GetTechScoreCount() * 4;
             ret += FinalEndScore;
+            ret += (Ore + PowerToken3 + Credit + Knowledge + QICs + PowerToken2 / 2) / 3;
             return ret;
 
         }
