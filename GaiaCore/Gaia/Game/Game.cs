@@ -1045,6 +1045,7 @@ namespace GaiaCore.Gaia
                 var match = GameSyntax.setupMapRegex.Match(syntax);
                 var str = match.Groups[1].Value;
                 MapSelection = (MapSelection)Enum.Parse(typeof(MapSelection), str, true);
+                return true;
             }
             return false;
         }
