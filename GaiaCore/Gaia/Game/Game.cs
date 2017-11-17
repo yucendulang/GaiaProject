@@ -652,15 +652,21 @@ namespace GaiaCore.Gaia
                         return false;
                     }
                     var techTileStr = item.Substring(1);
-                    var tile = faction.GameTileList.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0);
+                    var tile = faction.GameTileList.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0) as StandardTechnology;
+                    if (tile.IsCovered)
+                    {
+                        log = "此块STT板已经被覆盖";
+                        return false;
+                    }
                     if (tile == null)
                     {
                         log = "你没有此块STT版";
                         return false;
                     }
+                    
                     Action queue = () =>
                     {
-                        faction.GameTileList.Remove(tile);
+                        tile.IsCovered = true;
                         if (tile is STT9)
                         {
                             (tile as STT9).ReturnGameTile(faction);

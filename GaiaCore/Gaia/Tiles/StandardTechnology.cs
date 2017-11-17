@@ -121,6 +121,12 @@ namespace GaiaCore.Gaia.Tiles
     public abstract class StandardTechnology : GameTiles
     {
         public virtual int? Index { set; get; }
+        public bool IsCovered = false;
+
+        public override bool PredicateGameTileAction(Faction faction)
+        {
+            return !IsCovered && base.PredicateGameTileAction(faction);
+        }
         public StandardTechnology()
         {
             this.name = this.GetType().Name;
