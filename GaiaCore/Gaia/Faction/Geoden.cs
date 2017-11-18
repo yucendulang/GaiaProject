@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace GaiaCore.Gaia
@@ -29,14 +30,17 @@ namespace GaiaCore.Gaia
         {
             if (StrongHold == null)
             {
-                TempKnowledge += 3;
+                var hexList = GaiaGame.Map.GetHexList().ToList();
+                var hex = GaiaGame.Map.GetHex(row, col);
+                if (!hexList.Exists(x => x.FactionBelongTo == FactionName && x.TFTerrain == hex.TFTerrain)){
+                    TempKnowledge += 3;
 
-                Action action = () =>
-                {
-                    Knowledge = Knowledge;
-                };
-                ActionQueue.Enqueue(action);
-
+                    Action action = () =>
+                    {
+                        Knowledge = Knowledge;
+                    };
+                    ActionQueue.Enqueue(action);
+                }
             }
         }
 
