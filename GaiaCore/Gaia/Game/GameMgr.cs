@@ -102,7 +102,8 @@ namespace GaiaCore.Gaia
                 var result = GetAllGame(userName).ToList().Find(x =>
                 {
                     var gg = GetGameByName(x);
-                    return gg.UserDic.Count > 1 && gg.GetCurrentUserName().Equals(userName) && gg.GameStatus.stage != Stage.GAMEEND;
+                    var isLeech = gg.GameStatus.stage == Stage.ROUNDWAITLEECHPOWER && gg.UserDic.ContainsKey(userName) && gg.UserDic[userName].Exists(y => y.LeechPowerQueue.Count != 0);
+                    return isLeech || (gg.UserDic.Count > 1 && gg.GetCurrentUserName().Equals(userName) && gg.GameStatus.stage != Stage.GAMEEND);
                 });
                 return result;
             }

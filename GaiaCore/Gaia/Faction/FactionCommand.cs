@@ -376,8 +376,14 @@ namespace GaiaCore.Gaia
 
         public int GetFinalEndScorePreview()
         {
-            return GetFinalEndScore() + Score;
-
+            if (GaiaGame.GameStatus.stage == Stage.GAMEEND)
+            {
+                return Score;
+            }
+            else
+            {
+                return GetFinalEndScore() + Score;
+            }
         }
         public int GetTechScoreCount()
         {
