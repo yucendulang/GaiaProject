@@ -931,7 +931,11 @@ namespace GaiaCore.Gaia
                 log = "形成星盟的只能是本家的非盖亚建筑物以及未放置本家卫星的空地";
                 return false;
             }
-
+            if (PowerToken1 + PowerToken2 + PowerToken3 < SatelliteHexList.Count)
+            {
+                log = string.Format("魔力豆总数量为{0},放卫星数量为{1},魔力豆不够",(PowerToken1 + PowerToken2 + PowerToken3),SatelliteHexList.Count);
+                return false;
+            }
             if (list.Exists(x =>
             {
                 var surroundHex = GaiaGame.Map.GetSurroundhexWithBuildingAndSatellite(x.Item1, x.Item2, FactionName,list:list);
