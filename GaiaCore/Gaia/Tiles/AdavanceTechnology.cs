@@ -106,16 +106,9 @@ namespace GaiaCore.Gaia.Tiles
         public override bool InvokeGameTileAction(Faction faction)
         {
             faction.QICs += 1;
-
+            faction.Credit += 5;
             return base.InvokeGameTileAction(faction);
         }
-
-        public override bool OneTimeAction(Faction faction)
-        {
-            faction.Credit += 5;
-            return true;
-        }
-
         public override bool CanAction => true;
     }
     public class ATT4 : AdavanceTechnology
