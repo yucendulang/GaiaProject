@@ -24,7 +24,7 @@ namespace GaiaCore.Gaia
                 m_ore = 30;
                 m_QICs = 4;
                 m_powerToken3 = 30;
-                m_ShipLevel = 4;
+                m_ShipLevel = 3;
             }
             else
             {

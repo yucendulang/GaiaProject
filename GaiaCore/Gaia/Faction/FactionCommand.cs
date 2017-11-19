@@ -430,7 +430,7 @@ namespace GaiaCore.Gaia
             switch (syn)
             {
                 case BuildingSyntax.TC:
-                    build = TradeCenters.First();
+                    build = TradeCenters.FirstOrDefault();
                     oreCost = m_TradeCenterOreCost;
                     if (GaiaGame.FactionList.Where(x => x != this).ToList().Exists(y => GaiaGame.Map.GetSurroundhexWithBuild(row, col, y.FactionName,2).Count != 0))
                     {
@@ -443,7 +443,7 @@ namespace GaiaCore.Gaia
                     trigger = typeof(RST2);
                     break;
                 case BuildingSyntax.RL:
-                    build = ResearchLabs.First();
+                    build = ResearchLabs.FirstOrDefault();
                     oreCost = m_ReaserchLabOreCost;
                     creditCost = m_ReaserchLabCreditCost;
                     trigger = null;
