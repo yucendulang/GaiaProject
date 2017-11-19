@@ -50,10 +50,8 @@ namespace GaiaCore.Gaia
                 }
                 else
                 {
-                    TempQICs -= 1;
-                    if (QICs < 0)
+                    if (PreBuildGaiaPlanetMine(out log))
                     {
-                        log = "至少需要一块Q";
                         return false;
                     }
                 }
@@ -106,9 +104,7 @@ namespace GaiaCore.Gaia
                 Mines.RemoveAt(0);
                 if (!isGaiaPlanet && isGreenPlanet)
                 {
-                    QICs = QICs;
-                    TempQICs = 0;
-
+                    BuildGaiaPlanetMine();
                 }
                 if (isGreenPlanet)
                 {
@@ -137,6 +133,24 @@ namespace GaiaCore.Gaia
             TerraFormNumber = 0;
             TempShip = 0;
             return true;
+        }
+
+        protected virtual void BuildGaiaPlanetMine()
+        {
+            QICs = QICs;
+            TempQICs = 0;
+        }
+
+        protected virtual bool PreBuildGaiaPlanetMine(out string log)
+        {
+            log = string.Empty;
+            TempQICs -= 1;
+            if (QICs < 0)
+            {
+                log = "至少需要一块Q";
+                return false;
+            }
+            return false;
         }
 
         internal int GetSatelliteCount()
@@ -471,6 +485,10 @@ namespace GaiaCore.Gaia
                     oreCost = m_AcademyOreCost;
                     creditCost = m_AcademyCreditCost;
                     trigger = typeof(RST3);
+                    if(this is Gleen)
+                    {
+                        (this as Gleen).IsOreReplaceQICSIncome = false;
+                    }
                     break;
                 default:
                     log = "未知升级";
@@ -663,7 +681,7 @@ namespace GaiaCore.Gaia
         }
 
 
-        internal void ResetUnfinishAction()
+        internal virtual void ResetUnfinishAction()
         {
             ActionQueue.Clear();
             TerraFormNumber = 0;

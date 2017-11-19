@@ -76,6 +76,7 @@ namespace GaiaCore.Gaia
             GaiaPlanetNumber = 0;
             m_allianceMagicLevel = 7;
             PowerPreview = new List<Tuple<int, int, int>>();
+            TempQICs = 0;
         }
 
         public virtual bool FinishIntialMines()
@@ -163,7 +164,7 @@ namespace GaiaCore.Gaia
         public int TempCredit = 0;
         public int TempOre = 0;
         public int TempKnowledge = 0;
-        public int TempQICs = 0;
+        public virtual int TempQICs { set; get; }
         public string LimitTechAdvance { get; set; }
         public int AllianceTileCost = 0;
         #endregion
@@ -200,7 +201,7 @@ namespace GaiaCore.Gaia
         public int Credit { get => m_credit + TempCredit; set { m_credit = value; TempCredit = 0; } }
         public int Ore { get => m_ore + TempOre; set { m_ore = value; TempOre = 0; } }
         public int Knowledge { get => m_knowledge + TempKnowledge; set { m_knowledge = value; TempKnowledge = 0; } }
-        public int QICs { get => m_QICs + TempQICs; set { m_QICs = value; TempQICs = 0; } }
+        public virtual int QICs { get => m_QICs + TempQICs; set { m_QICs = value; TempQICs = 0; } }
         public int PowerToken1 { get => m_powerToken1 + TempPowerToken1; set { m_powerToken1 = value; TempPowerToken1 = 0; } }
         public int PowerToken2 { get => m_powerToken2 + TempPowerToken2; set => m_powerToken2 = value; }
         public int PowerToken3 { get => m_powerToken3 + TempPowerToken3; set => m_powerToken3 = value; }
@@ -219,7 +220,7 @@ namespace GaiaCore.Gaia
 
         public Dictionary<string, Func<Faction, bool>> ActionList { get; set; }
         public Dictionary<string, Func<Faction, bool>> PredicateActionList { get; set; }
-        public int GaiaPlanetNumber { get; set; }
+        public virtual int GaiaPlanetNumber { get; set; }
         public int GetShipDistance
         {
             get
