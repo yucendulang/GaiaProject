@@ -68,7 +68,12 @@ namespace GaiaCore.Gaia
                     return false;
                 }
             }
-            if (!(Mines.Count >= 1 && Credit >= m_MineCreditCost && Ore >= m_MineOreCost + Math.Max((transNumNeed - TerraFormNumber), 0) * GetTransformCost))
+            if (Mines.Count < 1)
+            {
+                log = "已经没有可用的矿场了";
+                return false;
+            }
+            if (!( Credit >= m_MineCreditCost && Ore >= m_MineOreCost + Math.Max((transNumNeed - TerraFormNumber), 0) * GetTransformCost))
             {
                 log = "资源不够";
                 return false;
