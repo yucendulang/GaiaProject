@@ -6,6 +6,7 @@ namespace GaiaCore.Gaia
 {
     public abstract class Building
     {
+        public int MagicLevelIncrease = 0;
         public abstract Type BaseBuilding { get; }
         public abstract int MagicLevel { get; }
         public virtual string Name => GetType().Name;
@@ -30,14 +31,12 @@ namespace GaiaCore.Gaia
 
     public class Academy : Building
     {
-        public int MagicLevelIncrease = 0;
         public override Type BaseBuilding => typeof(ResearchLab);
         public override int MagicLevel => 3 + MagicLevelIncrease;
     }
 
     public class StrongHold : Building
     {
-        public int MagicLevelIncrease = 0;
         public override Type BaseBuilding => typeof(TradeCenter);
         public override int MagicLevel => 3 + MagicLevelIncrease;
     }

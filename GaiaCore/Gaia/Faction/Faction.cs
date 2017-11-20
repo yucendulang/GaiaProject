@@ -195,9 +195,9 @@ namespace GaiaCore.Gaia
         public List<Mine> Mines { set; get; }
         public List<TradeCenter> TradeCenters { set; get; }
         public List<ResearchLab> ResearchLabs { set; get; }
-        public Academy Academy1 { set; get; }
-        public Academy Academy2 { set; get; }
-        public StrongHold StrongHold { set; get; }
+        public Building Academy1 { set; get; }
+        public Building Academy2 { set; get; }
+        public Building StrongHold { set; get; }
         public int Credit { get => m_credit + TempCredit; set { m_credit = value; TempCredit = 0; } }
         public int Ore { get => m_ore + TempOre; set { m_ore = value; TempOre = 0; } }
         public int Knowledge { get => m_knowledge + TempKnowledge; set { m_knowledge = value; TempKnowledge = 0; } }

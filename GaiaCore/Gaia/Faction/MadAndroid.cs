@@ -13,7 +13,10 @@ namespace GaiaCore.Gaia
             this.ColorCode = colorList[5];
             this.ColorMap = colorMapList[5];
             IsMadAndroidAbilityUsed = false;
-            Knowledge -=2;
+            Knowledge -= 2;
+            StrongHold = new MadAndroidSpecialBuildings.StrongHold();
+            Academy1 = new MadAndroidSpecialBuildings.Academy();
+            Academy2 = new MadAndroidSpecialBuildings.Academy();
         }
         public override Terrain OGTerrain { get => Terrain.Gray; }
         public bool IsMadAndroidAbilityUsed { set; get; }
