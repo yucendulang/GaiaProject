@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GaiaProject", "GaiaProject\GaiaProject.csproj", "{FFF4AD06-E3FA-43F0-9422-15EFCA0BBC78}"
 EndProject
@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GaiaCore", "GaiaCore\GaiaCo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ManageTool", "ManageTool\ManageTool.csproj", "{5217B944-44CF-410D-BC8C-9EDB29C6DDD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GaiaProjectUnitTesting", "GaiaProjectUnitTesting\GaiaProjectUnitTesting.csproj", "{858CE0AC-80F1-4882-8F44-CFE2C2C91F0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GaiaProjectUnitTesting", "GaiaProjectUnitTesting\GaiaProjectUnitTesting.csproj", "{858CE0AC-80F1-4882-8F44-CFE2C2C91F0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,5 +36,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EB164423-65F3-45BF-9C33-912DD07FCB7D}
 	EndGlobalSection
 EndGlobal

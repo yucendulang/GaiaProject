@@ -1,4 +1,5 @@
 ﻿// Write your Javascript code.
+"use strict";
 var hex_size = 30;
 var hex_width = hex_size * Math.sqrt(3);
 var hex_height = hex_size * 1.5;
@@ -8,13 +9,19 @@ var isFirstAct = true;
 var isFirstAl = true;
 var isFirstBuild = true;
 
-function createMap(id,type) {
-    var c = document.getElementById(id);
+//创建地图ID，类型，命令，回调
+function createMap(data) {
+    //id, type, syntax,func
+    var c = document.getElementById(data.id);
     var contentx = c.getContext("2d");
     console.log("js start");
     DrawMap(contentx);
+    //显示
+    if (data.showid !== undefined) {
+        $(data.showid).show();
+    }
 
-    if (type === undefined || type === "build") {
+    if (data.type === undefined || data.type === "build") {
         c.addEventListener('click', function (e) {
 
             //console.log(list);
@@ -145,7 +152,7 @@ function createMap(id,type) {
             //alert(getEventPosition(e).x+"/"+getEventPosition(e).y);
         }, false);
     }
-    else if (type === "act") {
+    else if (data.type === "act") {
         if (isFirstAct === true){//
             isFirstAct = false;
             c.addEventListener('click', function (e) {
@@ -167,7 +174,7 @@ function createMap(id,type) {
         }
 
     }
-    else if (type === "al1" || type === "al2") {
+    else if (data.type === "al1" || data.type === "al2" || data.type==="pos") {
         if (isFirstAl === true) {
             isFirstAl = false;
             //确认点事件
@@ -180,27 +187,43 @@ function createMap(id,type) {
                 posList = posList.substring(0, posList.length - 1);
                 //设置命令
                 var value;
-                if (type === "al1") {
-                    value = "satellite " + posList
+                if (data.syntax != undefined) {
+                    value = data.syntax.format(posList);
+
                 }
-                else if (type === "al2") {
-                    value = "alliance " + posList
+                else if (data.func != undefined) {
+                    value = data.func(posList);
                 }
-                value = value + ".+" + $("#alSelectList").val();
+                else {
+                    if (data.type === "al1") {
+                        value = "satellite " + posList;
+                    }
+                    else if (data.type === "al2") {
+                        value = "alliance " + posList;
+                    }
+                }
+                //联邦
+                if ($("#alSelectList").val() !== "") {
+                    value = value + ".+" + $("#alSelectList").val();
+                }
                 $("#syntax").val(value);
                 //隐藏和清空
                 $('#myModalCanves').modal('hide');
                 $("#alPosList").html("");
+                //隐藏
+                if (data.showid !== undefined) {
+                    $(data.showid).hide();
+                }
             });
 
             c.addEventListener('click', function (e) {
                 //console.log(list);
                 var xy = getEventPosition(e);
                 var clickObj = getClickObj(xy.x, xy.y);
-                if (type === "al1" && clickObj.typename !== undefined) {
+                if (data.type === "al1" && clickObj.typename !== undefined) {
                     alert("不能选择已经有建筑的地点");
                 }
-                if (type === "al2" && clickObj.typename === undefined) {
+                if (data.type === "al2" && clickObj.typename === undefined) {
                     alert("不能选择空白的地点");
                 } else {
                     //添加位置

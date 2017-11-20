@@ -33,6 +33,10 @@ namespace GaiaCore.Gaia
     }
     public abstract class MapAction : GameTiles
     {
+        public MapAction()
+        {
+            this.typename = "MapAction";
+        }
         protected abstract int ResourceCost { get; }
         public override string desc => GetType().Name;
         public override bool InvokeGameTileAction(Faction faction)

@@ -8,7 +8,6 @@
     width: 100px;
     text-align: center;
     background: url('/images/rbtback.png');
-    font-size: 15px;
     line-height: 30px;
     word-wrap: break-word;
     letter-spacing: 0px;
@@ -50,7 +49,7 @@
     background-size: 100%;
     text-align: center;
     line-height: 30px;
-    margin: auto;
+    /*margin: auto;*/
 }
 .sttusedcss {
     background: url('/images/sttusedback.png');
@@ -75,7 +74,7 @@
     text-align: center;
     line-height: 30px;
     background: url('/images/attback.png');
-    margin: auto;
+    /*margin: auto;*/
 }
 .attusedcss {
     background: url('/images/attback.png');
@@ -142,5 +141,35 @@
 
 .actusedcss {
     background: url(/images/actpwusedback.png);
+
+}
+
+
+.AC2False {
+    height: 90px;
+    width: 100px;
+    text-align: center;
+    line-height: 30px;
+    background: url('/images/sttback.png');
+    /*margin: auto;*/
+}
+    .AC2False span {
+        /*display: none*/
+    }
+.AC2True {
+    background: url('/images/sttusedback.png');
+}
+
+
+.MapAction {
+    height: 90px;
+    width: 100px;
+    text-align: center;
+    line-height: 30px;
+    background: url('/images/sttback.png');
+}
+
+.MapTrue {
+    background: url('/images/sttusedback.png');
 
 }

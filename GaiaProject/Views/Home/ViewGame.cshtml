@@ -147,11 +147,21 @@ else
                         </div>
                         <div class="modal-body" id="canvasSelectMap">
 
-                            <div class="row">
+                            <div>
                                 <div class="btn-group" role="group" aria-label="..." id="alPosList">
                                 </div>
                                 <div style="display: none" id="allistdiv">
                                     @Html.DropDownList("enumList", new SelectList(Model.ALTList.GroupBy(a => a.desc).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name) }), "name", "desc"), "--请选择联邦板块--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList", @syntax = "+" })
+                                </div>
+                                <div id="">
+                                    <select class="btn dropdown-toggle form-control" id="mapkjlist" name="enumList" syntax="advance " style="display: none"><option value="">--请选择升级科技--</option>
+                                        <option value="tf">地形改造</option>
+                                        <option value="ship">航行</option>
+                                        <option value="ai">人工智能</option>
+                                        <option value="gaia">盖亚计划</option>
+                                        <option value="eco">经济</option>
+                                        <option value="sci">科学</option>
+                                    </select>
                                 </div>
                             </div>
                             <canvas id="myCanvasSelect" width="950" height="740" style="border: 1px solid #c3c3c3;">
@@ -236,7 +246,7 @@ else
         else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
         {
 
-            <p>现在等待 @Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName 做Gaia行动 Pass跳过此行动阶段 Itar 用+sttx/attx获取板子 一次只能拿一块 人类正常使用Convert命令 一次只能转换一种资源</p>
+            <p>现在等待 <span style="background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 做Gaia行动 Pass跳过此行动阶段 Itar 用+sttx/attx获取板子 一次只能拿一块 人类正常使用Convert命令 一次只能转换一种资源</p>
         }
 
         @if (Model.UserDic.ContainsKey(User.Identity.Name))
@@ -688,8 +698,6 @@ else
 
 
 
-                <div>
-
                     <div>
                         <table class="table" style="font-size: 18px">
                             <tr>
@@ -743,57 +751,65 @@ else
                             </tr>
                         </table>
                     </div>
-                    <div class="col-md-5">
-
-                    </div>
-                </div>
 
 
-                <div help="回合/特权/科技版">
-                    @foreach (var it in item.GameTileList.OrderBy(a => a.showRank))
-                    {
-                        if (it.typename == "rbt")
+                    <div help="回合/特权/科技版">
+                        @foreach (var it in item.GameTileList.OrderBy(a => a.IsUsed).ThenBy(a => a.showRank))
                         {
+                            <div class="col-md-2"  >
+                            @if (it.typename == "rbt")
+                            {
 
                                 @if (it.IsUsed)
-                                {
-                                    <div class='col-md-6 rbtcss rbtusedcss @it.name @{ @it.name}used'><span>@it.GetType().Name @it.desc</span></div>
-                                        }
-                                        else
-                                        {
-                                    <div class="col-md-6 rbtcss  @it.name" id="@item.FactionName@it.name"><span>@it.GetType().Name <br />@it.desc</span></div>
-                                    @if (it.CanAction)
-                                    {
-                                         <script>
-                                             $("#@item.FactionName@it.name").click(function() {
-                                                 //
-                                                 selectMapPos('@it.name');
-                                             })
-                                         </script>
-                                    }
+                                 {
+                                     <div class='rbtcss rbtusedcss @it.name @{ @it.name}used'><span>@it.name<br /> @it.desc.Split(',')[0]<br /> @it.desc.Split(',')[1]</span></div>
+                                 }
+                                 else
+                                 {
+                                     <div class="rbtcss  @it.name" id="@item.FactionName@it.name" ><span>@it.name<br /> @it.desc.Split(',')[0]<br /> @it.desc.Split(',')[1]</span></div>
+                                     @if (it.CanAction)
+                                      {
+                                          <script>
+                                              $("#@item.FactionName@it.name").click(function() {
+                                                  //
+                                                  selectMapPos('@it.name');
+                                              })
+                                          </script>
+                                      }
 
-                                        }
+                                 }
 
-                                        }
+                            }
 
-                                        else if (it.typename == "stt")
-                                        {
-                            <div class="sttcss sttusedcss col-md-6 @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name"><span>@it.GetType().Name<br/> @it.desc</span>
-                                                                     </div>
-    }
-    else if (it.typename == "att")
-    {
-                            <div class="attcss attusedcss col-md-6 @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name"><span>@it.GetType().Name<br/> @it.desc</span>
-                                                                     </div>                          
-    }
-    else
-    {
-                            <div class="altcss col-md-6">@it.GetType().Name<br/> @it.desc</div>
-        }
-
-    }
+                            else if (it.typename == "stt")
+                            {
+                                <div class="sttcss sttusedcss    @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name"  > <span>@it.GetType().Name<br/> @it.desc</span>
+                                                                         </div>
+                            }
+                            else if (it.typename == "att")
+                            {
+                                <div class="attcss attusedcss    @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name"  ><span>@it.GetType().Name<br/> @it.desc</span>
+                                                                         </div>                          
+                            }
+                            else if (it.typename == "ac")
+                            {
+                                <div class="AC2False @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name"  ><span>@it.GetType().Name<br/> @it.desc</span>
+                                                                         </div>                          
+                            }
+                            else if (it.typename == "MapAction")
+                            {
+                                <div class="MapAction  Map@{@it.IsUsed}" syntax="action " id="@it.GetType().Name@{@it.IsUsed}"  ><span>@it.GetType().Name<br/> @it.desc</span>
+                                                       </div>                          
+                            }
+                            else
+                            {
+                                
+                                <div class="altcss"  >@it.GetType().Name<br/> @it.desc /else</div>
+                            }
+                            </div>
+                        }
                                                                              
-                                                                              </div>
+                     </div>
 
                 </div>
                 </div>
@@ -1091,267 +1107,11 @@ else
     @*<script type='text/javascript' language='javascript' src='~/lib/jquery/dist/jquery.min.js'></script>*@
     <script type='text/javascript' language='javascript' src='~/js/site.js'></script>
 
-    <script type="text/javascript">
+    <script>
         var model = @Html.Raw(Json.Serialize(Model));
-
-        var list = canvasobjList;
-
-        function getEventPosition(ev){
-            var x, y;
-            //if (ev.layerX || ev.layerX == 0) {
-            //    x = ev.layerX;
-            //    y = ev.layerY;
-            //} else if (ev.offsetX || ev.offsetX == 0) { // Opera
-            //    x = ev.offsetX;
-            //    y = ev.offsetY;
-            //}
-            x = ev.offsetX;
-            y = ev.offsetY;
-            return {x: x, y: y};
-        }
-
-        function getClickObj(x,y) {
-            for (var i = 0; i < list.length; i++) {
-                if (list[i].xmax >= x && list[i].xmin <= x && list[i].ymax >= y && list[i].ymin <= y) {
-                    return list[i];
-                }
-//            console.log(list[i]);
-//            console.log(x+"/"+y)
-            }
-        };
-
-
-
-        String.prototype.format = function (args) {
-            var result = this;
-            if (arguments.length > 0) {
-                if (arguments.length == 1 && typeof (args) == "object") {
-                    for (var key in args) {
-                        if (args[key] != undefined) {
-                            var reg = new RegExp("({" + key + "})", "g");
-                            result = result.replace(reg, args[key]);
-                        }
-                    }
-                }
-                else {
-                    for (var i = 0; i < arguments.length; i++) {
-                        if (arguments[i] != undefined) {
-                            //var reg = new RegExp("({[" + i + "]})", "g");//这个在索引大于9时会有问题，谢谢何以笙箫的指出
-                            var reg = new RegExp("({)" + i + "(})", "g");
-                            result = result.replace(reg, arguments[i]);
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-
-        createMap("myCanvas","build");
-
-
     </script>
+    <script type='text/javascript' language='javascript' src='~/js/faction.js'></script>
 
-
-    <script>
-
-        //弹出地图选择位置
-        function selectMapPos(value) {
-            $("#allistdiv").hide();
-            $("#syntax").val("action {0}".format(value));
-            $("#myModalCanves").modal();
-            createMap("myCanvasSelect","act");
-        }
-        //选择种族，选择回合版,快速行动
-        $(".selectchange").change(function () {
-            var obj = $(this);
-            var syntax = obj.attr("syntax");
-            if (syntax.indexOf("{0}")>0) {
-                $("#syntax").val(syntax.format($(this).val()));
-            } else {
-                $("#syntax").val(syntax + $(this).val());
-            }
-            //alert($(this).val());
-        });
-
-        //执行行动
-        $(".actionGp").click(function() {
-            //$("#syntax").val("{0}-{1}".format($(this).attr("syntax"), $($(this).attr("valueid")).val()));
-            submitData();
-        });
-        //只是赋值
-        $(".actionGp").click(function() {
-            $("#syntax").val("{0}{1}".format($(this).attr("syntax"), $($(this).attr("valueid")).val()));           
-        });
-
-        if (userInfo.isRound) {
-            //魔力行动
-            $("#actBody div").click(function () {
-                var value = this.id.replace(" ", "");
-                if ($(this).find("a").css("color") === "rgb(255, 0, 0)") {
-                    alert("行动以被执行");
-                }
-                else {
-                
-                    if (value === "ACT6" || value === "ACT2" ) {
-                        selectMapPos(value);
-                    } else {
-                        openQueryWindow("action {0}".format(value));
-                        //$("#syntax").val("action {0}".format(value));
-                    }
-                }
-
-                //alert($(this).find("a").css("color"));
-            });
-
-            //卫星建立联邦
-            $("#createAl").click(function () {
-                $("#allistdiv").show();
-
-                $("#myModalCanves").modal();
-                createMap("myCanvasSelect","al1");
-            });
-            //直接建立联邦
-            $("#createZjAl").click(function () {   
-                $("#allistdiv").show();
-
-                $("#myModalCanves").modal();
-                createMap("myCanvasSelect","al2");
-            });
-            //点击回合组推板
-            $("#rbt_s_list div").click(function() {
-                openQueryWindow(this.id,"确认PASS?");
-            });
-
-            //特殊行动
-            $("#playerFaction .STT1False").click(function () {
-                    var obj = $(this);
-                    openQueryWindow(obj.attr("syntax") + this.id,"确认执行?");
-                }
-            );
-        }
-
-        //弹出确认对话框
-        function openQueryWindow(type,title) {
-            //actType = "action {0}".format(actType);
-            //actType = type;
-            $("#syntax").val(type);
-            $("#querysyntax").text(type);
-            if (title != undefined) {
-                $("#querytitle").html(title);
-            } else {
-                //
-                $("#querytitle").html("您确认要执行吗?");
-            }
-
-            $("#querycfmModel").modal();
-        }
-        //确认对话框
-        $("#querycfmModelYes").click(function () {
-            //var value = $(this).attr("act");
-            $("#querycfmModel").modal('hide');
-            submitData();
-        });
-    </script>
-
-    <script>
-        //提交命令
-        function submitData() {
-            var value = $("#syntax").val();
-            if (value == "") {
-                alert("请先选择行动");
-                return;
-            }
-            $.post("/home/Syntax",
-                {
-                    name: $("#test1").val(),
-                    syntax: value,
-                    factionName: $("#test3").val(),
-                },
-                function (data, status) {
-                    if (data.indexOf("error") != -1) {
-                        alert(data);
-                    } else {
-                        location.reload();
-                    }
-                });
-        }
-
-        $(document).ready(function () {
-            $('button#pwincome').click(function () {
-                $.post("/home/Syntax",
-                    {
-                        name: $("#test1").val(),
-                        syntax: "setpower " + $(this).attr("value"),
-                        factionName: $("#test3").val(),
-                    },
-                    function (data, status) {
-                        if (data.indexOf("error") != -1) {
-                            alert(data);
-                        } else {
-                            location.reload();
-                        }
-                    });
-            });
-        });
-
-        $(document).ready(function () {
-            $("button#syn").click(function () {
-                submitData();
-            });
-        });
-
-        setTimeout('GetNextGame()', 10000); //指定1秒刷新一次
-
-        function GetNextGame() {
-            if ($("#isMyTurn").val().indexOf("True") == -1) {
-                $.post("/home/GetNextGame",
-                    {
-                        name: $("input#username").val()
-                    },
-                    function (data, status) {
-                        if (data == undefined || data==="") {
-                            //console.log(data);
-                        } else {
-                            //console.log(data);
-                            window.location.href = "/home/viewgame/" + data;
-                            alert("你的回合");
-                        }
-                        
-                    });
-            }
-            setTimeout('GetNextGame()', 10000);
-        }
-
-
-        $(document).ready(function () {
-            $("button#undo").click(function () {
-                UndoOneStep();
-            });
-        });
-        function UndoOneStep() {
-            var value = $("#test1").val();
-            console.log(value);
-            $.get("/home/UndoOneStep/" + value,
-                function (data, status) {
-                    console.log(data);
-                    location.reload();
-                }
-            );
-        }
-
-        $(document).ready(function () {
-            $("button#delete").click(function () {
-                var value = $("#test1").val();
-                console.log(value);
-                $.get("/home/DeleteOneGame/" + value,
-                    function (data, status) {
-                        console.log(data);
-                        location.reload();
-                    }
-                );
-            });
-        });
-    </script>
 
 }
 else

@@ -15,7 +15,6 @@
   <ItemGroup>
     <Content Remove="Views\Home\Gaia.cshtml" />
     <Content Remove="wwwroot/js\common.js" />
-    <Content Remove="wwwroot/js\faction.js" />
     <Content Remove="wwwroot/js\game.js" />
   </ItemGroup>
   <ItemGroup>
