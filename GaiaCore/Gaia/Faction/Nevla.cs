@@ -245,7 +245,7 @@ namespace GaiaCore.Gaia
                         ActionQueue.Enqueue(action);
                         return true;
                     case "pwc":
-                        if (rFNum != rTNum * 2)
+                        if (rFNum * 2 != rTNum)
                         {
                             log = "兑换比例为1：2";
                             return false;
