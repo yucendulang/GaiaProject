@@ -14,6 +14,10 @@ namespace GaiaCore.Gaia
             this.ColorMap = colorMapList[6];
             Knowledge -= 1;
             IsStrongBuild = false;
+            if (gg != null)
+            {
+                IncreaseTech("sci");
+            }
         }
         public bool IsStrongBuild { set; get; }
         public override Terrain OGTerrain { get => Terrain.White; }
@@ -68,8 +72,16 @@ namespace GaiaCore.Gaia
 
         internal override void PowerUse(int v)
         {
-            PowerToken3 -= (v + 1) / 2;
-            PowerToken1 += (v + 1) / 2;
+            if (IsStrongBuild)
+            {
+                PowerToken3 -= (v + 1) / 2;
+                PowerToken1 += (v + 1) / 2;
+            }
+            else
+            {
+                PowerToken3 -= v;
+                PowerToken1 += v;
+            }
         }
 
         internal override bool ConvertOneResourceToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log, int? rTNum2 = null, string rTKind2 = null)
