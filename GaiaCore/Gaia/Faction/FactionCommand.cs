@@ -313,6 +313,12 @@ namespace GaiaCore.Gaia
         {
             PowerToken1 += PowerTokenGaia;
             PowerTokenGaia = 0;
+            if(this is BalTak)
+            {
+                var f = (this as BalTak);
+                f.Gaias.AddRange(f.GaiasGaiaArea);
+                f.GaiasGaiaArea.Clear();
+            }
         }
 
         private int GetGaiaCost()
@@ -537,8 +543,14 @@ namespace GaiaCore.Gaia
                 }
                 if (syn == BuildingSyntax.AC2)
                 {
-                    var tile = new AC2();
-                    AddGameTiles(new AC2());
+                    if (this is BalTak)
+                    {
+                        AddGameTiles(new BalTakBuilding.AC2());
+                    }
+                    else
+                    {
+                        AddGameTiles(new AC2());
+                    }
                 }
                 else if (syn == BuildingSyntax.TC)
                 {

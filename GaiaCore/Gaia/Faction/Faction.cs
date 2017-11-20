@@ -285,7 +285,7 @@ namespace GaiaCore.Gaia
         };
 
 
-        public bool IsIncreaseTechLevelByIndexValidate(int index, out string log, bool isIncreaseAllianceTileCost = false)
+        public virtual bool IsIncreaseTechLevelByIndexValidate(int index, out string log, bool isIncreaseAllianceTileCost = false)
         {
             log = string.Empty;
             if (index < 0 | index > 5)
