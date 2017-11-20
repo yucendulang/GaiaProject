@@ -124,19 +124,20 @@
 }
 
 .actpwcss {
-    height: 44px;
-    width: 44px;
+    height: 53px;
+    width: 53px;
     text-align: center;
-    line-height: 44px;
+    line-height: 53px;
     background: url(/images/actpwback.png);
 }
 
 .actqcss {
-    height: 44px;
-    width: 44px;
+    height: 53px;
+    width: 53px;
     text-align: center;
-    line-height: 44px;
+    line-height: 53px;
     background: url(/images/actqback.png);
+    background-size: 100%;
 }
 
 .actusedcss {
