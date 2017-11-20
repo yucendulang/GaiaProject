@@ -1197,7 +1197,7 @@ namespace GaiaCore.Gaia
         {
             foreach(var item in FactionList.Where(x => !x.FactionName.Equals(factionName)))
             {
-                var power=Map.CalHighestPowerBuilding(row,col,item.FactionName);
+                var power=Map.CalHighestPowerBuilding(row,col,item);
                 if (power != 0)
                 {
                     item.LeechPowerQueue.Add(new Tuple<int, FactionName>(power, factionName));

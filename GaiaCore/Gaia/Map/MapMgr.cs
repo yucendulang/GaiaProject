@@ -486,7 +486,7 @@ namespace GaiaCore.Gaia
             return false;
         }
 
-        public int CalHighestPowerBuilding(int x, int y, FactionName name)
+        public int CalHighestPowerBuilding(int x, int y, Faction faction)
         {
             //吸魔力大小范围
             var distance = 2;
@@ -499,9 +499,16 @@ namespace GaiaCore.Gaia
                     {
                         //System.Diagnostics.Debug.WriteLine("row:" + i + " col:" + j);
 
-                        if (HexArray[i, j] != null && HexArray[i, j].FactionBelongTo == name)
+                        if (HexArray[i, j] != null && HexArray[i, j].FactionBelongTo == faction.FactionName)
                         {
-                            res = Math.Max(res, HexArray[i, j].Building.MagicLevel);
+                            if ((faction is MadAndroid) && faction.StrongHold == null && faction.OGTerrain == HexArray[i, j].TFTerrain)
+                            {
+                                res = Math.Max(res, HexArray[i, j].Building.MagicLevel + 1);
+                            }
+                            else
+                            {
+                                res = Math.Max(res, HexArray[i, j].Building.MagicLevel);
+                            }
                         }
                     }
 

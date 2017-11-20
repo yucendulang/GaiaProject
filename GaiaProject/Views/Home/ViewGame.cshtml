@@ -632,6 +632,10 @@ else
                         {
                             <button type="button" class="btn btn-default">能力是否使用:@((item as MadAndroid).IsMadAndroidAbilityUsed) </button>
                         }
+                        @if (item is BalTak)
+                        {
+                            <button type="button" class="btn btn-default">盖亚区盖亚数量:@((item as BalTak).GaiasGaiaArea.Count) </button>
+                        }
                     </div>
                 </div>
 

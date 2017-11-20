@@ -964,11 +964,11 @@ namespace GaiaCore.Gaia
             var map = GaiaGame.Map;
             var SatelliteHexList = list.Where(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].TFTerrain == Terrain.Empty && !GaiaGame.Map.HexArray[x.Item1, x.Item2].Satellite.Contains(FactionName))
                                     .ToList();
-            var BuildingHexList=list.Where(x =>
-                                            {
-                                                TerrenHex terrenHex = GaiaGame.Map.HexArray[x.Item1, x.Item2];
-                                                return terrenHex.Building != null && terrenHex.FactionBelongTo == FactionName && !(terrenHex.Building is GaiaBuilding);
-                                            })
+            var BuildingHexList = list.Where(x =>
+                                              {
+                                                  TerrenHex terrenHex = GaiaGame.Map.HexArray[x.Item1, x.Item2];
+                                                  return terrenHex.Building != null && terrenHex.FactionBelongTo == FactionName && !(terrenHex.Building is GaiaBuilding);
+                                              })
                                      .ToList();
 
             if ((SatelliteHexList.Count + BuildingHexList.Count) != list.Count)
@@ -978,12 +978,12 @@ namespace GaiaCore.Gaia
             }
             if (PowerToken1 + PowerToken2 + PowerToken3 < SatelliteHexList.Count)
             {
-                log = string.Format("魔力豆总数量为{0},放卫星数量为{1},魔力豆不够",(PowerToken1 + PowerToken2 + PowerToken3),SatelliteHexList.Count);
+                log = string.Format("魔力豆总数量为{0},放卫星数量为{1},魔力豆不够", (PowerToken1 + PowerToken2 + PowerToken3), SatelliteHexList.Count);
                 return false;
             }
             if (list.Exists(x =>
             {
-                var surroundHex = GaiaGame.Map.GetSurroundhexWithBuildingAndSatellite(x.Item1, x.Item2, FactionName,list:list);
+                var surroundHex = GaiaGame.Map.GetSurroundhexWithBuildingAndSatellite(x.Item1, x.Item2, FactionName, list: list);
                 return surroundHex.Exists(y => map.GetHex(y).IsAlliance
                 || (map.GetHex(y).Satellite != null && map.GetHex(y).Satellite.Contains(FactionName))
                 || (map.GetHex(y).FactionBelongTo == FactionName && !(map.GetHex(y).Building is GaiaBuilding)));
@@ -1028,7 +1028,7 @@ namespace GaiaCore.Gaia
             }
 
             TerrenGroup = new List<List<Tuple<int, int>>>();
-            foreach(var item in BuildingHexList)
+            foreach (var item in BuildingHexList)
             {
                 var Dis1List = TerrenGroup.FindAll(x => x.Exists(y => map.CalTwoHexDistance(y.Item1, y.Item2, item.Item1, item.Item2) == 1));
                 if (Dis1List.Any())
@@ -1043,12 +1043,22 @@ namespace GaiaCore.Gaia
                 }
                 else
                 {
-                    TerrenGroup.Add(new List<Tuple<int, int>>() { item});
+                    TerrenGroup.Add(new List<Tuple<int, int>>() { item });
                 }
             }
             System.Diagnostics.Debug.WriteLine(TerrenGroup.Count);
 
-            if (BuildingHexList.Sum(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].Building.MagicLevel) < m_allianceMagicLevel)
+            if (BuildingHexList.Sum(x =>
+            {
+                if (this is MadAndroid && StrongHold == null && OGTerrain == GaiaGame.Map.HexArray[x.Item1, x.Item2].TFTerrain)
+                {
+                    return GaiaGame.Map.HexArray[x.Item1, x.Item2].Building.MagicLevel + 1;
+                }
+                else
+                {
+                    return GaiaGame.Map.HexArray[x.Item1, x.Item2].Building.MagicLevel;
+                }
+            }) < m_allianceMagicLevel)
             {
                 log = string.Format("魔力等级不够{0}级", m_allianceMagicLevel);
                 return false;
