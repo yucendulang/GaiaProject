@@ -182,7 +182,7 @@ namespace GaiaCore.Gaia
             return m_MineCount - Mines.Count + m_TradeCenterCount - TradeCenters.Count + m_ReaserchLabCount - ResearchLabs.Count + i1 + i2 + i3 + i4;
         }
 
-        internal void PowerUse(int v)
+        internal virtual void PowerUse(int v)
         {
             PowerToken3 -= v;
             PowerToken1 += v;
@@ -313,6 +313,12 @@ namespace GaiaCore.Gaia
         {
             PowerToken1 += PowerTokenGaia;
             PowerTokenGaia = 0;
+            if(this is BalTak)
+            {
+                var f = (this as BalTak);
+                f.Gaias.AddRange(f.GaiasGaiaArea);
+                f.GaiasGaiaArea.Clear();
+            }
         }
 
         private int GetGaiaCost()
@@ -473,6 +479,10 @@ namespace GaiaCore.Gaia
                     oreCost = m_StrongHoldOreCost;
                     creditCost = m_StrongHoldCreditCost;
                     trigger = typeof(RST3);
+                    if(this is Nevla)
+                    {
+                        (this as Nevla).IsStrongBuild = true;
+                    }
                     break;
                 case BuildingSyntax.AC1:
                     build = Academy1;
@@ -533,8 +543,14 @@ namespace GaiaCore.Gaia
                 }
                 if (syn == BuildingSyntax.AC2)
                 {
-                    var tile = new AC2();
-                    AddGameTiles(new AC2());
+                    if (this is BalTak)
+                    {
+                        AddGameTiles(new BalTakBuilding.AC2());
+                    }
+                    else
+                    {
+                        AddGameTiles(new AC2());
+                    }
                 }
                 else if (syn == BuildingSyntax.TC)
                 {
@@ -1086,9 +1102,14 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        internal virtual bool ConvertOneResourceToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log)
+        internal virtual bool ConvertOneResourceToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log, int? rTNum2 = null, string rTKind2 = null)
         {
             log = string.Empty;
+            if (rTNum2 != null || rTKind2 != null)
+            {
+                log = "pw同时换取多项资源Nevla专用语句";
+                return false;
+            }
             var str = rFKind + rTKind;
             switch (str)
             {

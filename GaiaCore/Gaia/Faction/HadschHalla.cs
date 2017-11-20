@@ -24,10 +24,10 @@ namespace GaiaCore.Gaia
 
         protected override int CalCreditIncome()
         {
-            return base.CalCreditIncome()+3;
+            return base.CalCreditIncome() + 3;
         }
 
-        internal override bool ConvertOneResourceToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log)
+        internal override bool ConvertOneResourceToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log, int? rTNum2 = null, string rTKind2 = null)
         {
 
             log = string.Empty;
@@ -53,7 +53,7 @@ namespace GaiaCore.Gaia
                             Credit = Credit;
                             QICs = QICs;
                             TempCredit = 0;
-                            TempQICs =0;
+                            TempQICs = 0;
                         };
                         ActionQueue.Enqueue(action);
                         break;
@@ -121,13 +121,13 @@ namespace GaiaCore.Gaia
                         ActionQueue.Enqueue(action);
                         break;
                     default:
-                        return base.ConvertOneResourceToAnother(rFNum, rFKind, rTNum, rTKind, out log);
+                        return base.ConvertOneResourceToAnother(rFNum, rFKind, rTNum, rTKind, out log, rTNum2, rTKind2);
                 }
                 return true;
             }
             else
             {
-                return base.ConvertOneResourceToAnother(rFNum, rFKind, rTNum, rTKind, out log);
+                return base.ConvertOneResourceToAnother(rFNum, rFKind, rTNum, rTKind, out log, rTNum2, rTKind2);
             }
         }
     }

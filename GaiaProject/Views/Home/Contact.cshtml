@@ -133,34 +133,56 @@
 
                                 </li>
                                 <li class="list-group-item">
-                                    9.satellite （卫星）坐标,坐标,坐标...<br />
-                                    例如:satellite F5,F6,G9,R2<br />
-                                    在F5,F6,G9,R2放置卫星并且建立联邦
+                                    9.alliance （星球与卫星）坐标,坐标,坐标...<br />
+                                    例如:alliance F5,F6,F7<br />
+                                    在F6放置卫星连接F5与F7建立联邦
                                 </li>
                                 <li class="list-group-item">
-                                    10.alliance （星球）坐标,坐标,坐标...<br />
-                                    例如:alliance F5,F6<br />
-                                    在F5,F6两个星球上不放置卫星直接建立联邦
-                                </li>
-                                <li class="list-group-item">
-                                    11.advance tf|ai|eco|gaia|sci|ship<br />
+                                    10.advance tf|ai|eco|gaia|sci|ship<br />
                                     例如:advance ai<br />
                                     花费4点知识，提升人工智能研究轨道1格
                                 </li>
                                 <li class="list-group-item">
-                                    12.action actX（能量或量子智能方块行动）<br />
+                                    11.action actX（能量或量子智能方块行动）<br />
                                     例如:action act7<br />
                                     执行7号能量行动，花费3点能量，获得2点能量指示物。
+
                                 </li>
                                 <li class="list-group-item">
-                                    13.convert X to Y<br />
+                                    11-1.action act8.+sttx./attx.(-sttx.advance tf|ai|eco|gaia|sci|ship)<br />
+                                    例如:action act8.+stt1<br />
+                                    执行8号量子方块行动，花费4个量子方块，获得1号基础科技。（高级科技获得参考第14条）
+
+                                </li>
+                                <li class="list-group-item">
+                                    11-2.action act9.re altx<br />
+                                    例如:action act9.re alt1<br />
+                                    执行9号量子方块行动，为1号联邦板块重新计分（需已获得的联邦板块）。
+
+                                </li>
+                                <li class="list-group-item">
+                                    12.convert X to Y<br />
                                     例如:convert 3pw to 1o<br />
-                                    使用3点能量转换1点矿石。（该行动为自由行动，需搭配上述主要行动共同使用,暂不支持跨级转换，如QIC→C）
+                                    使用3点能量转换1点矿石。（该行动为自由行动，需搭配上述主要行动共同使用）
+
                                 </li>
                                 <li class="list-group-item">
-                                    14.burn X<br />
+                                    13.burn X<br />
                                     例如:burn 2.action act7<br />
                                     移除2号区1点能量，将2号区1点能量移动到3号区，执行7号能量行动，花费3点能量，获得2点能量指示物。（该行动为自由行动，需搭配上述主要行动共同使用）
+
+                                </li>
+                                <li class="list-group-item">
+                                    14.+attx.-sttx.advance tf|ai|eco|gaia|sci|ship<br />
+                                    例如:+att2.-stt1 advance ai<br />
+                                    获得2号高级科技，覆盖1号基础科技，提升人工智能研究轨道1格（获得高级科技指令，搭配升级RL/AC或ACT8行动，消耗联邦板块）
+
+                                </li>
+                                <li class="list-group-item">
+                                    15.planet（黑星）坐标<br />
+                                    例如:advance ship.planet F5<br />
+                                    升级航行到5级时，放置黑星到F5
+
                                 </li>
                             </ul>
                         </div>

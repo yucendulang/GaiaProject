@@ -637,12 +637,17 @@ namespace GaiaCore.Gaia
                     var RFKind = match.Groups[2].Value;
                     var RTNum = match.Groups[3].Value.ParseToInt(0);
                     var RTKind = match.Groups[4].Value;
-                    if (!faction.ConvertOneResourceToAnother(RFNum, RFKind, RTNum, RTKind, out log))
+                    int? RTNum2 = null;
+                    string RTKind2 = null;
+                    if (!string.IsNullOrEmpty(match.Groups[5].Value))
+                    {
+                        RTNum2 = match.Groups[6].Value.ParseToInt(0);
+                        RTKind2 = match.Groups[7].Value;
+                    }
+                    if (!faction.ConvertOneResourceToAnother(RFNum, RFKind, RTNum, RTKind, out log, RTNum2, RTKind2))
                     {
                         return false;
                     }
-
-
                 }
                 else if (GameFreeSyntax.ReturnTechTilesRegex.IsMatch(item))
                 {
@@ -663,7 +668,7 @@ namespace GaiaCore.Gaia
                         log = "你没有此块STT版";
                         return false;
                     }
-                    
+
                     Action queue = () =>
                     {
                         tile.IsCovered = true;

@@ -63,7 +63,7 @@ namespace GaiaCore.Gaia
         protected override int ResourceCost => 7;
         public override bool PredicateGameTileAction(Faction faction)
         {
-            return base.PredicateGameTileAction(faction) && faction.PowerToken3 >= ResourceCost;
+            return base.PredicateGameTileAction(faction) && faction.PowerTokenRepresent >= ResourceCost;
         }
         public override bool InvokeGameTileAction(Faction faction)
         {
@@ -79,7 +79,7 @@ namespace GaiaCore.Gaia
         protected override int ResourceCost => 5;
         public override bool PredicateGameTileAction(Faction faction)
         {
-            return base.PredicateGameTileAction(faction) && faction.PowerToken3 >= ResourceCost;
+            return base.PredicateGameTileAction(faction) && faction.PowerTokenRepresent >= ResourceCost;
         }
         public override bool InvokeGameTileAction(Faction faction)
         {
@@ -101,7 +101,7 @@ namespace GaiaCore.Gaia
         protected override int ResourceCost => 4;
         public override bool PredicateGameTileAction(Faction faction)
         {
-            return base.PredicateGameTileAction(faction) && faction.PowerToken3 >= ResourceCost;
+            return base.PredicateGameTileAction(faction) && faction.PowerTokenRepresent >= ResourceCost;
         }
         public override bool InvokeGameTileAction(Faction faction)
         {
@@ -116,7 +116,7 @@ namespace GaiaCore.Gaia
         protected override int ResourceCost => 4;
         public override bool PredicateGameTileAction(Faction faction)
         {
-            return base.PredicateGameTileAction(faction) && faction.PowerToken3 >= ResourceCost;
+            return base.PredicateGameTileAction(faction) && faction.PowerTokenRepresent >= ResourceCost;
         }
         public override bool InvokeGameTileAction(Faction faction)
         {
@@ -131,7 +131,7 @@ namespace GaiaCore.Gaia
         protected override int ResourceCost => 4;
         public override bool PredicateGameTileAction(Faction faction)
         {
-            return base.PredicateGameTileAction(faction) && faction.PowerToken3 >= ResourceCost;
+            return base.PredicateGameTileAction(faction) && faction.PowerTokenRepresent >= ResourceCost;
         }
         public override bool InvokeGameTileAction(Faction faction)
         {
@@ -146,7 +146,7 @@ namespace GaiaCore.Gaia
         protected override int ResourceCost => 3;
         public override bool PredicateGameTileAction(Faction faction)
         {
-            return base.PredicateGameTileAction(faction) && faction.PowerToken3 >= ResourceCost;
+            return base.PredicateGameTileAction(faction) && faction.PowerTokenRepresent >= ResourceCost;
         }
         public override bool InvokeGameTileAction(Faction faction)
         {
@@ -166,7 +166,7 @@ namespace GaiaCore.Gaia
         protected override int ResourceCost => 3;
         public override bool PredicateGameTileAction(Faction faction)
         {
-            return base.PredicateGameTileAction(faction) && faction.PowerToken3 >= ResourceCost;
+            return base.PredicateGameTileAction(faction) && faction.PowerTokenRepresent >= ResourceCost;
         }
         public override bool InvokeGameTileAction(Faction faction)
         {
