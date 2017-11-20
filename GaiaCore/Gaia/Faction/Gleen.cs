@@ -18,6 +18,8 @@ namespace GaiaCore.Gaia
             {
                 IncreaseTech("ship");
             }
+            //Set Green Planet 会多加两分
+            Score -= 2;
         }
         public override Terrain OGTerrain { get => Terrain.Yellow; }
 
