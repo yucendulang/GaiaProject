@@ -360,6 +360,7 @@ namespace GaiaCore.Gaia
             GameStatus.PlayerIndex = 0;
             FactionList.ForEach(x => x.GameTileList.Where(y=>!(y is AllianceTile)).ToList().ForEach(y => y.IsUsed = false));
             MapActionMrg.Reset();
+            FactionList.ForEach(x => x.ResetNewRound());
             ChangeGameStatus(Stage.ROUNDSTART);
         }
 
@@ -486,8 +487,11 @@ namespace GaiaCore.Gaia
 
                     if (faction.Knowledge < 4 && faction.IsSingleAdvTechTrack)
                     {
-                        log = "科技不足四点";
-                        return false;
+                        if (!(faction is MadAndroid && (faction as MadAndroid).IsMadAndroidAbilityUsed == false))
+                        {
+                            log = "科技不足四点";
+                            return false;
+                        }
                     }
 
 

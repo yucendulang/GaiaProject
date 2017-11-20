@@ -274,7 +274,7 @@ namespace GaiaCore.Gaia
         public int PowerTokenGaia { get => m_powerTokenGaia + TempPowerTokenGaia; set { m_powerTokenGaia = value; TempPowerTokenGaia = 0; } }
         public int AllianceTileReGet { get => m_AllianceTileReGet; set => m_AllianceTileReGet = value; }
 
-        private static List<FieldInfo> list = new List<FieldInfo>()
+        protected static List<FieldInfo> list = new List<FieldInfo>()
         {
             typeof(Faction).GetField("m_TransformLevel",BindingFlags.NonPublic|BindingFlags.Instance),
             typeof(Faction).GetField("m_ShipLevel",BindingFlags.NonPublic|BindingFlags.Instance),

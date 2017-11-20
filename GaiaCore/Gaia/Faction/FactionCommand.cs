@@ -384,6 +384,11 @@ namespace GaiaCore.Gaia
                 PowerPreview.Clear();
             }
         }
+
+        public virtual void ResetNewRound()
+        {
+        }
+
         public int GetFinalEndScore()
         {
             var ret = 0;
@@ -755,7 +760,7 @@ namespace GaiaCore.Gaia
             return TechStrList[v];
         }
 
-        internal void IncreaseTech(string tech)
+        internal virtual void IncreaseTech(string tech)
         {
             switch (tech)
             {

@@ -7,14 +7,22 @@ namespace GaiaCore.Gaia
 {
     public class MadAndroid : Faction
     {
-        public MadAndroid(GaiaGame gg) :base(FactionName.MadAndroid, gg)
+        public MadAndroid(GaiaGame gg) : base(FactionName.MadAndroid, gg)
         {
             this.ChineseName = "疯狂机器";
             this.ColorCode = colorList[5];
             this.ColorMap = colorMapList[5];
+            IsMadAndroidAbilityUsed = false;
 
         }
         public override Terrain OGTerrain { get => Terrain.Gray; }
+        public bool IsMadAndroidAbilityUsed { set; get; }
+
+        public override void ResetNewRound()
+        {
+            IsMadAndroidAbilityUsed = false;
+            base.ResetNewRound();
+        }
 
         protected override int CalKnowledgeIncome()
         {
@@ -82,6 +90,25 @@ namespace GaiaCore.Gaia
                     break;
             }
             return ret;
+        }
+
+        protected override int CallSHPowerTokenIncome()
+        {
+            return base.CallSHPowerTokenIncome() + 1;
+        }
+
+        public override bool IsIncreaseTechLevelByIndexValidate(int index, out string log, bool isIncreaseAllianceTileCost = false)
+        {
+            if (IsSingleAdvTechTrack && IsMadAndroidAbilityUsed == false)
+            {
+                var level = (int)list[index].GetValue(this);
+                if ((int)list.Min(x => x.GetValue(this)) == level)
+                {
+                    TechTracAdv++;
+                    IsMadAndroidAbilityUsed = true;
+                }
+            }
+            return base.IsIncreaseTechLevelByIndexValidate(index, out log, isIncreaseAllianceTileCost);
         }
     }
 }

@@ -628,6 +628,10 @@ else
                         {
                             <button type="button" class="btn btn-default">@income.Key:@income.Value</button>
                         }
+                        @if (item is MadAndroid)
+                        {
+                            <button type="button" class="btn btn-default">能力是否使用:@((item as MadAndroid).IsMadAndroidAbilityUsed) </button>
+                        }
                     </div>
                 </div>
 

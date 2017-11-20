@@ -134,7 +134,7 @@ namespace GaiaCore.Gaia
         public static async System.Threading.Tasks.Task<IEnumerable<string>> RestoreDictionaryFromServerAsync(string GameName = null, Func<string, bool> DebugInvoke = null)
         {
             HttpClient client = new HttpClient();
-            var logReader = await client.GetStringAsync("http://gaiaproject.chinacloudsites.cn/home/GetLastestActionLog");
+            var logReader = await client.GetStringAsync("http://gaiaproject-gaiaprojecttest.chinacloudsites.cn/home/GetLastestActionLog");
             return RestoreAllGames(logReader, GameName, "yucenyucen@126.com", DebugInvoke);
         }
 
