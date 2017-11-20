@@ -11,7 +11,7 @@ namespace GaiaCore.Gaia
     public abstract partial class Faction
     {
 
-        internal virtual bool BuildMine(Map map, int row, int col, out string log)
+        public virtual bool BuildMine(Map map, int row, int col, out string log)
         {
 
             log = string.Empty;
@@ -153,7 +153,7 @@ namespace GaiaCore.Gaia
             return false;
         }
 
-        internal int GetSatelliteCount()
+        public int GetSatelliteCount()
         {
             var hexList = GaiaGame.Map.GetHexList();
             var q =
@@ -163,7 +163,7 @@ namespace GaiaCore.Gaia
             return q.Count();
         }
 
-        internal int GetAllianceBuilding()
+        public int GetAllianceBuilding()
         {
             var hexList = GaiaGame.Map.GetHexList();
             var q =
@@ -173,7 +173,7 @@ namespace GaiaCore.Gaia
             return q.Count();
         }
 
-        internal int GetBuildCount()
+        public int GetBuildCount()
         {
             var i1 = Academy1 == null ? 1 : 0;
             var i2 = Academy2 == null ? 1 : 0;
@@ -182,7 +182,7 @@ namespace GaiaCore.Gaia
             return m_MineCount - Mines.Count + m_TradeCenterCount - TradeCenters.Count + m_ReaserchLabCount - ResearchLabs.Count + i1 + i2 + i3 + i4;
         }
 
-        internal virtual void PowerUse(int v)
+        public virtual void PowerUse(int v)
         {
             PowerToken3 -= v;
             PowerToken1 += v;
@@ -202,7 +202,7 @@ namespace GaiaCore.Gaia
             }
         }
 
-        internal bool BuildGaia(Map map, int row, int col, out string log)
+        public bool BuildGaia(Map map, int row, int col, out string log)
         {
             log = string.Empty;
             if (m_GaiaLevel == 0)
@@ -254,7 +254,7 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        internal int GetSpaceSectorCount()
+        public int GetSpaceSectorCount()
         {
             var hexList = GaiaGame.Map.GetHexList();
             var q =
@@ -265,7 +265,7 @@ namespace GaiaCore.Gaia
             return q.Count();
         }
 
-        internal int GetPlanetTypeCount()
+        public int GetPlanetTypeCount()
         {
             var hexList = GaiaGame.Map.GetHexList();
             var q =
@@ -276,7 +276,7 @@ namespace GaiaCore.Gaia
             return q.Count();
         }
 
-        internal bool IsPlanetTypeExist(Terrain terrain)
+        public bool IsPlanetTypeExist(Terrain terrain)
         {
             var hexList = GaiaGame.Map.GetHexList();
 
@@ -309,7 +309,7 @@ namespace GaiaCore.Gaia
             }
         }
 
-        internal virtual void GaiaPhaseIncome()
+        public virtual void GaiaPhaseIncome()
         {
             PowerToken1 += PowerTokenGaia;
             PowerTokenGaia = 0;
@@ -339,7 +339,7 @@ namespace GaiaCore.Gaia
             throw new Exception(m_GaiaLevel+"级GaiaLevel出错");
         }
 
-        internal void BuildPowerPreview()
+        public void BuildPowerPreview()
         {
             var pl = new List<int>();
             var ptl = new List<int>();
@@ -420,7 +420,7 @@ namespace GaiaCore.Gaia
             return ret;
         }
 
-        internal bool BuildIntialMine(Map map, int row, int col, out string log)
+        public bool BuildIntialMine(Map map, int row, int col, out string log)
         {
             log = string.Empty;
             if (!(map.HexArray[row, col].OGTerrain == OGTerrain))
@@ -440,7 +440,7 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        internal bool UpgradeBuilding(Map map, int row, int col, string buildStr, out string log)
+        public bool UpgradeBuilding(Map map, int row, int col, string buildStr, out string log)
         {
             log = string.Empty;
             var hex = map.HexArray[row, col];
@@ -574,7 +574,7 @@ namespace GaiaCore.Gaia
         {
         }
 
-        internal int GetTechLevelbyIndex(int index)
+        public int GetTechLevelbyIndex(int index)
         {
             switch (index)
             {
@@ -589,7 +589,7 @@ namespace GaiaCore.Gaia
             }
         }
 
-        internal void LeechPower(int power, FactionName factionFrom, bool isLeech)
+        public void LeechPower(int power, FactionName factionFrom, bool isLeech)
         {
             LeechPowerQueue.RemoveAt(LeechPowerQueue.FindIndex(x => x.Item1 == power && x.Item2 == factionFrom));
             if (isLeech)
@@ -626,7 +626,7 @@ namespace GaiaCore.Gaia
             }
         }
 
-        internal bool IsExitUnfinishFreeAction(out string log)
+        public bool IsExitUnfinishFreeAction(out string log)
         {
             log = string.Empty;
             if (TerraFormNumber != 0 && !(IsUseAction2&&TerraFormNumber==1))
@@ -702,7 +702,7 @@ namespace GaiaCore.Gaia
         }
 
 
-        internal virtual void ResetUnfinishAction()
+        public virtual void ResetUnfinishAction()
         {
             ActionQueue.Clear();
             TerraFormNumber = 0;
@@ -742,25 +742,25 @@ namespace GaiaCore.Gaia
         };
 
 #region 临时变量 退出前需要清除
-        public bool IsUseAction2 { get; internal set; }
+        public bool IsUseAction2 { get; set; }
         /// <summary>
         /// 代表需要退回的板子数量
         /// </summary>
-        public int TechReturn { get; internal set; }
-        public int PlanetGet { get; internal set; }
-        public bool IsSingleAdvTechTrack { get; internal set; }
-        public bool IsNoAdvTechTrack { get; internal set; }
-        public bool PlanetAlready { get; internal set; }
+        public int TechReturn { get; set; }
+        public int PlanetGet { get; set; }
+        public bool IsSingleAdvTechTrack { get; set; }
+        public bool IsNoAdvTechTrack { get; set; }
+        public bool PlanetAlready { get; set; }
         public int FactionSpecialAbility { get; set; }
         public int FinalEndScore { get; set; }
         #endregion
 
-        internal static string ConvertTechIndexToStr(int v)
+        public static string ConvertTechIndexToStr(int v)
         {
             return TechStrList[v];
         }
 
-        internal virtual void IncreaseTech(string tech)
+        public virtual void IncreaseTech(string tech)
         {
             switch (tech)
             {
@@ -880,13 +880,13 @@ namespace GaiaCore.Gaia
             return;
         }
 
-        internal GameTiles GameTileGet(string str)
+        public GameTiles GameTileGet(string str)
         {
             var ret= GameTileList.Find(x => x.GetType().Name.Equals(str, StringComparison.OrdinalIgnoreCase));
             return ret;
         }
 
-        internal void ForgingAllianceGetTiles(List<Tuple<int, int>> list)
+        public void ForgingAllianceGetTiles(List<Tuple<int, int>> list)
         {
             Action action = () =>
             {
@@ -909,7 +909,7 @@ namespace GaiaCore.Gaia
             m_AllianceTileGet++;
         }
 
-        internal virtual bool BuildBlackPlanet(int row, int col, out string log)
+        public virtual bool BuildBlackPlanet(int row, int col, out string log)
         {
             log = string.Empty;
             var hex = GaiaGame.Map.HexArray[row, col];
@@ -958,7 +958,7 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        internal bool ForgingAllianceCheck(List<Tuple<int, int>> list, out string log)
+        public bool ForgingAllianceCheck(List<Tuple<int, int>> list, out string log)
         {
             log = string.Empty;
             var map = GaiaGame.Map;
@@ -1117,9 +1117,14 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        internal virtual bool ConvertOneResourceToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log, int? rTNum2 = null, string rTKind2 = null)
+        public virtual bool ConvertOneResourceToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log, int? rTNum2 = null, string rTKind2 = null,int? rFNum2=null,string rFKind2=null)
         {
             log = string.Empty;
+            if (rFNum2 != null || rFKind2 != null)
+            {
+                log = "多种资源同时换取其他资源是Taklons专用语句";
+                return false;
+            }
             if (rTNum2 != null || rTKind2 != null)
             {
                 log = "pw同时换取多项资源Nevla专用语句";
@@ -1367,7 +1372,7 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        internal bool GetAllianceTile(AllianceTile alt, out string log)
+        public bool GetAllianceTile(AllianceTile alt, out string log)
         {
             log = string.Empty;
             if (m_AllianceTileGet == 0)
@@ -1386,7 +1391,7 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        internal bool PredicateAction(string actionStr, out string log)
+        public bool PredicateAction(string actionStr, out string log)
         {
             log = string.Empty;
             if (PredicateActionList.ContainsKey(actionStr)&& !PredicateActionList[actionStr].Invoke(this))
@@ -1402,7 +1407,7 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        internal void DoAction(string actionStr,bool isFreeSyntax=false)
+        public void DoAction(string actionStr,bool isFreeSyntax=false)
         {
             var func = ActionList[actionStr];
             if (isFreeSyntax)
@@ -1419,7 +1424,7 @@ namespace GaiaCore.Gaia
             }
         }
 
-        internal bool IsIncreateTechValide(string tech, out string log, bool isIncreaseAllianceTileCost = false)
+        public bool IsIncreateTechValide(string tech, out string log, bool isIncreaseAllianceTileCost = false)
         {
             log = string.Empty;
             var index = TechStrList.FindIndex(x => x.Equals(tech));

@@ -28,7 +28,7 @@ namespace GaiaCore.Gaia
             return base.CalKnowledgeIncome()+1;
         }
 
-        internal bool DowngradeBuilding(int row, int col, out string log)
+        public bool DowngradeBuilding(int row, int col, out string log)
         {
             log = string.Empty;
             var hex = GaiaGame.Map.HexArray[row, col];

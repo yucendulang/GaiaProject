@@ -132,7 +132,7 @@ namespace GaiaCore.Gaia
             return ret;
         }
 
-        internal override void ResetUnfinishAction()
+        public override void ResetUnfinishAction()
         {
             if (Academy2 == null)
             {

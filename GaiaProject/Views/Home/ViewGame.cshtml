@@ -636,6 +636,10 @@ else
                         {
                             <button type="button" class="btn btn-default">盖亚区盖亚数量:@((item as BalTak).GaiasGaiaArea.Count) </button>
                         }
+                        @if (item is Taklons)
+                        {
+                            <button type="button" class="btn btn-default">智慧石所在区域:@((item as Taklons).BigStone) </button>
+                        }
                     </div>
                 </div>
 

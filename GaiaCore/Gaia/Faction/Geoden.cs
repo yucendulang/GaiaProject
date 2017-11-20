@@ -20,7 +20,7 @@ namespace GaiaCore.Gaia
         }
         public override Terrain OGTerrain { get => Terrain.Orange; }
 
-        internal override bool BuildMine(Map map, int row, int col, out string log)
+        public override bool BuildMine(Map map, int row, int col, out string log)
         {
             GetThreeKnowledge(row, col);
             return base.BuildMine(map, row, col, out log);
@@ -44,7 +44,7 @@ namespace GaiaCore.Gaia
             }
         }
 
-        internal override bool BuildBlackPlanet(int row, int col, out string log)
+        public override bool BuildBlackPlanet(int row, int col, out string log)
         {
             GetThreeKnowledge(row, col);
             return base.BuildBlackPlanet(row, col, out log);

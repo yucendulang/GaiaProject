@@ -20,13 +20,13 @@ namespace GaiaCore.Gaia
             new ACT9(),
             new ACT10()
         };
-        internal void AddMapActionList(Dictionary<string, Func<Faction, bool>> actionList, Dictionary<string, Func<Faction, bool>> preList)
+        public void AddMapActionList(Dictionary<string, Func<Faction, bool>> actionList, Dictionary<string, Func<Faction, bool>> preList)
         {
             mapActList.ForEach(x => actionList.Add(x.GetType().Name.ToLower(), x.InvokeGameTileAction));
             mapActList.ForEach(x => preList.Add(x.GetType().Name.ToLower(), x.PredicateGameTileAction));
         }
 
-        internal void Reset()
+        public void Reset()
         {
             mapActList.ForEach(x => x.IsUsed = false);
         }

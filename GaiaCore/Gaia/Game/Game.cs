@@ -244,8 +244,8 @@ namespace GaiaCore.Gaia
                 var match = GameFreeSyntax.ConvertRegex.Match(str);
                 var RFNum = match.Groups[1].Value.ParseToInt(0);
                 var RFKind = match.Groups[2].Value;
-                var RTNum = match.Groups[3].Value.ParseToInt(0);
-                var RTKind = match.Groups[4].Value;
+                var RTNum = match.Groups[6].Value.ParseToInt(0);
+                var RTKind = match.Groups[7].Value;
                 var ret = terraner.ConvertGaiaPowerToAnother(RFNum, RFKind, RTNum, RTKind, out log);
                 if (terraner.IsExitUnfinishFreeAction(out log))
                 {
@@ -639,16 +639,23 @@ namespace GaiaCore.Gaia
                     var match = GameFreeSyntax.ConvertRegex.Match(item);
                     var RFNum = match.Groups[1].Value.ParseToInt(0);
                     var RFKind = match.Groups[2].Value;
-                    var RTNum = match.Groups[3].Value.ParseToInt(0);
-                    var RTKind = match.Groups[4].Value;
+                    var RTNum = match.Groups[6].Value.ParseToInt(0);
+                    var RTKind = match.Groups[7].Value;
+                    int? RFNum2 = null;
+                    string RFKind2 = null;
+                    if (!string.IsNullOrEmpty(match.Groups[3].Value))
+                    {
+                        RFNum2 = match.Groups[4].Value.ParseToInt(0);
+                        RFKind2 = match.Groups[5].Value;
+                    }
                     int? RTNum2 = null;
                     string RTKind2 = null;
-                    if (!string.IsNullOrEmpty(match.Groups[5].Value))
+                    if (!string.IsNullOrEmpty(match.Groups[8].Value))
                     {
-                        RTNum2 = match.Groups[6].Value.ParseToInt(0);
-                        RTKind2 = match.Groups[7].Value;
+                        RTNum2 = match.Groups[9].Value.ParseToInt(0);
+                        RTKind2 = match.Groups[10].Value;
                     }
-                    if (!faction.ConvertOneResourceToAnother(RFNum, RFKind, RTNum, RTKind, out log, RTNum2, RTKind2))
+                    if (!faction.ConvertOneResourceToAnother(RFNum, RFKind, RTNum, RTKind, out log, RTNum2, RTKind2, RFNum2, RFKind2))
                     {
                         return false;
                     }

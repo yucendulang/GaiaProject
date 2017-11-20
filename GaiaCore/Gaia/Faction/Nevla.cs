@@ -27,7 +27,7 @@ namespace GaiaCore.Gaia
             return base.CalKnowledgeIncome() - m_ReaserchLabCount + ResearchLabs.Count;
         }
 
-        internal override void ResetUnfinishAction()
+        public override void ResetUnfinishAction()
         {
             if (StrongHold == null)
             {
@@ -70,7 +70,7 @@ namespace GaiaCore.Gaia
             }
         }
 
-        internal override void PowerUse(int v)
+        public override void PowerUse(int v)
         {
             if (IsStrongBuild)
             {
@@ -84,7 +84,7 @@ namespace GaiaCore.Gaia
             }
         }
 
-        internal override bool ConvertOneResourceToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log, int? rTNum2 = null, string rTKind2 = null)
+        public override bool ConvertOneResourceToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log, int? rTNum2 = null, string rTKind2 = null, int? rFNum2 = null, string rFKind2 = null)
         {
             log = string.Empty;
             var str = rFKind + rTKind;

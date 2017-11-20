@@ -41,8 +41,8 @@ namespace GaiaCore.Gaia
         /// <summary>
         /// 储存Gaia阶段的行动先后顺序
         /// </summary>
-        public Queue<int> GaiaPlayerIndexQueue { get; internal set; }
-        public Queue<int> IncomePhaseIndexQueue { get; internal set; }
+        public Queue<int> GaiaPlayerIndexQueue { get;  set; }
+        public Queue<int> IncomePhaseIndexQueue { get; set; }
 
         public void SetPlayerIndexLast()
         {

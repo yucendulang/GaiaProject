@@ -56,7 +56,7 @@ namespace ManageTool
             }
         }
 
-        internal abstract void InvokeAction();
+        public abstract void InvokeAction();
 
         protected bool ShouldRun()
         {

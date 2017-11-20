@@ -37,7 +37,7 @@ namespace GaiaCore.Gaia
             base.CallSpecialSHBuild();
         }
 
-        internal bool ExcuteSHAbility(Tuple<int, int> pos1, Tuple<int, int> pos2, out string log)
+        public bool ExcuteSHAbility(Tuple<int, int> pos1, Tuple<int, int> pos2, out string log)
         {
             log = string.Empty;
             var hex1 = GaiaGame.Map.HexArray[pos1.Item1, pos1.Item2];

@@ -14,7 +14,7 @@ namespace ManageTool
     {
         protected override int m_timeOut { get => 300 * 1000; }
 
-        internal override void InvokeAction()
+        public override void InvokeAction()
         {
             GameMgr.BackupDictionary();
             GameMgr.RemoveOldBackupData();

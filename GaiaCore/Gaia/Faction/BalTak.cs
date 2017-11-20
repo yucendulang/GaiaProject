@@ -41,7 +41,7 @@ namespace GaiaCore.Gaia
             return base.IsIncreaseTechLevelByIndexValidate(index, out log, isIncreaseAllianceTileCost);
         }
 
-        internal override bool ConvertOneResourceToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log, int? rTNum2 = default(int?), string rTKind2 = null)
+        public override bool ConvertOneResourceToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log, int? rTNum2 = default(int?), string rTKind2 = null, int? rFNum2 = null, string rFKind2 = null)
         {
             log = string.Empty;
             var str = rFKind + rTKind;
@@ -153,7 +153,7 @@ namespace GaiaCore.Gaia
             return base.ConvertOneResourceToAnother(rFNum, rFKind, rTNum, rTKind, out log, rTNum2, rTKind2);
         }
 
-        internal override void ResetUnfinishAction()
+        public override void ResetUnfinishAction()
         {
             Gaias.AddRange(TempGaias);
             TempGaias.Clear();

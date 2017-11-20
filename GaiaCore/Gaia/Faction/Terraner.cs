@@ -20,13 +20,13 @@ namespace GaiaCore.Gaia
         }
         public override Terrain OGTerrain { get => Terrain.Blue; }
 
-        internal override void GaiaPhaseIncome()
+        public override void GaiaPhaseIncome()
         {
             PowerToken2 += PowerTokenGaia;
             PowerTokenGaia = 0;
         }
 
-        internal bool ConvertGaiaPowerToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log)
+        public bool ConvertGaiaPowerToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log)
         {
             log = string.Empty;
             var str = rFKind + rTKind;

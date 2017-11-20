@@ -676,7 +676,7 @@ namespace GaiaCore.Gaia
             return ret;
         }
 
-        internal int CalShipDistanceNeed(int row, int col, FactionName factionName)
+        public int CalShipDistanceNeed(int row, int col, FactionName factionName)
         {
             for (int i = 1; i < m_mapHeight; i++)
             {

@@ -14,7 +14,7 @@ namespace ManageTool
     {
         protected override int m_timeOut { get => 3600 * 1000; }
 
-        internal override void InvokeAction()
+        public override void InvokeAction()
         {
             var gamelist=GameMgr.GetAllGame();
             foreach (var item in gamelist)

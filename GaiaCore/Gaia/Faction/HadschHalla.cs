@@ -27,7 +27,7 @@ namespace GaiaCore.Gaia
             return base.CalCreditIncome() + 3;
         }
 
-        internal override bool ConvertOneResourceToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log, int? rTNum2 = null, string rTKind2 = null)
+        public override bool ConvertOneResourceToAnother(int rFNum, string rFKind, int rTNum, string rTKind, out string log, int? rTNum2 = null, string rTKind2 = null, int? rFNum2 = null, string rFKind2 = null)
         {
 
             log = string.Empty;
