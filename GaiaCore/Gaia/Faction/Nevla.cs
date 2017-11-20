@@ -164,6 +164,34 @@ namespace GaiaCore.Gaia
                         };
                         ActionQueue.Enqueue(action);
                         return true;
+                    case "pwco":
+                        if (!(rFNum * 2 == rTNum + rTNum2 * 3))
+                        {
+                            log = "pw兑换c与o的兑换比例为2:1:1";
+                            return false;
+                        }
+                        if (PowerToken3 < rFNum)
+                        {
+                            log = "魔力值不够";
+                            return false;
+                        }
+                        TempPowerToken3 -= rFNum;
+                        TempPowerToken1 += rFNum;
+                        TempCredit += rTNum;
+                        TempOre += rTNum2.GetValueOrDefault();
+                        action = () =>
+                        {
+                            PowerToken3 = PowerToken3;
+                            PowerToken1 = PowerToken1;
+                            Ore = Ore;
+                            Credit = Credit;
+                            TempPowerToken3 = 0;
+                            TempPowerToken1 = 0;
+                            TempOre = 0;
+                            TempCredit = 0;
+                        };
+                        ActionQueue.Enqueue(action);
+                        return true;
                     case "pwpwtc":
                         if (!(rFNum * 2 == rTNum * 3 + rTNum2))
                         {
@@ -179,6 +207,32 @@ namespace GaiaCore.Gaia
                         TempPowerToken1 += rFNum;
                         TempPowerToken1 += rTNum;
                         TempCredit += rTNum2.GetValueOrDefault();
+                        action = () =>
+                        {
+                            PowerToken3 = PowerToken3;
+                            PowerToken1 = PowerToken1;
+                            Credit = Credit;
+                            TempPowerToken3 = 0;
+                            TempPowerToken1 = 0;
+                            TempCredit = 0;
+                        };
+                        ActionQueue.Enqueue(action);
+                        return true;
+                    case "pwcpwt":
+                        if (!(rFNum * 2 == rTNum + rTNum2 * 3))
+                        {
+                            log = "pw兑换c和pwt的兑换比例为2:1：1";
+                            return false;
+                        }
+                        if (PowerToken3 < rFNum)
+                        {
+                            log = "魔力值不够";
+                            return false;
+                        }
+                        TempPowerToken3 -= rFNum;
+                        TempPowerToken1 += rFNum;
+                        TempCredit += rTNum;
+                        TempPowerToken1 += rTNum2.GetValueOrDefault();
                         action = () =>
                         {
                             PowerToken3 = PowerToken3;
@@ -237,6 +291,31 @@ namespace GaiaCore.Gaia
                             TempPowerToken3 = 0;
                             TempPowerToken1 = 0;
                             TempKnowledge = 0;
+                        };
+                        ActionQueue.Enqueue(action);
+                        return true;
+                    case "pwo":
+                        if (rFNum * 2 != rTNum * 3)
+                        {
+                            log = "兑换比例为3：2";
+                            return false;
+                        }
+                        if (PowerToken3 < rFNum)
+                        {
+                            log = "魔力值不够";
+                            return false;
+                        }
+                        TempPowerToken3 -= rFNum;
+                        TempPowerToken1 += rFNum;
+                        TempOre += rTNum;
+                        action = () =>
+                        {
+                            PowerToken3 = PowerToken3;
+                            PowerToken1 = PowerToken1;
+                            Ore = Ore;
+                            TempPowerToken3 = 0;
+                            TempPowerToken1 = 0;
+                            TempOre = 0;
                         };
                         ActionQueue.Enqueue(action);
                         return true;
