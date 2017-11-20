@@ -17,6 +17,7 @@ namespace GaiaCore.Gaia
                 IncreaseTech("gaia");
             }
             QICs -= 1;
+            m_powerToken2 -= 2;
             TempGaias = new List<GaiaBuilding>();
             GaiasGaiaArea = new List<GaiaBuilding>();
         }

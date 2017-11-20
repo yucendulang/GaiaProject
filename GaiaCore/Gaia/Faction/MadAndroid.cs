@@ -13,7 +13,7 @@ namespace GaiaCore.Gaia
             this.ColorCode = colorList[5];
             this.ColorMap = colorMapList[5];
             IsMadAndroidAbilityUsed = false;
-
+            Knowledge -=2;
         }
         public override Terrain OGTerrain { get => Terrain.Gray; }
         public bool IsMadAndroidAbilityUsed { set; get; }
