@@ -756,57 +756,66 @@ else
                     <div help="回合/特权/科技版">
                         @foreach (var it in item.GameTileList.OrderBy(a => a.IsUsed).ThenBy(a => a.showRank))
                         {
-                            <div class="col-md-2"  >
-                            @if (it.typename == "rbt")
-                            {
+                            <div class="col-md-2">
+                                @if (it.typename == "rbt")
+                                {
 
-                                @if (it.IsUsed)
-                                 {
-                                     <div class='rbtcss rbtusedcss @it.name @{ @it.name}used'><span>@it.name<br /> @it.desc.Split(',')[0]<br /> @it.desc.Split(',')[1]</span></div>
-                                 }
-                                 else
-                                 {
-                                     <div class="rbtcss  @it.name" id="@item.FactionName@it.name" ><span>@it.name<br /> @it.desc.Split(',')[0]<br /> @it.desc.Split(',')[1]</span></div>
-                                     @if (it.CanAction)
-                                      {
-                                          <script>
-                                              $("#@item.FactionName@it.name").click(function() {
-                                                  //
-                                                  selectMapPos('@it.name');
-                                              })
-                                          </script>
-                                      }
+                                    @if (it.IsUsed)
+                                     {
+                                         <div class='rbtcss rbtusedcss @it.name @{@it.name}used'><span>@it.name<br/> @it.desc.Split(',')[0]<br/> @it.desc.Split(',')[1]</span>
+                                                                                  </div>
+                                     }
+                                     else
+                                     {
+                                         <div class="rbtcss  @it.name" id="@item.FactionName@it.name"><span>@it.name<br/> @it.desc.Split(',')[0]<br/> @it.desc.Split(',')[1]</span>
+                                         </div>
+                                         @if (it.CanAction)
+                                          {
+                                              <script>
+                                                  $("#@item.FactionName@it.name").click(function() {
+                                                      //
+                                                      selectMapPos('@it.name');
+                                                  })
+                                              </script>
+                                          }
 
-                                 }
+                                     }
 
-                            }
+                                }
 
-                            else if (it.typename == "stt")
-                            {
-                                <div class="sttcss sttusedcss    @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name"  > <span>@it.GetType().Name<br/> @it.desc</span>
-                                                                         </div>
-                            }
-                            else if (it.typename == "att")
-                            {
-                                <div class="attcss attusedcss    @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name"  ><span>@it.GetType().Name<br/> @it.desc</span>
-                                                                         </div>                          
-                            }
-                            else if (it.typename == "ac")
-                            {
-                                <div class="AC2False @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name"  ><span>@it.GetType().Name<br/> @it.desc</span>
-                                                                         </div>                          
-                            }
-                            else if (it.typename == "MapAction")
-                            {
-                                <div class="MapAction  Map@{@it.IsUsed}" syntax="action " id="@it.GetType().Name@{@it.IsUsed}"  ><span>@it.GetType().Name<br/> @it.desc</span>
-                                                       </div>                          
-                            }
-                            else
-                            {
-                                
-                                <div class="altcss"  >@it.GetType().Name<br/> @it.desc /else</div>
-                            }
-                            </div>
+                                else if (it.typename == "stt")
+                                {
+                                    <div class="sttcss sttusedcss    @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name"> <span>@it.GetType().Name<br/> @it.desc</span>
+                                                                       </div>
+                                }
+                                else if (it.typename == "att")
+                                {
+                                    <div class="attcss attusedcss    @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name"><span>@it.GetType().Name<br/> @it.desc</span>
+                                                                       </div>
+                                }
+                                else if (it.typename == "ac")
+                                {
+                                    <div class="AC2False @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name"><span>@it.GetType().Name<br/> @it.desc</span>
+                                                           </div>
+                                }
+                                else if (it.typename == "MapAction")
+                                {
+                                    <div class="MapAction  Map@{@it.IsUsed}" syntax="action " id="@it.GetType().Name@{@it.IsUsed}"><span>@it.GetType().Name<br/> @it.desc</span>
+                                                                                                                      </div>
+                                }
+                                else
+                                {
+
+                                    if (it.IsUsed)
+                                    {
+                                        <div class="altusedcss ">@it.GetType().Name<br/> @it.desc</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="altcss ">@it.GetType().Name<br/> @it.desc</div>
+                                    }
+                                }
+                                                                                                                      </div>
                         }
                                                                              
                      </div>
