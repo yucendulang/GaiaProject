@@ -130,7 +130,7 @@ namespace GaiaCore.Gaia
         /// <summary>
         /// convert的正则
         /// </summary>
-        public static Regex ConvertRegex = new Regex("convert ([0-9]{1,2})([a-z]{1,3}) to ([0-9]{1,2})([a-z]{1,3})");
+        public static Regex ConvertRegex = new Regex("convert ([0-9]{1,2})([a-z]{1,4}) to ([0-9]{1,2})([a-z]{1,3})(,([0-9]{1,2})([a-z]{1,3})){0,1}");
         /// <summary>
         /// 退回板子的正则
         /// </summary>

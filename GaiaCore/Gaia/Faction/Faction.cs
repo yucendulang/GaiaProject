@@ -205,6 +205,7 @@ namespace GaiaCore.Gaia
         public int PowerToken1 { get => m_powerToken1 + TempPowerToken1; set { m_powerToken1 = value; TempPowerToken1 = 0; } }
         public int PowerToken2 { get => m_powerToken2 + TempPowerToken2; set => m_powerToken2 = value; }
         public int PowerToken3 { get => m_powerToken3 + TempPowerToken3; set => m_powerToken3 = value; }
+        public virtual int PowerTokenRepresent { get => m_powerToken3 + TempPowerToken3;}
         public int TransformLevel { get => m_TransformLevel; }
         public int ShipLevel { get => m_ShipLevel; }
         public int AILevel { get => m_AILevel; }

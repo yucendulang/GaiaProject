@@ -112,6 +112,7 @@ namespace GaiaCore.Gaia
         protected override void CallSpecialSHBuild()
         {
             AddGameTiles(new ALT7());
+            TriggerRST(typeof(RST5));
             base.CallSpecialSHBuild();
         }
 
