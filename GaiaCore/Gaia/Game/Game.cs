@@ -375,6 +375,31 @@ namespace GaiaCore.Gaia
             var power = match.Groups[2].Value.ParseToInt();
             var factionFromStr = match.Groups[3].Value;
             Enum.TryParse(factionFromStr, true, out FactionName factionFrom);
+            if (faction is Taklons && faction.StrongHold == null)
+            {
+                var pwtfirst= match.Groups[4].Value.Trim();
+                if (string.IsNullOrEmpty(pwtfirst))
+                {
+                    return false;
+                }
+                if (pwtfirst.Equals("pwt"))
+                {
+                    faction.PowerToken1++;
+                    try
+                    {
+                        faction.LeechPower(power, factionFrom, isLeech);
+                    }
+                    catch
+                    {
+                        faction.PowerToken1--;
+                    }
+                }
+                else
+                { 
+                    faction.LeechPower(power, factionFrom, isLeech);
+                    faction.PowerToken1++;
+                }
+            }
             faction.LeechPower(power, factionFrom, isLeech);
 
             return true;

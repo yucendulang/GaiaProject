@@ -49,7 +49,7 @@ namespace GaiaCore.Gaia
         /// </summary>
         public const string leech = "leech";
         public const string decline = "decline";
-        public static Regex leechPowerRegex = new Regex("[a-z]+:(leech|decline) ([0-9]) from (.+)");
+        public static Regex leechPowerRegex = new Regex("[a-z]+:(leech|decline) ([0-9]) from ([a-z]+)( pwt| pw){0,1}");
         /// <summary>
         /// pass板子的正则
         /// </summary>
