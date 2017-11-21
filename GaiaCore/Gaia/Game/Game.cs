@@ -55,7 +55,14 @@ namespace GaiaCore.Gaia
                         }
                         if (GameStatus.NextPlayerForIntial())
                         {
-                            GameStatus.PlayerIndex = FactionList.FindIndex(x=>!x.FinishIntialMines());
+                            if (FactionList.Exists(x => x is Xenos && !x.FinishIntialMines()))
+                            {
+                                GameStatus.PlayerIndex = FactionList.FindIndex(x => x is Xenos);
+                            }
+                            else if (FactionList.Exists(x => x is Hive && !x.FinishIntialMines()))
+                            {
+                                GameStatus.PlayerIndex = FactionList.FindIndex(x => x is Hive);
+                            }
                         }
                     }
                     return ret;
@@ -1045,15 +1052,15 @@ namespace GaiaCore.Gaia
                 var faction = syntax.Substring(GameSyntax.factionSelection.Length + 1);
                 if (Enum.TryParse(faction, true, out FactionName result))
                 {
-                    if (FactionList.Exists(x => (int)x.FactionName/2 == (int)result /2))
+                    if (FactionList.Exists(x => (int)x.FactionName / 2 == (int)result / 2))
                     {
                         log = "不能选择相同颜色的种族";
                         return false;
                     }
-                    
+
                     if (!FactionList.Exists(x => x.FactionName == result))
                     {
-                        SetupFaction(user,result);
+                        SetupFaction(user, result);
                         GameStatus.NextPlayer();
                     }
                     else
@@ -1064,6 +1071,16 @@ namespace GaiaCore.Gaia
                     if (FactionList.Count == GameStatus.PlayerNumber)
                     {
                         ChangeGameStatus(Stage.INITIALMINES);
+                        var i = FactionList.FindIndex(x => x is Hive);
+                        if (i != -1)
+                        {
+                            GameStatus.SetPassPlayerIndex(i);
+                        }
+
+                        if (FactionList.FindIndex(x => x is Hive) == 0)
+                        {
+                            GameStatus.NextPlayerForIntial();
+                        }
                     }
                     return true;
                 }

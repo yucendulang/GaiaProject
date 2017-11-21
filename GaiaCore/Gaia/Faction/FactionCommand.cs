@@ -420,7 +420,7 @@ namespace GaiaCore.Gaia
             return ret;
         }
 
-        public bool BuildIntialMine(Map map, int row, int col, out string log)
+        public virtual bool BuildIntialMine(Map map, int row, int col, out string log)
         {
             log = string.Empty;
             if (!(map.HexArray[row, col].OGTerrain == OGTerrain))

@@ -27,6 +27,7 @@ namespace GaiaCore.Gaia
         /// 初始设置房子是否走完一轮
         /// </summary>
         public bool m_IntialFlag;
+        private bool m_IntialFinish = false;
 
         /// <summary>
         /// 4个玩家 0-3
@@ -103,21 +104,36 @@ namespace GaiaCore.Gaia
         /// <returns></returns>
         public bool NextPlayerForIntial()
         {
-                if (m_IntialFlag == true)
+            if (m_IntialFinish)
+            {
+                return true;
+            }
+            if (m_IntialFlag == true)
+            {
+                m_PlayerIndex--;
+            }
+            else
+            {
+                m_PlayerIndex++;
+                if (m_PlayerIndex == PlayerNumber + 1)
                 {
-                    m_PlayerIndex--;
+                    m_IntialFlag = true;
+                    m_PlayerIndex = PlayerNumber;
                 }
-                else
-                {
-                    m_PlayerIndex++;
-                    if (m_PlayerIndex == PlayerNumber + 1)
-                    {
-                        m_IntialFlag = true;
-                        m_PlayerIndex = PlayerNumber;
-                    }
-                }
-
-            return m_IntialFlag && m_PlayerIndex == 0;
+            }
+            if (m_PassPlayerIndex.Contains(PlayerIndex))
+            {
+                NextPlayerForIntial();
+            }
+            if(m_IntialFlag && m_PlayerIndex == 0)
+            {
+                m_IntialFinish = true;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 
