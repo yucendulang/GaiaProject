@@ -78,16 +78,29 @@ function createMap(data) {
                     break;
                 case "TradeCenter":
                 case "ResearchLab":
-                    //$("#myModalLabel").text("新增");
                     //如果是ResearchLab
-                    if (clickObj.typename === "ResearchLab") {
-                        $("#updateBuildList").html('<option value="">--请选择升级建筑--</option><option value="AC1">AC1</option><option value="AC2">AC2</option>')
-                        $("#sttBody").show();
+                    //如果是疯狂机器回合
+                    if ("MadAndroid" === userInfo.factionName) {
+                        if (clickObj.typename === "ResearchLab") {
+                            $("#updateBuildList").html('<option value="">--请选择升级建筑--</option><option value="SH" selected = "selected">SH</option>');
+                            $("#sttBody").hide();
+                        }
+                        else {//TradeCenter
+                            $("#updateBuildList").html('<option value="">--请选择升级建筑--</option><option value="RL">ResearchLab</option><option value="AC1">AC1</option><option value="AC2">AC2</option>');
+                            $("#sttBody").show();
+
+                        }
+                    } else {
+                        if (clickObj.typename === "ResearchLab") {
+                            $("#updateBuildList").html('<option value="">--请选择升级建筑--</option><option value="AC1">AC1</option><option value="AC2">AC2</option>');
+                            $("#sttBody").show();
+                        }
+                        else {
+                            $("#updateBuildList").html('<option value="">--请选择升级建筑--</option><option value="RL">ResearchLab</option><option value="SH">SH</option>');
+                            $("#sttBody").hide();
+                        }
                     }
-                    else {
-                        $("#updateBuildList").html('<option value="">--请选择升级建筑--</option><option value="RL">ResearchLab</option><option value="SH">SH</option>')
-                        $("#sttBody").hide();
-                    }
+
                     $('#myModal').modal();
 
                     if (isFirstBuild) {
