@@ -163,7 +163,7 @@ namespace GaiaCore.Gaia
             return q.Count();
         }
 
-        public int GetAllianceBuilding()
+        public virtual int GetAllianceBuilding()
         {
             var hexList = GaiaGame.Map.GetHexList();
             var q =
@@ -254,7 +254,7 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        public int GetSpaceSectorCount()
+        public virtual int GetSpaceSectorCount()
         {
             var hexList = GaiaGame.Map.GetHexList();
             var q =

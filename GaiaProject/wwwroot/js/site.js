@@ -331,6 +331,9 @@ function DrawMap(ctx) {
                         default:
                             console.log(array[i][j].building.name + "不支持");
                     }
+                    if (array[i][j].specialBuilding != null) {
+                        DrawLantidaMine(ctx, j, i);
+                    }
                 }
                 if (array[i][j].satellite !== null) {
                     DrawSatellite(ctx, j, i, array[i][j].satellite);
@@ -493,6 +496,25 @@ function DrawMine(ctx, row, col,name) {
     ctx.closePath();
 
     fillBuilding(ctx, name);
+
+    ctx.restore();
+}
+
+function DrawLantidaMine(ctx, row, col) {
+    var loc = hexCenter(row, col);
+    loc[0] = loc[0]-19;
+    loc[1] = loc[1];
+    ctx.save();
+
+    ctx.beginPath();
+    ctx.moveTo(loc[0], loc[1] - 6);
+    ctx.lineTo(loc[0] + 6, loc[1]);
+    ctx.lineTo(loc[0] + 6, loc[1] + 6);
+    ctx.lineTo(loc[0] - 6, loc[1] + 6);
+    ctx.lineTo(loc[0] - 6, loc[1]);
+    ctx.closePath();
+
+    fillBuilding(ctx, 1);
 
     ctx.restore();
 }
