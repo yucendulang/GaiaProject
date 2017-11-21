@@ -9,6 +9,42 @@ var isFirstAct = true;
 var isFirstAl = true;
 var isFirstBuild = true;
 
+///获取选择的科技板块
+function getKjTile() {
+    var execcode;
+    var kj = $("#updatekj").val();
+    //高级科技
+    if ($("#attList").val() !== "") {
+        var fg = $("#fg_sttList").val();
+        if (fg === "") {
+            alert("请选择覆盖科技");
+            return false;
+        }
+        else if (kj === "") {
+            alert("请选择升级科技");
+            return false;
+        } else {
+            execcode = ("+{0}.-{1}. advance {2}".format($("#attList").val(), fg, kj));
+        }
+    }
+    //基础科技
+    else if ($("#stt6List").val() !== "") {
+        execcode = ("+{0}.".format($("#stt6List").val()));
+
+    }
+    //基础科技-选择科技
+    else {
+        if (kj === "") {
+            alert("请选择升级科技");
+            return false;
+        }
+        else {
+            execcode = ("+{0}. advance {1}".format($("#stt3List").val(), $("#updatekj").val()));
+        }
+    }
+    return execcode;
+}
+
 //创建地图ID，类型，命令，回调
 function createMap(data) {
     //id, type, syntax,func
@@ -82,38 +118,43 @@ function createMap(data) {
                             execcode =("upgrade {0} to {1}.".format(clickObj.position,
                                 upJz));
                         } else {
-                            var kj = $("#updatekj").val();
-                            //高级科技
-                            if ($("#attList").val() !== "") {
-                                var fg = $("#fg_sttList").val();
-                                if (fg === "") {
-                                    alert("请选择覆盖科技");
-                                    return;
-                                }
-                                else if (kj === "") {
-                                    alert("请选择升级科技");
-                                    return;
-                                } else {
-                                    execcode = ("upgrade {0} to {1}.+{2}.-{3}. advance {4}".format(clickObj.position, upJz, $("#attList").val(), fg, kj));
-                                }
+                            var code = getKjTile();
+                            if (!code) {
+                                return;
                             }
-                            //基础科技
-                            else if ($("#stt6List").val() !== "") {
-                                execcode = ("upgrade {0} to {1}.+{2}.".format(clickObj.position,
-                                    upJz, $("#stt6List").val()));
-
-                            }
-                            //基础科技-选择科技
-                            else {
-                                if (kj === "") {
-                                    alert("请选择升级科技");
-                                    return;
-                                }
-                                else
-                                {
-                                    execcode = ("upgrade {0} to {1}.+{2}. advance {3}".format(clickObj.position, upJz, $("#stt3List").val(), $("#updatekj").val()));
-                                }
-                            }
+                            execcode = "upgrade {0} to {1}.".format(clickObj.position, upJz) + code;
+//                            var kj = $("#updatekj").val();
+//                            //高级科技
+//                            if ($("#attList").val() !== "") {
+//                                var fg = $("#fg_sttList").val();
+//                                if (fg === "") {
+//                                    alert("请选择覆盖科技");
+//                                    return;
+//                                }
+//                                else if (kj === "") {
+//                                    alert("请选择升级科技");
+//                                    return;
+//                                } else {
+//                                    execcode = ("upgrade {0} to {1}.+{2}.-{3}. advance {4}".format(clickObj.position, upJz, $("#attList").val(), fg, kj));
+//                                }
+//                            }
+//                            //基础科技
+//                            else if ($("#stt6List").val() !== "") {
+//                                execcode = ("upgrade {0} to {1}.+{2}.".format(clickObj.position,
+//                                    upJz, $("#stt6List").val()));
+//
+//                            }
+//                            //基础科技-选择科技
+//                            else {
+//                                if (kj === "") {
+//                                    alert("请选择升级科技");
+//                                    return;
+//                                }
+//                                else
+//                                {
+//                                    execcode = ("upgrade {0} to {1}.+{2}. advance {3}".format(clickObj.position, upJz, $("#stt3List").val(), $("#updatekj").val()));
+//                                }
+//                            }
                         }
                         $('#myModal').modal('hide');
                         openQueryWindow(execcode);

@@ -209,23 +209,51 @@ else
                 
                 @if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Itar)
                 {
+                    @Html.Partial("Partial_SelectTT",Model)
                     <script type="text/javascript">
-                        $(function() {
-                            $('#myModal').modal();
+                        $(function () {
+
+                            $(".updatettlist").change(function() {
+                                $(".updatettlist").not($(this)).val("");
+                            });
+
+                            $('#myModalLabel').text("请选择科技板块");
+                            $('#updateBuildList').hide();
+                            $("#updateQuery").click(function() {
+                                var code = getKjTile();
+                                if (!code) {
+                                    return;
+                                }
+                                $("#syntax").val(code);
+                                $('#myModal').modal("hide");
+                            });
                         })
                     </script>
-                }
-                <button onclick="$('#myModal').modal();">选择科技版</button>
+                    <div class="btn-group" role="group" aria-label="...">
+                        <button class="btn btn-default" onclick="$('#myModal').modal();">选择科技版</button>
 
-                <button onclick="$('#syntax').val('pass');submitData();">pass</button>
-@*                <div class="col-lg-6">*@
-@**@
-@**@
-@*                </div>*@
-@*                <div class="col-lg-6">*@
-@*                    *@
-@**@
-@*                </div>*@
+                        <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
+                    </div>
+                }
+                else if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Terraner)
+                {
+                    
+                    <div>
+                            <span>PG:@Model.FactionList[Model.GameStatus.PlayerIndex].PowerTokenGaia</span>
+                            @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTerraner, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert " })
+
+     
+
+                        <button class="btn btn-default" onclick="submitData();">确认</button>
+
+                        <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
+                    </div>
+
+                }
+
+
+
+
             </div>
         }
 
