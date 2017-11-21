@@ -340,7 +340,7 @@
 
 
     <div help="回合/特权/科技版">
-        @foreach (var it in item.GameTileList.OrderBy(a => a.IsUsed).ThenBy(a => a.showRank))
+        @foreach (var it in item.GameTileList.OrderBy(a => a.showRank))
         {
             <div class="col-md-2">
                 @if (it.typename == "rbt")
