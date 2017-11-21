@@ -249,12 +249,13 @@ function createMap(data) {
                     value = data.func(posList);
                 }
                 else {
-                    if (data.type === "al1") {
-                        value = "satellite " + posList;
-                    }
-                    else if (data.type === "al2") {
-                        value = "alliance " + posList;
-                    }
+                    //if (data.type === "al1") {
+                    //    value = "satellite " + posList;
+                    //}
+                    //else if (data.type === "al2") {
+                    //    value = "alliance " + posList;
+                    //}
+                    value = "alliance " + posList;
                 }
                 //联邦
                 if ($("#alSelectList").val() !== "") {
@@ -270,22 +271,27 @@ function createMap(data) {
                 }
             });
 
-            c.addEventListener('click', function (e) {
-                //console.log(list);
+            function clickPos(e) {
                 var xy = getEventPosition(e);
                 var clickObj = getClickObj(xy.x, xy.y);
-                if (data.type === "al1" && clickObj.typename !== undefined) {
-                    alert("不能选择已经有建筑的地点");
+                //if (data.type === "al1" && clickObj.typename !== undefined) {
+                //    alert("不能选择已经有建筑的地点");
+                //}
+                //else if (data.type === "al2" && clickObj.typename === undefined) {
+                //    alert("不能选择空白的地点");
+                //}
+                if (1 === 2) {
+                    
                 }
-                if (data.type === "al2" && clickObj.typename === undefined) {
-                    alert("不能选择空白的地点");
-                } else {
+                else {
                     //添加位置
-                    $("#alPosList").append('<button type="button" class="btn btn-default" onclick="$(this).remove();">'+clickObj.position+'</button>');
+                    $("#alPosList").append('<button type="button" class="btn btn-default" onclick="$(this).remove();">' + clickObj.position + '</button>');
                 }
-
-            }, false);
+            }
+            c.removeEventListener('click', clickPos);
+            c.addEventListener('click', clickPos, false);
         }
+
 
     }
 

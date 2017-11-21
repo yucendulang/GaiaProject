@@ -103,20 +103,22 @@ if (userInfo.isRound) {
         //alert($(this).find("a").css("color"));
     });
 
-    //卫星建立联邦
-    $("#createAl").click(function () {
-        $("#allistdiv").show();
-
-        $("#myModalCanves").modal();
-        createMap({ id: "myCanvasSelect", type:"al1"});
-    });
-    //直接建立联邦
+    //选择建筑位置
     $("#createZjAl").click(function () {
         $("#allistdiv").show();
 
         $("#myModalCanves").modal();
-        createMap({ id: "myCanvasSelect", type: "al2" });
+        createMap({ id: "myCanvasSelect", type: "al2",action:"建筑" });
     });
+
+    //选择卫星位置
+    //$("#createAl").click(function () {
+    //    $("#allistdiv").show();
+
+    //    $("#myModalCanves").modal();
+    //    createMap({ id: "myCanvasSelect", type: "al1", action: "卫星"});
+    //});
+
     //点击回合组推板
     $("#rbt_s_list div").click(function () {
         openQueryWindow(this.id, "确认PASS?");

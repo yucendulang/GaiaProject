@@ -24,6 +24,7 @@ namespace GaiaCore.Gaia.Data
             new PwInfo(){code = "1k to 1c",name = "1点知识兑换1点信用点"},
             new PwInfo(){code = "1q to 1c",name = "1个量子方块兑换1点信用点"},
             new PwInfo(){code = "1q to 1pwt",name = "1个量子方块兑换1个能量指示物"},
+            new PwInfo(){code = "1q to 1o",name = "1个量子方块兑换1个矿石"},
 
         };
 
