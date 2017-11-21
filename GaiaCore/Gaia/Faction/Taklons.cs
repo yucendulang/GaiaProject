@@ -62,11 +62,11 @@ namespace GaiaCore.Gaia
 
         public override int PowerIncrease(int i)
         {
-            if (m_powerToken1 > i)
+            if (m_powerToken1 >= i)
             {
                 BigStone = 2;
             }
-            else if (m_powerToken1 * 2 + m_powerToken2 > i)
+            else if (m_powerToken1 * 2 + m_powerToken2 >= i)
             {
                 BigStone = 3;
             }
