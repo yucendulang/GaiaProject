@@ -19,7 +19,7 @@ namespace GaiaCore.Gaia
             //判断是否是Gaia改变过的绿色星球
             bool isGaiaPlanet = false;
             int transNumNeed = 0;
-            if(map.HexArray[row, col] == null)
+            if (map.HexArray[row, col] == null)
             {
                 log = "出界了兄弟";
                 return false;
@@ -71,7 +71,7 @@ namespace GaiaCore.Gaia
                 log = "已经没有可用的矿场了";
                 return false;
             }
-            if (!( Credit >= m_MineCreditCost && Ore >= m_MineOreCost + Math.Max((transNumNeed - TerraFormNumber), 0) * GetTransformCost))
+            if (!(Credit >= m_MineCreditCost && Ore >= m_MineOreCost + Math.Max((transNumNeed - TerraFormNumber), 0) * GetTransformCost))
             {
                 log = "资源不够";
                 return false;
@@ -89,7 +89,7 @@ namespace GaiaCore.Gaia
                 log = string.Format("建筑距离太偏远了,需要{0}个Q来加速", (distanceNeed - GetShipDistance + 1) / 2);
                 return false;
             }
-            QSHIP=Math.Max((distanceNeed - GetShipDistance + 1) / 2, 0);
+            QSHIP = Math.Max((distanceNeed - GetShipDistance + 1) / 2, 0);
             //扣资源建建筑
             Action queue = () =>
             {
@@ -120,7 +120,8 @@ namespace GaiaCore.Gaia
                     TriggerRST(typeof(RST7));
                 }
                 var surroundhex = map.GetSurroundhexWithBuild(row, col, FactionName);
-                if (surroundhex.Exists(x => map.HexArray[x.Item1, x.Item2].IsAlliance))
+                if (surroundhex.Exists(x => (map.HexArray[x.Item1, x.Item2].IsAlliance && map.HexArray[x.Item1, x.Item2].FactionBelongTo == FactionName)
+                || (this is Lantida && map.HexArray[x.Item1, x.Item2].SpecialBuilding != null && map.HexArray[x.Item1, x.Item2].IsSpecialBuildingAlliance == true)))
                 {
                     map.HexArray[row, col].IsAlliance = true;
                 }
