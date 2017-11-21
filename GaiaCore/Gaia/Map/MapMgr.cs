@@ -475,7 +475,8 @@ namespace GaiaCore.Gaia
                 {
                     if (HexArray[i, j] != null && CalTwoHexDistance(x, y, i, j) <= distance)
                     {
-                        if (HexArray[i, j].FactionBelongTo == name && !(HexArray[i, j].Building is GaiaBuilding))
+                        if ((HexArray[i, j].FactionBelongTo == name && !(HexArray[i, j].Building is GaiaBuilding)) ||
+                            (HexArray[i, j].SpaceSectorName != null && name == FactionName.Lantida))
                         {
                             return true;
                         }
@@ -509,6 +510,10 @@ namespace GaiaCore.Gaia
                             {
                                 res = Math.Max(res, HexArray[i, j].Building.MagicLevel);
                             }
+                        }
+                        else if (HexArray[i, j] != null && (faction is Lantida) && HexArray[i, j].SpecialBuilding != null)
+                        {
+                            res = Math.Max(res, 1);
                         }
                     }
 

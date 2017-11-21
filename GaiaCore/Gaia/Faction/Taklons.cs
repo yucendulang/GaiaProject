@@ -12,6 +12,7 @@ namespace GaiaCore.Gaia
             this.ChineseName = "利爪族";
             this.ColorCode = colorList[4];
             this.ColorMap = colorMapList[4];
+            PowerToken1 += 1;
             BigStone = 1;
         }
         /// <summary>

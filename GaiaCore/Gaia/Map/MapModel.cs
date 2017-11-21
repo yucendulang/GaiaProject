@@ -63,6 +63,8 @@ namespace GaiaCore.Gaia
         [JsonProperty]
         public Building Building { set; get; }
         [JsonProperty]
+        public Building SpecialBuilding { get; set; }
+        [JsonProperty]
         public List<FactionName> Satellite {
             get
             {
@@ -76,8 +78,13 @@ namespace GaiaCore.Gaia
                 }
             }
         }
+
+
+
         [JsonProperty]
         public bool IsAlliance = false;
+        [JsonProperty]
+        public bool IsSpecialBuildingAlliance = false;
 
         public void AddSatellite(FactionName factionName)
         {
