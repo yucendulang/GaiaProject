@@ -110,6 +110,14 @@ namespace GaiaCore.Gaia
                     TechTracAdv++;
                     IsMadAndroidAbilityUsed = true;
                 }
+                else
+                {
+                    if (Knowledge < 4)
+                    {
+                        log = "科技不足四点且无法触发能力";
+                        return false;
+                    }
+                }
             }
             return base.IsIncreaseTechLevelByIndexValidate(index, out log, isIncreaseAllianceTileCost);
         }
