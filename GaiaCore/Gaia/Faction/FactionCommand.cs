@@ -290,7 +290,7 @@ namespace GaiaCore.Gaia
         {
             return;
         }
-        private void RemovePowerToken(int n)
+        protected virtual void RemovePowerToken(int n)
         {
             if (PowerToken1 + PowerToken2 + PowerToken3 <n)
             {

@@ -13,14 +13,52 @@ namespace GaiaCore.Gaia
             this.ColorCode = colorList[4];
             this.ColorMap = colorMapList[4];
             PowerToken1 += 1;
-            BigStone = 1;
         }
+        private int m_BigStone=1;
         /// <summary>
         /// 所谓的智慧之石 1表示在1区 2表示在2区 3表示3区
         /// </summary>
-        public int BigStone { set; get; }
+        public int BigStone
+        {
+            set
+            {
+                if (BigStone != 0)
+                {
+                    m_BigStone = value;
+                }
+            }
+            get => m_BigStone;
+        }
         public override Terrain OGTerrain { get => Terrain.Brown; }
         public int BigStoneBackup { get; private set; }
+
+        protected override void RemovePowerToken(int n)
+        {
+            base.RemovePowerToken(n);
+            if (PowerToken1 == 0 && PowerToken2 == 0 && PowerToken3 == 0)
+            {
+                BigStone = 0;
+                return;
+            }
+            if (BigStone == 1 && PowerToken1 == 0)
+            {
+                PowerToken1++;
+                if (PowerToken2 != 0)
+                {
+                    PowerToken2--;
+                }
+                else if (PowerToken3 != 0)
+                {
+                    PowerToken3--;
+                }
+                return;
+            }
+            else if (BigStone == 2 && PowerToken2 == 0)
+            {
+                PowerToken2++;
+                PowerToken3--;
+            }
+        }
 
         public override int PowerIncrease(int i)
         {
