@@ -78,9 +78,8 @@ namespace GaiaCore.Gaia
                 }
             }
         }
-
-
-
+        [JsonProperty]
+        public bool IsSpecialSatelliteForHive = false;
         [JsonProperty]
         public bool IsAlliance = false;
         [JsonProperty]

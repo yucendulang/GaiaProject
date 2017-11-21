@@ -342,7 +342,7 @@ function DrawMap(ctx) {
                     }
                 }
                 if (array[i][j].satellite !== null) {
-                    DrawSatellite(ctx, j, i, array[i][j].satellite);
+                    DrawSatellite(ctx, j, i, array[i][j].satellite, array[i][j].isSpecialSatelliteForHive);
                 }
 
             }
@@ -574,61 +574,47 @@ function DrawGaiaBuilding(ctx, row, col, name) {
     ctx.restore();
 }
 
-function DrawSatellite(ctx, row, col, satellite) {
+function DrawSatellite(ctx, row, col, satellite,isSP) {
     switch (satellite.length) {
         case 1:
             var loc = hexCenter(row, col);
-            loc[1] -= 9;
-            loc[0] -= 4;
-            ctx.save();
-            fillBuilding(ctx, satellite[0]);
-            ctx.beginPath();
-            ctx.fillRect(loc[0], loc[1], 8, 8);
-            ctx.strokeRect(loc[0], loc[1], 8, 8);
-            ctx.restore();
+            DrawSquare(ctx, loc[0] - 4, loc[1] - 9, satellite[0], isSP);
             break;
         case 2:
             loc = hexCenter(row, col);
-            loc[1] -= 20;
-            loc[0] -= 4;
-            ctx.save();
-            fillBuilding(ctx, satellite[0]);
-            ctx.beginPath();
-            ctx.fillRect(loc[0], loc[1], 8, 8);
-            ctx.strokeRect(loc[0], loc[1], 8, 8);
-            ctx.restore();
-            loc[1] += 15;
-            ctx.save();
-            fillBuilding(ctx, satellite[1]);
-            ctx.beginPath();
-            ctx.fillRect(loc[0], loc[1], 8, 8);
-            ctx.strokeRect(loc[0], loc[1], 8, 8);
-            ctx.restore();
+            DrawSquare(ctx, loc[0] - 4, loc[1] - 20, satellite[0], isSP);
+            DrawSquare(ctx, loc[0] - 4, loc[1] - 5, satellite[0], isSP);
             break;
         case 3:
             loc = hexCenter(row, col);
-            DrawSquare(ctx, loc[0] - 4, loc[1] - 18, satellite[0]);
-            DrawSquare(ctx, loc[0] + 5, loc[1], satellite[1]);
-            DrawSquare(ctx, loc[0] - 10, loc[1], satellite[2]);
+            DrawSquare(ctx, loc[0] - 4, loc[1] - 18, satellite[0], isSP);
+            DrawSquare(ctx, loc[0] + 5, loc[1], satellite[1], isSP);
+            DrawSquare(ctx, loc[0] - 10, loc[1], satellite[2], isSP);
             break;
         case 4:
             loc = hexCenter(row, col);
-            DrawSquare(ctx, loc[0] - 10, loc[1] - 16, satellite[0]);
-            DrawSquare(ctx, loc[0] + 5, loc[1] - 16, satellite[1]);
-            DrawSquare(ctx, loc[0] + 5, loc[1], satellite[2]);
-            DrawSquare(ctx, loc[0] - 10, loc[1], satellite[3]);
+            DrawSquare(ctx, loc[0] - 10, loc[1] - 16, satellite[0], isSP);
+            DrawSquare(ctx, loc[0] + 5, loc[1] - 16, satellite[1], isSP);
+            DrawSquare(ctx, loc[0] + 5, loc[1], satellite[2], isSP);
+            DrawSquare(ctx, loc[0] - 10, loc[1], satellite[3], isSP);
             break;
         default:
             break;
     }
 }
 
-function DrawSquare(ctx, row, col, satellite) {
+function DrawSquare(ctx, row, col, satellite,isSP) {
     ctx.save();
-    fillBuilding(ctx, satellite);
     ctx.beginPath();
-    ctx.fillRect(row, col, 8, 8);
-    ctx.strokeRect(row, col, 8, 8);
+    if (satellite == 8 && isSP == true) {
+        ctx.arc(row+4, col, 5, 0, 2 * Math.PI);
+        fillBuilding(ctx, satellite);
+    } else {
+        fillBuilding(ctx, satellite);
+        ctx.fillRect(row, col, 8, 8);
+        ctx.strokeRect(row, col, 8, 8);
+    }
+
     ctx.restore();
 }
 

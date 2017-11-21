@@ -120,7 +120,8 @@ namespace GaiaCore.Gaia
             "act2",
             "act6",
             "amb",
-            "fir"
+            "fir",
+            "hiv",
         };
         public static Regex actionRegex = new Regex(string.Format("{0} ({1})", GameSyntax.action, string.Join("|", turnActionList)));
         /// <summary>

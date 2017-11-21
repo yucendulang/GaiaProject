@@ -901,7 +901,14 @@ namespace GaiaCore.Gaia
                         GaiaGame.Map.HexArray[x.Item1, x.Item2].IsAlliance = true;
                     }
                 });
-                RemovePowerToken(list.Sum(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].TFTerrain == Terrain.Empty ? 1 : 0));
+                if(this is Hive)
+                {
+                    QICs -= list.Sum(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].TFTerrain == Terrain.Empty ? 1 : 0);
+                }
+                else
+                {
+                    RemovePowerToken(list.Sum(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].TFTerrain == Terrain.Empty ? 1 : 0));
+                }
                 TriggerRST(typeof(RST5));
             };
 

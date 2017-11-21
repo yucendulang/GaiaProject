@@ -342,6 +342,22 @@ namespace GaiaCore.Gaia
             }
             return list;
         }
+
+        public List<Tuple<int, int>> GetHexListForBuildingAndSatellite(FactionName name)
+        {
+            var list = new List<Tuple<int, int>>();
+            for (int i = 0; i < m_mapHeight; i++)
+            {
+                for (int j = 0; j < m_mapWidth; j++)
+                {
+                    if (HexArray[i, j] != null && (HexArray[i, j].FactionBelongTo == name || (HexArray[i, j].Satellite?.Contains(name)).GetValueOrDefault()))
+                    {
+                        list.Add(new Tuple<int, int>(i, j));
+                    }
+                }
+            }
+            return list;
+        }
         public void AddSpaceSector(int x, int y, SpaceSector ss, Random random)
         {
 
@@ -476,7 +492,8 @@ namespace GaiaCore.Gaia
                     if (HexArray[i, j] != null && CalTwoHexDistance(x, y, i, j) <= distance)
                     {
                         if ((HexArray[i, j].FactionBelongTo == name && !(HexArray[i, j].Building is GaiaBuilding)) ||
-                            (HexArray[i, j].SpaceSectorName != null && name == FactionName.Lantida))
+                            (HexArray[i, j].SpecialBuilding != null && name == FactionName.Lantida) ||
+                            (HexArray[i, j].IsSpecialSatelliteForHive == true && name == FactionName.Hive))
                         {
                             return true;
                         }
