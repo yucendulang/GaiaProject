@@ -399,10 +399,13 @@ namespace GaiaCore.Gaia
                     faction.LeechPower(power, factionFrom, isLeech);
                     faction.PowerToken1++;
                 }
+                return true;
             }
-            faction.LeechPower(power, factionFrom, isLeech);
-
-            return true;
+            else
+            {
+                faction.LeechPower(power, factionFrom, isLeech);
+                return true;
+            }
         }
 
         private bool ProcessSyntaxCommand(string syntax, ref string log)

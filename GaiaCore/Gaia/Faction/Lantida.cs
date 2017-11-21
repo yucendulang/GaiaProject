@@ -8,7 +8,7 @@ namespace GaiaCore.Gaia
 {
     public class Lantida : Faction
     {
-        public Lantida(GaiaGame gg) :base(FactionName.Lantida, gg)
+        public Lantida(GaiaGame gg) : base(FactionName.Lantida, gg)
         {
             this.ChineseName = "亚特兰斯星人";
             this.ColorCode = colorList[0]; this.ColorMap = colorMapList[0];
@@ -24,7 +24,7 @@ namespace GaiaCore.Gaia
 
         public override bool BuildMine(Map map, int row, int col, out string log)
         {
-            if(map.HexArray[row, col].Building!=null&& map.HexArray[row, col].FactionBelongTo!=FactionName&&!(map.HexArray[row,col].Building is GaiaBuilding))
+            if (map.HexArray[row, col].Building != null && map.HexArray[row, col].FactionBelongTo != FactionName && !(map.HexArray[row, col].Building is GaiaBuilding))
             {
                 ///进入Lantida技能阶段
                 log = string.Empty;
@@ -65,6 +65,10 @@ namespace GaiaCore.Gaia
                     TriggerRST(typeof(RST1));
                     TriggerRST(typeof(ATT4));
                     QICs -= QSHIP;
+                    if (StrongHold == null)
+                    {
+                        Knowledge += 2;
+                    }
                 };
                 ActionQueue.Enqueue(queue);
                 TempShip = 0;
@@ -93,6 +97,60 @@ namespace GaiaCore.Gaia
                 (h.SpecialBuilding != null && h.IsSpecialBuildingAlliance == true)
                 select h;
             return q.Count();
+        }
+
+        public override bool ForgingAllianceCheck(List<Tuple<int, int>> list, out string log)
+        {
+            Queue<FactionName?> queue = new Queue<FactionName?>();
+            log = string.Empty;
+            var hexList = GaiaGame.Map.GetHexList();
+            SwapAllSpecialBuilding(hexList, queue);
+            bool ret = false;
+            try
+            {
+                ret = base.ForgingAllianceCheck(list, out log);
+            }
+            catch
+            {
+
+            }
+            SwapAllSpecialBuilding(hexList, queue);
+            return ret;
+        }
+
+        public override void ForgingAllianceGetTiles(List<Tuple<int, int>> list)
+        {
+            Queue<FactionName?> queue = new Queue<FactionName?>();
+            var hexList = GaiaGame.Map.GetHexList();
+            SwapAllSpecialBuilding(hexList, queue);
+            base.ForgingAllianceGetTiles(list);
+            SwapAllSpecialBuilding(hexList, queue);
+        }
+
+        private void SwapAllSpecialBuilding(IList<TerrenHex> hexList, Queue<FactionName?> queue)
+        {
+            bool IsEnqueue = queue.Count == 0;
+            foreach (var item in hexList)
+            {
+                if (item.SpecialBuilding != null)
+                {
+                    var temp = item.SpecialBuilding;
+                    var tempBool = item.IsSpecialBuildingAlliance;
+                    if (IsEnqueue)
+                    {
+                        queue.Enqueue(item.FactionBelongTo);
+                        item.FactionBelongTo = FactionName;
+                    }
+                    else
+                    {
+                        item.FactionBelongTo = queue.Dequeue();
+                    }
+                    item.SpecialBuilding = item.Building;
+                    item.IsSpecialBuildingAlliance = item.IsAlliance;
+                    item.Building = temp;
+                    item.IsAlliance = tempBool;
+                }
+            }
         }
     }
 }

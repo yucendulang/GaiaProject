@@ -886,7 +886,7 @@ namespace GaiaCore.Gaia
             return ret;
         }
 
-        public void ForgingAllianceGetTiles(List<Tuple<int, int>> list)
+        public virtual void ForgingAllianceGetTiles(List<Tuple<int, int>> list)
         {
             Action action = () =>
             {
@@ -958,7 +958,7 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        public bool ForgingAllianceCheck(List<Tuple<int, int>> list, out string log)
+        public virtual bool ForgingAllianceCheck(List<Tuple<int, int>> list, out string log)
         {
             log = string.Empty;
             var map = GaiaGame.Map;
