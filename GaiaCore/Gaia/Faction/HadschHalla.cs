@@ -42,9 +42,9 @@ namespace GaiaCore.Gaia
                             log = "兑换比例为4：1";
                             return false;
                         }
-                        if (PowerToken3 < rFNum)
+                        if (Credit < rFNum)
                         {
-                            log = "魔力值不够";
+                            log = "钱不够";
                         }
                         TempCredit -= rFNum;
                         TempQICs += rTNum;
@@ -63,9 +63,9 @@ namespace GaiaCore.Gaia
                             log = "兑换比例为3：1";
                             return false;
                         }
-                        if (PowerToken3 < rFNum)
+                        if (Credit < rFNum)
                         {
-                            log = "魔力值不够";
+                            log = "钱不够";
                         }
                         TempCredit -= rFNum;
                         TempOre += rTNum;
@@ -84,9 +84,9 @@ namespace GaiaCore.Gaia
                             log = "兑换比例为4：1";
                             return false;
                         }
-                        if (PowerToken3 < rFNum)
+                        if (Credit < rFNum)
                         {
-                            log = "魔力值不够";
+                            log = "钱不够";
                         }
                         TempCredit -= rFNum;
                         TempKnowledge += rTNum;
@@ -105,9 +105,9 @@ namespace GaiaCore.Gaia
                             log = "兑换比例为3：1";
                             return false;
                         }
-                        if (PowerToken3 < rFNum)
+                        if (Credit < rFNum)
                         {
-                            log = "魔力值不够";
+                            log = "钱不够";
                         }
                         TempCredit -= rFNum;
                         TempPowerToken1 += rTNum;
