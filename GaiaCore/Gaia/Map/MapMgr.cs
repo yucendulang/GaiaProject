@@ -561,7 +561,8 @@ namespace GaiaCore.Gaia
                     {
                         //System.Diagnostics.Debug.WriteLine("row:" + i + " col:" + j);
 
-                        if (HexArray[i, j] != null && HexArray[i, j].FactionBelongTo == name && !(HexArray[i, j].Building is GaiaBuilding))
+                        if ((HexArray[i, j] != null && HexArray[i, j].FactionBelongTo == name && !(HexArray[i, j].Building is GaiaBuilding)) ||
+                            (name == FactionName.Lantida && HexArray[i, j] != null && HexArray[i, j].SpecialBuilding != null))
                         {
                             ret.Add(new Tuple<int, int>(i, j));
                         }
