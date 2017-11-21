@@ -174,11 +174,17 @@ namespace GaiaProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult LeechPower(string name, FactionName factionName, int power, FactionName leechFactionName, bool isLeech)
+        public IActionResult LeechPower(string name, FactionName factionName, int power, FactionName leechFactionName, bool isLeech,bool? isPwFirst)
         {
             var faction = GameMgr.GetGameByName(name).FactionList.Find(x => x.FactionName.ToString().Equals(name));
             var leech = isLeech ? "leech" : "decline";
+
             var syntax = string.Format("{0}:{1} {2} from {3}", factionName, leech, power, leechFactionName);
+            if (isPwFirst.HasValue)
+            {
+                var pwFirst = isPwFirst.GetValueOrDefault() ? "pw" : "pwt";
+                syntax = syntax + " " + pwFirst;
+            }
             GameMgr.GetGameByName(name).Syntax(syntax, out string log);
             return Redirect("/home/viewgame/" + name);
         }
