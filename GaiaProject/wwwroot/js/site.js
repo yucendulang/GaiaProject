@@ -583,7 +583,7 @@ function DrawSatellite(ctx, row, col, satellite,isSP) {
         case 2:
             loc = hexCenter(row, col);
             DrawSquare(ctx, loc[0] - 4, loc[1] - 20, satellite[0], isSP);
-            DrawSquare(ctx, loc[0] - 4, loc[1] - 5, satellite[0], isSP);
+            DrawSquare(ctx, loc[0] - 4, loc[1] - 5, satellite[1], isSP);
             break;
         case 3:
             loc = hexCenter(row, col);
@@ -607,7 +607,7 @@ function DrawSquare(ctx, row, col, satellite,isSP) {
     ctx.save();
     ctx.beginPath();
     if (satellite == 8 && isSP == true) {
-        ctx.arc(row+4, col, 5, 0, 2 * Math.PI);
+        ctx.arc(row+4, col+4, 5, 0, 2 * Math.PI);
         fillBuilding(ctx, satellite);
     } else {
         fillBuilding(ctx, satellite);
