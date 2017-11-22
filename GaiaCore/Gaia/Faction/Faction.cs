@@ -441,9 +441,6 @@ namespace GaiaCore.Gaia
                 case 4:
                     ret += 2;
                     break;
-                case 5:
-                    ret += 3;
-                    break;
                 default:
                     break;
             }
@@ -482,9 +479,6 @@ namespace GaiaCore.Gaia
                     break;
                 case 4:
                     ret += 4;
-                    break;
-                case 5:
-                    ret += 6;
                     break;
                 default:
                     break;
@@ -564,9 +558,6 @@ namespace GaiaCore.Gaia
                     break;
                 case 4:
                     ret.Add(4);
-                    break;
-                case 5:
-                    ret.Add(6);
                     break;
                 default:
                     break;
