@@ -145,16 +145,28 @@ if (userInfo.isRound) {
         //大使星人
         if (id === "AmbFalse") {
             $("#myModalCanves").modal();
-            createMap({ id: "myCanvasSelect", type: "pos", syntax:"action amb.swap {0}" });
+            createMap({ id: "myCanvasSelect", type: "pos", syntax: "action amb.swap {0}" });
         }
         //章鱼人
         else if (id === "FirFalse") {
             $("#myModalCanves").modal();
             createMap({
-                id: "myCanvasSelect", type: "pos", showid:"#mapkjlist", func: function(pos) {
-                var value = "action fir.downgrade {0}.advance {1}";
-                return value.format(pos, $("#mapkjlist").val());
-            } });
+                id: "myCanvasSelect", type: "pos", showid: "#mapkjlist", func: function (pos) {
+                    var value = "action fir.downgrade {0}.advance {1}";
+                    return value.format(pos, $("#mapkjlist").val());
+                }
+            });
+        }
+            //蜂人
+        else if (id === "HivFalse") {
+            selectMapPos("hiv");
+//            $("#myModalCanves").modal();
+//            createMap({
+//                id: "myCanvasSelect", type: "pos", showid: "#mapkjlist", func: function (pos) {
+//                    var value = "action fir.downgrade {0}.advance {1}";
+//                    return value.format(pos, $("#mapkjlist").val());
+//                }
+//            });
         }
 
     });
