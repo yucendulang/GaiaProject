@@ -343,14 +343,15 @@ namespace GaiaCore.Gaia
             return list;
         }
 
-        public List<Tuple<int, int>> GetHexListForBuildingAndSatellite(FactionName name)
+        public List<Tuple<int, int>> GetHexListForBuildingAndSatellite(FactionName name, List<Tuple<int, int>> satelist = null)
         {
             var list = new List<Tuple<int, int>>();
             for (int i = 0; i < m_mapHeight; i++)
             {
                 for (int j = 0; j < m_mapWidth; j++)
                 {
-                    if (HexArray[i, j] != null && (HexArray[i, j].FactionBelongTo == name || (HexArray[i, j].Satellite?.Contains(name)).GetValueOrDefault()))
+                    if ((HexArray[i, j] != null && (HexArray[i, j].FactionBelongTo == name || (HexArray[i, j].Satellite?.Contains(name)).GetValueOrDefault()))
+                    || (satelist?.Exists(x => x.Item1 == i && x.Item2 == j)).GetValueOrDefault())
                     {
                         list.Add(new Tuple<int, int>(i, j));
                     }

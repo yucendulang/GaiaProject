@@ -87,11 +87,11 @@ namespace GaiaCore.Gaia
             int oldAllianceCount;
             var allianceListClone = new List<Tuple<int, int>>(AllianceList);
 
-            allianceListClone.AddRange(list);
+            //allianceListClone.AddRange(list);
             do
             {
                 oldAllianceCount = allianceListClone.Count;
-                var hexlist = map.GetHexListForBuildingAndSatellite(FactionName);
+                var hexlist = map.GetHexListForBuildingAndSatellite(FactionName,list);
                 var newNeighboor = hexlist.Where(x => !allianceListClone.Contains(x)).ToList().FindAll(x => allianceListClone.Exists(y => map.CalTwoHexDistance(x.Item1, x.Item2, y.Item1, y.Item2) == 1));
                 allianceListClone.AddRange(newNeighboor);
             }
