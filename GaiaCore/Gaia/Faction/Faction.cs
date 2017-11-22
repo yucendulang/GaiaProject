@@ -352,7 +352,12 @@ namespace GaiaCore.Gaia
                 m_powerToken3 = m_powerToken3,
                 m_powerTokenGaia = m_powerTokenGaia,
                 m_QICs = m_QICs
+
             };
+            if (this is Taklons)
+            {
+                backup.m_bigstone = (this as Taklons).BigStone;
+            }
         }
 
         private void RestoreResource()
@@ -367,6 +372,10 @@ namespace GaiaCore.Gaia
                 m_powerToken3 = backup.m_powerToken3;
                 m_powerTokenGaia = backup.m_powerTokenGaia;
                 m_QICs = backup.m_QICs;
+                if (this is Taklons)
+                {
+                    (this as Taklons).BigStone = backup.m_bigstone.GetValueOrDefault();
+                }
             };
         }
 

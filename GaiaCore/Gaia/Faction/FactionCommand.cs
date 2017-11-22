@@ -347,7 +347,7 @@ namespace GaiaCore.Gaia
             CalPowerIncome(pl);
             CalPowerTokenIncome(ptl);
             var pls = new List<Tuple<bool, int>>(); //true为加魔力 false为加pwt
-            pl.Where(x=>x!=0).ToList().ForEach(x => pls.Add(new Tuple<bool, int>(true,x)));
+            pl.Where(x => x != 0).ToList().ForEach(x => pls.Add(new Tuple<bool, int>(true, x)));
             ptl.Where(x => x != 0).ToList().ForEach(x => pls.Add(new Tuple<bool, int>(false, x)));
             for (int i = 0; i < pls.Count; i++)
             {
@@ -376,14 +376,18 @@ namespace GaiaCore.Gaia
                     RestoreResource();
                 }
             }
-            
             if (PowerPreview.Count == 1)
             {
-                PowerToken1 = PowerPreview.FirstOrDefault().Item1;
-                PowerToken2 = PowerPreview.FirstOrDefault().Item2;
-                PowerToken3 = PowerPreview.FirstOrDefault().Item3;
-                PowerPreview.Clear();
+                SetPowerPreview(0);
             }
+        }
+
+        public virtual void SetPowerPreview(int i)
+        {
+            PowerToken1 = PowerPreview[i].Item1;
+            PowerToken2 = PowerPreview[i].Item2;
+            PowerToken3 = PowerPreview[i].Item3;
+            PowerPreview.Clear();
         }
 
         public virtual void ResetNewRound()

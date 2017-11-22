@@ -172,18 +172,16 @@ namespace GaiaCore.Gaia
             var p1 = match.Groups[1].Value.ParseToInt(0);
             var p2 = match.Groups[2].Value.ParseToInt(0);
             var p3 = match.Groups[3].Value.ParseToInt(0);
-            if (faction.PowerPreview.Exists(x => x.Item1 == p1 && x.Item2 == p2 && x.Item3 == p3))
+            var pr = faction.PowerPreview.FindIndex(x => x.Item1 == p1 && x.Item2 == p2 && x.Item3 == p3);
+            if (pr!=-1)
             {
-                faction.PowerToken1 = p1;
-                faction.PowerToken2 = p2;
-                faction.PowerToken3 = p3;
+                faction.SetPowerPreview(pr);
             }
             else
             {
                 log = "不能变为此种魔力分配";
                 return false;
             }
-            faction.PowerPreview.Clear();
             return true;
         }
 
