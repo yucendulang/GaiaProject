@@ -321,9 +321,17 @@ namespace GaiaCore.Gaia.Tiles
                 {
                     (item.Building as Academy).MagicLevelIncrease += v;
                 }
-                if (item.Building is StrongHold)
+                else if (item.Building is StrongHold)
                 {
                     (item.Building as StrongHold).MagicLevelIncrease += v;
+                }
+                else if(item.Building is MadAndroidSpecialBuildings.Academy)
+                {
+                    (item.Building as MadAndroidSpecialBuildings.Academy).MagicLevelIncrease += v;
+                }
+                else if(item.Building is MadAndroidSpecialBuildings.StrongHold)
+                {
+                    (item.Building as MadAndroidSpecialBuildings.StrongHold).MagicLevelIncrease += v;
                 }
             }
             return true;
