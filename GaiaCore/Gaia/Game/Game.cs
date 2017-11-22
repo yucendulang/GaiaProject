@@ -31,6 +31,7 @@ namespace GaiaCore.Gaia
             {
                 UserDic.Add(us, new List<Faction>());
             }
+            RedoStack = new Stack<string>();
         }
         public bool ProcessSyntax(string user, string syntax, out string log)
         {
@@ -994,7 +995,7 @@ namespace GaiaCore.Gaia
             row = position.Substring(0, 1).ToCharArray().First() - 'a';
             col = position.Substring(1).ParseToInt(0);
         }
-        public bool ValidateSyntaxCommand(string syntax, ref string log, out string command, out Faction faction)
+        private bool ValidateSyntaxCommand(string syntax, ref string log, out string command, out Faction faction)
         {
             if (!ValidateSyntaxCommandForLeech(syntax, ref log, out command, out faction))
             {
@@ -1014,7 +1015,7 @@ namespace GaiaCore.Gaia
             }
             return true;
         }
-        public bool ValidateSyntaxCommandForLeech(string syntax, ref string log, out string command, out Faction faction)
+        private bool ValidateSyntaxCommandForLeech(string syntax, ref string log, out string command, out Faction faction)
         {
             command = string.Empty;
             faction = null;
@@ -1351,6 +1352,7 @@ namespace GaiaCore.Gaia
         public MapSelection MapSelection { get; private set; }
         public int UserCount { get; private set; }
         public string LastErrorLog { get; private set; }
+        public Stack<string> RedoStack { set; get; }
 
         public class STTInfo
         {

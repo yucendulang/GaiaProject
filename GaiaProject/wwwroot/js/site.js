@@ -340,6 +340,9 @@ function DrawMap(ctx) {
                     if (array[i][j].specialBuilding != null) {
                         DrawLantidaMine(ctx, j, i);
                     }
+                    if (array[i][j].isSpecialBuildingAlliance === true) {
+                        DrawLantidaStar(ctx,j,i)
+                    }
                 }
                 if (array[i][j].satellite !== null) {
                     DrawSatellite(ctx, j, i, array[i][j].satellite, array[i][j].isSpecialSatelliteForHive);
@@ -676,6 +679,24 @@ function DrawStar(ctx, row, col) {
             -Math.sin((18 + i * 72) / 180 * Math.PI) * 5 + y
         );
         ctx.lineTo(Math.cos((54 + i * 72) / 180 * Math.PI) * 3 + x,
+            -Math.sin((54 + i * 72) / 180 * Math.PI) * 3 + y
+        );
+    }
+    ctx.closePath();
+    ctx.fill();
+} 
+function DrawLantidaStar(ctx, row, col) {
+    var loc = hexCenter(row, col);
+    var x = loc[0]-20;
+    var y = loc[1];
+    ctx.beginPath();
+    ctx.fillStyle = 'black';
+    //ctx为传入的上下文环境，R为外面大圆的半径，r为内部小圆的半径，x为五角星中心的横坐标，y为五角星中心的纵坐标。 
+    for (var i = 0; i < 5; i++) {
+        ctx.lineTo(Math.cos((18 + i * 72) / 180 * Math.PI) * 3 + x,
+            -Math.sin((18 + i * 72) / 180 * Math.PI) * 5 + y
+        );
+        ctx.lineTo(Math.cos((54 + i * 72) / 180 * Math.PI) * 2 + x,
             -Math.sin((54 + i * 72) / 180 * Math.PI) * 3 + y
         );
     }

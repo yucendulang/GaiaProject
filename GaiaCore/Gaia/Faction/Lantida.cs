@@ -120,14 +120,12 @@ namespace GaiaCore.Gaia
 
         public override void ForgingAllianceGetTiles(List<Tuple<int, int>> list)
         {
-            Queue<FactionName?> queue = new Queue<FactionName?>();
-            var hexList = GaiaGame.Map.GetHexList();
-            SwapAllSpecialBuilding(hexList, queue);
+
             base.ForgingAllianceGetTiles(list);
-            SwapAllSpecialBuilding(hexList, queue);
+            
         }
 
-        private void SwapAllSpecialBuilding(IList<TerrenHex> hexList, Queue<FactionName?> queue)
+        protected void SwapAllSpecialBuilding(IList<TerrenHex> hexList, Queue<FactionName?> queue)
         {
             bool IsEnqueue = queue.Count == 0;
             foreach (var item in hexList)

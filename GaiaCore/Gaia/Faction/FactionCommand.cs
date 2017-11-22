@@ -908,6 +908,10 @@ namespace GaiaCore.Gaia
                     {
                         GaiaGame.Map.HexArray[x.Item1, x.Item2].AddSatellite(FactionName);
                     }
+                    else if (this is Lantida && GaiaGame.Map.HexArray[x.Item1, x.Item2].SpecialBuilding != null)
+                    {
+                        GaiaGame.Map.HexArray[x.Item1, x.Item2].IsSpecialBuildingAlliance = true;
+                    }
                     else
                     {
                         GaiaGame.Map.HexArray[x.Item1, x.Item2].IsAlliance = true;

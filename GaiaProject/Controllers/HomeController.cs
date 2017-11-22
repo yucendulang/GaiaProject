@@ -208,6 +208,15 @@ namespace GaiaProject.Controllers
             return GameMgr.UndoOneStep(id);
         }
 
+        public bool RedoOneStep(string id)
+        {
+            if (!PowerUser.IsPowerUser(User.Identity.Name))
+            {
+                return false;
+            }
+            return GameMgr.RedoOneStep(id);
+        }
+
         public bool DeleteOneGame(string id)
         {
             if (!PowerUser.IsPowerUser(User.Identity.Name))
