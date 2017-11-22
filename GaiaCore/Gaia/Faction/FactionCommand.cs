@@ -399,9 +399,16 @@ namespace GaiaCore.Gaia
             var ret = 0;
             ret += GetTechScoreCount() * 4;
             ret += FinalEndScore;
-            ret += (Ore + PowerToken3 + Credit + Knowledge + QICs + PowerToken2 / 2) / 3;
+            ret += GetResouceScore();
             return ret;
 
+        }
+
+        public int GetResouceScore()
+        {
+            var ret = 0;
+            ret += (Ore + PowerToken3 + Credit + Knowledge + QICs + PowerToken2 / 2) / 3;
+            return ret;
         }
 
         public int GetFinalEndScorePreview()

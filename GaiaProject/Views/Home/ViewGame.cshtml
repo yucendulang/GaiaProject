@@ -398,6 +398,15 @@ else
                         </tr>
                         <tr>
                             <td>
+                                资源总积分
+                            </td>
+                            @foreach (var fac in Model.FactionList)
+                            {
+                                <td>@fac.GetResouceScore()</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
                                 结局总计分
                             </td>
                             @{            Model.FactionList.ForEach(x => x.FinalEndScore = 0);
