@@ -629,6 +629,21 @@ namespace GaiaCore.Gaia
                     {
                         return false;
                     }
+                }else if (GameSyntax.forgingAlliance.IsMatch(item))
+                {
+                    if(!(faction is Hive))
+                    {
+                        log = "不加地点出城是蜂人专用语句";
+                        return false;
+                    }
+                    if (faction.ForgingAllianceCheck(null, out log))
+                    {
+                        faction.ForgingAllianceGetTiles(null);
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else if (GameFreeSyntax.ALTRegex.IsMatch(item))
                 {
