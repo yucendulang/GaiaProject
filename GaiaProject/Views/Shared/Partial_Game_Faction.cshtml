@@ -226,11 +226,11 @@
                                 <div class="col-lg-6">
                                     <div class="input-group">
 
-                                        @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListHadsch, "code", "name"), "--要塞行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert {0}.qc" })
+                                        @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListHadsch, "code", "name"), "--要塞行动--", new { @class = "btn dropdown-toggle form-control", @id = "StrongHoldKs", @syntax = "convert {0}" })
 
                                         <span class="input-group-btn">
-                                            <button class="btn btn-default actionGp" type="button">确定</button>
-                                        </span>
+                                            <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#StrongHoldKs">前</button>
+                                            <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#StrongHoldKs">后</button>                                          </span>
                                     </div>
                                 </div>
                             }
@@ -239,11 +239,11 @@
                                 <div class="col-lg-6">
                                     <div class="input-group">
 
-                                        @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListNevla, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert {0}.qc" })
+                                        @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListNevla, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control", @id = "NevlaKs", @syntax = "convert {0}" })
 
                                         <span class="input-group-btn">
-                                            <button class="btn btn-default actionGp" type="button">确定</button>
-                                        </span>
+                                            <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#NevlaKs">前</button>
+                                            <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#NevlaKs">后</button>                                        </span>
                                     </div>
                                 </div>
                             }
@@ -252,11 +252,11 @@
                                 <div class="col-lg-6">
                                     <div class="input-group">
 
-                                        @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListBalTak, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert {0}.qc" })
+                                        @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListBalTak, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control", @id = "BalTakKs", @syntax = "convert {0}" })
 
                                         <span class="input-group-btn">
-                                            <button class="btn btn-default actionGp" type="button">确定</button>
-                                        </span>
+                                            <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#BalTakKs">前</button>
+                                            <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#BalTakKs">后</button>                                            </span>
                                     </div>
                                 </div>
                             }
@@ -265,10 +265,11 @@
                                 <div class="col-lg-6">
                                     <div class="input-group">
 
-                                        @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTaklons, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert {0}.qc" })
+                                        @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTaklons, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control", @id = "TaklonsKs", @syntax = "convert {0}" })
 
                                         <span class="input-group-btn">
-                                            <button class="btn btn-default actionGp" type="button">确定</button>
+                                            <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#TaklonsKs">前</button>
+                                            <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#TaklonsKs">后</button>    
                                         </span>
                                     </div>
                                 </div>

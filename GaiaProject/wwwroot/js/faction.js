@@ -158,6 +158,35 @@ if (userInfo.isRound) {
         }
 
     });
+
+
+    //快速行动插入
+    $(".ksaction").click(function() {
+        var obj = $(this);
+        //行动类型，前后
+        var actionType = obj.attr("actionType");
+        //对象ID
+        var controlid = obj.attr("controlid");
+        //下拉对象
+        var control = $(controlid);
+        //下来值
+        var syntax = control.attr("syntax");
+        //下拉命令
+        var value = control.val();
+        //下拉代码
+        if (value === "") {
+            alert("请选择要进行的操作");
+            return;
+        } else {
+            value = syntax.format(value);
+        }
+        if (actionType === "before") {
+            $("#syntax").val(value + "." + $("#syntax").val());
+        } else {
+            $("#syntax").val($("#syntax").val() + '.' + value);
+
+        }
+    });
 }
 
 //弹出确认对话框

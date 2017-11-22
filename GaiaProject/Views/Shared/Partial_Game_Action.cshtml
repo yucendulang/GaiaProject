@@ -48,20 +48,28 @@
                 </div>
             </div>
 
-            <div class="col-md-5" style="background-color: #c3c3c3">
+            <div class="col-md-5">
 
                 <div class="col-md-5">
                     <div class="input-group">
-                        <input type="text" class="form-control selectchange" placeholder="输入数值" syntax="burn {0}.qc">
+                        <input type="text" class="form-control" id="xsnengliang" placeholder="牺牲能量" syntax="burn {0}">
                         <span class="input-group-btn">
-                            <button class="btn btn-default actionGp" type="button" syntax="burn {0}.qc">牺牲能量</button>
+                            <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#xsnengliang">前</button>
+                            <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#xsnengliang">后</button>
                         </span>
                     </div>
                 </div>
 
 
                 <div class="col-md-5">
-                    @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActList, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert " })
+                    <div  class="input-group">
+                        @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActList, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control", @id = "ksactionall", @syntax = "convert {0}" })
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#ksactionall">前</button>
+                            <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#ksactionall">后</button>
+                        </span>
+
+                    </div>
                 </div>
             </div>
         </div>
