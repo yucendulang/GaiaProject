@@ -139,7 +139,7 @@
                 </td>
                 @foreach (var item in Model.ATTList)
                 {
-                    <td title="@item.name"> <div class="attcss @{@item.name}False"><span>@item.name<br />@item.desc</span></div></td>
+                    <td title="@item.name"  align="center"> <div class="attcss @{@item.name}False"><span>@item.name<br />@item.desc</span></div></td>
                 }
                                                                  </tr>
                                                                  <tr>
@@ -148,7 +148,7 @@
                                                                      </td>
                                                                      @foreach (var item in Model.STT6ListGroup)
                                                                      {
-                                                                         <td title="@item.name">
+                                                                         <td title="@item.name"  align="center">
                                             
                                                                              <div class="sttcss @{@item.name}False"><span>@item.name (@item.count) <br /> @item.desc</span> </div>
                                                                                                   </td>
@@ -160,7 +160,7 @@
                                                                                                       </td>
                                                                                                       @foreach (var item in Model.STT3ListGroup)
                                                                                                       {
-                                                                                                          <td colspan="2" title="@item.name" class="">
+                                                                                                          <td colspan="2" title="@item.name" class=""  align="center">
                                                                                                               <div class="sttcss  @{@item.name}False"><span>@item.name (@item.count) <br /> @item.desc</span></div>
                                                                                                                                     </td>
                                                                                                       }

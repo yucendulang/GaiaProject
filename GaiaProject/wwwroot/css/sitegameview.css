@@ -162,6 +162,23 @@
 }
 
 
+.BalAC2False {
+    height: 90px;
+    width: 100px;
+    text-align: center;
+    line-height: 30px;
+    background: url('/images/ac2back.png');
+    /*margin: auto;*/
+}
+
+.BalAC2False span {
+    display: none
+}
+
+.BalAC2True {
+    background: url('/images/ac2usedback.png');
+}
+
 .MapAction {
     height: 90px;
     width: 100px;

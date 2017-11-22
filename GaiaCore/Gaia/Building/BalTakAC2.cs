@@ -7,6 +7,10 @@ namespace GaiaCore.Gaia.BalTakBuilding
 {
     public class AC2 : GameTiles
     {
+        public AC2()
+        {
+            this.typename = "BalAC2";
+        }
         public override string desc => "4C";
         public override bool CanAction => true;
         public override bool InvokeGameTileAction(Faction faction)
