@@ -319,7 +319,7 @@ else
         <div class="row">
 
             <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="col-lg-3">
+            @*<div class="col-lg-3">*@
                 <div class="input-group">
                     @if (User.Identity.Name.Equals("yucenyucen@126.com") || User.Identity.Name.Equals("xsssssssch@hotmail.com") || User.Identity.Name.Equals("qqthomas@163.com"))
                     {
@@ -329,19 +329,20 @@ else
                             <button id="redo" type="button" class="btn btn-default">redo</button>
                         </div>
                     }
-                    <span class="input-group-addon">命令</span>
-                    <input id="syntax" name="syntax" type="text" class="form-control" aria-label="Text input with multiple buttons">
+                    
                     @*<div class="input-group-btn">*@
+                        <span class="input-group-addon">命令</span>
+                        <input id="syntax" name="syntax" type="text" class="form-control" aria-label="Text input with multiple buttons">
                         <button id="syn" type="button" class="btn btn-default">保存</button>
-
+                    @*</div>*@
                         <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
                         @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
                         {
                             <input id="test3" name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden" />
                         }
-                    @*</div>*@<!-- /.input-group -->
+                   <!-- /.input-group -->
                 </div><!-- /.col-lg-6 -->
-            </div>
+            @*</div>*@
         </div>
     }
 
