@@ -78,16 +78,10 @@ namespace GaiaCore.Gaia
             "ac2",
         };
         public static Regex actionRegex = new Regex(string.Format("{0} ({1})", action, string.Join("|", turnActionList)));
-        /// <summary>
-        /// 建立城邦
-        /// </summary>
-        public static string satellite = "satellite";
-        public static Regex forgingAlliance = new Regex("satellite [a-z][0-9]{1,2}(,[a-z][0-9]{1,2})*");
-        public static string allianceold = "allianceold";
-        public static Regex forgingAlliance2 = new Regex(allianceold+" [a-z][0-9]{1,2}(,[a-z][0-9]{1,2})*");
         //最后留下的出城语句
         public static string alliance = "alliance";
         public static Regex forgingAllianceV2 = new Regex(alliance + " [a-z][0-9]{1,2}(,[a-z][0-9]{1,2})*");
+        public static Regex forgingAlliance = new Regex(alliance);
         public static Regex swapRegex = new Regex("swap ([a-z][0-9]{1,2}),([a-z][0-9]{1,2})");
     }
 

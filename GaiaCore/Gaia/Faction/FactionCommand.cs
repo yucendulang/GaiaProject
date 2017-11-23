@@ -347,7 +347,7 @@ namespace GaiaCore.Gaia
             CalPowerIncome(pl);
             CalPowerTokenIncome(ptl);
             var pls = new List<Tuple<bool, int>>(); //true为加魔力 false为加pwt
-            pl.Where(x=>x!=0).ToList().ForEach(x => pls.Add(new Tuple<bool, int>(true,x)));
+            pl.Where(x => x != 0).ToList().ForEach(x => pls.Add(new Tuple<bool, int>(true, x)));
             ptl.Where(x => x != 0).ToList().ForEach(x => pls.Add(new Tuple<bool, int>(false, x)));
             for (int i = 0; i < pls.Count; i++)
             {
@@ -376,14 +376,18 @@ namespace GaiaCore.Gaia
                     RestoreResource();
                 }
             }
-            
             if (PowerPreview.Count == 1)
             {
-                PowerToken1 = PowerPreview.FirstOrDefault().Item1;
-                PowerToken2 = PowerPreview.FirstOrDefault().Item2;
-                PowerToken3 = PowerPreview.FirstOrDefault().Item3;
-                PowerPreview.Clear();
+                SetPowerPreview(0);
             }
+        }
+
+        public virtual void SetPowerPreview(int i)
+        {
+            PowerToken1 = PowerPreview[i].Item1;
+            PowerToken2 = PowerPreview[i].Item2;
+            PowerToken3 = PowerPreview[i].Item3;
+            PowerPreview.Clear();
         }
 
         public virtual void ResetNewRound()
@@ -395,9 +399,16 @@ namespace GaiaCore.Gaia
             var ret = 0;
             ret += GetTechScoreCount() * 4;
             ret += FinalEndScore;
-            ret += (Ore + PowerToken3 + Credit + Knowledge + QICs + PowerToken2 / 2) / 3;
+            ret += GetResouceScore();
             return ret;
 
+        }
+
+        public int GetResouceScore()
+        {
+            var ret = 0;
+            ret += (Ore + PowerToken3 + Credit + Knowledge + QICs + PowerToken2 / 2) / 3;
+            return ret;
         }
 
         public int GetFinalEndScorePreview()
@@ -896,6 +907,10 @@ namespace GaiaCore.Gaia
                     if (GaiaGame.Map.HexArray[x.Item1, x.Item2].TFTerrain == Terrain.Empty)
                     {
                         GaiaGame.Map.HexArray[x.Item1, x.Item2].AddSatellite(FactionName);
+                    }
+                    else if (this is Lantida && GaiaGame.Map.HexArray[x.Item1, x.Item2].SpecialBuilding != null)
+                    {
+                        GaiaGame.Map.HexArray[x.Item1, x.Item2].IsSpecialBuildingAlliance = true;
                     }
                     else
                     {

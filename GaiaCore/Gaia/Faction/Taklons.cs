@@ -14,7 +14,7 @@ namespace GaiaCore.Gaia
             this.ColorMap = colorMapList[4];
             PowerToken1 += 1;
         }
-        private int m_BigStone=1;
+        private int m_BigStone = 1;
         /// <summary>
         /// 所谓的智慧之石 1表示在1区 2表示在2区 3表示3区
         /// </summary>
@@ -174,7 +174,7 @@ namespace GaiaCore.Gaia
                     ActionQueue.Enqueue(action);
                     return true;
                 case "bsc":
-                    if (rFNum*3 != rTNum)
+                    if (rFNum * 3 != rTNum)
                     {
                         log = "兑换比例为1：3";
                         return false;
@@ -224,12 +224,12 @@ namespace GaiaCore.Gaia
                         log = "智慧石不在3区";
                         return false;
                     }
-                    if (PowerToken3 < rFNum2+1)
+                    if (PowerToken3 < rFNum2 + 1)
                     {
                         log = "魔力值不够";
                         return false;
                     }
-                    TempPowerToken3 -= rFNum2.GetValueOrDefault()+1;
+                    TempPowerToken3 -= rFNum2.GetValueOrDefault() + 1;
                     TempPowerToken1 += rFNum2.GetValueOrDefault() + 1;
                     TempQICs += 1;
                     BigStone = 1;
@@ -279,7 +279,7 @@ namespace GaiaCore.Gaia
                     ActionQueue.Enqueue(action);
                     return true;
                 case "bspwt":
-                    if (rFNum  != rTNum )
+                    if (rFNum != rTNum)
                     {
                         log = "兑换比例为1:1";
                         return false;
@@ -299,8 +299,8 @@ namespace GaiaCore.Gaia
                         log = "魔力值不够";
                         return false;
                     }
-                    TempPowerToken3 -=  1;
-                    TempPowerToken1 +=  2;
+                    TempPowerToken3 -= 1;
+                    TempPowerToken1 += 2;
                     BigStone = 1;
                     BigStoneBackup = 3;
                     action = () =>
@@ -313,6 +313,19 @@ namespace GaiaCore.Gaia
                     return true;
             }
             return base.ConvertOneResourceToAnother(rFNum, rFKind, rTNum, rTKind, out log, rTNum2, rTKind2);
+        }
+
+        public override void SetPowerPreview(int i)
+        {
+            if (PowerPreview[i].Item3 > PowerToken3)
+            {
+                BigStone = 3;
+            }
+            else if (PowerPreview[i].Item2 > PowerToken2)
+            {
+                BigStone = 2;
+            }
+            base.SetPowerPreview(i);
         }
     }
 }

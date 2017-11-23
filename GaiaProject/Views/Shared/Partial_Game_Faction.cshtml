@@ -216,6 +216,10 @@
                             {
                                 <button type="button" class="btn btn-default">智慧石所在区域:@((item as Taklons).BigStone) </button>
                             }
+                            @if (item is Hive)
+                            {
+                                <button type="button" class="btn btn-default">主城等级:@((item as Hive).GetMainAllianceGrade()) </button>
+                            }
                         </div>
                     </div>
 

@@ -321,3 +321,14 @@ $(document).ready(function () {
         );
     });
 });
+
+$(document).ready(function () {
+    $("button#redo").click(function () {
+        var value = $("#test1").val();
+        $.get("/home/RedoOneStep/" + value,
+            function (data, status) {
+                location.reload();
+            }
+        );
+    });
+});

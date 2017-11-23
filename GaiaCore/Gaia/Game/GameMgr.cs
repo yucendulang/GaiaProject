@@ -204,6 +204,18 @@ namespace GaiaCore.Gaia
             }
         }
 
+        public static bool RedoOneStep(string id)
+        {
+            var gg = GetGameByName(id);
+            if (gg == null|| !gg.RedoStack.Any())
+            {
+                return false;
+            }
+            var syntax = gg.RedoStack.Pop();
+            gg.Syntax(syntax, out string log);
+            return true;
+        }
+
         public static bool DeleteOneGame(string id)
         {
             if (m_dic.ContainsKey(id))
@@ -285,13 +297,15 @@ namespace GaiaCore.Gaia
                     syntaxList.RemoveAt(syntaxList.Count - 1);
                 }
             }
-
+            gg.RedoStack.Push(syntaxList.Last());
+            var Redo = gg.RedoStack;
             syntaxList.RemoveAt(syntaxList.Count - 1);
 
 
             gg.UserActionLog = string.Join("\r\n", syntaxList);
 
             RestoreGameWithActionLog(new KeyValuePair<string, GaiaGame>(GameName, gg));
+            GetGameByName(GameName).RedoStack = Redo;
             return true;
         }
     }

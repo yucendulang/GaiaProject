@@ -62,53 +62,86 @@ namespace GaiaCore.Gaia
         {
             log = string.Empty;
             var map = GaiaGame.Map;
-            var SatelliteHexList = list.Where(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].TFTerrain == Terrain.Empty && !GaiaGame.Map.HexArray[x.Item1, x.Item2].Satellite.Contains(FactionName))
-                                    .ToList();
-            if (SatelliteHexList.Count != list.Count)
+            if (list != null)
             {
-                log = "峰人的指令只要标记出卫星位置即可,如果不需要放置卫星请直接使用Alliance.+ATLX即可";
-                return false;
-            }
-            if (QICs < SatelliteHexList.Count)
-            {
-                log = string.Format("QIC总数量为{0},放卫星数量为{1},QIC不够", QICs, SatelliteHexList.Count);
-                return false;
-            }
+                var SatelliteHexList = list.Where(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].TFTerrain == Terrain.Empty && !GaiaGame.Map.HexArray[x.Item1, x.Item2].Satellite.Contains(FactionName))
+                        .ToList();
+                if (SatelliteHexList.Count != list.Count)
+                {
+                    log = "峰人的指令只要标记出卫星位置即可,如果不需要放置卫星请直接使用Alliance.+ATLX即可";
+                    return false;
+                }
+                if (QICs < SatelliteHexList.Count)
+                {
+                    log = string.Format("QIC总数量为{0},放卫星数量为{1},QIC不够", QICs, SatelliteHexList.Count);
+                    return false;
+                }
 
-            if (list.Exists(x =>
-            {
-                TerrenHex terrenHex = GaiaGame.Map.HexArray[x.Item1, x.Item2];
-                return terrenHex.Satellite.Contains(FactionName);
-            }))
-            {
-                log = "有地块已经放置过卫星";
-                return false;
-            }
-            int oldAllianceCount;
-            var allianceListClone = new List<Tuple<int, int>>(AllianceList);
+                if (list.Exists(x =>
+                {
+                    TerrenHex terrenHex = GaiaGame.Map.HexArray[x.Item1, x.Item2];
+                    return terrenHex.Satellite.Contains(FactionName);
+                }))
+                {
+                    log = "有地块已经放置过卫星";
+                    return false;
+                }
+                int oldAllianceCount;
+                var allianceListClone = new List<Tuple<int, int>>(AllianceList);
 
-            allianceListClone.AddRange(list);
-            do
-            {
-                oldAllianceCount = allianceListClone.Count;
-                var hexlist = map.GetHexListForBuildingAndSatellite(FactionName);
-                var newNeighboor = hexlist.Where(x => !allianceListClone.Contains(x)).ToList().FindAll(x => allianceListClone.Exists(y => map.CalTwoHexDistance(x.Item1, x.Item2, y.Item1, y.Item2) == 1));
-                allianceListClone.AddRange(newNeighboor);
+                //allianceListClone.AddRange(list);
+                do
+                {
+                    oldAllianceCount = allianceListClone.Count;
+                    var hexlist = map.GetHexListForBuildingAndSatellite(FactionName, list);
+                    var newNeighboor = hexlist.Where(x => !allianceListClone.Contains(x)).ToList().FindAll(x => allianceListClone.Exists(y => map.CalTwoHexDistance(x.Item1, x.Item2, y.Item1, y.Item2) == 1));
+                    allianceListClone.AddRange(newNeighboor);
+                }
+                while (oldAllianceCount != allianceListClone.Count);
+                var altNum = GameTileList.Count(x => x is AllianceTile) - (m_TransformLevel == 5 ? 1 : 0) + 1;
+                if (allianceListClone.Sum(x => (map.GetHex(x).Building?.MagicLevel).GetValueOrDefault() + (map.GetHex(x).IsSpecialSatelliteForHive ? 1 : 0)) < m_allianceMagicLevel * altNum)
+                {
+                    log = string.Format("主城等级为{0},魔力等级不够{1}级", allianceListClone.Sum(x => map.GetHex(x).Building?.MagicLevel), m_allianceMagicLevel * altNum);
+                    return false;
+                }
             }
-            while (oldAllianceCount != allianceListClone.Count);
-            var altNum = GameTileList.Count(x => x is AllianceTile) - (m_TransformLevel == 5 ? 1 : 0) + 1;
-            if (allianceListClone.Sum(x => (map.GetHex(x).Building?.MagicLevel).GetValueOrDefault() + (map.GetHex(x).IsSpecialSatelliteForHive ? 1 : 0)) < m_allianceMagicLevel * altNum)
+            else
             {
-                log = string.Format("主城等级为{0},魔力等级不够{1}级", allianceListClone.Sum(x => map.GetHex(x).Building?.MagicLevel), m_allianceMagicLevel * altNum);
-                return false;
+                var altNum = GameTileList.Count(x => x is AllianceTile) - (m_TransformLevel == 5 ? 1 : 0) + 1;
+                if (GetMainAllianceGrade() < m_allianceMagicLevel * altNum)
+                {
+                    log = string.Format("主城等级为{0},魔力等级不够{1}级", GetMainAllianceGrade(), m_allianceMagicLevel * altNum);
+                    return false;
+                }
             }
             return true;
         }
 
         public override void ForgingAllianceGetTiles(List<Tuple<int, int>> list)
         {
+            if (list == null)
+            {
+                list = new List<Tuple<int, int>>();
+            }
             int oldAllianceCount;
-            AllianceList.AddRange(list);
+            var allianceListClone = new List<Tuple<int, int>>(AllianceList);
+            //allianceListClone.AddRange(list);
+            do
+            {
+                oldAllianceCount = allianceListClone.Count;
+                var hexlist = GaiaGame.Map.GetHexListForBuildingAndSatellite(FactionName, list);
+                var newNeighboor = hexlist.Where(x => !allianceListClone.Contains(x)).ToList().FindAll(x => allianceListClone.Exists(y => GaiaGame.Map.CalTwoHexDistance(x.Item1, x.Item2, y.Item1, y.Item2) == 1));
+                allianceListClone.AddRange(newNeighboor);
+            }
+            while (oldAllianceCount != allianceListClone.Count);
+
+            list.AddRange(allianceListClone.Where(x => GaiaGame.Map.GetHex(x).TFTerrain != Terrain.Empty && GaiaGame.Map.GetHex(x).IsAlliance == false).ToList());
+            base.ForgingAllianceGetTiles(list);
+        }
+
+        public int GetMainAllianceGrade()
+        {
+            int oldAllianceCount;
             do
             {
                 oldAllianceCount = AllianceList.Count;
@@ -117,7 +150,8 @@ namespace GaiaCore.Gaia
                 AllianceList.AddRange(newNeighboor);
             }
             while (oldAllianceCount != AllianceList.Count);
-            base.ForgingAllianceGetTiles(list);
+            AllianceList.Where(x => GaiaGame.Map.GetHex(x).TFTerrain != Terrain.Empty && GaiaGame.Map.GetHex(x).IsAlliance == false).ToList().ForEach(x => GaiaGame.Map.GetHex(x).IsAlliance = true);
+            return AllianceList.Sum(x => (GaiaGame.Map.GetHex(x).Building?.MagicLevel).GetValueOrDefault() + (GaiaGame.Map.GetHex(x).IsSpecialSatelliteForHive ? 1 : 0));
         }
         protected override void CallSpecialSHBuild()
         {

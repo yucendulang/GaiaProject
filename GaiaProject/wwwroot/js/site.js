@@ -340,9 +340,15 @@ function DrawMap(ctx) {
                     if (array[i][j].specialBuilding != null) {
                         DrawLantidaMine(ctx, j, i);
                     }
+                    if (array[i][j].isSpecialBuildingAlliance === true) {
+                        DrawLantidaStar(ctx,j,i)
+                    }
                 }
                 if (array[i][j].satellite !== null) {
                     DrawSatellite(ctx, j, i, array[i][j].satellite, array[i][j].isSpecialSatelliteForHive);
+                }
+                if (array[i][j].isAlliance) {
+                    DrawStar(ctx, j, i);
                 }
 
             }
@@ -583,7 +589,7 @@ function DrawSatellite(ctx, row, col, satellite,isSP) {
         case 2:
             loc = hexCenter(row, col);
             DrawSquare(ctx, loc[0] - 4, loc[1] - 20, satellite[0], isSP);
-            DrawSquare(ctx, loc[0] - 4, loc[1] - 5, satellite[0], isSP);
+            DrawSquare(ctx, loc[0] - 4, loc[1] - 5, satellite[1], isSP);
             break;
         case 3:
             loc = hexCenter(row, col);
@@ -607,7 +613,7 @@ function DrawSquare(ctx, row, col, satellite,isSP) {
     ctx.save();
     ctx.beginPath();
     if (satellite == 8 && isSP == true) {
-        ctx.arc(row+4, col, 5, 0, 2 * Math.PI);
+        ctx.arc(row+4, col+4, 5, 0, 2 * Math.PI);
         fillBuilding(ctx, satellite);
     } else {
         fillBuilding(ctx, satellite);
@@ -661,6 +667,43 @@ function DrawAcademy(ctx, row, col, name) {
     ctx.restore();
 }
 
+function DrawStar(ctx, row, col) {
+    var loc = hexCenter(row, col);
+    var x = loc[0];
+    var y = loc[1];
+    ctx.beginPath();
+    ctx.fillStyle = 'black';
+    //ctx为传入的上下文环境，R为外面大圆的半径，r为内部小圆的半径，x为五角星中心的横坐标，y为五角星中心的纵坐标。 
+    for (var i = 0; i < 5; i++) {
+        ctx.lineTo(Math.cos((18 + i * 72) / 180 * Math.PI) * 5 + x,
+            -Math.sin((18 + i * 72) / 180 * Math.PI) * 5 + y
+        );
+        ctx.lineTo(Math.cos((54 + i * 72) / 180 * Math.PI) * 3 + x,
+            -Math.sin((54 + i * 72) / 180 * Math.PI) * 3 + y
+        );
+    }
+    ctx.closePath();
+    ctx.fill();
+} 
+function DrawLantidaStar(ctx, row, col) {
+    var loc = hexCenter(row, col);
+    var x = loc[0]-20;
+    var y = loc[1];
+    ctx.beginPath();
+    ctx.fillStyle = 'black';
+    //ctx为传入的上下文环境，R为外面大圆的半径，r为内部小圆的半径，x为五角星中心的横坐标，y为五角星中心的纵坐标。 
+    for (var i = 0; i < 5; i++) {
+        ctx.lineTo(Math.cos((18 + i * 72) / 180 * Math.PI) * 3 + x,
+            -Math.sin((18 + i * 72) / 180 * Math.PI) * 5 + y
+        );
+        ctx.lineTo(Math.cos((54 + i * 72) / 180 * Math.PI) * 2 + x,
+            -Math.sin((54 + i * 72) / 180 * Math.PI) * 3 + y
+        );
+    }
+    ctx.closePath();
+    ctx.fill();
+} 
+
 function fillBuilding(ctx, name) {
     var color = ConvertRaceIntToColor(name);
     ctx.fillStyle = color;
@@ -673,6 +716,8 @@ function fillBuilding(ctx, name) {
     ctx.lineWidth = 2;
     ctx.stroke();
 }
+
+
 
 function ConvertIntToColor(i) {
     //if(i==window.roundColorIndex){
