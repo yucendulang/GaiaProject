@@ -543,7 +543,10 @@ namespace GaiaCore.Gaia
             }
             if (syn == BuildingSyntax.RL|| syn == BuildingSyntax.AC1 || syn == BuildingSyntax.AC2)
             {
-                TechTilesGet++;
+                if (IsTechTileAnyGet())
+                {
+                    TechTilesGet++;
+                }
             }
             //扣资源,执行操作
             Action queue = () =>
@@ -582,6 +585,25 @@ namespace GaiaCore.Gaia
             return true;
         }
 
+        private bool IsTechTileAnyGet()
+        {
+            if (GameTileList.Count(x => x is StandardTechnology) != 9)
+            {
+                return true;
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                var item = list[i];
+                if ((((int)item.GetValue(this) == 4 || (int)item.GetValue(this) == 5) && GaiaGame.ATTList[i].isPicked == false)
+                    && GameTileList.Exists(x => x is AllianceTile && x.IsUsed == false))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         protected virtual void CallSpecialSHBuild()
         {
         }
@@ -603,10 +625,20 @@ namespace GaiaCore.Gaia
 
         public void LeechPower(int power, FactionName factionFrom, bool isLeech)
         {
-            LeechPowerQueue.RemoveAt(LeechPowerQueue.FindIndex(x => x.Item1 == power && x.Item2 == factionFrom));
+            var index = LeechPowerQueue.FindIndex(x => x.Item1 == power && x.Item2 == factionFrom);
+            if (index == -1)
+            {
+                return;
+            }
+            LeechPowerQueue.RemoveAt(index);
             if (isLeech)
             {
-                var ret=PowerIncrease(power);
+                var ret = Math.Min(m_powerToken1 * 2 + m_powerToken2, power);
+                if (Score < ret - 1)
+                {
+                    power = Score + 1;
+                }
+                PowerIncrease(power);
                 Score -= Math.Max(ret - 1, 0);
             }
         }
@@ -890,6 +922,20 @@ namespace GaiaCore.Gaia
             TriggerRST(typeof(RST6));
             TriggerRST(typeof(ATT6));
             return;
+        }
+
+        internal void RemoveGameTiles(StandardTechnology tile)
+        {
+            GameTileList.Remove(tile);
+            if (tile.CanAction)
+            {
+                PredicateActionList.Remove(tile.GetType().Name.ToLower());
+                ActionList.Remove(tile.GetType().Name.ToLower());
+            }
+            if (tile is STT9)
+            {
+                (tile as STT9).ReturnGameTile(this);
+            }
         }
 
         public GameTiles GameTileGet(string str)

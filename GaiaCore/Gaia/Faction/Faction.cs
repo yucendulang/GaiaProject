@@ -66,6 +66,7 @@ namespace GaiaCore.Gaia
             StrongHold = new StrongHold();
             Gaias = new List<GaiaBuilding>();
             GameTileList = new List<GameTiles>();
+            GameTileListCovered = new List<GameTiles>();
             LeechPowerQueue = new List<Tuple<int, FactionName>>();
             Score = 10;
             GaiaGame = gg;
@@ -93,6 +94,7 @@ namespace GaiaCore.Gaia
 
         public FactionName FactionName { get; }
         public List<GameTiles> GameTileList { set; get; }
+        public List<GameTiles> GameTileListCovered { set; get; }
         private FactionBackup backup;
         //八种资源
         protected int m_credit;
@@ -388,9 +390,9 @@ namespace GaiaCore.Gaia
                 GameTileList.Remove(tile);
             }
             ret.Add("C", CalCreditIncome());
-            ret.Add("K", CalKnowledgeIncome());
             ret.Add("O", CalOreIncome());
             ret.Add("Q", CalQICIncome());
+            ret.Add("K", CalKnowledgeIncome());
             ret.Add("PWT", CalPowerTokenIncome());
             ret.Add("PW", CalPowerIncome());
             if (tile != null)

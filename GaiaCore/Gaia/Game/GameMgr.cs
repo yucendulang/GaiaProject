@@ -179,6 +179,7 @@ namespace GaiaCore.Gaia
                             DebugInvoke.Invoke(item.Key + ":" + log);
                         }
                         System.Diagnostics.Debug.WriteLine(item.Key + ":" + log);
+                        break;
                     }
                     else
                     {
@@ -202,6 +203,31 @@ namespace GaiaCore.Gaia
             {
                 m_dic.Add(item.Key, gg);
             }
+        }
+
+        public static bool ReportBug(string id)
+        {
+            var gg = GetGameByName(id);
+            if (gg == null)
+            {
+                return false;
+            }
+            string[] newUserName = new string[4];
+            for (int i = 0; i < 4; i++)
+            {
+                if (string.IsNullOrEmpty(gg.Username[i]))
+                {
+                    newUserName[i] = null;
+                }
+                else
+                {
+                    newUserName[i] = "Report@Bug.com";
+                }
+            }
+            var ggNew = new GaiaGame(newUserName);
+            ggNew.UserActionLog = gg.UserActionLog;
+            RestoreGameWithActionLog(new KeyValuePair<string, GaiaGame>(id + "Debug" + DateTime.Now.ToString("yyyyMMddHHmmss"), ggNew));
+            return true;
         }
 
         public static bool RedoOneStep(string id)

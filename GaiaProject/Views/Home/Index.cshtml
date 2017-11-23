@@ -17,15 +17,21 @@
     <hr>
     <h4>已知问题将来会修复</h4>
     <li>升级科技之后的资源暂时无法convert</li>
-    <li>吸墨和各种资源上下限问题</li>
+    <li>各种资源上下限问题</li>
     <li>出城算法检测问题</li>
-    <li>STT被退版之后还产生收入以及行动还能使用的问题 还未修复</li>
-    <li>依塔族无板子可拿依旧要能升级RL和AC</li>
-    <p>超星人特殊语句 Convert 1pwsp to 1k.魔力进盖亚区 建立SH之后 可以使用语句 convert 2pw to 1q.convert 2pw to 1o,1c.convet 2pw to 1pwt,1c.convert 1pw to 2c.convert 2pw to 1k.convert 3pw to 2o.convert 3pw to 2pwt.</p>
+    <p>种族介绍与帮助文件已经更新 如果有什么语句不清楚请联系to总进行补充</p>
+    @*<p>超星人特殊语句 Convert 1pwsp to 1k.魔力进盖亚区 建立SH之后 可以使用语句 convert 2pw to 1q.convert 2pw to 1o,1c.convet 2pw to 1pwt,1c.convert 1pw to 2c.convert 2pw to 1k.convert 3pw to 2o.convert 3pw to 2pwt.</p>
     <p>炽炎族特殊语句 Convert 1gaia to 1q以及其他三种类似</p>
     <p>疯狂机器直接用advance语句提升科技 如果能触发技能会优先触发种族技能节省K 种族技能是否发动在下回合收入面板旁边可以查看</p>
     <p>利爪族智慧石的使用在做魔力行动时候是自动的,burn行动也是自动转的.使用Convert行动只支持以下语句Convert 1bs to 1o.Convert 1bs to 3c.Convert 1bs,1pw to 1q.Convert 1bs,1pw to 1k.Convert 1bs to 1pwt</p>
-    <p>蜂人使用SH能力语句为Action hiv.build xx.出城语句为Alliance xx,xx,xx 注意因为机制不同 蜂人的xx只需要点明卫星位置即可 不需要点建筑和空间站</p>
+    <p>蜂人使用SH能力语句为Action hiv.build xx.出城语句为Alliance xx,xx,xx 注意因为机制不同 蜂人的xx只需要点明卫星位置即可 不需要点建筑和空间站</p>*@
+    <h4>2017-11-23更新如下 触发以下Bug的局可能会回档</h4>
+    <li>修正STT被退版之后还产生收入以及行动还能使用的问题</li>
+    <li>无板子可拿现在允许升级RL和AC</li>
+    <li>界面进行调整</li>
+    <li>修正某些情况下吸魔力会报错 如果再有报错请通知to总</li>
+    <li>修正分数可以通过吸魔力扣到负数的问题</li>
+    <li>为To总增加复制局的能力 如果遇到BUG请第一时间找to总复制保存当前局面（找Dulang为备选方案）</li>
     <h4>2017-11-22更新如下 触发以下Bug的局可能会回档</h4>
     <li>展示蜂人主城等级 并提供Alliance语句让蜂人无需卫星出城</li>
     <li>修正Lantida寄生其他种族建筑导致其他种族建筑无法出城问题</li>
@@ -36,7 +42,7 @@
     <li>修正蜂人不连通也可以出城的问题</li>
     <li>修正利爪族的肾结石在回合开始收入魔力时偶尔错位的问题</li>
     <li>修正蜂人空间站显示Bug</li>
-    <h4>2017-11-21更新如下</h4>
+    @*<h4>2017-11-21更新如下</h4>
     <li>修正圣鸡可以贷款的BUG</li>
     <li>修正亚特族到处飞不用Q的问题,修正亚特族出城相关的一些BUG</li>
     <li>更新蜂人</li>
@@ -46,7 +52,7 @@
     <li>更新亚特兰斯星人 不稳定阶段</li>
     <li>利爪族初始区powertoken+1 修正利爪吸墨些许问题 修正利爪gaia和出城时Removetoken结算错误问题</li>
     <li>更新利爪族 利爪族涉及到复杂的魔力计算 请各位测试为主 放平心态 随时可能回档</li>
-    <li>修正疯狂机器科技树错误问题</li>
+    <li>修正疯狂机器科技树错误问题</li>*@
     @*<h4>2017-11-20更新如下</h4>
     <li>修正疯狂机器建筑链不对的问题</li>
     <li>炽焰P2区减少两个 疯狂机器初始科技少2</li>
@@ -111,16 +117,20 @@
     <li>修正在行动之后使用Convert使资源异常增加的问题</li>
     <li>修正Act2与Act6可以一起用的问题</li>*/
 
+    @if (User.Identity.Name.Equals("yucenyucen@126.com") || User.Identity.Name.Equals("xsssssssch@hotmail.com") || User.Identity.Name.Equals("qqthomas@163.com"))
+    {
+        <p><a href="/home/GetAllGame">获取所有游戏列表</a></p>
+
+    }
 
     @if (UserManager.GetUserName(User).Equals("yucenyucen@126.com"))
     {
         <p><a href="/home/BackupData">备份所有游戏</a></p>
         <p><a href="/home/RestoreData">恢复所有游戏</a></p>
-        <p><a href="/home/GetAllGame">获取所有游戏列表</a></p>
         @*<p><a href="/home/DeleteAllGame">删除所有游戏</a></p>*@
         <environment names="Development">
             <p><a href="/home/RestoreDataFromServer">从服务器恢复所有游戏</a></p>
-            <p><a href="/home/RestoreDataFromServerOneGame/helloworld">恢复单个游戏</a></p>
+            <p><a href="/home/RestoreDataFromServerOneGame/123321">恢复单个游戏</a></p>
         </environment>
     }
     <script>
