@@ -90,15 +90,20 @@
         {
             @Html.Partial("Partial_Game_Action",Model)
         }    
+        
+        @{
+            //我的位置
+            int index = Model.FactionList.FindIndex(f => f.UserName == @UserManager.GetUserName(User));
+            //玩家数量
+            int playerCount = Model.FactionList.Count;
+        }
+        
+        @for (int i = 0; i < playerCount; i++)
+        {
 
-        @foreach (var item in Model.FactionList.Except(Model.FactionNextTurnList))
-        {
-            @Html.Partial("Partial_Game_FactionItem", item)//玩家区域显示
+           @Html.Partial("Partial_Game_FactionItem", Model.FactionList[(index + i)% playerCount])//玩家区域显示
+
         }
-           
-        @foreach (var item in Model.FactionNextTurnList)
-        {
-            @Html.Partial("Partial_Game_FactionItem", item)//玩家区域显示
-        }
-                                                                                                                  </div>
+
+                                                                                                    </div>
 </div>
