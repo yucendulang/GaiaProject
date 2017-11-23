@@ -390,9 +390,9 @@ namespace GaiaCore.Gaia
                 GameTileList.Remove(tile);
             }
             ret.Add("C", CalCreditIncome());
-            ret.Add("K", CalKnowledgeIncome());
             ret.Add("O", CalOreIncome());
             ret.Add("Q", CalQICIncome());
+            ret.Add("K", CalKnowledgeIncome());
             ret.Add("PWT", CalPowerTokenIncome());
             ret.Add("PW", CalPowerIncome());
             if (tile != null)

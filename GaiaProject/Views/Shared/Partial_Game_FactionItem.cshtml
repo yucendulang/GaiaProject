@@ -32,6 +32,9 @@
         {
             <button type="button" class="btn btn-default">@income.Key:@income.Value</button>
         }
+        <button type="button" class="btn btn-default">G星球:@Model.GaiaPlanetNumber </button>
+        <button type="button" class="btn btn-default">星球种类:@Model.GetPlanetTypeCount() </button>
+        <button type="button" class="btn btn-default">星域:@Model.GetSpaceSectorCount()</button>
         @if (@Model is MadAndroid)
         {
             <button type="button" class="btn btn-default">能力是否使用:@((@Model as MadAndroid).IsMadAndroidAbilityUsed) </button>
@@ -123,9 +126,9 @@
     <table class="table" style="font-size: 18px">
         <tr>
             <td>@Model.Credit C </td>
-            <td>@Model.Knowledge K</td>
             <td>@Model.Ore O</td>
             <td>@Model.QICs Q</td>
+            <td>@Model.Knowledge K</td>
             <td>@Model.PowerTokenGaia PG</td>
             <td></td>
             <td>@Model.PowerToken1/@Model.PowerToken2/@Model.PowerToken3 pw</td>
