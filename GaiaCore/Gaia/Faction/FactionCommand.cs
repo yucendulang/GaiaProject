@@ -1441,6 +1441,20 @@ namespace GaiaCore.Gaia
             return true;
         }
 
+        internal Dictionary<string, int> GetResouceChange()
+        {
+            var ret = new Dictionary<string, int>();
+            ret.Add("c", m_credit - turnStartBackup.m_credit);
+            ret.Add("o", m_ore - turnStartBackup.m_ore);
+            ret.Add("q", m_QICs - turnStartBackup.m_QICs);
+            ret.Add("k", m_knowledge - turnStartBackup.m_knowledge);
+            ret.Add("p1", m_powerToken1 - turnStartBackup.m_powerToken1);
+            ret.Add("p2", m_powerToken2 - turnStartBackup.m_powerToken2);
+            ret.Add("p3", m_powerToken3 - turnStartBackup.m_powerToken3);
+            ret.Add("pg", m_powerTokenGaia - turnStartBackup.m_powerTokenGaia);
+            return ret;
+        }
+
         public bool GetAllianceTile(AllianceTile alt, out string log)
         {
             log = string.Empty;

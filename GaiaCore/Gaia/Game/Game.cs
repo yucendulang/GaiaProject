@@ -33,6 +33,7 @@ namespace GaiaCore.Gaia
             }
             RedoStack = new Stack<string>();
             LastMoveTime = DateTime.Now;
+            LogEntityList = new List<LogEntity>();
         }
         public bool ProcessSyntax(string user, string syntax, out string log)
         {
@@ -1123,16 +1124,24 @@ namespace GaiaCore.Gaia
                 log = string.Empty;
                 if (syntax.StartsWith("#"))
                     return;
+                FactionList.ForEach(x => x.BackupResource(x.turnStartBackup));
                 if (ProcessSyntax(user, syntax, out log))
                 {
                     UserActionLog += syntax.AddEnter();
                     UserActionLog += m_TailLog;
                     m_TailLog = string.Empty;
+                    if(FactionList.Count>= GameStatus.PlayerIndex + 1)
+                    {
+                        var change = FactionList[GameStatus.PlayerIndex].GetResouceChange();
+                    }
+                    
                 }
                 else
                 {
                     UserActionLog += "##" + DateTime.Now.ToString() + "#" + syntax.AddEnter();
                 }
+                
+
             }
 
             catch(Exception ex)
@@ -1337,6 +1346,7 @@ namespace GaiaCore.Gaia
         public bool IsTestGame { get; set; }
         [JsonProperty]
         public DateTime? LastMoveTime { set; get; }
+        public List<LogEntity> LogEntityList { set; get; }
 
 
         /// <summary>
