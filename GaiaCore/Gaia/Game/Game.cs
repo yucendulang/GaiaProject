@@ -629,9 +629,10 @@ namespace GaiaCore.Gaia
                     {
                         return false;
                     }
-                }else if (GameSyntax.forgingAlliance.IsMatch(item))
+                }
+                else if (GameSyntax.forgingAlliance.IsMatch(item))
                 {
-                    if(!(faction is Hive))
+                    if (!(faction is Hive))
                     {
                         log = "不加地点出城是蜂人专用语句";
                         return false;
@@ -718,11 +719,7 @@ namespace GaiaCore.Gaia
                     }
                     var techTileStr = item.Substring(1);
                     var tile = faction.GameTileList.Find(x => string.Compare(x.GetType().Name, techTileStr, true) == 0) as StandardTechnology;
-                    if (tile.IsCovered)
-                    {
-                        log = "此块STT板已经被覆盖";
-                        return false;
-                    }
+
                     if (tile == null)
                     {
                         log = "你没有此块STT版";
@@ -731,12 +728,10 @@ namespace GaiaCore.Gaia
 
                     Action queue = () =>
                     {
-                        tile.IsCovered = true;
-                        if (tile is STT9)
-                        {
-                            (tile as STT9).ReturnGameTile(faction);
-                        }
+                        faction.GameTileListCovered.Add(tile);
+                        faction.RemoveGameTiles(tile);
                     };
+                    faction.ActionQueue.Enqueue(queue);
                     faction.TechReturn--;
                 }
                 else if (GameFreeSyntax.PlanetRegex.IsMatch(item))
@@ -879,10 +874,14 @@ namespace GaiaCore.Gaia
                 log = string.Format("玩家已经获得该板块{0}", tile.GetType().Name);
                 return false;
             }
+
+            if (faction.GameTileListCovered.Exists(x => x.GetType().Name.Equals(tile.GetType().Name)))
+            {
+                log = string.Format("玩家曾经获得过该板块{0}", tile.GetType().Name);
+                return false;
+            }
             Action queue = () =>
             {
-                faction.GameTileList.Add(tile);
-                tile.OneTimeAction(faction);
                 if (ATTList.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
                 {
                     (tile as AdavanceTechnology).isPicked = true;
@@ -902,11 +901,7 @@ namespace GaiaCore.Gaia
                 {
                     STT3List.Remove(tile as StandardTechnology);
                 }
-                if (tile.CanAction)
-                {
-                    faction.PredicateActionList.Add(tile.GetType().Name.ToLower(), tile.PredicateGameTileAction);
-                    faction.ActionList.Add(tile.GetType().Name.ToLower(), tile.InvokeGameTileAction);
-                }
+                faction.AddGameTiles(tile);
             };
             faction.ActionQueue.Enqueue(queue);
             faction.TechTilesGet--;
@@ -965,12 +960,7 @@ namespace GaiaCore.Gaia
                     faction.PredicateActionList.Remove(ret.GetType().Name.ToLower());
                     faction.ActionList.Remove(ret.GetType().Name.ToLower());
                 }
-                faction.GameTileList.Add(rbt);
-                if (rbt.CanAction)
-                {
-                    faction.PredicateActionList.Add(rbt.GetType().Name.ToLower(), rbt.PredicateGameTileAction);
-                    faction.ActionList.Add(rbt.GetType().Name.ToLower(), rbt.InvokeGameTileAction);
-                }
+                faction.AddGameTiles(rbt);
                 RBTList.Remove(rbt);
             };
             faction.ActionQueue.Enqueue(action);

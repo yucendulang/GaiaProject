@@ -924,6 +924,20 @@ namespace GaiaCore.Gaia
             return;
         }
 
+        internal void RemoveGameTiles(StandardTechnology tile)
+        {
+            GameTileList.Remove(tile);
+            if (tile.CanAction)
+            {
+                PredicateActionList.Remove(tile.GetType().Name.ToLower());
+                ActionList.Remove(tile.GetType().Name.ToLower());
+            }
+            if (tile is STT9)
+            {
+                (tile as STT9).ReturnGameTile(this);
+            }
+        }
+
         public GameTiles GameTileGet(string str)
         {
             var ret= GameTileList.Find(x => x.GetType().Name.Equals(str, StringComparison.OrdinalIgnoreCase));
