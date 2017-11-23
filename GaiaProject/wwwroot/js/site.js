@@ -109,69 +109,29 @@ function createMap(data) {
                         return;
                     }
 
-                    $("#updateBuildList").change(function () {
-                        //SH
-                        if ($(this).val() === "SH") {
-                            $("#sttBody").hide();
-                        } else {
-                            $("#sttBody").show();
-                        }
-                        
-                    });
+
 
                         //清空其他选项
-                    $(".updatettlist").change(function() {
-                        $(".updatettlist").not($(this)).val("");
-                    });
+                    //$(".updatettlist").change(function() {
+                    //    $(".updatettlist").not($(this)).val("");
+                    //});
 
-                    $("#updateQuery").click(function () {
-                        var execcode;
-                        var upJz = $("#updateBuildList").val();
-                        if (upJz === "SH") {
-                            execcode =("upgrade {0} to {1}.".format(clickObj.position,
-                                upJz));
-                        } else {
-                            var code = getKjTile();
-                            if (!code) {
-                                return;
-                            }
-                            execcode = "upgrade {0} to {1}.".format(clickObj.position, upJz) + code;
-//                            var kj = $("#updatekj").val();
-//                            //高级科技
-//                            if ($("#attList").val() !== "") {
-//                                var fg = $("#fg_sttList").val();
-//                                if (fg === "") {
-//                                    alert("请选择覆盖科技");
-//                                    return;
-//                                }
-//                                else if (kj === "") {
-//                                    alert("请选择升级科技");
-//                                    return;
-//                                } else {
-//                                    execcode = ("upgrade {0} to {1}.+{2}.-{3}. advance {4}".format(clickObj.position, upJz, $("#attList").val(), fg, kj));
-//                                }
-//                            }
-//                            //基础科技
-//                            else if ($("#stt6List").val() !== "") {
-//                                execcode = ("upgrade {0} to {1}.+{2}.".format(clickObj.position,
-//                                    upJz, $("#stt6List").val()));
-//
-//                            }
-//                            //基础科技-选择科技
-//                            else {
-//                                if (kj === "") {
-//                                    alert("请选择升级科技");
-//                                    return;
-//                                }
-//                                else
-//                                {
-//                                    execcode = ("upgrade {0} to {1}.+{2}. advance {3}".format(clickObj.position, upJz, $("#stt3List").val(), $("#updatekj").val()));
-//                                }
-//                            }
-                        }
-                        $('#myModal').modal('hide');
-                        openQueryWindow(execcode);
-                    });
+                    //$("#updateQuery").click(function () {
+                    //    var execcode;
+                    //    var upJz = $("#updateBuildList").val();
+                    //    if (upJz === "SH") {
+                    //        execcode =("upgrade {0} to {1}.".format(clickObj.position,
+                    //            upJz));
+                    //    } else {
+                    //        var code = getKjTile();
+                    //        if (!code) {
+                    //            return;
+                    //        }
+                    //        execcode = "upgrade {0} to {1}.".format(clickObj.position, upJz) + code;
+                    //    }
+                    //    $('#myModal').modal('hide');
+                    //    openQueryWindow(execcode);
+                    //});
                     break;
                 case "Academy":
 
@@ -249,12 +209,6 @@ function createMap(data) {
                     value = data.func(posList);
                 }
                 else {
-                    //if (data.type === "al1") {
-                    //    value = "satellite " + posList;
-                    //}
-                    //else if (data.type === "al2") {
-                    //    value = "alliance " + posList;
-                    //}
                     value = "alliance " + posList;
                 }
                 //联邦

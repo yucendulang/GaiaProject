@@ -44,6 +44,44 @@ else
     </script>
 }
 
+@Html.Partial("Partial_SelectTT",Model)
+<script type="text/javascript">
+    var selectTTsyntax="";
+    function openSelectTT(syntax) {
+        $('#myModal').modal();
+        selectTTsyntax = syntax;
+    }
+
+    $(function() {
+        $(".updatettlist").change(function() {
+            $(".updatettlist").not($(this)).val("");
+        });
+
+        $('#myModalLabel').text("请选择科技板块");
+        $('#updateBuildList').hide();
+        $("#updateQuery").click(function() {
+            var code = getKjTile();
+            if (!code) {
+                return;
+            }
+            code = selectTTsyntax.format(code);
+            $("#syntax").val(code);
+            $('#myModal').modal("hide");
+        });
+
+
+        $("#updateBuildList").change(function () {
+            //SH
+            if ($(this).val() === "SH") {
+                $("#sttBody").hide();
+            } else {
+                $("#sttBody").show();
+            }
+                        
+        });
+    });
+</script>
+
 
 
 @if (SignInManager.IsSignedIn(User))
@@ -91,9 +129,6 @@ else
             <p>现在是Round @Model.GameStatus.RoundCount,Turn @Model.GameStatus.TurnCount</p>
 
             <p>现在是 <span class="buildcolor">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 的回合,颜色是 @Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()</p>
-
-
-            @Html.Partial("Partial_SelectTT",Model)
 
 
 
@@ -216,28 +251,8 @@ else
                 
                 @if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Itar)
                 {
-                    @Html.Partial("Partial_SelectTT",Model)
-                    <script type="text/javascript">
-                        $(function () {
-
-                            $(".updatettlist").change(function() {
-                                $(".updatettlist").not($(this)).val("");
-                            });
-
-                            $('#myModalLabel').text("请选择科技板块");
-                            $('#updateBuildList').hide();
-                            $("#updateQuery").click(function() {
-                                var code = getKjTile();
-                                if (!code) {
-                                    return;
-                                }
-                                $("#syntax").val(code);
-                                $('#myModal').modal("hide");
-                            });
-                        })
-                    </script>
                     <div class="btn-group" role="group" aria-label="...">
-                        <button class="btn btn-default" onclick="$('#myModal').modal();">选择科技版</button>
+                        <button class="btn btn-default" onclick="openSelectTT('{0}')">选择科技版</button>
 
                         <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
                     </div>

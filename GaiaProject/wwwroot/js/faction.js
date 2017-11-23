@@ -94,7 +94,12 @@ if (userInfo.isRound) {
 
             if (value === "ACT6" || value === "ACT2") {
                 selectMapPos(value);
-            } else {
+            }
+            else if (value === "ACT8") {
+                //$('#myModal').modal();
+                openSelectTT("action ACT8.{0}");
+            }
+            else {
                 openQueryWindow("action {0}".format(value));
                 //$("#syntax").val("action {0}".format(value));
             }
@@ -200,6 +205,8 @@ if (userInfo.isRound) {
         }
     });
 }
+
+
 
 //弹出确认对话框
 function openQueryWindow(type, title) {
