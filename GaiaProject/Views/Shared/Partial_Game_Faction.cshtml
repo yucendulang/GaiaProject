@@ -32,8 +32,6 @@
 
     <div style="position: absolute; z-index: 999; top: 1px;left:450px" id="gameAction">
     <div class="row" id="actBody">
-
-
         @foreach (var item in Model.MapActionMrg.mapActList)
         {
             {
@@ -88,17 +86,17 @@
 </div>
     <div class="col-md-5" id="playerFaction">
 
-        @foreach (var item in Model.FactionList.FindAll(f=>f.UserName == @UserManager.GetUserName(User)))
-        {
-            @Html.Partial("Partial_Game_FactionItem", item)//玩家区域显示
-        }
-        
         @if (isRound)//行动区域显示
         {
             @Html.Partial("Partial_Game_Action",Model)
-        }        
+        }    
 
-        @foreach (var item in Model.FactionList.FindAll(f=>f.UserName != @UserManager.GetUserName(User)))
+        @foreach (var item in Model.FactionList.Except(Model.FactionNextTurnList))
+        {
+            @Html.Partial("Partial_Game_FactionItem", item)//玩家区域显示
+        }
+           
+        @foreach (var item in Model.FactionNextTurnList)
         {
             @Html.Partial("Partial_Game_FactionItem", item)//玩家区域显示
         }

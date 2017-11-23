@@ -168,7 +168,7 @@ else
             <p>现在等待 @Model.Username[Model.GameStatus.PlayerIndex] 选种族 setup xxx.</p>
 
             <div class="btn-group" id="selectfaction" role="group" aria-label="...">
-                @foreach (var fac in (new List<Faction>() { new Lantida(null), new Terraner(null), new Ambas(null), new Taklons(null), new Firaks(null), new MadAndroid(null), new BalTak(null), new Geoden(null), new Hive(null), new HadschHalla(null), new Itar(null), new Nevla(null), new Gleen(null), new Xenos(null) }))
+                @foreach (var fac in (new List<Faction>() { new Terraner(null), new Lantida(null), new Hive(null), new HadschHalla(null), new BalTak(null), new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null), new MadAndroid(null), new Itar(null), new Nevla(null) }))
                 {
                     <button type="button" class="btn btn-default" style="background-color: @fac.ColorCode" id="@fac.FactionName" syntax = "setup ">@fac.ChineseName</button>
 
