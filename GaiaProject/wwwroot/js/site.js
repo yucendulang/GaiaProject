@@ -11,6 +11,11 @@ var isFirstBuild = true;
 
 ///获取选择的科技板块
 function getKjTile() {
+
+    var upJz = $("#updateBuildList").val();
+    if (upJz === "SH") {
+        return ("{0}".format(upJz));
+    } 
     var execcode;
     var kj = $("#updatekj").val();
     //高级科技
@@ -42,7 +47,13 @@ function getKjTile() {
             execcode = ("+{0}. advance {1}".format($("#stt3List").val(), $("#updatekj").val()));
         }
     }
-    return execcode;
+    if (upJz === "" || upJz ===null) {
+        return execcode;
+
+    } else {
+        return upJz+"."+execcode;
+
+    }
 }
 
 //创建地图ID，类型，命令，回调
@@ -100,8 +111,10 @@ function createMap(data) {
                             $("#sttBody").hide();
                         }
                     }
+                    $("#updateBuildList").show();
 
-                    $('#myModal').modal();
+
+                    openSelectTT("upgrade "+clickObj.position+" to {0}");
 
                     if (isFirstBuild) {
                         isFirstBuild = false;
