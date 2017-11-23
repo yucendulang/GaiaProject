@@ -212,7 +212,6 @@ namespace GaiaCore.Gaia
                 result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random), random);
                 randomList.RemoveAt(index);
             });
-            System.Diagnostics.Debug.WriteLine(randomList.Count);
             return result;
         }
 
@@ -235,7 +234,6 @@ namespace GaiaCore.Gaia
                 result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random), random);
                 randomList.RemoveAt(index);
             });
-            System.Diagnostics.Debug.WriteLine(randomList.Count);
             return result;
         }
 
@@ -258,7 +256,6 @@ namespace GaiaCore.Gaia
                 result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random), random);
                 randomList.RemoveAt(index);
             });
-            System.Diagnostics.Debug.WriteLine(randomList.Count);
             return result;
         }
 

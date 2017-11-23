@@ -1124,30 +1124,32 @@ namespace GaiaCore.Gaia
                 log = string.Empty;
                 if (syntax.StartsWith("#"))
                     return;
-                FactionList.ForEach(x => x.BackupResource(x.turnStartBackup));
+                var currentFaction = GetCurrentFaction();
+                var turnStart = currentFaction?.BackupResource();
                 if (ProcessSyntax(user, syntax, out log))
                 {
                     UserActionLog += syntax.AddEnter();
                     UserActionLog += m_TailLog;
                     m_TailLog = string.Empty;
-                    if(FactionList.Count>= GameStatus.PlayerIndex + 1)
+                    currentFaction?.GetResouceChange(turnStart);
+                    LogEntityList.Add(new LogEntity()
                     {
-                        var change = FactionList[GameStatus.PlayerIndex].GetResouceChange();
-                    }
-                    
+                        FactionName = currentFaction?.FactionName,
+                        Row = LogEntityList.Count + 1,
+                        Syntax = syntax,
+                        ResouceChange = turnStart,
+                        ResouceEnd = currentFaction?.BackupResource()
+                    });
                 }
                 else
                 {
                     UserActionLog += "##" + DateTime.Now.ToString() + "#" + syntax.AddEnter();
                 }
-                
-
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LastErrorLog = ex.ToString();
-                System.Diagnostics.Debug.WriteLine(ex.ToString());
                 UserActionLog += "##!!##" + DateTime.Now.ToString() + "#" + syntax.AddEnter();
                 log = "引起程序异常,将本局名字报告给TOTO以方便排查问题";
                 return;
@@ -1155,6 +1157,18 @@ namespace GaiaCore.Gaia
             finally
             {
                 LastMoveTime = DateTime.Now;
+            }
+        }
+
+        private Faction GetCurrentFaction()
+        {
+            if (FactionList.Count >= GameStatus.PlayerIndex + 1)
+            {
+                return FactionList[GameStatus.PlayerIndex];
+            }
+            else
+            {
+                return null;
             }
         }
 

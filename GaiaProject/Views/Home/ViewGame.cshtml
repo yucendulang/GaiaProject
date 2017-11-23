@@ -18,11 +18,14 @@
 
 
 <link rel="stylesheet" href="~/css/sitegameview.css?version=2" asp-append-version="true" />    
+<link rel="stylesheet" href="~/css/bootstrap-table.css">
+<script src="~/js/bootstrap-table.js"></script>
 
-@if (@Model.GameStatus.RoundCount > 0)
-{
 
-    <script>
+    @if (@Model.GameStatus.RoundCount > 0)
+    {
+
+        <script>
         //var isRound =@isRound;
         var userInfo = {
             isRound: '@isRound' === 'True',
@@ -32,524 +35,567 @@
             factionName:'@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName'
         };
         //alert(userInfo.isRound);
-    </script>
-}
-else
-{
-    <script>
-        var userInfo = {
-            isRound: false,
-            round:0
-        };
-    </script>
-}
-
-@if (isRound)
-{
-    @Html.Partial("Partial_SelectTT",Model)
-    <script type="text/javascript">
-        var selectTTsyntax="";
-        function openSelectTT(syntax) {
-            $('#myModal').modal();
-            selectTTsyntax = syntax;
-        }
-
-        $(function() {
-            $(".updatettlist").change(function() {
-                $(".updatettlist").not($(this)).val("");
-            });
-
-            $('#myModalLabel').text("请选择科技板块");
-            $('#updateBuildList').hide();
-            $("#updateQuery").click(function() {
-                var code = getKjTile();
-                if (!code) {
-                    return;
-                }
-                code = selectTTsyntax.format(code);
-                $("#syntax").val(code);
-                $('#myModal').modal("hide");
-            });
-
-
-            $("#updateBuildList").change(function () {
-                //SH
-                if ($(this).val() === "SH") {
-                    $("#sttBody").hide();
-                } else {
-                    $("#sttBody").show();
-                }
-                        
-            });
-        });
-    </script>
-}
-
-
-
-
-
-@if (SignInManager.IsSignedIn(User))
-{
-    @if (User.Identity.Name.Equals("yucenyucen@126.com") || User.Identity.Name.Equals("xsssssssch@hotmail.com") || User.Identity.Name.Equals("qqthomas@163.com"))
-    {
-        <div class="input-group-btn">
-            <button id="undo" type="button" class="btn btn-default">undo</button>
-            <button id="delete" type="button" class="btn btn-default">delete</button>
-            <button id="redo" type="button" class="btn btn-default">redo</button>
-            <button id="report" type="button" class="btn btn-default">report</button>
-        </div>
+        </script>
     }
-    <div id="gameTopInfo"  style="font-size:20px">
-        @if (@Model.FactionList.Count > @Model.GameStatus.PlayerIndex)
+    else
+    {
+        <script>
+            var userInfo = {
+                isRound: false,
+                round: 0
+            };
+        </script>
+    }
+
+    @if (isRound)
+    {
+        @Html.Partial("Partial_SelectTT", Model)
+        <script type="text/javascript">
+            var selectTTsyntax = "";
+            function openSelectTT(syntax) {
+                $('#myModal').modal();
+                selectTTsyntax = syntax;
+            }
+
+            $(function () {
+                $(".updatettlist").change(function () {
+                    $(".updatettlist").not($(this)).val("");
+                });
+
+                $('#myModalLabel').text("请选择科技板块");
+                $('#updateBuildList').hide();
+                $("#updateQuery").click(function () {
+                    var code = getKjTile();
+                    if (!code) {
+                        return;
+                    }
+                    code = selectTTsyntax.format(code);
+                    $("#syntax").val(code);
+                    $('#myModal').modal("hide");
+                });
+
+
+                $("#updateBuildList").change(function () {
+                    //SH
+                    if ($(this).val() === "SH") {
+                        $("#sttBody").hide();
+                    } else {
+                        $("#sttBody").show();
+                    }
+
+                });
+            });
+        </script>
+    }
+
+
+
+
+
+    @if (SignInManager.IsSignedIn(User))
+    {
+        @if (User.Identity.Name.Equals("yucenyucen@126.com") || User.Identity.Name.Equals("xsssssssch@hotmail.com") || User.Identity.Name.Equals("qqthomas@163.com"))
         {
-            <style type="text/css">       
+            <div class="input-group-btn">
+                <button id="undo" type="button" class="btn btn-default">undo</button>
+                <button id="delete" type="button" class="btn btn-default">delete</button>
+                <button id="redo" type="button" class="btn btn-default">redo</button>
+                <button id="report" type="button" class="btn btn-default">report</button>
+            </div>
+        }
+        <div id="gameTopInfo" style="font-size:20px">
+            @if (@Model.FactionList.Count > @Model.GameStatus.PlayerIndex)
+            {
+                <style type="text/css">
+
                 .buildcolor {
                     background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode
-                }    
-            </style>
-            <script>
-                //$("#gameTopInfo").css("background-color","@Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode");
-            </script>
-        }
-
-        <input id="username" name="name" class="form-control" value="@User.Identity.Name" type="hidden" />
-        <input id="isMyTurn" name="name" class="form-control" value="@User.Identity.Name.Equals(Model.GetCurrentUserName()).ToString()" type="hidden" />
-        <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
-        @if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDWAITLEECHPOWER)
-        {
-
-            <p>等待以下吸取能量</p>
-            foreach (var fac in @Model.FactionList)
-            {
-                foreach (var leech in fac.LeechPowerQueue)
-                {
-                    <p>@fac.ChineseName 是否要从 @leech.Item2 吸取 @leech.Item1 点能量</p>
                 }
+                </style>
+                <script>
+                //$("#gameTopInfo").css("background-color","@Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode");
+                </script>
             }
-            <br>
-        }
-        else if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDSTART)
-        {
-            <p>现在是Round @Model.GameStatus.RoundCount,Turn @Model.GameStatus.TurnCount</p>
 
-            <p>现在是 <span class="buildcolor">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 的回合,颜色是 @Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()</p>
+            <input id="username" name="name" class="form-control" value="@User.Identity.Name" type="hidden" />
+            <input id="isMyTurn" name="name" class="form-control" value="@User.Identity.Name.Equals(Model.GetCurrentUserName()).ToString()" type="hidden" />
+            <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
+            @if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDWAITLEECHPOWER)
+            {
+
+                <p>等待以下吸取能量</p>
+                foreach (var fac in @Model.FactionList)
+                {
+                    foreach (var leech in fac.LeechPowerQueue)
+                    {
+                        <p>@fac.ChineseName 是否要从 @leech.Item2 吸取 @leech.Item1 点能量</p>
+                    }
+                }
+                <br>
+            }
+            else if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDSTART)
+            {
+                <p>现在是Round @Model.GameStatus.RoundCount,Turn @Model.GameStatus.TurnCount</p>
+
+                <p>现在是 <span class="buildcolor">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 的回合,颜色是 @Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()</p>
 
 
 
             <!-- 模态框（Modal）选择地图 -->
-            <div class="modal fade" id="myModalCanves" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog" style="width: 1000px;height: 800px">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                &times;
-                            </button>
-                            <h4 class="modal-title" id="myModalLabel">
-                                请选择位置
-                            </h4>
-                        </div>
-                        <div class="modal-body" id="canvasSelectMap">
-
-                            <div>
-                                <div class="btn-group" role="group" aria-label="..." id="alPosList">
-                                </div>
-                                <div style="display: none" id="allistdiv">
-                                    @Html.DropDownList("enumList", new SelectList(Model.ALTList.GroupBy(a => a.desc).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name) }), "name", "desc"), "--请选择联邦板块--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList", @syntax = "+" })
-                                </div>
-                                <div id="">
-                                    <select class="btn dropdown-toggle form-control" id="mapkjlist" name="enumList" syntax="advance " style="display: none"><option value="">--请选择升级科技--</option>
-                                        <option value="tf">地形改造</option>
-                                        <option value="ship">航行</option>
-                                        <option value="ai">人工智能</option>
-                                        <option value="gaia">盖亚计划</option>
-                                        <option value="eco">经济</option>
-                                        <option value="sci">科学</option>
-                                    </select>
-                                </div>
+                <div class="modal fade" id="myModalCanves" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" style="width: 1000px;height: 800px">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    &times;
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">
+                                    请选择位置
+                                </h4>
                             </div>
-                            <canvas id="myCanvasSelect" width="950" height="740" style="border: 1px solid #c3c3c3;">
-                                Your browser does not support the canvas element.
-                            </canvas>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">取消
-                            </button>
-                            <button type="button" class="btn btn-primary" id="queryPosList">
-                                确定
-                            </button>
-                        </div>
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal -->
-            </div>
+                            <div class="modal-body" id="canvasSelectMap">
+
+                                <div>
+                                    <div class="btn-group" role="group" aria-label="..." id="alPosList">
+                                    </div>
+                                    <div style="display: none" id="allistdiv">
+                                        @Html.DropDownList("enumList", new SelectList(Model.ALTList.GroupBy(a => a.desc).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name) }), "name", "desc"), "--请选择联邦板块--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList", @syntax = "+" })
+                                    </div>
+                                    <div id="">
+                                        <select class="btn dropdown-toggle form-control" id="mapkjlist" name="enumList" syntax="advance " style="display: none">
+                                            <option value="">--请选择升级科技--</option>
+                                            <option value="tf">地形改造</option>
+                                            <option value="ship">航行</option>
+                                            <option value="ai">人工智能</option>
+                                            <option value="gaia">盖亚计划</option>
+                                            <option value="eco">经济</option>
+                                            <option value="sci">科学</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <canvas id="myCanvasSelect" width="950" height="740" style="border: 1px solid #c3c3c3;">
+                                    Your browser does not support the canvas element.
+                                </canvas>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                    取消
+                                </button>
+                                <button type="button" class="btn btn-primary" id="queryPosList">
+                                    确定
+                                </button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal -->
+                </div>
 
 
 
             <!-- 信息确认对话框 -->
-            <div class="modal fade" id="querycfmModel">
-                <div class="modal-dialog">
-                    <div class="modal-content message_align">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                            <h4 class="modal-title">提示信息</h4>
-                        </div>
-                        <div class="modal-body" id="">
-                            <p id="querytitle">您确认要执行吗？</p>
-                            <p id="querysyntax"></p>
+                <div class="modal fade" id="querycfmModel">
+                    <div class="modal-dialog">
+                        <div class="modal-content message_align">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <h4 class="modal-title">提示信息</h4>
+                            </div>
+                            <div class="modal-body" id="">
+                                <p id="querytitle">您确认要执行吗？</p>
+                                <p id="querysyntax"></p>
 
 
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal" onclick='$("#syntax").focus();'>手动输入</button>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal" onclick='$("#syntax").focus();'>手动输入</button>
 
 
-                            <a  class="btn btn-success" data-dismiss="modal" id="querycfmModelYes">立即执行</a>
-                        </div>
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
-        }
-
-        else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
-        {
-            <p>现在等待 @Model.Username[Model.GameStatus.PlayerIndex] 选种族 setup xxx.</p>
-
-            <div class="btn-group" id="selectfaction" role="group" aria-label="...">
-                @foreach (var fac in (new List<Faction>() { new Terraner(null), new Lantida(null), new Hive(null), new HadschHalla(null), new BalTak(null), new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null), new MadAndroid(null), new Itar(null), new Nevla(null) }))
-                {
-                    <button type="button" class="btn btn-default" style="background-color: @fac.ColorCode" id="@fac.FactionName" syntax = "setup ">@fac.ChineseName</button>
-
-                }
-                <script>
-                    $("#selectfaction button").click(function() {
-                        $("#syntax").val("setup {0}".format(this.id));
-                    });
-                </script>
-            </div>
-        }
-        else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.INITIALMINES)
-        {
-
-            <p>现在等待 <span  class="buildcolor">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 建造初始房子 </p>
-        }
-        else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.SELECTROUNDBOOSTER)
-        {
-
-            <p>现在等待 <span  class="buildcolor">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 选择回合助推板 +rbtx</p>
-
-            if (isAction)
-            {
-                @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"), "--请选择回合助推板--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "rbtList", @syntax = "+" })
+                                <a class="btn btn-success" data-dismiss="modal" id="querycfmModelYes">立即执行</a>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
             }
-        }
-        else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
-        {
 
-            <p>游戏结束 @string.Join("|", @Model.FactionList.OrderBy(x => x.Score).Select(x => string.Format("{0}:{1}", x.ChineseName, x.Score)))</p>
-        }
-        else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
-        {
-            <div>
-                <p>现在等待 <span style="background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 做Gaia行动 Pass跳过此行动阶段 Itar 用+sttx/attx获取板子 一次只能拿一块 人类正常使用Convert命令 一次只能转换一种资源
-                </p>
-                
-                @if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Itar)
+            else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
+            {
+                <p>现在等待 @Model.Username[Model.GameStatus.PlayerIndex] 选种族 setup xxx.</p>
+
+                <div class="btn-group" id="selectfaction" role="group" aria-label="...">
+                    @foreach (var fac in (new List<Faction>() { new Terraner(null), new Lantida(null), new Hive(null), new HadschHalla(null), new BalTak(null), new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null), new MadAndroid(null), new Itar(null), new Nevla(null) }))
+                    {
+                        <button type="button" class="btn btn-default" style="background-color: @fac.ColorCode" id="@fac.FactionName" syntax="setup ">@fac.ChineseName</button>
+
+                    }
+                    <script>
+                        $("#selectfaction button").click(function () {
+                            $("#syntax").val("setup {0}".format(this.id));
+                        });
+                    </script>
+                </div>
+            }
+            else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.INITIALMINES)
+            {
+
+                <p>现在等待 <span class="buildcolor">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 建造初始房子 </p>
+            }
+            else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.SELECTROUNDBOOSTER)
+            {
+
+                <p>现在等待 <span class="buildcolor">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 选择回合助推板 +rbtx</p>
+
+                if (isAction)
                 {
-                    <div class="btn-group" role="group" aria-label="...">
-                        <button class="btn btn-default" onclick="openSelectTT('{0}')">选择科技版</button>
-
-                        <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
-                    </div>
+                    @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"), "--请选择回合助推板--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "rbtList", @syntax = "+" })
                 }
-                else if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Terraner)
-                {
-                    
-                    <div>
+            }
+            else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
+            {
+
+                <p>游戏结束 @string.Join("|", @Model.FactionList.OrderBy(x => x.Score).Select(x => string.Format("{0}:{1}", x.ChineseName, x.Score)))</p>
+            }
+            else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
+            {
+                <div>
+                    <p>
+                        现在等待 <span style="background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 做Gaia行动 Pass跳过此行动阶段 Itar 用+sttx/attx获取板子 一次只能拿一块 人类正常使用Convert命令 一次只能转换一种资源
+                    </p>
+
+                    @if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Itar)
+                    {
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button class="btn btn-default" onclick="openSelectTT('{0}')">选择科技版</button>
+
+                            <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
+                        </div>
+                    }
+                    else if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Terraner)
+                    {
+
+                        <div>
                             <span>PG:@Model.FactionList[Model.GameStatus.PlayerIndex].PowerTokenGaia</span>
                             @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTerraner, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert " })
 
-     
 
-                        <button class="btn btn-default" onclick="submitData();">确认</button>
 
-                        <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
+                            <button class="btn btn-default" onclick="submitData();">确认</button>
+
+                            <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
+                        </div>
+
+                    }
+
+
+
+
+                </div>
+            }
+
+            @if (Model.UserDic.ContainsKey(User.Identity.Name))
+
+            {
+                @foreach (var fac in Model.UserDic[User.Identity.Name])
+
+                {
+                    @foreach (var leech in fac.LeechPowerQueue)
+
+                    {
+                        if (fac is Taklons && fac.StrongHold == null)
+                        {
+                            <form asp-controller="Home" asp-action="LeechPower" asp-route-returnurl="/Home/Contact" method="post" class="form-horizontal">
+                                <div>
+                                    @fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力
+                                    <input name="isPwFirst" id="pwFirst" type="radio" checked="checked" value="true" /> 先增加魔力
+                                    <input name="isPwFirst" id="pwFirst" type="radio" value="false" />先增加魔力Token
+                                </div>
+                                <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
+                                <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
+                                <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
+                                <input name="leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
+                                <button type="submit" name="isLeech" class="btn btn-default" value="true">是</button>
+                                <button type="submit" name="isLeech" class="btn btn-default" value="false">否</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form asp-controller="Home" asp-action="LeechPower" asp-route-returnurl="/Home/Contact" method="post" class="form-horizontal">
+                                <div>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力</div>
+                                <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
+                                <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
+                                <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
+                                <input name="leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
+                                <button type="submit" name="isLeech" class="btn btn-default" value="true">是</button>
+                                <button type="submit" name="isLeech" class="btn btn-default" value="false">否</button>
+                            </form>
+                        }
+
+                    }
+                }
+                if (User.Identity.Name.Equals(Model.GetCurrentUserName()) && Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDINCOME)
+                {
+                    <p>现在是Round @Model.GameStatus.RoundCount,Turn @Model.GameStatus.TurnCount</p>
+                            <p>
+                                现在等待 <span style="background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 选择想要的魔力分配方式
+                            </p>
+                    foreach (var item in Model.FactionList[Model.GameStatus.PlayerIndex].PowerPreview)
+                    {
+                        <button id="pwincome" class="btn btn-default" value="@item.Item1,@item.Item2,@item.Item3">@item.Item1|@item.Item2|@item.Item3</button>
+                    }
+
+                }
+            }
+
+            @if (ViewData["log"] != null)
+            {
+                <p>@ViewData["log"]</p>
+            }
+
+
+        </div>
+
+                @if (User.Identity.Name.Equals(Model.GetCurrentUserName()))
+                {
+
+                    <div>
+
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        @*<div class="col-lg-3">*@
+                        <div class="input-group">
+                            @*<div class="input-group-btn">*@
+                            <span class="input-group-addon">命令</span>
+                            <input id="syntax" name="syntax" type="text" class="form-control" aria-label="Text input with multiple buttons">
+                            <button id="syn" type="button" class="btn btn-default">保存</button>
+                            @*</div>*@
+                            <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
+                            @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
+                            {
+                                <input id="test3" name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden" />
+                            }
+                            <!-- /.input-group -->
+                        </div><!-- /.col-lg-6 -->
+                        @*</div>*@
                     </div>
-
                 }
 
 
 
 
-            </div>
-        }
 
-                     @if (Model.UserDic.ContainsKey(User.Identity.Name))
-
-                     {
-                         @foreach (var fac in Model.UserDic[User.Identity.Name])
-
-                          {
-                              @foreach (var leech in fac.LeechPowerQueue)
-
-                              {
-                                  if (fac is Taklons && fac.StrongHold == null)
-                                  {
-                                    <form asp-controller="Home" asp-action="LeechPower" asp-route-returnurl="/Home/Contact" method="post" class="form-horizontal">
-                                        <div>
-                                            @fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力
-                                            <input name="isPwFirst" id="pwFirst" type="radio" checked="checked" value="true" /> 先增加魔力
-                                            <input name="isPwFirst" id="pwFirst" type="radio" value="false" />先增加魔力Token
-                                        </div>
-                                        <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
-                                        <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
-                                        <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
-                                        <input name="leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
-                                        <button type="submit" name="isLeech" class="btn btn-default" value="true">是</button>
-                                        <button type="submit" name="isLeech" class="btn btn-default" value="false">否</button>
-                                    </form>
-                                  }
-                                  else
-                                  {
-                                    <form asp-controller="Home" asp-action="LeechPower" asp-route-returnurl="/Home/Contact" method="post" class="form-horizontal">
-                                        <div>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力</div>
-                                        <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
-                                        <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
-                                        <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
-                                        <input name="leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
-                                        <button type="submit" name="isLeech" class="btn btn-default" value="true">是</button>
-                                        <button type="submit" name="isLeech" class="btn btn-default" value="false">否</button>
-                                    </form>
-                                  }
-
-                              }
-                         }
-                         if (User.Identity.Name.Equals(Model.GetCurrentUserName()) && Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDINCOME)
-                         {
-                             <p>现在是Round @Model.GameStatus.RoundCount,Turn @Model.GameStatus.TurnCount</p>
-                             <p>现在等待 <span style="background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 选择想要的魔力分配方式
-                             </p>
-                             foreach (var item in Model.FactionList[Model.GameStatus.PlayerIndex].PowerPreview)
-                             {
-                                 <button id="pwincome" class="btn btn-default" value="@item.Item1,@item.Item2,@item.Item3">@item.Item1|@item.Item2|@item.Item3</button>
-                             }
-
-                         }
-                     }
-
-                     @if (ViewData["log"] != null)
-                     {
-                         <p>@ViewData["log"]</p>
-                     }
-
-
-                 </div>
-
-    @if (User.Identity.Name.Equals(Model.GetCurrentUserName()))
-    {
-
-        <div>
-
-            <div asp-validation-summary="All" class="text-danger"></div>
-            @*<div class="col-lg-3">*@
-                <div class="input-group">                  
-                    @*<div class="input-group-btn">*@
-                        <span class="input-group-addon">命令</span>
-                        <input id="syntax" name="syntax" type="text" class="form-control" aria-label="Text input with multiple buttons">
-                        <button id="syn" type="button" class="btn btn-default">保存</button>
-                    @*</div>*@
-                        <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
-                        @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
-                        {
-                            <input id="test3" name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden" />
-                        }
-                   <!-- /.input-group -->
-                </div><!-- /.col-lg-6 -->
-            @*</div>*@
-        </div>
-    }
+                @Html.Partial("Partial_Game_Faction", Model)//玩家区域显示
 
 
 
 
+        <div class="row">
 
-    @Html.Partial("Partial_Game_Faction", Model)//玩家区域显示
+            <div class="col-md-1">
+                <div class="row">
+                    <div>
+                        <div class="panel panel-default">
+                            <!-- Default panel contents -->
+                            <div class="panel-heading">回合助推板</div>
+                            <div class="panel-body" id="rbt_s_list">
 
 
 
+                                @foreach (var item in Model.RBTList)
+                                {
+                                    <div class="rbtcss @item.name" style="" id="pass @item.name"><span>@item.name<br /> @item.desc.Split(',')[0]<br /> @item.desc.Split(',')[1]</span></div>
+                                    <br />
 
-    <div class="row">
-        
-        <div class="col-md-1">
-            <div class="row">
-                <div>
-                    <div class="panel panel-default">
-                        <!-- Default panel contents -->
-                        <div class="panel-heading">回合助推板</div>
-                        <div class="panel-body"  id="rbt_s_list" >
-                        
-                        
+                                }
+                            </div>
 
-                            @foreach (var item in Model.RBTList)
-                            {
-                                <div class="rbtcss @item.name" style="" id="pass @item.name"><span>@item.name<br /> @item.desc.Split(',')[0]<br /> @item.desc.Split(',')[1]</span></div>
-                                <br/>
-
-                            }
                         </div>
 
+
                     </div>
 
-
                 </div>
-
-            </div>
-            <div class="row">
-                <div>
-
-                    
-
-                  
-
-                </div>
-            </div>
-        </div>
-        
-        
-        <div class="col-md-3">
-            
-            <div class="panel panel-default">
-                <!-- Default panel contents -->
-                <div class="panel-heading">联邦板块</div>
-                <div class="panel-body">
+                <div class="row">
                     <div>
-                        @foreach (var item in Model.ALTList.GroupBy(a => a.desc).Select(g => new  { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name) }))
-                        {
-                            if (@item.name == "ALT6")
-                            {
-                                <div style="" title="@item.desc" class="col-md-6 altcss altusedcss">
-                                    @item.name (@item.count)<br/> @item.desc
-                                </div>
-                            }
-                            else
-                            {
-                                <div style=""  title="@item.desc" class="col-md-6 altcss">
-                                    @item.name (@item.count)<br /> @item.desc
-                                </div> 
-                            }
-                        }
+
+
+
+
+
                     </div>
                 </div>
             </div>
 
-        </div>
 
-        <div class="col-md-5">
+            <div class="col-md-3">
 
-            <div class="panel panel-default">
-                <div class="panel-heading">终局计分板(数量统计未实现功能)</div>
-                <div class="panel-body">   
-
-
-
-                    <table class="table">
-                        <tr>
-                            <td>
-                                   
-                            </td>
-                            @foreach (var item in Model.FactionList)
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">联邦板块</div>
+                    <div class="panel-body">
+                        <div>
+                            @foreach (var item in Model.ALTList.GroupBy(a => a.desc).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name) }))
                             {
-
-                                <td>
-                                    <span  style="background-color: @item.ColorCode">@item.ChineseName</span>
-
-                                </td>         
+                                if (@item.name == "ALT6")
+                                {
+                                    <div style="" title="@item.desc" class="col-md-6 altcss altusedcss">
+                                        @item.name (@item.count)<br /> @item.desc
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div style="" title="@item.desc" class="col-md-6 altcss">
+                                        @item.name (@item.count)<br /> @item.desc
+                                    </div>
+                                }
                             }
-                        </tr>  
-                        @foreach (var item in Model.FSTList)
-                        {
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-5">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">终局计分板(数量统计未实现功能)</div>
+                    <div class="panel-body">
+
+
+
+                        <table class="table">
+                            <tr>
+                                <td></td>
+                                @foreach (var item in Model.FactionList)
+                                {
+
+                                    <td>
+                                        <span style="background-color: @item.ColorCode">@item.ChineseName</span>
+
+                                    </td>
+                                }
+                            </tr>
+                            @foreach (var item in Model.FSTList)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.GetType().Name @item.desc
+                                    </td>
+                                    @foreach (var fac in Model.FactionList)
+                                    {
+                                        <td>@item.TargetNumber(fac)</td>
+                                    }
+
+                                </tr>
+                            }
                             <tr>
                                 <td>
-                                    @item.GetType().Name @item.desc
+                                    科技计分数量
                                 </td>
                                 @foreach (var fac in Model.FactionList)
                                 {
-                                    <td>@item.TargetNumber(fac)</td>
+                                    <td>@fac.GetTechScoreCount()</td>
                                 }
-
                             </tr>
-                        }
-                        <tr>
-                            <td>
-                                科技计分数量
-                            </td>
-                            @foreach (var fac in Model.FactionList)
-                            {
-                                <td>@fac.GetTechScoreCount()</td>
-                            }
-                        </tr>
-                        <tr>
-                            <td>
-                                资源总积分
-                            </td>
-                            @foreach (var fac in Model.FactionList)
-                            {
-                                <td>@fac.GetResouceScore()</td>
-                            }
-                        </tr>
-                        <tr>
-                            <td>
-                                结局总计分
-                            </td>
-                            @{            Model.FactionList.ForEach(x => x.FinalEndScore = 0);
-                                Model.FSTList.ForEach(x => x.InvokeGameTileAction(Model.FactionList)); }
-                            @foreach (var fac in Model.FactionList)
-                            {
-                                <td>@fac.GetFinalEndScorePreview()</td>
-                            }
-                        </tr>
+                            <tr>
+                                <td>
+                                    资源总积分
+                                </td>
+                                @foreach (var fac in Model.FactionList)
+                                {
+                                    <td>@fac.GetResouceScore()</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>
+                                    结局总计分
+                                </td>
+                                @{            Model.FactionList.ForEach(x => x.FinalEndScore = 0);
+                                    Model.FSTList.ForEach(x => x.InvokeGameTileAction(Model.FactionList)); }
+                                @foreach (var fac in Model.FactionList)
+                                {
+                                    <td>@fac.GetFinalEndScorePreview()</td>
+                                }
+                            </tr>
 
-</table>
+                        </table>
+                    </div>
+
+
+
                 </div>
-                          
-
-
             </div>
+
+
+            @*<div class="col-md-6">
+                <div class="panel panel-default">
+                     Default panel contents 
+                    <div class="panel-heading">操作日志</div>
+
+                    <ul class="list-group">
+                        @foreach (var item in Model.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            <li class="list-group-item">@item</li>
+                        }
+                    </ul>
+
+
+                </div>
+            </div>*@
+
+
+
+
+
         </div>
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th>种族名</th>
+                    <th>变化数值</th>
+                    <th>信用点</th>
+                    <th>变化数值</th>
+                    <th>矿</th>
+                    <th>变化数值</th>
+                    <th>QIC</th>
+                    <th>变化数值</th>
+                    <th>知识</th>
+                    <th>语句</th>
+                </tr>
+            </thead>
 
+            <tbody>
+                @foreach (var item in Model.LogEntityList.OrderByDescending(x=>x.Row).Take(20).OrderBy(x=>x.Row))
+                {
+                    <tr>
+                        <td>@(item.FactionName ?? null)</td>
+                        <td>@item.ResouceChange?.m_credit</td>
+                        <td>@(item.ResouceEnd?.m_credit)c</td>
+                        <td>@item.ResouceChange?.m_ore</td>
+                        <td>@(item.ResouceEnd?.m_ore)o</td>
+                        <td>@item.ResouceChange?.m_QICs</td>
+                        <td>@(item.ResouceEnd?.m_QICs)q</td>
+                        <td>@item.ResouceChange?.m_knowledge</td>
+                        <td>@(item.ResouceEnd?.m_knowledge)k</td>
+                        <td>@item.Syntax</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @if (!string.IsNullOrEmpty(Model.LastErrorLog))
+        {
+            <h1>ErrorLog</h1>
+            <p>@Model.LastErrorLog</p>
+        }
 
-        <div class="col-md-3">
-            <div class="panel panel-default">
-                <!-- Default panel contents -->
-                <div class="panel-heading">操作日志</div>
+        @*<script type='text/javascript' language='javascript' src='~/lib/jquery/dist/jquery.min.js'></script>*@
+                                    <script type='text/javascript' language='javascript' src='~/js/site.js'></script>
 
-                <ul class="list-group">
-                    @foreach (var item in Model.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        <li class="list-group-item">@item</li>
-                    }
-                </ul>
-            </div>
-        </div>
-
-    </div>
-@if (!string.IsNullOrEmpty(Model.LastErrorLog))
-{
-    <h1>ErrorLog</h1>
-    <p>@Model.LastErrorLog</p>
-}
-
-    @*<script type='text/javascript' language='javascript' src='~/lib/jquery/dist/jquery.min.js'></script>*@
-    <script type='text/javascript' language='javascript' src='~/js/site.js'></script>
-
-    <script>
+                                    <script>
         var model = @Html.Raw(Json.Serialize(Model));
-    </script>
-    <script type='text/javascript' language='javascript' src='~/js/faction.js'></script>
+                                    </script>
+                                    <script type='text/javascript' language='javascript' src='~/js/faction.js'></script>
 
 
-}
-else
-{
-    <p>没做完不好意思啊</p>
-}
+                                    }
+                                    else
+                                    {
+                                        <p>没做完不好意思啊</p>
+                                    }

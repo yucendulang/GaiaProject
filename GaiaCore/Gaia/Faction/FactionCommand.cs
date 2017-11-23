@@ -356,7 +356,7 @@ namespace GaiaCore.Gaia
                     var temp = pls[i];
                     pls[i] = pls[j];
                     pls[j] = temp;
-                    BackupResource();
+                    var back=BackupResource();
                     pls.ForEach(x =>
                     {
                         if (x.Item1)
@@ -368,12 +368,11 @@ namespace GaiaCore.Gaia
                             PowerToken1 += x.Item2;
                         }
                     });
-                    System.Diagnostics.Debug.WriteLine(string.Join(",", pls.Select(x => x.Item1.ToString() + x.Item2.ToString())));
                     if (!PowerPreview.Exists(x => x.Item1 == PowerToken1 && x.Item2 == PowerToken2 && x.Item3 == PowerToken3))
                     {
                         PowerPreview.Add(new Tuple<int, int, int>(PowerToken1, PowerToken2, PowerToken3));
                     }
-                    RestoreResource();
+                    RestoreResource(back);
                 }
             }
             if (PowerPreview.Count == 1)
@@ -1115,7 +1114,6 @@ namespace GaiaCore.Gaia
                     TerrenGroup.Add(new List<Tuple<int, int>>() { item });
                 }
             }
-            System.Diagnostics.Debug.WriteLine(TerrenGroup.Count);
 
             if (BuildingHexList.Sum(x =>
             {
@@ -1441,18 +1439,22 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        internal Dictionary<string, int> GetResouceChange()
+        internal void GetResouceChange(FactionBackup turnStartBackup)
         {
-            var ret = new Dictionary<string, int>();
-            ret.Add("c", m_credit - turnStartBackup.m_credit);
-            ret.Add("o", m_ore - turnStartBackup.m_ore);
-            ret.Add("q", m_QICs - turnStartBackup.m_QICs);
-            ret.Add("k", m_knowledge - turnStartBackup.m_knowledge);
-            ret.Add("p1", m_powerToken1 - turnStartBackup.m_powerToken1);
-            ret.Add("p2", m_powerToken2 - turnStartBackup.m_powerToken2);
-            ret.Add("p3", m_powerToken3 - turnStartBackup.m_powerToken3);
-            ret.Add("pg", m_powerTokenGaia - turnStartBackup.m_powerTokenGaia);
-            return ret;
+            if (turnStartBackup == null)
+            {
+                return;
+            }
+
+            turnStartBackup.m_credit = m_credit - turnStartBackup.m_credit;
+            turnStartBackup.m_ore = m_ore - turnStartBackup.m_ore;
+            turnStartBackup.m_QICs = m_QICs - turnStartBackup.m_QICs;
+            turnStartBackup.m_knowledge = m_knowledge - turnStartBackup.m_knowledge;
+            turnStartBackup.m_powerToken1 = m_powerToken1 - turnStartBackup.m_powerToken1;
+            turnStartBackup.m_powerToken2 = m_powerToken2 - turnStartBackup.m_powerToken2;
+            turnStartBackup.m_powerToken3 = m_powerToken3 - turnStartBackup.m_powerToken3;
+            turnStartBackup.m_powerTokenGaia = m_powerTokenGaia - turnStartBackup.m_powerTokenGaia;
+            return;
         }
 
         public bool GetAllianceTile(AllianceTile alt, out string log)

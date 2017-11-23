@@ -287,7 +287,6 @@ namespace GaiaCore.Gaia
             {
                 return null;
             }
-            System.Diagnostics.Debug.WriteLine("读取文件" + filename);
             var logPath = Path.Combine(BackupDataPath, filename);
             var logReader = File.ReadAllText(logPath);
             return logReader;

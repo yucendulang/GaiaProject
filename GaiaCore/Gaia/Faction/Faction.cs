@@ -95,8 +95,6 @@ namespace GaiaCore.Gaia
         public FactionName FactionName { get; }
         public List<GameTiles> GameTileList { set; get; }
         public List<GameTiles> GameTileListCovered { set; get; }
-        private FactionBackup backup;
-        public FactionBackup turnStartBackup;
         //八种资源
         protected int m_credit;
         protected int m_ore;
@@ -343,10 +341,10 @@ namespace GaiaCore.Gaia
         //       private int m_GaiaLevel;
         //       private int m_EconomicLevel;
         //       private int m_ScienceLevel;
-        public void BackupResource(FactionBackup b = null)
+        public FactionBackup BackupResource()
         {
 
-            backup = new FactionBackup()
+            var ret = new FactionBackup()
             {
                 m_credit = m_credit,
                 m_knowledge = m_knowledge,
@@ -360,16 +358,12 @@ namespace GaiaCore.Gaia
             };
             if (this is Taklons)
             {
-                backup.m_bigstone = (this as Taklons).BigStone;
+                ret.m_bigstone = (this as Taklons).BigStone;
             }
-
-            if (b == null)
-            {
-                b = backup;
-            }
+            return ret;
         }
 
-        private void RestoreResource()
+        private void RestoreResource(FactionBackup backup)
         {
             if (backup != null)
             {
