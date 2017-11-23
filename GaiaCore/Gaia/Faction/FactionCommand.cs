@@ -603,10 +603,20 @@ namespace GaiaCore.Gaia
 
         public void LeechPower(int power, FactionName factionFrom, bool isLeech)
         {
-            LeechPowerQueue.RemoveAt(LeechPowerQueue.FindIndex(x => x.Item1 == power && x.Item2 == factionFrom));
+            var index = LeechPowerQueue.FindIndex(x => x.Item1 == power && x.Item2 == factionFrom);
+            if (index == -1)
+            {
+                return;
+            }
+            LeechPowerQueue.RemoveAt(index);
             if (isLeech)
             {
-                var ret=PowerIncrease(power);
+                var ret = Math.Min(m_powerToken1 * 2 + m_powerToken2, power);
+                if (Score < ret - 1)
+                {
+                    power = Score + 1;
+                }
+                PowerIncrease(power);
                 Score -= Math.Max(ret - 1, 0);
             }
         }

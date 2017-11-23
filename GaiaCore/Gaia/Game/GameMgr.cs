@@ -179,6 +179,7 @@ namespace GaiaCore.Gaia
                             DebugInvoke.Invoke(item.Key + ":" + log);
                         }
                         System.Diagnostics.Debug.WriteLine(item.Key + ":" + log);
+                        break;
                     }
                     else
                     {
