@@ -803,7 +803,7 @@ function renderColorCycle(ctx) {
 
     ctx.save()
     //ctx.scale(2, 2);
-    ctx.translate(830, 50);
+    ctx.translate(50, 680);
 
     var base =0;
 

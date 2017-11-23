@@ -320,7 +320,7 @@ else
     @if (User.Identity.Name.Equals(Model.GetCurrentUserName()))
     {
 
-        <div class="row">
+        <div>
 
             <div asp-validation-summary="All" class="text-danger"></div>
             @*<div class="col-lg-3">*@
@@ -352,23 +352,87 @@ else
 
 
 
-    @if (isRound)//行动区域显示
-    {
-        @Html.Partial("Partial_Game_Action",Model)
-    }
+
 
     @Html.Partial("Partial_Game_Faction", Model)//玩家区域显示
 
-    @Html.Partial("Partial_Game_TT", Model)//科技区域显示
+
 
 
     <div class="row">
+        
+        <div class="col-md-1">
+            <div class="row">
+                <div>
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">回合助推板</div>
+                        <div class="panel-body"  id="rbt_s_list" >
+                        
+                        
+
+                            @foreach (var item in Model.RBTList)
+                            {
+                                <div class="rbtcss @item.name" style="" id="pass @item.name"><span>@item.name<br /> @item.desc.Split(',')[0]<br /> @item.desc.Split(',')[1]</span></div>
+                                <br/>
+
+                            }
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div>
+
+                    
+
+                  
+
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="col-md-3">
+            
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">联邦板块</div>
+                <div class="panel-body">
+                    <div>
+                        @foreach (var item in Model.ALTList.GroupBy(a => a.desc).Select(g => new  { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name) }))
+                        {
+                            if (@item.name == "ALT6")
+                            {
+                                <div style="" title="@item.desc" class="col-md-6 altcss altusedcss">
+                                    @item.name (@item.count)<br/> @item.desc
+                                </div>
+                            }
+                            else
+                            {
+                                <div style=""  title="@item.desc" class="col-md-6 altcss">
+                                    @item.name (@item.count)<br /> @item.desc
+                                </div> 
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
 
         <div class="col-md-5">
 
             <div class="panel panel-default">
                 <div class="panel-heading">终局计分板(数量统计未实现功能)</div>
-                <div class="panel-body">                                 
+                <div class="panel-body">   
+
+
+
                     <table class="table">
                         <tr>
                             <td>
@@ -434,32 +498,8 @@ else
             </div>
         </div>
 
-        <div class="col-md-5">
-            
-            <div class="panel panel-default">
-                <!-- Default panel contents -->
-                <div class="panel-heading">联邦板块</div>
-                <div class="panel-body">
-                    <div>
-                        @foreach (var item in Model.ALTList.GroupBy(a => a.desc).Select(g => new  { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name) }))
-                        {
-                            if (@item.name == "ALT6")
-                            {
-                                <div style="" title="@item.desc" class="col-md-6 altcss altusedcss">
-                                    @item.name (@item.count)<br/> @item.desc
-                                </div>
-                            }
-                            else
-                            {
-                                <div style=""  title="@item.desc" class="col-md-6 altcss">
-                                    @item.name (@item.count)<br /> @item.desc
-                                </div> 
-                            }
-                        }
-                    </div>
-                </div>
-            </div>
 
+        <div class="col-md-3">
             <div class="panel panel-default">
                 <!-- Default panel contents -->
                 <div class="panel-heading">操作日志</div>
@@ -472,7 +512,6 @@ else
                 </ul>
             </div>
         </div>
-
 
     </div>
 @if (!string.IsNullOrEmpty(Model.LastErrorLog))

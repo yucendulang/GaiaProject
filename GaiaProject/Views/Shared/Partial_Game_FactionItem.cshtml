@@ -1,0 +1,257 @@
+﻿@using GaiaCore.Gaia
+@model Faction
+
+
+@{
+    bool isRound = @Model.GaiaGame.GameStatus.RoundCount > 0 && @Model.GaiaGame.GetCurrentUserName() == User.Identity.Name;
+}
+<script type="text/javascript">
+                $(function () {
+                    var span = '<span style="background-color: @Model.ColorCode">&nbsp;&nbsp;</span>&nbsp;';
+                    $("#tt_l" + @Model.TransformLevel).find("td").eq(1).append(span);
+                    $("#tt_l" + @Model.ShipLevel).find("td").eq(2).append(span);
+                    $("#tt_l" + @Model.AILevel).find("td").eq(3).append(span);
+                    $("#tt_l" + @Model.GaiaLevel).find("td").eq(4).append(span);
+                    $("#tt_l" + @Model.EconomicLevel).find("td").eq(5).append(span);
+                    $("#tt_l" + @Model.ScienceLevel).find("td").eq(6).append(span);
+                });
+
+            </script>
+
+<div class="panel panel-default">
+<div class="panel-heading">
+    <h3 class="panel-title">
+        <span class="badge">@Model.Score VP</span> <span style="background-color: @Model.ColorCode">@Model.ChineseName @Model.FactionName @Model.UserName</span>
+    </h3>
+</div>
+<div class="panel-body">
+<div>
+    下回合收入:
+    <div class="btn-group" role="group" aria-label="First group">
+        @foreach (var income in @Model.CalNextTurnIncome())
+        {
+            <button type="button" class="btn btn-default">@income.Key:@income.Value</button>
+        }
+        @if (@Model is MadAndroid)
+        {
+            <button type="button" class="btn btn-default">能力是否使用:@((@Model as MadAndroid).IsMadAndroidAbilityUsed) </button>
+        }
+        @if (@Model is BalTak)
+        {
+            <button type="button" class="btn btn-default">盖亚区盖亚数量:@((@Model as BalTak).GaiasGaiaArea.Count) </button>
+        }
+        @if (@Model is Taklons)
+        {
+            <button type="button" class="btn btn-default">智慧石所在区域:@((@Model as Taklons).BigStone) </button>
+        }
+        @if (@Model is Hive)
+        {
+            <button type="button" class="btn btn-default">主城等级:@((@Model as Hive).GetMainAllianceGrade()) </button>
+        }
+    </div>
+</div>
+
+<div class="row">
+    @if (@Model.GaiaGame.GameStatus.RoundCount > 0 && @isRound && @Model.FactionName == Model.GaiaGame.FactionList[Model.GaiaGame.GameStatus.PlayerIndex].FactionName) //@Model.GameStatus.RoundCount > 0 && @isRound && @Model.FactionName == Model.FactionList[Model.GameStatus.PlayerIndex].FactionName
+    {
+        if (@Model.FactionName == FactionName.HadschHalla && @Model.StrongHold == null) //圣擒族
+        {
+            <div class="col-lg-6">
+                <div class="input-group">
+
+                    @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListHadsch, "code", "name"), "--要塞行动--", new { @class = "btn dropdown-toggle form-control", @id = "StrongHoldKs", @syntax = "convert {0}" })
+
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#StrongHoldKs">前</button>
+                        <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#StrongHoldKs">后</button>                                          </span>
+                </div>
+            </div>
+        }
+        else if (@Model.FactionName == FactionName.Nevla) //超星人
+        {
+            <div class="col-lg-6">
+                <div class="input-group">
+
+                    @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListNevla, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control", @id = "NevlaKs", @syntax = "convert {0}" })
+
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#NevlaKs">前</button>
+                        <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#NevlaKs">后</button>                                        </span>
+                </div>
+            </div>
+        }
+        else if (@Model.FactionName == FactionName.BalTak) //炽炎
+        {
+            <div class="col-lg-6">
+                <div class="input-group">
+
+                    @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListBalTak, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control", @id = "BalTakKs", @syntax = "convert {0}" })
+
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#BalTakKs">前</button>
+                        <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#BalTakKs">后</button>                                            </span>
+                </div>
+            </div>
+        }
+        else if (@Model.FactionName == FactionName.Taklons) ////利爪
+        {
+            <div class="col-lg-6">
+                <div class="input-group">
+
+                    @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTaklons, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control", @id = "TaklonsKs", @syntax = "convert {0}" })
+
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#TaklonsKs">前</button>
+                        <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#TaklonsKs">后</button>    
+                    </span>
+                </div>
+            </div>
+        }
+    }
+    <div>
+        @foreach (var leech in @Model.LeechPowerQueue)
+        {
+            <div>From @leech.Item2 leech @leech.Item1 power</div>
+        }
+
+    </div>
+</div>
+
+
+
+<div>
+    <table class="table" style="font-size: 18px">
+        <tr>
+            <td>@Model.Credit C </td>
+            <td>@Model.Knowledge K</td>
+            <td>@Model.Ore O</td>
+            <td>@Model.QICs Q</td>
+            <td>@Model.PowerTokenGaia PG</td>
+            <td></td>
+            <td>@Model.PowerToken1/@Model.PowerToken2/@Model.PowerToken3 pw</td>
+        </tr>
+        <tr>
+            <td>M </td>
+            <td>TC</td>
+            <td>RL</td>
+            <td>AC1</td>
+            <td>AC2</td>
+            <td>SH</td>
+            <td>Gaia</td>
+        </tr>
+        <tr>
+            <td>@(8 - @Model.Mines.Count)/8</td>
+            <td>@(4 - @Model.TradeCenters.Count)/4</td>
+            <td>@(3 - @Model.ResearchLabs.Count)/3</td>
+            <td>
+                @if (@Model.Academy1 == null)
+                {
+                    <span>1/1</span>
+                }
+                else
+                {
+                    <span>0/1</span>}
+            </td>
+            <td>
+                @if (@Model.Academy2 == null)
+                {
+                    <span>1/1</span>}
+                else
+                {
+                    <span>0/1</span>}
+            </td>
+            <td>
+                @if (@Model.StrongHold == null)
+                {
+                    <span>1/1</span>}
+                else
+                {
+                    <span>0/1</span>}
+            </td>
+            <td>@Model.Gaias.Count</td>
+        </tr>
+    </table>
+</div>
+
+
+<div help="回合/特权/科技版">
+    @foreach (var it in @Model.GameTileList.OrderBy(a => a.showRank))
+    {
+        <div class="col-md-3">
+            @if (it.typename == "rbt")
+            {
+
+                @if (it.IsUsed)
+                 {
+                     <div class='rbtcss rbtusedcss @it.name @{@it.name}used'>
+                                                                  <span>@it.name<br /> @it.desc.Split(',')[0]<br /> @it.desc.Split(',')[1]</span>
+                                                              </div>
+                 }
+                 else
+                 {
+                     <div class="rbtcss  @it.name" id="@Model.FactionName@it.name">
+                         <span>@it.name<br /> @it.desc.Split(',')[0]<br /> @it.desc.Split(',')[1]</span>
+                     </div>
+                     @if (it.CanAction)
+                      {
+                          <script>
+                              $("#@Model.FactionName@it.name").click(function() {
+                                  //
+                                  selectMapPos('@it.name');
+                              })
+                          </script>
+                      }
+
+                 }
+
+            }
+
+            else if (it.typename == "stt")
+            {
+                <div class="sttcss sttusedcss    @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name">
+                                                       <span>@it.GetType().Name<br /> @it.desc</span>
+                                                   </div>
+            }
+            else if (it.typename == "att")
+            {
+                <div class="attcss attusedcss    @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name">
+                                                       <span>@it.GetType().Name<br /> @it.desc</span>
+                                                   </div>
+            }
+            else if (it.typename == "BalAC2")
+            {
+                <div class="BalAC2False @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name">
+                                              <span>@it.GetType().Name<br /> @it.desc</span>
+                                          </div>
+            }
+            else if (it.typename == "ac")
+            {
+                <div class="AC2False @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name">
+                                           <span>@it.GetType().Name<br /> @it.desc</span>
+                                       </div>
+            }
+            else if (it.typename == "MapAction")
+            {
+                <div class="MapAction  Map@{@it.IsUsed}" syntax="action " id="@it.GetType().Name@{@it.IsUsed}">
+                                                                                                      <span>@it.GetType().Name<br /> @it.desc</span>                                                                                                                </div>
+            }
+            else
+            {
+
+                if (it.IsUsed)
+                {
+                    <div class="altcss altusedcss ">@it.GetType().Name<br />  @it.desc</div>
+                }
+                else
+                {
+                    <div class="altcss ">@it.GetType().Name<br /> @it.desc</div>
+                                    @*<div>@it.GetType()</div>*@
+                }
+            }
+                                                                                                  </div>
+    }
+
+                                                                                                  </div>
+
+                                                                                                  </div>
+                                                                                                  </div>
