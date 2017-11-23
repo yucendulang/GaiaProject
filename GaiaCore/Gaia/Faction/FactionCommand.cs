@@ -543,7 +543,10 @@ namespace GaiaCore.Gaia
             }
             if (syn == BuildingSyntax.RL|| syn == BuildingSyntax.AC1 || syn == BuildingSyntax.AC2)
             {
-                TechTilesGet++;
+                if (IsTechTileAnyGet())
+                {
+                    TechTilesGet++;
+                }
             }
             //扣资源,执行操作
             Action queue = () =>
@@ -580,6 +583,25 @@ namespace GaiaCore.Gaia
             };
             ActionQueue.Enqueue(queue);
             return true;
+        }
+
+        private bool IsTechTileAnyGet()
+        {
+            if (GameTileList.Count(x => x is StandardTechnology) != 9)
+            {
+                return true;
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                var item = list[i];
+                if ((((int)item.GetValue(this) == 4 || (int)item.GetValue(this) == 5) && GaiaGame.ATTList[i].isPicked == false)
+                    && GameTileList.Exists(x => x is AllianceTile && x.IsUsed == false))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         protected virtual void CallSpecialSHBuild()
