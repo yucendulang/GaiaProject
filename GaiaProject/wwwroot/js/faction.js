@@ -332,3 +332,14 @@ $(document).ready(function () {
         );
     });
 });
+
+$(document).ready(function () {
+    $("button#report").click(function () {
+        var value = $("#test1").val();
+        $.get("/home/ReportBug/" + value,
+            function (data, status) {
+                location.reload();
+            }
+        );
+    });
+});

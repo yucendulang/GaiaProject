@@ -48,7 +48,15 @@ else
 
 @if (SignInManager.IsSignedIn(User))
 {
-
+    @if (User.Identity.Name.Equals("yucenyucen@126.com") || User.Identity.Name.Equals("xsssssssch@hotmail.com") || User.Identity.Name.Equals("qqthomas@163.com"))
+    {
+        <div class="input-group-btn">
+            <button id="undo" type="button" class="btn btn-default">undo</button>
+            <button id="delete" type="button" class="btn btn-default">delete</button>
+            <button id="redo" type="button" class="btn btn-default">redo</button>
+            <button id="report" type="button" class="btn btn-default">report</button>
+        </div>
+    }
     <div id="gameTopInfo"  style="font-size:20px">
         @if (@Model.FactionList.Count > @Model.GameStatus.PlayerIndex)
         {
@@ -324,16 +332,7 @@ else
 
             <div asp-validation-summary="All" class="text-danger"></div>
             @*<div class="col-lg-3">*@
-                <div class="input-group">
-                    @if (User.Identity.Name.Equals("yucenyucen@126.com") || User.Identity.Name.Equals("xsssssssch@hotmail.com") || User.Identity.Name.Equals("qqthomas@163.com"))
-                    {
-                        <div class="input-group-btn">
-                            <button id="undo" type="button" class="btn btn-default">undo</button>
-                            <button id="delete" type="button" class="btn btn-default">delete</button>
-                            <button id="redo" type="button" class="btn btn-default">redo</button>
-                        </div>
-                    }
-                    
+                <div class="input-group">                  
                     @*<div class="input-group-btn">*@
                         <span class="input-group-addon">命令</span>
                         <input id="syntax" name="syntax" type="text" class="form-control" aria-label="Text input with multiple buttons">
