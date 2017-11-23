@@ -32,6 +32,7 @@ namespace GaiaCore.Gaia
                 UserDic.Add(us, new List<Faction>());
             }
             RedoStack = new Stack<string>();
+            LastMoveTime = DateTime.Now;
         }
         public bool ProcessSyntax(string user, string syntax, out string log)
         {
@@ -1142,6 +1143,10 @@ namespace GaiaCore.Gaia
                 log = "引起程序异常,将本局名字报告给TOTO以方便排查问题";
                 return;
             }
+            finally
+            {
+                LastMoveTime = DateTime.Now;
+            }
         }
 
         private void SetupFaction(string user,FactionName faction)
@@ -1330,6 +1335,8 @@ namespace GaiaCore.Gaia
         public Dictionary<string,List<Faction>> UserDic { set; get; }
         [JsonProperty]
         public bool IsTestGame { get; set; }
+        [JsonProperty]
+        public DateTime? LastMoveTime { set; get; }
 
 
         /// <summary>

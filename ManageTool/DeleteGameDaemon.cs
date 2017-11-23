@@ -16,10 +16,14 @@ namespace ManageTool
 
         public override void InvokeAction()
         {
-            var gamelist=GameMgr.GetAllGame();
+            var gamelist = GameMgr.GetAllGameName();
             foreach (var item in gamelist)
             {
-                if(GameMgr.GetGameByName(item).GameStatus.stage == Stage.GAMEEND)
+                if (GameMgr.GetGameByName(item).GameStatus.stage == Stage.GAMEEND)
+                {
+                    GameMgr.RemoveAndBackupGame(item);
+                }
+                if (DateTime.Now.AddDays(-1) > GameMgr.GetGameByName(item).LastMoveTime)
                 {
                     GameMgr.RemoveAndBackupGame(item);
                 }

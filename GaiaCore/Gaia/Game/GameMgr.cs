@@ -78,7 +78,7 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        public static IEnumerable<string> GetAllGame(string userName = null)
+        public static IEnumerable<string> GetAllGameName(string userName = null)
         {
             if (string.IsNullOrEmpty(userName))
             {
@@ -91,6 +91,19 @@ namespace GaiaCore.Gaia
             }
         }
 
+        public static IEnumerable<KeyValuePair<string, GaiaGame>> GetAllGame(string userName = null)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                return m_dic;
+            }
+            else
+            {
+                var result = from p in m_dic where p.Value.Username.Contains(userName) select p;
+                return result;
+            }
+        }
+
         public static string GetNextGame(string userName = null)
         {
             if (string.IsNullOrEmpty(userName))
@@ -99,7 +112,7 @@ namespace GaiaCore.Gaia
             }
             else
             {
-                var result = GetAllGame(userName).ToList().Find(x =>
+                var result = GetAllGameName(userName).ToList().Find(x =>
                 {
                     var gg = GetGameByName(x);
                     var isLeech = gg.GameStatus.stage == Stage.ROUNDWAITLEECHPOWER && gg.UserDic.ContainsKey(userName) && gg.UserDic[userName].Exists(y => y.LeechPowerQueue.Count != 0);
@@ -112,7 +125,7 @@ namespace GaiaCore.Gaia
         public static bool BackupDictionary()
         {
             JsonSerializerSettings jsetting = new JsonSerializerSettings();
-            jsetting.ContractResolver = new LimitPropsContractResolver(new string[] { "UserActionLog", "Username", "IsTestGame" });
+            jsetting.ContractResolver = new LimitPropsContractResolver(new string[] { "UserActionLog", "Username", "IsTestGame", "LastMoveTime" });
             var str = JsonConvert.SerializeObject(m_dic, Formatting.Indented, jsetting);
             var logPath = System.IO.Path.Combine(BackupDataPath, DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt");
             var logWriter = System.IO.File.CreateText(logPath);
@@ -166,6 +179,7 @@ namespace GaiaCore.Gaia
         {
             var gg = new GaiaGame(item.Value.Username);
             gg.IsTestGame = item.Value.IsTestGame;
+            
             try
             {
                 foreach (var str in item.Value.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
@@ -195,6 +209,7 @@ namespace GaiaCore.Gaia
                 }
                 System.Diagnostics.Debug.WriteLine(item.Key + ":" + ex.ToString());
             }
+            gg.LastMoveTime = item.Value.LastMoveTime;
             if (m_dic.ContainsKey(item.Key))
             {
                 m_dic[item.Key] = gg;

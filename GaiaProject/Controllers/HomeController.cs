@@ -50,7 +50,7 @@ namespace GaiaProject.Controllers
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
-            ViewData["nameList"] = string.Join(",", GameMgr.GetAllGame());
+            ViewData["nameList"] = string.Join(",", GameMgr.GetAllGameName());
             return View();
         }
 
@@ -83,7 +83,7 @@ namespace GaiaProject.Controllers
             if (task.Result != null)
             {
                 ViewData["Message"] = task.Result.UserName;
-                ViewData["GameList"] = GameMgr.GetAllGame(task.Result.UserName);
+                ViewData["GameList"] = GameMgr.GetAllGameName(task.Result.UserName);
             }
 
             return View();
@@ -253,7 +253,7 @@ namespace GaiaProject.Controllers
         }
         public IActionResult GetAllGame()
         {
-            ViewData["nameList"] = string.Join(",", GameMgr.GetAllGame());
+            ViewData["nameList"] = string.Join(",", GameMgr.GetAllGameName());
             return View();
         }
 

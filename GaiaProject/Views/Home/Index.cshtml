@@ -1,4 +1,5 @@
 ﻿
+
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
@@ -9,10 +10,23 @@
     <h4>你的游戏</h4>
     @if (ViewData["GameList"] != null)
     {
-        @foreach (var item in (IEnumerable<string>)ViewData["GameList"])
-        {
-            <li><a href="/home/ViewGame/@item">@item</a></li>
-        }
+        <table border="1" cellspacing="10">
+            <tr>
+                <td>局名</td>
+                <td>等待的玩家</td>
+                <td>上一次行动时间</td>
+                <td>你的种族</td>
+            </tr>
+            @foreach (var item in (IEnumerable<KeyValuePair<string, GaiaCore.Gaia.GaiaGame>>)ViewData["GameList"])
+            {
+                <tr>
+                    <td><a href="/home/ViewGame/@item.Key">@item.Key</a></td>
+                    <td>@item.Value.GetCurrentUserName()</td>
+                    <td>@(item.Value.LastMoveTime??null)</td>
+                    <td>@string.Join(",",@item.Value.UserDic[User.Identity.Name].Select(x=>x.ChineseName))</td>
+                </tr>
+            }
+        </table>
     }
     <hr>
     <h4>已知问题将来会修复</h4>
