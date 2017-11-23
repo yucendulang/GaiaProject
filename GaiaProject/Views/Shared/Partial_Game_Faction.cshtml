@@ -1,5 +1,6 @@
 ﻿@using GaiaCore.Gaia
 @model GaiaCore.Gaia.GaiaGame
+@inject UserManager<ApplicationUser> UserManager
 
 
 @{ bool isRound = @Model.GameStatus.RoundCount > 0 && @Model.GetCurrentUserName() == User.Identity.Name;}
@@ -174,7 +175,7 @@
     </div>
     <div class="col-md-5" id="playerFaction">
 
-        @foreach (var item in Model.FactionList)
+        @foreach (var item in Model.FactionList.OrderBy(f=>f.UserName != @UserManager.GetUserName(User)).ToList())
         {
             <script type="text/javascript">
         $(function () {

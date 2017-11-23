@@ -11,7 +11,10 @@
 @inject UserManager<ApplicationUser> UserManager
 
     
-@{ bool isRound = @Model.GameStatus.RoundCount > 0 && @Model.GetCurrentUserName() == User.Identity.Name;}
+@{
+    bool isRound = @Model.GameStatus.RoundCount > 0 && @Model.GetCurrentUserName() == User.Identity.Name;
+    bool isAction =  @Model.GetCurrentUserName() == User.Identity.Name;
+}
 
 
 <link rel="stylesheet" href="~/css/sitegameview.css?version=2" asp-append-version="true" />    
@@ -193,9 +196,10 @@ else
 
             <p>现在等待 <span  class="buildcolor">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 选择回合助推板 +rbtx</p>
 
-            @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"), "--请选择回合助推板--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "rbtList", @syntax = "+" })
-
-
+            if (isAction)
+            {
+                @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"), "--请选择回合助推板--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "rbtList", @syntax = "+" })
+            }
         }
         else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
         {
