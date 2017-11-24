@@ -99,6 +99,9 @@ if (userInfo.isRound) {
                 //$('#myModal').modal();
                 openSelectTT("action ACT8.{0}");
             }
+            else if (value === "ACT9") {
+                $("#myAltModal").modal();
+            }
             else {
                 openQueryWindow("action {0}".format(value));
                 //$("#syntax").val("action {0}".format(value));

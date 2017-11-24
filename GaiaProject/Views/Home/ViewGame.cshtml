@@ -50,42 +50,7 @@
     @if (isRound)
     {
         @Html.Partial("Partial_SelectTT", Model)
-        <script type="text/javascript">
-            var selectTTsyntax = "";
-            function openSelectTT(syntax) {
-                $('#myModal').modal();
-                selectTTsyntax = syntax;
-            }
 
-            $(function () {
-                $(".updatettlist").change(function () {
-                    $(".updatettlist").not($(this)).val("");
-                });
-
-                $('#myModalLabel').text("请选择科技板块");
-                $('#updateBuildList').hide();
-                $("#updateQuery").click(function () {
-                    var code = getKjTile();
-                    if (!code) {
-                        return;
-                    }
-                    code = selectTTsyntax.format(code);
-                    $("#syntax").val(code);
-                    $('#myModal').modal("hide");
-                });
-
-
-                $("#updateBuildList").change(function () {
-                    //SH
-                    if ($(this).val() === "SH") {
-                        $("#sttBody").hide();
-                    } else {
-                        $("#sttBody").show();
-                    }
-
-                });
-            });
-        </script>
     }
 
 

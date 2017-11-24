@@ -34,6 +34,10 @@ namespace GaiaCore.Gaia.Tiles
     }
     public abstract class AllianceTile : GameTiles
     {
+        public AllianceTile()
+        {
+            this.typename = "alt";
+        }
     }
     public class ALT1 : AllianceTile
     {

@@ -1,4 +1,8 @@
 ﻿@model GaiaCore.Gaia.GaiaGame
+
+@{
+    var alList = Model.FactionList[Model.GameStatus.PlayerIndex].GameTileList.FindAll(a => a.typename == "alt");
+}
 <!-- 模态框（Modal）升级建筑 -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -31,14 +35,15 @@
                     <div class="form-inline">
                         @Html.DropDownList("enumList", new SelectList(Model.ATTList, "name", "desc"), "--请选择高级科技--", new { @class = "btn dropdown-toggle form-control updatettlist", @id = "attList", @syntax = ".+" })
                         @Html.DropDownList("enumList", new SelectList(Model.FactionList[Model.GameStatus.PlayerIndex].GameTileList.FindAll(a => a.typename == "stt"), "name", "desc"), "--请选择被覆盖科技--", new { @class = "btn dropdown-toggle form-control ", @id = "fg_sttList", @syntax = ".+" })
-
                     </div>
 
                 </div>
 
             </div>
             <div class="modal-footer">
-
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    取消
+                </button>
                 <button type="button" class="btn btn-primary" id="updateQuery">
                     确定
                 </button>
@@ -46,3 +51,81 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
+
+<div class="modal fade" id="myAltModal" tabindex="-1" role="dialog" aria-labelledby="myAltModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myAltModalLabel">
+                    选择联邦板块
+                </h4>
+            </div>
+            <div class="modal-body">
+                @Html.DropDownList("enumList", new SelectList(alList, "name", "desc"), "--请选择联邦板块--", new { @class = "btn dropdown-toggle form-control", @id = "copy_attList", @syntax = ".+" })
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    取消
+                </button>
+                <button type="button" class="btn btn-primary" id="queryAltTile">
+                    确定
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+
+<script type="text/javascript">
+    var selectTTsyntax = "";
+    function openSelectTT(syntax) {
+        $('#myModal').modal();
+        selectTTsyntax = syntax;
+    }
+
+    $(function () {
+        //只能选择一项科技
+        $(".updatettlist").change(function () {
+            $(".updatettlist").not($(this)).val("");
+        });
+
+        $('#myModalLabel').text("请选择科技板块");
+        $('#updateBuildList').hide();
+        //确认选择
+        $("#updateQuery").click(function () {
+            var code = getKjTile();
+            if (!code) {
+                return;
+            }
+            code = selectTTsyntax.format(code);
+            $("#syntax").val(code);
+            $('#myModal').modal("hide");
+        });
+        //切换建筑类型
+        $("#updateBuildList").change(function () {
+            //SH
+            if ($(this).val() === "SH") {
+                $("#sttBody").hide();
+            } else {
+                $("#sttBody").show();
+            }
+
+        });
+
+        //选择联邦板块
+        $("#queryAltTile").click(function() {
+            var value = $("#copy_attList").val();
+            if (value === "") {
+                alert("请先选择联邦板块");
+            } else {
+                $("#syntax").val("action act9.re {0}".format(value));
+
+            }
+        });
+
+    });
+</script>
