@@ -1,0 +1,35 @@
+﻿
+@model IEnumerable<KeyValuePair<string, GaiaCore.Gaia.GaiaGame>>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <td>局名</td>
+            <td>你的种族</td>
+            <td>上一次行动时间</td>
+            <td>回合</td>
+            <td>等待的玩家</td>
+            <td>分数</td>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderByDescending(x=>x.Value.LastMoveTime))
+        {
+            <tr>
+                <td><a href="/home/ViewGame/@item.Key">@item.Key</a></td>
+                <td>@string.Join(",", @item.Value.UserDic[User.Identity.Name].Select(x => x.ChineseName))</td>
+                <td>@item.Value.GetLastMovePreriod()</td>
+                <td>@item.Value.GameStatus.RoundCount</td>
+                <td>@item.Value.GetCurrentUserName()</td>
+                <td>@string.Join(",", @item.Value.UserDic[User.Identity.Name].Select(x => x.Score))</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

@@ -253,7 +253,7 @@ namespace GaiaProject.Controllers
         }
         public IActionResult GetAllGame()
         {
-            ViewData["nameList"] = string.Join(",", GameMgr.GetAllGameName());
+            ViewData["GameList"] = GameMgr.GetAllGame();
             return View();
         }
 

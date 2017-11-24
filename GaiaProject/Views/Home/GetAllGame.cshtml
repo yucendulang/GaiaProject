@@ -1,4 +1,3 @@
-﻿@foreach (var item in @ViewData["nameList"].ToString().Split(','))
-{
-    <p><a href="/home/viewgame/@item">@item</a></p>
-}
+﻿
+
+@Html.Partial("Partial_AllGameList", ViewData["GameList"]);

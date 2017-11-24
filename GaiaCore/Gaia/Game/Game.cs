@@ -1276,7 +1276,6 @@ namespace GaiaCore.Gaia
             m_TailLog += "#" + stage.ToString().AddEnter();
             GameStatus.stage = stage;
         }
-
         public void SetLeechPowerQueue(FactionName factionName,int row,int col)
         {
             foreach(var item in FactionList.Where(x => !x.FactionName.Equals(factionName)))
@@ -1287,6 +1286,31 @@ namespace GaiaCore.Gaia
                     item.LeechPowerQueue.Add(new Tuple<int, FactionName>(power, factionName));
                 }
             }
+        }
+        public string GetLastMovePreriod()
+        {
+            if (!LastMoveTime.HasValue)
+            {
+                return "未知情况";
+            }
+            var t = LastMoveTime.GetValueOrDefault();
+            if ((DateTime.Now - t).Days > 0)
+            {
+                return ((DateTime.Now - t).Days) + "天前";
+            }
+            if ((DateTime.Now - t).Hours > 0)
+            {
+                return ((DateTime.Now - t).Hours) + "小时前";
+            }
+            if ((DateTime.Now - t).Minutes > 0)
+            {
+                return ((DateTime.Now - t).Minutes) + "分钟前";
+            }
+            if ((DateTime.Now - t).Seconds > 0)
+            {
+                return ((DateTime.Now - t).Seconds) + "秒前";
+            }
+            return "未知情况";
         }
 
         public string GetCurrentUserName()
