@@ -638,7 +638,7 @@ namespace GaiaCore.Gaia
                     power = Score + 1;
                 }
                 PowerIncrease(power);
-                Score -= Math.Max(ret - 1, 0);
+                Score -= Math.Max(power - 1, 0);
             }
         }
 
