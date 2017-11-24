@@ -175,7 +175,7 @@ namespace GaiaCore.Gaia
 
         public virtual int PowerIncrease(int i)
         {
-            var ret = Math.Min(m_powerToken1 * 2 + m_powerToken2, i);
+            var ret = Math.Min(m_powerToken1 + m_powerToken2, i);
             if (m_powerToken1 > i)
             {
                 m_powerToken1 -= i;
