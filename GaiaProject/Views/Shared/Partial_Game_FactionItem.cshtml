@@ -35,6 +35,7 @@
         <button type="button" class="btn btn-default">G星球:@Model.GaiaPlanetNumber </button>
         <button type="button" class="btn btn-default">星球种类:@Model.GetPlanetTypeCount() </button>
         <button type="button" class="btn btn-default">星域:@Model.GetSpaceSectorCount()</button>
+        <button type="button" class="btn btn-default">时常:@Model.GetClockPeriod()</button>
         @if (@Model is MadAndroid)
         {
             <button type="button" class="btn btn-default">能力是否使用:@((@Model as MadAndroid).IsMadAndroidAbilityUsed) </button>

@@ -78,6 +78,7 @@ namespace GaiaCore.Gaia
             m_allianceMagicLevel = 7;
             PowerPreview = new List<Tuple<int, int, int>>();
             TempQICs = 0;
+            ClockPerid = TimeSpan.Zero;
         }
 
         public virtual bool FinishIntialMines()
@@ -117,6 +118,8 @@ namespace GaiaCore.Gaia
         protected const int m_MineCount = 8;
         protected const int m_MineOreCost = 1;
         protected const int m_MineCreditCost = 2;
+        //统计用的一些数据
+        public TimeSpan ClockPerid;
         //一些不会变的常量
         protected const int m_TradeCenterOreCost = 2;
         protected const int m_TradeCenterCreditCostCluster = 3;
@@ -593,6 +596,11 @@ namespace GaiaCore.Gaia
         protected virtual int CallSHPowerTokenIncome()
         {
             return 1;
+        }
+
+        public string GetClockPeriod()
+        {
+            return ClockPerid.ToString(@"dd\.hh\:mm\:ss");
         }
 
     }

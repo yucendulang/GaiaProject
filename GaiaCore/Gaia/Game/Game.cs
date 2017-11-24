@@ -1140,6 +1140,10 @@ namespace GaiaCore.Gaia
                         ResouceChange = turnStart,
                         ResouceEnd = currentFaction?.BackupResource()
                     });
+                    if (currentFaction != null)
+                    {
+                        currentFaction.ClockPerid += DateTime.Now - LastMoveTime.GetValueOrDefault();
+                    }
                 }
                 else
                 {
@@ -1319,12 +1323,21 @@ namespace GaiaCore.Gaia
             {
                 return Username[GameStatus.PlayerIndex];
             }
-            else if(GameStatus.stage==Stage.ROUNDWAITLEECHPOWER||GameStatus.stage==Stage.GAMEEND)
+            else if (GameStatus.stage == Stage.ROUNDWAITLEECHPOWER || GameStatus.stage == Stage.GAMEEND)
             {
                 return string.Empty;
-            }else
+            }
+            else if (FactionList.Count <= GameStatus.PlayerIndex)
+            {
+                return string.Empty;
+            }
+            else if (UserDic.Where(x => x.Value.Contains(FactionList[GameStatus.PlayerIndex])).Any())
             {
                 return UserDic.Where(x => x.Value.Contains(FactionList[GameStatus.PlayerIndex])).First().Key;
+            }
+            else
+            {
+                return string.Empty;
             }
         }
 
