@@ -96,6 +96,10 @@
             int index = Model.FactionList.FindIndex(f => f.UserName == @UserManager.GetUserName(User));
             //玩家数量
             int playerCount = Model.FactionList.Count;
+            if (index == -1)
+            {
+                index = 0;
+            }
         }
         
         @for (int i = 0; i < playerCount; i++)
