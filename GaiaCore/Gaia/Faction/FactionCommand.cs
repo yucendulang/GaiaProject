@@ -632,13 +632,10 @@ namespace GaiaCore.Gaia
             LeechPowerQueue.RemoveAt(index);
             if (isLeech)
             {
-                var ret = Math.Min(m_powerToken1 * 2 + m_powerToken2, power);
-                if (Score < ret - 1)
-                {
-                    power = Score + 1;
-                }
-                var actualpower=PowerIncrease(power);
-                Score -= Math.Max(actualpower, 0);
+                //能吸的 
+                var ret = Math.Min(Math.Min(m_powerToken1 * 2 + m_powerToken2, power), Score + 1);
+                var actualpower = PowerIncrease(ret);
+                Score -= Math.Max(actualpower - 1, 0);
             }
         }
 

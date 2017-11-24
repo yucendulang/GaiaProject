@@ -19,10 +19,10 @@ namespace GaiaCore.Gaia
             }
             if (gg.IsTestGame)
             {
-                m_credit = 50;
-                m_knowledge = 20;
-                m_ore = 30;
-                m_QICs = 4;
+                m_credit = 30;
+                m_knowledge = 15;
+                m_ore = 15;
+                m_QICs = 15;
                 m_powerToken3 = 30;
                 m_ShipLevel = 3;
             }
@@ -202,9 +202,88 @@ namespace GaiaCore.Gaia
         public Building Academy1 { set; get; }
         public Building Academy2 { set; get; }
         public Building StrongHold { set; get; }
-        public int Credit { get => m_credit + TempCredit; set { m_credit = value; TempCredit = 0; } }
-        public int Ore { get => m_ore + TempOre; set { m_ore = value; TempOre = 0; } }
-        public int Knowledge { get => m_knowledge + TempKnowledge; set { m_knowledge = value; TempKnowledge = 0; } }
+        public int Credit
+        {
+            get
+            {
+                if (m_credit + TempCredit <= 30)
+                {
+                    return m_credit + TempCredit;
+                }
+                else
+                {
+                    return 30;
+                }
+
+            }
+            set
+            {
+                if (value <= 30)
+                {
+                    m_credit = value;
+                }
+                else
+                {
+                    m_credit = 30;
+                }
+                TempCredit = 0;
+            }
+        }
+        public int Ore
+        {
+            get
+            {
+                if (m_ore + TempOre <= 15)
+                {
+                    return m_ore + TempOre;
+                }
+                else
+                {
+                    return 15;
+                }
+
+            }
+            set
+            {
+                if (value <= 15)
+                {
+                    m_ore = value;
+                }
+                else
+                {
+                    m_ore = 15;
+                }
+                TempOre = 0;
+            }
+        }
+        public int Knowledge
+        {
+            get
+            {
+                if (m_knowledge + TempKnowledge <= 15)
+                {
+                    return m_knowledge + TempKnowledge;
+                }
+                else
+                {
+                    return 15;
+                }
+
+            }
+            set
+            {
+                if (value <= 15)
+                {
+                    m_knowledge = value;
+                }
+                else
+                {
+                    m_knowledge = 15;
+                }
+                TempKnowledge = 0;
+            }
+        }
+
         public virtual int QICs { get => m_QICs + TempQICs; set { m_QICs = value; TempQICs = 0; } }
         public int PowerToken1 { get => m_powerToken1 + TempPowerToken1; set { m_powerToken1 = value; TempPowerToken1 = 0; } }
         public int PowerToken2 { get => m_powerToken2 + TempPowerToken2; set { m_powerToken2 = value; TempPowerToken2 = 0; } }

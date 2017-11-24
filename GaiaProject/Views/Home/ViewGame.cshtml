@@ -527,7 +527,7 @@
             </thead>
 
             <tbody>
-                @foreach (var item in Model.LogEntityList.OrderByDescending(x=>x.Row).Take(20).OrderBy(x=>x.Row))
+                @foreach (var item in Model.LogEntityList.OrderByDescending(x => x.Row).Take(20).OrderBy(x => x.Row))
                 {
                     <tr>
                         <td>@(item.FactionName ?? null)</td>
@@ -544,12 +544,17 @@
                 }
             </tbody>
         </table>
-        @if (!string.IsNullOrEmpty(Model.LastErrorLog))
+        @foreach (var item in Model.UserActionLog.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
         {
-            <h1>ErrorLog</h1>
-            <p>@Model.LastErrorLog</p>
+            <li>@item</li>
         }
-
+        <environment names="Development">
+            @if (!string.IsNullOrEmpty(Model.LastErrorLog))
+            {
+                <h1>ErrorLog</h1>
+                <p>@Model.LastErrorLog</p>
+            }
+        </environment>
         @*<script type='text/javascript' language='javascript' src='~/lib/jquery/dist/jquery.min.js'></script>*@
                                     <script type='text/javascript' language='javascript' src='~/js/site.js'></script>
 
@@ -562,5 +567,5 @@
                                     }
                                     else
                                     {
-                                        <p>没做完不好意思啊</p>
+                                        < p > 没做完不好意思啊 </ p >
                                     }
