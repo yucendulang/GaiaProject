@@ -18,15 +18,29 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.OrderByDescending(x=>x.Value.LastMoveTime))
+        @foreach (var item in Model.OrderByDescending(x => x.Value.LastMoveTime))
         {
             <tr>
                 <td><a href="/home/ViewGame/@item.Key">@item.Key</a></td>
-                <td>@string.Join(",", @item.Value.UserDic[User.Identity.Name].Select(x => x.ChineseName))</td>
+                @if (item.Value.UserDic.ContainsKey(User.Identity.Name))
+                {
+                    <td>@string.Join(",", @item.Value.UserDic[User.Identity.Name].Select(x => x.ChineseName))</td>
+                }
+                else
+                {
+                    <td>@string.Join(",", @item.Value.FactionList.Select(x => x.ChineseName))</td>
+                }
                 <td>@item.Value.GetLastMovePreriod()</td>
                 <td>@item.Value.GameStatus.RoundCount</td>
                 <td>@item.Value.GetCurrentUserName()</td>
-                <td>@string.Join(",", @item.Value.UserDic[User.Identity.Name].Select(x => x.Score))</td>
+                @if (item.Value.UserDic.ContainsKey(User.Identity.Name))
+                {
+                    <td>@string.Join(",", @item.Value.UserDic[User.Identity.Name].Select(x => x.Score))</td>
+                }
+                else
+                {
+                    <td> @string.Join(",", @item.Value.FactionList.Select(x => x.Score)) </td >
+                }
             </tr>
         }
     </tbody>
