@@ -32,7 +32,8 @@ namespace GaiaCore.Gaia
             {
                 var hexList = GaiaGame.Map.GetHexList().ToList();
                 var hex = GaiaGame.Map.GetHex(row, col);
-                if (!hexList.Exists(x => x.FactionBelongTo == FactionName && x.TFTerrain == hex.TFTerrain)){
+                if (!hexList.Exists(x => x.FactionBelongTo == FactionName && !(x.Building is GaiaBuilding) && x.TFTerrain == hex.TFTerrain))
+                {
                     TempKnowledge += 3;
 
                     Action action = () =>
