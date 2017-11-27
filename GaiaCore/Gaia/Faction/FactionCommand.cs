@@ -1443,7 +1443,7 @@ namespace GaiaCore.Gaia
             {
                 return;
             }
-
+            turnStartBackup.m_score = Score - turnStartBackup.m_score;
             turnStartBackup.m_credit = m_credit - turnStartBackup.m_credit;
             turnStartBackup.m_ore = m_ore - turnStartBackup.m_ore;
             turnStartBackup.m_QICs = m_QICs - turnStartBackup.m_QICs;
