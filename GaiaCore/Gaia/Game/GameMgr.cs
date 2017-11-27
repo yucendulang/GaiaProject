@@ -148,8 +148,8 @@ namespace GaiaCore.Gaia
         {
             HttpClient client = new HttpClient();
             var logReader = await client.GetStringAsync("http://gaiaproject.chinacloudsites.cn/home/GetLastestActionLog");
-            //return RestoreAllGames(logReader, GameName, "yucenyucen@126.com", DebugInvoke);
-            return RestoreAllGames(logReader, GameName, DebugInvoke: DebugInvoke);
+            return RestoreAllGames(logReader, GameName, "yucenyucen@126.com", DebugInvoke);
+            //return RestoreAllGames(logReader, GameName, DebugInvoke: DebugInvoke);
         }
 
         private static IEnumerable<string> RestoreAllGames(string logReader, string GameName = null, string user = null, Func<string, bool> DebugInvoke = null)

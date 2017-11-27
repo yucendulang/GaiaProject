@@ -70,7 +70,7 @@ namespace GaiaProject.Controllers
             GameMgr.CreateNewGame(model.Name, username, out GaiaGame result,model.MapSelction, isTestGame: model.IsTestGame);
 
             ViewData["ReturnUrl"] = "/Home/ViewGame/" + model.Name;
-            return Redirect("/home/viewgame/" + model.Name);
+            return Redirect("/home/viewgame/" + System.Net.WebUtility.UrlEncode(model.Name));
         }
         // GET: /Home/NewGame
         [HttpGet]
@@ -186,7 +186,7 @@ namespace GaiaProject.Controllers
                 syntax = syntax + " " + pwFirst;
             }
             GameMgr.GetGameByName(name).Syntax(syntax, out string log);
-            return Redirect("/home/viewgame/" + name);
+            return Redirect("/home/viewgame/" + System.Net.WebUtility.UrlEncode(name));
         }
 
         public string GetLastestActionLog()
@@ -285,7 +285,7 @@ namespace GaiaProject.Controllers
         {
             Task<IEnumerable<string>> task = GameMgr.RestoreDictionaryFromServerAsync(id);
             task.Wait();
-            return Redirect("/home/viewgame/"+ id);
+            return Redirect("/home/viewgame/" + System.Net.WebUtility.UrlEncode(id));
         }
         #endregion
     }
