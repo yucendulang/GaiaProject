@@ -23,7 +23,7 @@ namespace ManageTool
                 {
                     GameMgr.RemoveAndBackupGame(item);
                 }
-                if (DateTime.Now.AddDays(-1) > GameMgr.GetGameByName(item).LastMoveTime)
+                if (DateTime.Now.AddDays(-4) > GameMgr.GetGameByName(item).LastMoveTime)
                 {
                     GameMgr.RemoveAndBackupGame(item);
                 }
