@@ -395,17 +395,25 @@ namespace GaiaCore.Gaia
                     faction.PowerToken1++;
                     try
                     {
-                        faction.LeechPower(power, factionFrom, isLeech);
+                        if(!faction.LeechPower(power, factionFrom, isLeech))
+                        {
+                            faction.PowerToken1--;
+                            return false;
+                        }
                     }
                     catch
                     {
                         faction.PowerToken1--;
+                        return false;
                     }
                 }
                 else
                 { 
-                    faction.LeechPower(power, factionFrom, isLeech);
-                    faction.PowerToken1++;
+                    if(faction.LeechPower(power, factionFrom, isLeech))
+                    {
+                        faction.PowerToken1++;
+                        return false;
+                    }
                 }
                 return true;
             }

@@ -622,12 +622,12 @@ namespace GaiaCore.Gaia
             }
         }
 
-        public void LeechPower(int power, FactionName factionFrom, bool isLeech)
+        public bool LeechPower(int power, FactionName factionFrom, bool isLeech)
         {
             var index = LeechPowerQueue.FindIndex(x => x.Item1 == power && x.Item2 == factionFrom);
             if (index == -1)
             {
-                return;
+                return false;
             }
             LeechPowerQueue.RemoveAt(index);
             if (isLeech)
@@ -637,6 +637,7 @@ namespace GaiaCore.Gaia
                 var actualpower = PowerIncrease(ret);
                 Score -= Math.Max(actualpower - 1, 0);
             }
+            return true;
         }
 
         private void RemoveBuilding(BuildingSyntax syn)
