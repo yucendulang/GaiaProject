@@ -114,9 +114,7 @@ function createMap(data) {
                     break;
                 case "TradeCenter":
                 case "ResearchLab":
-                    if (LantidaBuild()) {
-                        break;
-                    }
+
                     //如果是ResearchLab
                     //如果是疯狂机器回合
                     if ("MadAndroid" === userInfo.factionName) {
