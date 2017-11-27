@@ -8,10 +8,15 @@ namespace GaiaProject.Models.AccountViewModels
 {
     public class LoginViewModel
     {
+
         [Required]
-        [EmailAddress]
-        [Display(Name = "邮箱")]
-        public string Email { get; set; }
+        [Display(Name = "用户名")]
+        public string UserName { get; set; }
+
+//        [Required]
+//        [EmailAddress]
+//        [Display(Name = "邮箱")]
+//        public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

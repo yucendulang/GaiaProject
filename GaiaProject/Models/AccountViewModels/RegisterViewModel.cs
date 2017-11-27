@@ -8,6 +8,11 @@ namespace GaiaProject.Models.AccountViewModels
 {
     public class RegisterViewModel
     {
+
+        [Required]
+        [Display(Name = "用户名")]
+        public string UserName { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "邮箱")]
