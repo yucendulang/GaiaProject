@@ -33,8 +33,8 @@ namespace GaiaProject.Controllers
                 ViewData["GameList"] = GameMgr.GetAllGame(task.Result.UserName);
             }
 #if DEBUG
-            ViewData["Message"] = @"yucenyucen@126.com";
-            ViewData["GameList"] = GameMgr.GetAllGame(@"yucenyucen@126.com");
+            //ViewData["Message"] = @"yucenyucen@126.com";
+            //ViewData["GameList"] = GameMgr.GetAllGame(@"yucenyucen@126.com");
 #endif
 
             return View();

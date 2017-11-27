@@ -6,6 +6,9 @@
 @{
 }
 
+@inject UserManager<ApplicationUser> UserManager
+
+
 <table class="table table-condensed">
     <thead>
         <tr>
@@ -18,31 +21,34 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.OrderByDescending(x => x.Value.LastMoveTime))
-        {
-            <tr>
-                <td><a href="/home/ViewGame/@item.Key">@item.Key</a></td>
-                @if (item.Value.UserDic.ContainsKey(User.Identity.Name))
-                {
-                    <td>@string.Join(",", @item.Value.UserDic[User.Identity.Name].Select(x => x.ChineseName))</td>
-                }
-                else
-                {
-                    <td>@string.Join(",", @item.Value.FactionList.Select(x => x.ChineseName))</td>
-                }
-                <td>@item.Value.GetLastMovePreriod()</td>
-                <td>@item.Value.GameStatus.RoundCount</td>
-                <td>@item.Value.GetCurrentUserName()</td>
-                @if (item.Value.UserDic.ContainsKey(User.Identity.Name))
-                {
-                    <td>@string.Join(",", @item.Value.UserDic[User.Identity.Name].Select(x => x.Score))</td>
-                }
-                else
-                {
-                    <td> @string.Join(",", @item.Value.FactionList.Select(x => x.Score)) </td >
-                }
-            </tr>
-        }
+    @{ string color = null;
+        var userName = @UserManager.GetUserName(User);}
+    @foreach (var item in Model.OrderByDescending(x => x.Value.LastMoveTime))
+    {
+        color = item.Value.GetCurrentUserName() == userName ? "#CD950C" : "";
+        <tr style="background: @color">
+            <td><a href="/home/ViewGame/@item.Key">@item.Key</a></td>
+            @if (item.Value.UserDic.ContainsKey(User.Identity.Name))
+            {
+                <td>@string.Join(",", @item.Value.UserDic[User.Identity.Name].Select(x => x.ChineseName))</td>
+            }
+            else
+            {
+                <td>@string.Join(",", @item.Value.FactionList.Select(x => x.ChineseName))</td>
+            }
+            <td>@item.Value.GetLastMovePreriod()</td>
+            <td>@item.Value.GameStatus.RoundCount</td>
+            <td>@item.Value.GetCurrentUserName()</td>
+            @if (item.Value.UserDic.ContainsKey(User.Identity.Name))
+            {
+                <td>@string.Join(",", @item.Value.UserDic[User.Identity.Name].Select(x => x.Score))</td>
+            }
+            else
+            {
+                <td> @string.Join(",", @item.Value.FactionList.Select(x => x.Score)) </td >
+            }
+        </tr>
+    }
     </tbody>
 </table>
 
