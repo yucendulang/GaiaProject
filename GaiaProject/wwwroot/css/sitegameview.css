@@ -167,7 +167,7 @@
     width: 100px;
     text-align: center;
     line-height: 30px;
-    background: url('/images/ac2back.png');
+    background: url('/images/AC2-4c.png');
     /*margin: auto;*/
 }
 
@@ -176,7 +176,7 @@
 }
 
 .BalAC2True {
-    background: url('/images/ac2usedback.png');
+    background: url('/images/AC2-4c-used.png');
 }
 
 .MapAction {

@@ -44,10 +44,12 @@ namespace GaiaCore.Gaia.Data
         public static readonly List<PwInfo> QuickActListNevla = new List<PwInfo>()
         {
             new PwInfo(){code = "2pw to 1q",name = "2点能量兑换1个量子方块"},
-            new PwInfo(){code = "2pw to 1o+1c",name = "2点能量兑换1个矿石和1点信用点"},
-            new PwInfo(){code = "2pw to 1pwt+1c",name = "2点能量兑换1个能量指示物和1点信用点"},
+            new PwInfo(){code = "2pw to 1o,1c",name = "2点能量兑换1个矿石和1点信用点"},
+            new PwInfo(){code = "2pw to 1pwt,1c",name = "2点能量兑换1个能量指示物和1点信用点"},
             new PwInfo(){code = "2pw to 1k",name = "2点能量兑换1点知识"},
             new PwInfo(){code = "1pw to 2c",name = "1点能量兑换2点信用点"},
+
+
             new PwInfo(){code = "1o to 1c",name = "1个矿石兑换1点信用点"},
             new PwInfo(){code = "1o to 1pwt",name = "1个矿石兑换1个能量指示物"},
             new PwInfo(){code = "1q to 1o",name = "1个量子方块兑换1个矿石"},
@@ -95,8 +97,8 @@ namespace GaiaCore.Gaia.Data
             new PwInfo(){code = "1q to 1pwt",name = "1个量子方块兑换1个能量指示物"},
             new PwInfo(){code = "1bs to 1o",name = "1个智慧石兑换1个矿石"},
             new PwInfo(){code = "1bs to 3c",name = "1个智慧石兑换3点信用点"},
-            new PwInfo(){code = "1bs+1pw to 1q",name = "1个智慧石和1点能量兑换1个量子方块"},
-            new PwInfo(){code = "1bs+1pw to 1k",name = "1个智慧石和1点能量兑换1点知识"},
+            new PwInfo(){code = "1bs,1pw to 1q",name = "1个智慧石和1点能量兑换1个量子方块"},
+            new PwInfo(){code = "1bs,1pw to 1k",name = "1个智慧石和1点能量兑换1点知识"},
             new PwInfo(){code = "1bs to 1pwt",name = "1个智慧石兑换1个能量指示物"},
 
 

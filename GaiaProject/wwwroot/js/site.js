@@ -82,13 +82,41 @@ function createMap(data) {
                 //if (clickObj.mapcolor !== userInfo.mapcolor) {
                 //    return;
                 //}
+                //亚特兰斯星人
+
+                if (userInfo.factionName === "Lantida") {
+                    var bList = new Array("Mine", "TradeCenter", "ResearchLab", "Academy", "StrongHold");
+                    if (!Array.indexOf) {
+                        Array.prototype.indexOf = function (obj) {
+                            for (var i = 0; i < this.length; i++) {
+                                if (this[i] == obj) {
+                                    return i;
+                                }
+                            }
+                            return -1;
+                        }
+                    }
+                    //var index = arr.indexOf('1');//为index赋值为0
+                    //如果不是自己的建筑
+                    var index = bList.indexOf(clickObj.typename);
+                    if (userInfo.mapcolor !== clickObj.mapcolor && index>-1 ) {
+                        openQueryWindow("build {0}".format(clickObj.position), "确认进行建造?".format(clickObj.position));
+                        return;
+                    }
+                }
+                else {
+                    
+                } 
                 switch (clickObj.typename) {
                 case "Mine":
-                        //$("#syntax").val("upgrade {0} to {1}".format(clickObj.position, "TC"));
-                        openQueryWindow("upgrade {0} to {1}".format(clickObj.position, "TC"), "是否要升级{0}建筑".format(clickObj.position));
+                    //$("#syntax").val("upgrade {0} to {1}".format(clickObj.position, "TC"));
+                    openQueryWindow("upgrade {0} to {1}".format(clickObj.position, "TC"), "是否要升级{0}建筑".format(clickObj.position));
                     break;
                 case "TradeCenter":
                 case "ResearchLab":
+                    if (LantidaBuild()) {
+                        break;
+                    }
                     //如果是ResearchLab
                     //如果是疯狂机器回合
                     if ("MadAndroid" === userInfo.factionName) {
@@ -114,37 +142,13 @@ function createMap(data) {
                     $("#updateBuildList").show();
 
 
-                    openSelectTT("upgrade "+clickObj.position+" to {0}");
+                    openSelectTT("upgrade " + clickObj.position + " to {0}");
 
                     if (isFirstBuild) {
                         isFirstBuild = false;
                     } else {
                         return;
                     }
-
-
-
-                        //清空其他选项
-                    //$(".updatettlist").change(function() {
-                    //    $(".updatettlist").not($(this)).val("");
-                    //});
-
-                    //$("#updateQuery").click(function () {
-                    //    var execcode;
-                    //    var upJz = $("#updateBuildList").val();
-                    //    if (upJz === "SH") {
-                    //        execcode =("upgrade {0} to {1}.".format(clickObj.position,
-                    //            upJz));
-                    //    } else {
-                    //        var code = getKjTile();
-                    //        if (!code) {
-                    //            return;
-                    //        }
-                    //        execcode = "upgrade {0} to {1}.".format(clickObj.position, upJz) + code;
-                    //    }
-                    //    $('#myModal').modal('hide');
-                    //    openQueryWindow(execcode);
-                    //});
                     break;
                 case "Academy":
 
@@ -152,15 +156,16 @@ function createMap(data) {
                 case "StrongHold":
                     break;
                 case "GaiaBuilding":
-                        openQueryWindow("build " + clickObj.position);
+                    openQueryWindow("build " + clickObj.position);
                     break;
                 case "gaizao":
                     //$("#syntax").val("gaia " + clickObj.position);
-                        openQueryWindow("gaia " + clickObj.position,"确认进行盖亚改造?");
+                    openQueryWindow("gaia " + clickObj.position, "确认进行盖亚改造?");
                     break;
                 default:
                     console.log("不能继续升级");
-                }
+                }   
+             
             }
             else {
                 //$("#syntax").val("build " + clickObj.position);
@@ -186,7 +191,8 @@ function createMap(data) {
                 //console.log(list);
                 var xy = getEventPosition(e);
                 var clickObj = getClickObj(xy.x, xy.y);
-                if (clickObj.typename != undefined && clickObj.typename !=="gaizao") {
+                //                if (userInfo.factionName === "Lantida") {
+                if (userInfo.factionName !== "Lantida" && clickObj.typename != undefined && clickObj.typename !=="gaizao") {
                     alert("不能选择已经有建筑的地点");
                 } else {
                     if (clickObj.typename === "gaizao") {

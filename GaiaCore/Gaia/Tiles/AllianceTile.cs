@@ -37,6 +37,7 @@ namespace GaiaCore.Gaia.Tiles
         public AllianceTile()
         {
             this.typename = "alt";
+            this.name = this.GetType().Name;
         }
     }
     public class ALT1 : AllianceTile
