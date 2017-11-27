@@ -266,7 +266,7 @@
                     {
                         if (fac is Taklons && fac.StrongHold == null)
                         {
-                            <form asp-controller="Home" asp-action="LeechPower" asp-route-returnurl="/Home/Contact" method="post" class="form-horizontal">
+                            <form asp-controller="Home" asp-action="LeechPower" method="post" class="form-horizontal">
                                 <div>
                                     @fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力
                                     <input name="isPwFirst" id="pwFirst" type="radio" checked="checked" value="true" /> 先增加魔力
@@ -282,7 +282,7 @@
                         }
                         else
                         {
-                            <form asp-controller="Home" asp-action="LeechPower" asp-route-returnurl="/Home/Contact" method="post" class="form-horizontal">
+                            <form asp-controller="Home" asp-action="LeechPower" method="post" class="form-horizontal">
                                 <div>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力</div>
                                 <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
                                 <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
