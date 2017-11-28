@@ -46,6 +46,12 @@ namespace GaiaCore.Gaia
                     return false;
                 }
 
+                if (map.HexArray[row, col].SpecialBuilding != null)
+                {
+                    log = "你已经在此处寄生过房子了";
+                    return false;
+                }
+
                 var distanceNeed = map.CalShipDistanceNeed(row, col, FactionName);
 
                 if (QICs * 2 < distanceNeed - GetShipDistance)
