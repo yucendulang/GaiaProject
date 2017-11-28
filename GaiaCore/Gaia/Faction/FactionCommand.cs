@@ -154,7 +154,7 @@ namespace GaiaCore.Gaia
             return false;
         }
 
-        public int GetSatelliteCount()
+        public virtual int GetSatelliteCount()
         {
             var hexList = GaiaGame.Map.GetHexList();
             var q =
@@ -174,7 +174,7 @@ namespace GaiaCore.Gaia
             return q.Count();
         }
 
-        public int GetBuildCount()
+        public virtual int GetBuildCount()
         {
             var i1 = Academy1 == null ? 1 : 0;
             var i2 = Academy2 == null ? 1 : 0;
@@ -266,7 +266,7 @@ namespace GaiaCore.Gaia
             return q.Count();
         }
 
-        public int GetPlanetTypeCount()
+        public virtual int GetPlanetTypeCount()
         {
             var hexList = GaiaGame.Map.GetHexList();
             var q =
@@ -793,6 +793,9 @@ namespace GaiaCore.Gaia
         public bool IsNoAdvTechTrack { get; set; }
         public bool PlanetAlready { get; set; }
         public int FactionSpecialAbility { get; set; }
+        /// <summary>
+        /// 记录两个FST计分板分数的
+        /// </summary>
         public int FinalEndScore { get; set; }
         #endregion
 

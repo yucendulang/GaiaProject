@@ -442,29 +442,31 @@
                                     <td>
                                         @item.GetType().Name @item.desc
                                     </td>
+                                    @{  Model.FactionList.ForEach(x => x.FinalEndScore = 0);
+                                        item.InvokeGameTileAction(Model.FactionList); }
                                     @foreach (var fac in Model.FactionList)
                                     {
-                                        <td>@item.TargetNumber(fac)</td>
+                                        <td>@item.TargetNumber(fac)/@(fac.FinalEndScore)VP</td>
                                     }
 
                                 </tr>
                             }
                             <tr>
                                 <td>
-                                    科技计分数量
+                                    科技总分
                                 </td>
                                 @foreach (var fac in Model.FactionList)
                                 {
-                                    <td>@fac.GetTechScoreCount()</td>
+                                    <td>@(fac.GetTechScoreCount()*4)VP</td>
                                 }
                             </tr>
                             <tr>
                                 <td>
-                                    资源总积分
+                                    资源总分
                                 </td>
                                 @foreach (var fac in Model.FactionList)
                                 {
-                                    <td>@fac.GetResouceScore()</td>
+                                    <td>@(fac.GetResouceScore())VP</td>
                                 }
                             </tr>
                             <tr>
@@ -475,7 +477,7 @@
                                     Model.FSTList.ForEach(x => x.InvokeGameTileAction(Model.FactionList)); }
                                 @foreach (var fac in Model.FactionList)
                                 {
-                                    <td>@fac.GetFinalEndScorePreview()</td>
+                                    <td>@(fac.GetFinalEndScorePreview())VP</td>
                                 }
                             </tr>
 
@@ -535,17 +537,19 @@
                 }
             </tbody>
         </table>
-        @foreach (var item in Model.UserActionLog.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
+        @if (User.Identity.Name.Equals("yucenyucen@126.com"))
         {
-            <li>@item</li>
-        }
-        <environment names="Development">
+            @foreach (var item in Model.UserActionLog.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                <li>@item</li>
+            }
+
             @if (!string.IsNullOrEmpty(Model.LastErrorLog))
             {
-                <h1>ErrorLog</h1>
-                <p>@Model.LastErrorLog</p>
+                <h1> ErrorLog </h1>
+                <p> @Model.LastErrorLog</p>
             }
-        </environment>
+        }
         @*<script type='text/javascript' language='javascript' src='~/lib/jquery/dist/jquery.min.js'></script>*@
                                     <script type='text/javascript' language='javascript' src='~/js/site.js'></script>
 

@@ -36,7 +36,14 @@ namespace GaiaCore.Gaia.Tiles
             scorequeue.Enqueue(12);
             scorequeue.Enqueue(6);
             scorequeue.Enqueue(0);
-            foreach (var item in factionList.GroupBy(x => TargetNumber(x)).OrderByDescending(x => x.Key))
+            var scoreList = new List<Faction>(factionList);
+            if (scoreList.Count == 2)
+            {
+                var virtualPlayer = new VirtualPlayerFaction(FactionName.Ambas,null);
+                scoreList.Add(virtualPlayer);
+            }
+
+            foreach (var item in scoreList.GroupBy(x => TargetNumber(x)).OrderByDescending(x => x.Key))
             {
                 var total = item.ToList().Sum(x => scorequeue.Dequeue());
                 item.ToList().ForEach(x => x.FinalEndScore += total / item.Count());
