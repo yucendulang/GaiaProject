@@ -8,6 +8,7 @@ using GaiaProject.Models.HomeViewModels;
 using Microsoft.AspNetCore.Identity;
 using GaiaProject.Models;
 using GaiaCore.Gaia.User;
+using ManageTool;
 
 namespace GaiaProject.Controllers
 {
@@ -42,15 +43,11 @@ namespace GaiaProject.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = string.Join("\r\n", GameMgr.GetAllBackupDataName());
-
             return View();
         }
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
-            ViewData["nameList"] = string.Join(",", GameMgr.GetAllGameName());
             return View();
         }
 
@@ -58,10 +55,19 @@ namespace GaiaProject.Controllers
         {
             return View();
         }
+
+        public IActionResult ServerDown()
+        {
+            return View();
+        }
         // POST: /Home/NewGame
         [HttpPost]
         public IActionResult NewGame(NewGameViewModel model)
         {
+            if (ServerStatus.IsStopSyntax == true)
+            {
+                return Redirect("/home/serverdown");
+            }
             if (string.IsNullOrEmpty(model.Name))
             {
                 model.Name = Guid.NewGuid().ToString();
@@ -76,7 +82,6 @@ namespace GaiaProject.Controllers
         [HttpGet]
         public IActionResult NewGame()
         {
-
             var task = _userManager.GetUserAsync(HttpContext.User);
             Task[] taskarray = new Task[] { task };
             Task.WaitAll(taskarray, millisecondsTimeout: 1000);
@@ -85,7 +90,6 @@ namespace GaiaProject.Controllers
                 ViewData["Message"] = task.Result.UserName;
                 ViewData["GameList"] = GameMgr.GetAllGameName(task.Result.UserName);
             }
-
             return View();
         }
 
@@ -142,6 +146,10 @@ namespace GaiaProject.Controllers
         [HttpPost]
         public string Syntax(string name, string syntax, string factionName)
         {
+            if (ServerStatus.IsStopSyntax == true)
+            {
+                return "error:" + "服务器维护中";
+            }
             var task = _userManager.GetUserAsync(HttpContext.User);
             Task[] taskarray = new Task[] { task };
             Task.WaitAll(taskarray, millisecondsTimeout: 1000);
@@ -178,6 +186,10 @@ namespace GaiaProject.Controllers
         [HttpPost]
         public IActionResult LeechPower(string name, FactionName factionName, int power, FactionName leechFactionName, bool isLeech,bool? isPwFirst)
         {
+            if (ServerStatus.IsStopSyntax == true)
+            {
+                return Redirect("/home/serverdown");
+            }
             var faction = GameMgr.GetGameByName(name).FactionList.Find(x => x.FactionName.ToString().Equals(name));
             var leech = isLeech ? "leech" : "decline";
 
@@ -240,6 +252,7 @@ namespace GaiaProject.Controllers
         #region 管理工具
         public IActionResult BackupData()
         {
+            ServerStatus.IsStopSyntax = true;
             GameMgr.BackupDictionary();
             return View();
         }
