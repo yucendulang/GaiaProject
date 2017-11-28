@@ -91,6 +91,7 @@ namespace GaiaProject.Controllers
 
         public IActionResult ViewGame(string id)
         {
+            ViewData["Title"] = "viewgame";
             var gg = GameMgr.GetGameByName(id);
             if (gg == null)
             {
@@ -103,6 +104,7 @@ namespace GaiaProject.Controllers
         [HttpPost]
         public IActionResult ViewGame(string name, string syntax, string factionName)
         {
+            ViewData["Title"] = "viewgame";
             var task = _userManager.GetUserAsync(HttpContext.User);
             Task[] taskarray = new Task[] { task };
             Task.WaitAll(taskarray, millisecondsTimeout: 1000);
