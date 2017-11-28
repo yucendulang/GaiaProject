@@ -22,7 +22,7 @@
             {
                 <li class="list-group-item" style="height: 35px;background-color: #CD950C;">@Model.RSTList[i].desc</li>
             }
-            if (@Model.GameStatus.RoundCount >= i + 2)
+            else if (@Model.GameStatus.RoundCount >= i + 2)
             {
                 <li class="list-group-item" style="height: 35px;background-color: #c3c3c3;">@Model.RSTList[i].desc</li>
             }
