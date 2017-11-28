@@ -435,12 +435,18 @@
 
                                     </td>
                                 }
+                                @if (Model.FactionList.Count == 2)
+                                {
+                                    <td>
+                                        虚拟玩家
+                                    </td>
+                                }
                             </tr>
                             @foreach (var item in Model.FSTList)
                             {
                                 <tr>
                                     <td>
-                                        @item.GetType().Name @item.desc
+                                        @item.GetType().Name @item.desc (数量/分数)
                                     </td>
                                     @{  Model.FactionList.ForEach(x => x.FinalEndScore = 0);
                                         item.InvokeGameTileAction(Model.FactionList); }
@@ -448,7 +454,12 @@
                                     {
                                         <td>@item.TargetNumber(fac)/@(fac.FinalEndScore)VP</td>
                                     }
-
+                                    @if (Model.FactionList.Count == 2)
+                                    {
+                                        <td>
+                                            @(item.TargetNumber(new VirtualPlayerFaction(FactionName.Ambas,null)))/@(36 - Model.FactionList.Sum(x=>x.FinalEndScore))VP
+                                        </td>
+                                    }
                                 </tr>
                             }
                             <tr>
@@ -459,6 +470,10 @@
                                 {
                                     <td>@(fac.GetTechScoreCount()*4)VP</td>
                                 }
+                                @if (Model.FactionList.Count == 2)
+                                {
+                                    <td></td>
+                                }
                             </tr>
                             <tr>
                                 <td>
@@ -467,6 +482,10 @@
                                 @foreach (var fac in Model.FactionList)
                                 {
                                     <td>@(fac.GetResouceScore())VP</td>
+                                }
+                                @if (Model.FactionList.Count == 2)
+                                {
+                                    <td></td>
                                 }
                             </tr>
                             <tr>
@@ -478,6 +497,10 @@
                                 @foreach (var fac in Model.FactionList)
                                 {
                                     <td>@(fac.GetFinalEndScorePreview())VP</td>
+                                }
+                                @if (Model.FactionList.Count == 2)
+                                {
+                                    <td></td>
                                 }
                             </tr>
 
