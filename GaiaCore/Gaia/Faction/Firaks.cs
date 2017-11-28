@@ -49,6 +49,7 @@ namespace GaiaCore.Gaia
                 hex.Building = TradeCenters.First();
                 TradeCenters.RemoveAt(0);
                 TriggerRST(typeof(RST2));
+                TriggerRST(typeof(RST8));
                 GaiaGame.SetLeechPowerQueue(FactionName, row, col);
             });
             TechTracAdv++;

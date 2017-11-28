@@ -45,7 +45,7 @@ namespace GaiaCore.Gaia
         public const string downgrade = "downgrade";
         public static Regex downgradeRegex = new Regex(downgrade + " ([a-z][0-9]{1,2})");
         /// <summary>
-        /// 吸魔力的正则表达式
+        /// 吸能量的正则表达式
         /// </summary>
         public const string leech = "leech";
         public const string decline = "decline";

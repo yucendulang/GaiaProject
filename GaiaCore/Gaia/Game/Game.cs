@@ -37,6 +37,11 @@ namespace GaiaCore.Gaia
         }
         public bool ProcessSyntax(string user, string syntax, out string log)
         {
+            ///此处为打版本标记之处
+            if (version == 0)
+            {
+                version = 2;
+            }
             log = string.Empty;
             syntax = syntax.ToLower();
             bool ret;
@@ -82,7 +87,7 @@ namespace GaiaCore.Gaia
                     }
                     return ret;
                 case Stage.ROUNDSTART:
-                    ///吸魔力
+                    ///吸能量
                     if (GameSyntax.leechPowerRegex.IsMatch(syntax))
                     {
                         ret = ProcessSyntaxLeechPower(syntax, ref log);
@@ -118,7 +123,7 @@ namespace GaiaCore.Gaia
 
                         return ret;
                     }
-                ///只处理吸魔力
+                ///只处理吸能量
                 case Stage.ROUNDWAITLEECHPOWER:
                     if (GameSyntax.leechPowerRegex.IsMatch(syntax))
                     {
@@ -182,7 +187,7 @@ namespace GaiaCore.Gaia
             }
             else
             {
-                log = "不能变为此种魔力分配";
+                log = "不能变为此种能量分配";
                 return false;
             }
             return true;
@@ -220,7 +225,7 @@ namespace GaiaCore.Gaia
                 }
                 if (faction.PowerTokenGaia < GameConstNumber.ItarGaiaGetTechTileCost)
                 {
-                    log = "盖亚区至少有四点魔力豆";
+                    log = "盖亚区至少有四点能量豆";
                     return false;
                 }
                 itar.SpecialGetTechTile();
@@ -245,7 +250,7 @@ namespace GaiaCore.Gaia
                 }
                 if (!commandList.ToList().TrueForAll(x => GameFreeSyntax.ConvertRegex.IsMatch(x)))
                 {
-                    log = "只支持魔力转换行动";
+                    log = "只支持能量转换行动";
                     return false;
                 }
                 var str = commandList.First();
@@ -678,7 +683,7 @@ namespace GaiaCore.Gaia
                     var v = match.Groups[1].Value.ParseToInt();
                     if (!(faction.PowerToken2 >= v * 2))
                     {
-                        log = item + "需要" + v * 2 + "魔力";
+                        log = item + "需要" + v * 2 + "能量";
                         return false;
                     }
                     faction.PowerBurnSpecialPreview(v);
@@ -1025,7 +1030,7 @@ namespace GaiaCore.Gaia
 
             if (faction.LeechPowerQueue.Count != 0)
             {
-                log = "必须先执行吸取魔力行动";
+                log = "必须先执行吸取能量行动";
                 return false;
             }
             return true;
@@ -1277,7 +1282,19 @@ namespace GaiaCore.Gaia
             ATTList = ATTMgr.GetRandomList(6, random);
             STT6List = STTMgr.GetRandomList(6, random);
             STT3List = (from items in STTMgr.GetOtherList(STT6List) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();
-            RSTList = RSTMgr.GetRandomList(6, random);
+            if (version == 1)
+            {
+                RSTList = RSTMgr.GetRandomList(6, random);
+            }
+            else if(version == 2)
+            {
+                RSTList = RSTMgr2.GetRandomList(6, random);
+            }
+            else
+            {
+                RSTList = RSTMgr2.GetRandomList(6, random);
+            }
+
             FSTList = FSTMgr.GetRandomList(2, random);
             RBTList = (from items in RBTMgr.GetRandomList(GameStatus.PlayerNumber + 3, random) orderby items.GetType().Name.Remove(0, 3).ParseToInt(-1) select items).ToList();
             ALTList = ALTMgr.GetList();
@@ -1405,6 +1422,8 @@ namespace GaiaCore.Gaia
         public bool IsTestGame { get; set; }
         [JsonProperty]
         public DateTime? LastMoveTime { set; get; }
+        [JsonProperty]
+        public int version { set; get; }
         public List<LogEntity> LogEntityList { set; get; }
 
 

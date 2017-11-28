@@ -101,7 +101,7 @@ namespace GaiaCore.Gaia
                 var altNum = GameTileList.Count(x => x is AllianceTile) - (m_TransformLevel == 5 ? 1 : 0) + 1;
                 if (allianceListClone.Sum(x => (map.GetHex(x).Building?.MagicLevel).GetValueOrDefault() + (map.GetHex(x).IsSpecialSatelliteForHive ? 1 : 0)) < m_allianceMagicLevel * altNum)
                 {
-                    log = string.Format("主城等级为{0},魔力等级不够{1}级", allianceListClone.Sum(x => map.GetHex(x).Building?.MagicLevel), m_allianceMagicLevel * altNum);
+                    log = string.Format("主城等级为{0},能量等级不够{1}级", allianceListClone.Sum(x => map.GetHex(x).Building?.MagicLevel), m_allianceMagicLevel * altNum);
                     return false;
                 }
             }
@@ -110,7 +110,7 @@ namespace GaiaCore.Gaia
                 var altNum = GameTileList.Count(x => x is AllianceTile) - (m_TransformLevel == 5 ? 1 : 0) + 1;
                 if (GetMainAllianceGrade() < m_allianceMagicLevel * altNum)
                 {
-                    log = string.Format("主城等级为{0},魔力等级不够{1}级", GetMainAllianceGrade(), m_allianceMagicLevel * altNum);
+                    log = string.Format("主城等级为{0},能量等级不够{1}级", GetMainAllianceGrade(), m_allianceMagicLevel * altNum);
                     return false;
                 }
             }

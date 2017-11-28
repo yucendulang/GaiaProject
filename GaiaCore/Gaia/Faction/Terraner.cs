@@ -40,7 +40,7 @@ namespace GaiaCore.Gaia
                     }
                     if (PowerTokenGaia < rFNum)
                     {
-                        log = "魔力值不够";
+                        log = "能量值不够";
                         return false;
                     }
                     TempPowerTokenGaia -= rFNum;
@@ -65,7 +65,7 @@ namespace GaiaCore.Gaia
                     }
                     if (PowerTokenGaia < rFNum)
                     {
-                        log = "魔力值不够";
+                        log = "能量值不够";
                         return false;
                     }
                     TempPowerTokenGaia -= rFNum;
@@ -90,7 +90,7 @@ namespace GaiaCore.Gaia
                     }
                     if (PowerTokenGaia < rFNum)
                     {
-                        log = "魔力值不够";
+                        log = "能量值不够";
                         return false;
                     }
                     TempPowerTokenGaia -= rFNum;
@@ -115,7 +115,7 @@ namespace GaiaCore.Gaia
                     }
                     if (PowerTokenGaia < rFNum)
                     {
-                        log = "魔力值不够";
+                        log = "能量值不够";
                         return false;
                     }
                     TempPowerTokenGaia -= rFNum;

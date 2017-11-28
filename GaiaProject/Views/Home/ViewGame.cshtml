@@ -268,9 +268,9 @@
                         {
                             <form asp-controller="Home" asp-action="LeechPower" method="post" class="form-horizontal">
                                 <div>
-                                    @fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力
-                                    <input name="isPwFirst" id="pwFirst" type="radio" checked="checked" value="true" /> 先增加魔力
-                                    <input name="isPwFirst" id="pwFirst" type="radio" value="false" />先增加魔力Token
+                                    @fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点能量
+                                    <input name="isPwFirst" id="pwFirst" type="radio" checked="checked" value="true" /> 先增加能量
+                                    <input name="isPwFirst" id="pwFirst" type="radio" value="false" />先增加能量Token
                                 </div>
                                 <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
                                 <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
@@ -283,7 +283,7 @@
                         else
                         {
                             <form asp-controller="Home" asp-action="LeechPower" method="post" class="form-horizontal">
-                                <div>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点魔力</div>
+                                <div>@fac.FactionName 是否要从 @leech.Item2 吸取 @leech.Item1 点能量</div>
                                 <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
                                 <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
                                 <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
@@ -299,7 +299,7 @@
                 {
                     <p>现在是Round @Model.GameStatus.RoundCount,Turn @Model.GameStatus.TurnCount</p>
                             <p>
-                                现在等待 <span style="background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 选择想要的魔力分配方式
+                                现在等待 <span style="background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 选择想要的能量分配方式
                             </p>
                     foreach (var item in Model.FactionList[Model.GameStatus.PlayerIndex].PowerPreview)
                     {
@@ -533,13 +533,13 @@
                     <th class="text-right">变化数值</th>
                     <th>知识</th>
                     <th class="text-right">变化数值</th>
-                    <th>魔力</th>
+                    <th>能量</th>
                     <th>语句</th>
                 </tr>
             </thead>
 
             <tbody>
-                @foreach (var item in Model.LogEntityList.OrderByDescending(x => x.Row).Take(20))
+                @foreach (var item in Model.LogEntityList.OrderByDescending(x => x.Row))
                 {
                     <tr>
                         <td>@(item.FactionName ?? null)</td>

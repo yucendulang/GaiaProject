@@ -28,6 +28,32 @@ namespace GaiaCore.Gaia.Tiles
         }
     }
 
+    public static class RSTMgr2
+    {
+        public static List<RoundScoring> GetRandomList(int n, Random random)
+        {
+            var list = new List<RoundScoring>()
+            {
+                new RST1(),
+                new RST2(),
+                new RST3(),
+                new RST4(),
+                new RST5(),
+                new RST6(),
+                new RST7(),
+                new RST8(),
+                new RST9(),
+                new RST10(),
+            };
+            var result = new List<RoundScoring>();
+            for (int i = 0; i < n; i++)
+            {
+                result.Add(list.RandomRemove(random));
+            }
+            return result;
+        }
+    }
+
 
     public abstract class RoundScoring:GameTiles
     {
@@ -117,5 +143,41 @@ namespace GaiaCore.Gaia.Tiles
         }
 
         public override int GetTriggerScore => 2;
+    }
+    public class RST8 : RoundScoring
+    {
+        public override string desc
+        {
+            get
+            {
+                return "TC->4VP";
+            }
+        }
+
+        public override int GetTriggerScore => 4;
+    }
+    public class RST9 : RoundScoring
+    {
+        public override string desc
+        {
+            get
+            {
+                return "SH/AD->5VP";
+            }
+        }
+
+        public override int GetTriggerScore => 5;
+    }
+    public class RST10 : RoundScoring
+    {
+        public override string desc
+        {
+            get
+            {
+                return "M(G)->3VP";
+            }
+        }
+
+        public override int GetTriggerScore => 3;
     }
 }

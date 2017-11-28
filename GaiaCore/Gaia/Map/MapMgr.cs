@@ -504,7 +504,7 @@ namespace GaiaCore.Gaia
 
         public int CalHighestPowerBuilding(int x, int y, Faction faction)
         {
-            //吸魔力大小范围
+            //吸能量大小范围
             var distance = 2;
             var res = 0;
             for (int i = Math.Max(x - distance, 0); i <= Math.Min(x + distance, m_mapHeight - 1); i++)
@@ -549,7 +549,7 @@ namespace GaiaCore.Gaia
             return dist;
         }
         /// <summary>
-        /// 寻找周围的魔力建筑 不包括GaiaBuilding
+        /// 寻找周围的能量建筑 不包括GaiaBuilding
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -557,7 +557,7 @@ namespace GaiaCore.Gaia
         /// <returns></returns>
         public List<Tuple<int, int>> GetSurroundhexWithBuild(int x, int y, FactionName name, int? dis = null)
         {
-            //吸魔力大小范围
+            //吸能量大小范围
             var ret = new List<Tuple<int, int>>();
             int distance = 0;
             if (dis.HasValue)
@@ -598,7 +598,7 @@ namespace GaiaCore.Gaia
         /// <returns></returns>
         public List<Tuple<int, int>> GetSurroundhexWithBuildingAndSatellite(int x, int y, FactionName name, int? dis = null, List<Tuple<int, int>> list = null)
         {
-            //吸魔力大小范围
+            //吸能量大小范围
             var ret = new List<Tuple<int, int>>();
             int distance = 0;
             if (dis.HasValue)
@@ -641,7 +641,7 @@ namespace GaiaCore.Gaia
         /// <returns></returns>
         public List<Tuple<int, int>> GetSurroundhex(int x, int y, FactionName name, List<Tuple<int, int>> list)
         {
-            //吸魔力大小范围
+            //吸能量大小范围
             var ret = new List<Tuple<int, int>>();
             int distance = 1;
             for (int i = Math.Max(x - distance, 0); i <= Math.Min(x + distance, m_mapHeight - 1); i++)
@@ -674,7 +674,7 @@ namespace GaiaCore.Gaia
         /// <returns></returns>
         public List<Tuple<int, int>> GetSatellitehex(int x, int y, FactionName name, List<Tuple<int, int>> list)
         {
-            //吸魔力大小范围
+            //吸能量大小范围
             var ret = new List<Tuple<int, int>>();
             var distance = 1;
             for (int i = Math.Max(x - distance, 0); i <= Math.Min(x + distance, m_mapHeight - 1); i++)

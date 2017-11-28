@@ -112,7 +112,7 @@ namespace GaiaCore.Gaia
         protected int m_GaiaLevel;
         protected int m_EconomicLevel;
         protected int m_ScienceLevel;
-        //出城需要的魔力等级
+        //出城需要的能量等级
         protected int m_allianceMagicLevel;
 
         protected const int m_MineCount = 8;

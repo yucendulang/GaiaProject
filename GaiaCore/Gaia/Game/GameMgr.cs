@@ -125,7 +125,7 @@ namespace GaiaCore.Gaia
         public static bool BackupDictionary()
         {
             JsonSerializerSettings jsetting = new JsonSerializerSettings();
-            jsetting.ContractResolver = new LimitPropsContractResolver(new string[] { "UserActionLog", "Username", "IsTestGame", "LastMoveTime" });
+            jsetting.ContractResolver = new LimitPropsContractResolver(new string[] { "UserActionLog", "Username", "IsTestGame", "LastMoveTime", "version" });
             var str = JsonConvert.SerializeObject(m_dic, Formatting.Indented, jsetting);
             var logPath = System.IO.Path.Combine(BackupDataPath, DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt");
             var logWriter = System.IO.File.CreateText(logPath);
@@ -180,6 +180,15 @@ namespace GaiaCore.Gaia
         {
             var gg = new GaiaGame(item.Value.Username);
             gg.IsTestGame = item.Value.IsTestGame;
+            if (item.Value.version == 0)
+            {
+                gg.version = 1;
+            }
+            else
+            {
+                gg.version = item.Value.version;
+            }
+            
             
             try
             {

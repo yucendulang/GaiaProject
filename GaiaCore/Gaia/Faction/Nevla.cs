@@ -98,7 +98,7 @@ namespace GaiaCore.Gaia
                     }
                     if (PowerToken3 < rFNum)
                     {
-                        log = "魔力值不够";
+                        log = "能量值不够";
                         return false;
                     }
                     TempPowerToken3 -= rFNum;
@@ -131,7 +131,7 @@ namespace GaiaCore.Gaia
                         }
                         if (PowerToken3 < rFNum)
                         {
-                            log = "魔力值不够";
+                            log = "能量值不够";
                             return false;
                         }
                         TempPowerToken3 -= rFNum;
@@ -156,7 +156,7 @@ namespace GaiaCore.Gaia
                         }
                         if (PowerToken3 < rFNum)
                         {
-                            log = "魔力值不够";
+                            log = "能量值不够";
                             return false;
                         }
                         TempPowerToken3 -= rFNum;
@@ -184,7 +184,7 @@ namespace GaiaCore.Gaia
                         }
                         if (PowerToken3 < rFNum)
                         {
-                            log = "魔力值不够";
+                            log = "能量值不够";
                             return false;
                         }
                         TempPowerToken3 -= rFNum;
@@ -212,7 +212,7 @@ namespace GaiaCore.Gaia
                         }
                         if (PowerToken3 < rFNum)
                         {
-                            log = "魔力值不够";
+                            log = "能量值不够";
                             return false;
                         }
                         TempPowerToken3 -= rFNum;
@@ -238,7 +238,7 @@ namespace GaiaCore.Gaia
                         }
                         if (PowerToken3 < rFNum)
                         {
-                            log = "魔力值不够";
+                            log = "能量值不够";
                             return false;
                         }
                         TempPowerToken3 -= rFNum;
@@ -264,7 +264,7 @@ namespace GaiaCore.Gaia
                         }
                         if (PowerToken3 < rFNum)
                         {
-                            log = "魔力值不够";
+                            log = "能量值不够";
                             return false;
                         }
                         TempPowerToken3 -= rFNum;
@@ -289,7 +289,7 @@ namespace GaiaCore.Gaia
                         }
                         if (PowerToken3 < rFNum)
                         {
-                            log = "魔力值不够";
+                            log = "能量值不够";
                             return false;
                         }
                         TempPowerToken3 -= rFNum;
@@ -314,7 +314,7 @@ namespace GaiaCore.Gaia
                         }
                         if (PowerToken3 < rFNum)
                         {
-                            log = "魔力值不够";
+                            log = "能量值不够";
                             return false;
                         }
                         TempPowerToken3 -= rFNum;

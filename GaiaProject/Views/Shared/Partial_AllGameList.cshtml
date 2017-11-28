@@ -18,6 +18,7 @@
             <td>回合</td>
             <td>等待的玩家</td>
             <td>分数</td>
+            <td>版本</td>
         </tr>
     </thead>
     <tbody>
@@ -47,6 +48,7 @@
             {
                 <td> @string.Join(",", @item.Value.FactionList.Select(x => x.Score)) </td >
             }
+            <td>V@(item.Value.version)</td>
         </tr>
     }
     </tbody>

@@ -84,7 +84,7 @@ $(".actionGp").click(function () {
 });
 
 if (userInfo.isRound) {
-    //魔力行动
+    //能量行动
     $("#actBody div").click(function () {
         var value = this.id.replace(" ", "");
         if ($(this).find("a").css("color") === "rgb(255, 0, 0)") {

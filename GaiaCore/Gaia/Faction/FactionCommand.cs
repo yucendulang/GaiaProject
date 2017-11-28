@@ -109,6 +109,7 @@ namespace GaiaCore.Gaia
                 if (isGreenPlanet)
                 {
                     TriggerRST(typeof(RST4));
+                    TriggerRST(typeof(RST10));
                     TriggerRST(typeof(STT2));
                     GaiaPlanetNumber++;
                 }
@@ -218,7 +219,7 @@ namespace GaiaCore.Gaia
             }
             if (PowerToken1 + PowerToken2 + PowerToken3 < GetGaiaCost())
             {
-                log = "魔力豆资源不够";
+                log = "能量豆资源不够";
                 return false;
             }
             if (map.HexArray[row, col].TFTerrain != Terrain.Purple)
@@ -295,7 +296,7 @@ namespace GaiaCore.Gaia
         {
             if (PowerToken1 + PowerToken2 + PowerToken3 <n)
             {
-                throw new Exception(string.Format("没有{0}个魔力豆来移除",n));
+                throw new Exception(string.Format("没有{0}个能量豆来移除",n));
             }
             PowerToken1 -= n;
             if (PowerToken1 < 0)
@@ -346,7 +347,7 @@ namespace GaiaCore.Gaia
             var ptl = new List<int>();
             CalPowerIncome(pl);
             CalPowerTokenIncome(ptl);
-            var pls = new List<Tuple<bool, int>>(); //true为加魔力 false为加pwt
+            var pls = new List<Tuple<bool, int>>(); //true为加能量 false为加pwt
             pl.Where(x => x != 0).ToList().ForEach(x => pls.Add(new Tuple<bool, int>(true, x)));
             ptl.Where(x => x != 0).ToList().ForEach(x => pls.Add(new Tuple<bool, int>(false, x)));
             for (int i = 0; i < pls.Count; i++)
@@ -469,6 +470,7 @@ namespace GaiaCore.Gaia
             int creditCost;
             Building build;
             Type trigger;
+            Type trigger2;
             switch (syn)
             {
                 case BuildingSyntax.TC:
@@ -481,21 +483,24 @@ namespace GaiaCore.Gaia
                     else
                     {
                         creditCost = m_TradeCenterCreditCostAlone;
-                    }       
-                    trigger = typeof(RST2);
+                    }
+                    trigger = typeof(RST8);
+                    trigger2 = typeof(RST2);
                     break;
                 case BuildingSyntax.RL:
                     build = ResearchLabs.FirstOrDefault();
                     oreCost = m_ReaserchLabOreCost;
                     creditCost = m_ReaserchLabCreditCost;
                     trigger = null;
+                    trigger2 = null;
                     break;
                 case BuildingSyntax.SH:
                     build = StrongHold;
                     oreCost = m_StrongHoldOreCost;
                     creditCost = m_StrongHoldCreditCost;
                     trigger = typeof(RST3);
-                    if(this is Nevla)
+                    trigger2 = typeof(RST9);
+                    if (this is Nevla)
                     {
                         (this as Nevla).IsStrongBuild = true;
                     }
@@ -505,13 +510,15 @@ namespace GaiaCore.Gaia
                     oreCost = m_AcademyOreCost;
                     creditCost = m_AcademyCreditCost;
                     trigger = typeof(RST3);
+                    trigger2 = typeof(RST9);
                     break;
                 case BuildingSyntax.AC2:
                     build = Academy2;
                     oreCost = m_AcademyOreCost;
                     creditCost = m_AcademyCreditCost;
                     trigger = typeof(RST3);
-                    if(this is Gleen)
+                    trigger2 = typeof(RST9);
+                    if (this is Gleen)
                     {
                         (this as Gleen).IsOreReplaceQICSIncome = false;
                     }
@@ -559,6 +566,10 @@ namespace GaiaCore.Gaia
                 if (trigger != null)
                 {
                     TriggerRST(trigger);
+                }
+                if (trigger2 != null)
+                {
+                    TriggerRST(trigger2);
                 }
                 if (syn == BuildingSyntax.AC2)
                 {
@@ -1047,7 +1058,7 @@ namespace GaiaCore.Gaia
             }
             if (PowerToken1 + PowerToken2 + PowerToken3 < SatelliteHexList.Count)
             {
-                log = string.Format("魔力豆总数量为{0},放卫星数量为{1},魔力豆不够", (PowerToken1 + PowerToken2 + PowerToken3), SatelliteHexList.Count);
+                log = string.Format("能量豆总数量为{0},放卫星数量为{1},能量豆不够", (PowerToken1 + PowerToken2 + PowerToken3), SatelliteHexList.Count);
                 return false;
             }
             if (list.Exists(x =>
@@ -1128,7 +1139,7 @@ namespace GaiaCore.Gaia
                 }
             }) < m_allianceMagicLevel)
             {
-                log = string.Format("魔力等级不够{0}级", m_allianceMagicLevel);
+                log = string.Format("能量等级不够{0}级", m_allianceMagicLevel);
                 return false;
             }
 
@@ -1209,7 +1220,7 @@ namespace GaiaCore.Gaia
                     }
                     if (PowerToken3 < rFNum)
                     {
-                        log = "魔力值不够";
+                        log = "能量值不够";
                         return false;
                     }
                     TempPowerToken3 -= rFNum;
@@ -1234,7 +1245,7 @@ namespace GaiaCore.Gaia
                     }
                     if (PowerToken3 < rFNum)
                     {
-                        log = "魔力值不够";
+                        log = "能量值不够";
                         return false;
                     }
                     TempPowerToken3 -= rFNum;
@@ -1259,7 +1270,7 @@ namespace GaiaCore.Gaia
                     }
                     if (PowerToken3 < rFNum)
                     {
-                        log = "魔力值不够";
+                        log = "能量值不够";
                         return false;
                     }
                     TempPowerToken3 -= rFNum;
@@ -1284,7 +1295,7 @@ namespace GaiaCore.Gaia
                     }
                     if (PowerToken3 < rFNum)
                     {
-                        log = "魔力值不够";
+                        log = "能量值不够";
                         return false;
                     }
                     TempPowerToken3 -= rFNum;

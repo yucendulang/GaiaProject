@@ -134,7 +134,7 @@ namespace GaiaCore.Gaia.Tiles
         }
     }
     /// <summary>
-    /// 行动：获得4魔力
+    /// 行动：获得4能量
     /// </summary>
     public class STT1 : StandardTechnology
     {
