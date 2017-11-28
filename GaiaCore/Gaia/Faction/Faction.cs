@@ -428,6 +428,7 @@ namespace GaiaCore.Gaia
 
             var ret = new FactionBackup()
             {
+                m_score = Score,
                 m_credit = m_credit,
                 m_knowledge = m_knowledge,
                 m_ore = m_ore,

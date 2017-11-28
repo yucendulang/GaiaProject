@@ -14,6 +14,7 @@ namespace GaiaCore.Gaia
         public int m_powerToken2;
         public int m_powerToken3;
         public int m_powerTokenGaia;
+        public int m_score;
         public int? m_bigstone;
     }
 }
