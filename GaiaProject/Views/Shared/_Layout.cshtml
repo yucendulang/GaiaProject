@@ -3,7 +3,16 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @if (ViewData["Title"] != null && ViewData["Title"].ToString().Equals("viewgame"))
+    {
+        <meta name = "viewport" content = "width=device-width, initial-scale=0.4" />
+    }
+    else
+    {
+        <meta name = "viewport" content = "width=device-width, initial-scale=1" />
+    }
+
+    @*<meta name="viewport" content="width=device-width, initial-scale=0.4, minimum-scale=0.4, maximum-scale=2.0, user-scalable=yes" />*@
     <title>@ViewData["Title"] - 盖亚计划</title>
     
     
