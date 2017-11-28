@@ -24,6 +24,6 @@ namespace GaiaProject.Data
             // Add your customizations after calling base.OnModelCreating(builder);
         }
 
-        //public DbSet<UserFriend> UserFriend { get; set; }
+        public DbSet<UserFriend> UserFriend { get; set; }
     }
 }

@@ -497,17 +497,17 @@
             <thead>
                 <tr>
                     <th>种族名</th>
-                    <th>变化数值</th>
+                    <th class="text-right">变化数值</th>
                     <th>分数</th>
-                    <th>变化数值</th>
+                    <th class="text-right">变化数值</th>
                     <th>信用点</th>
-                    <th>变化数值</th>
+                    <th class="text-right">变化数值</th>
                     <th>矿</th>
-                    <th>变化数值</th>
+                    <th class="text-right">变化数值</th>
                     <th>QIC</th>
-                    <th>变化数值</th>
+                    <th class="text-right">变化数值</th>
                     <th>知识</th>
-                    <th>变化数值</th>
+                    <th class="text-right">变化数值</th>
                     <th>魔力</th>
                     <th>语句</th>
                 </tr>
@@ -518,17 +518,17 @@
                 {
                     <tr>
                         <td>@(item.FactionName ?? null)</td>
-                        <td>@item.ResouceChange?.m_score</td>
+                        <td class="text-right">@item.ResouceChange?.m_score</td>
                         <td>@(item.ResouceEnd?.m_score)vp</td>
-                        <td>@item.ResouceChange?.m_credit</td>
+                        <td class="text-right">@item.ResouceChange?.m_credit</td>
                         <td>@(item.ResouceEnd?.m_credit)c</td>
-                        <td>@item.ResouceChange?.m_ore</td>
+                        <td class="text-right">@item.ResouceChange?.m_ore</td>
                         <td>@(item.ResouceEnd?.m_ore)o</td>
-                        <td>@item.ResouceChange?.m_QICs</td>
+                        <td class="text-right">@item.ResouceChange?.m_QICs</td>
                         <td>@(item.ResouceEnd?.m_QICs)q</td>
-                        <td>@item.ResouceChange?.m_knowledge</td>
+                        <td class="text-right">@item.ResouceChange?.m_knowledge</td>
                         <td>@(item.ResouceEnd?.m_knowledge)k</td>
-                        <td>@(item.ResouceChange?.m_powerToken2 + item.ResouceChange?.m_powerToken3 * 2)</td>
+                        <td class="text-right">@(item.ResouceChange?.m_powerToken2 + item.ResouceChange?.m_powerToken3 * 2)</td>
                         <td>@(item.ResouceEnd?.m_powerToken1)/@(item.ResouceEnd?.m_powerToken2)/@(item.ResouceEnd?.m_powerToken3)</td>
                         <td>@item.Syntax</td>
                     </tr>
