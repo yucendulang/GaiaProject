@@ -1,8 +1,6 @@
-﻿.container {
+﻿/*.container {
     width: 1640px;
-}
-
-
+}*/
 .rbtcss {
     height: 90px;
     width: 100px;
@@ -192,3 +190,22 @@
 .MapTrue {
     background: url('/images/shusedback.png');
 }
+
+
+@media (min-width: 1060px) {
+    .container {
+        width: 1060px;
+    }
+}
+@media (min-width: 1640px) {
+    .container {
+        width: 1640px;
+    }
+}
+
+
+
+
+/*.container {
+    width: 1640px;
+}*/
