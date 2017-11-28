@@ -46,7 +46,13 @@ namespace GaiaCore.Gaia.Tiles
             foreach (var item in scoreList.GroupBy(x => TargetNumber(x)).OrderByDescending(x => x.Key))
             {
                 var total = item.ToList().Sum(x => scorequeue.Dequeue());
-                item.ToList().ForEach(x => x.FinalEndScore += total / item.Count());
+                item.ToList().ForEach(x =>
+                {
+                    if (TargetNumber(x) != 0)
+                    {
+                        x.FinalEndScore += total / item.Count();
+                    }
+                });
             }
             return true;
         }
