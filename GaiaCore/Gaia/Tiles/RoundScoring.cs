@@ -162,7 +162,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "SH/AD->5VP";
+                return "SH/AC->5VP";
             }
         }
 
