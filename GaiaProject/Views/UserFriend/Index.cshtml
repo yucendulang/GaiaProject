@@ -1,0 +1,13 @@
+﻿@model List<UserFriend>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>
+    @foreach (var  item in @Model)
+    {
+        <div>@item.UserName</div>
+    }
+</h2>

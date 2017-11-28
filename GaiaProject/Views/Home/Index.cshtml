@@ -10,6 +10,10 @@
     <p id="username">@ViewData["Message"]</p>
     <p><a href="/home/NewGame">创建新游戏</a></p>
     <h4>你的游戏</h4>
+
+
+
+
     @if (ViewData["GameList"] != null)
     {
         @Html.Partial("Partial_AllGameList", ViewData["GameList"])
@@ -53,25 +57,25 @@
         </environment>
     }
     <script>
-    setTimeout('GetNextGame()', 10000); //指定1秒刷新一次
+        setTimeout('GetNextGame()', 10000); //指定1秒刷新一次
 
-    function GetNextGame() {
-        if ($("#isMyTurn").text().indexOf("True") == -1) {
-            $.post("/home/GetNextGame",
-                {
-                    name: $("p#username").text()
-                },
-                function (data, status) {
-                    console.log(data);
-                    if (data == undefined || data == "") {
-                    } else {
-                        window.location.href = "/home/viewgame/" + data;
-                        alert("你的回合");
-                    }
-                });
+        function GetNextGame() {
+            if ($("#isMyTurn").text().indexOf("True") == -1) {
+                $.post("/home/GetNextGame",
+                    {
+                        name: $("p#username").text()
+                    },
+                    function (data, status) {
+                        console.log(data);
+                        if (data == undefined || data == "") {
+                        } else {
+                            window.location.href = "/home/viewgame/" + data;
+                            alert("你的回合");
+                        }
+                    });
+            }
+            setTimeout('GetNextGame()', 10000);
         }
-        setTimeout('GetNextGame()', 10000);
-    }
     </script>
 }
 else

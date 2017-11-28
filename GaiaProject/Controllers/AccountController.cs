@@ -119,6 +119,9 @@ namespace GaiaProject.Controllers
             {
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
 
+                //_userManager.AddClaimAsync()
+                //user.Friends.Add(user);
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

@@ -8,31 +8,14 @@ using GaiaProject.Data;
 namespace GaiaProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171128072634_MyFirstMigration")]
+    partial class MyFirstMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("GaiaProject.Models.AccountViewModels.UserFriend", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("UserId");
-
-                    b.Property<int>("UserIdTo");
-
-                    b.Property<string>("UserName");
-
-                    b.Property<string>("UserNameTo");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserFriend");
-                });
 
             modelBuilder.Entity("GaiaProject.Models.ApplicationUser", b =>
                 {
@@ -71,6 +54,8 @@ namespace GaiaProject.Data.Migrations
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
+
+                    b.Property<string>("testName");
 
                     b.HasKey("Id");
 
