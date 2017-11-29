@@ -280,7 +280,7 @@ function DrawMap(ctx) {
 
             if (array[i][j] !== null) {
                 //console.log(i, j, array[i][j].ogTerrain, ConvertIntToColor(array[i][j].ogTerrain), array[i][j].isCenter);
-                DrawOneHex(ctx, j, i, ConvertIntToColor(array[i][j].tfTerrain), array[i][j].isCenter, array[i][j]);
+                DrawOneHex(ctx, j, i, ConvertIntToColor(array[i][j].tfTerrain), array[i][j].isCenter, array[i][j],array);
                 //console.log(i, j, array[i][j].building);
                 if (array[i][j].building !== null) {
                     //建筑对象
@@ -328,7 +328,7 @@ function DrawMap(ctx) {
 }
 
 
-function DrawOneHex(ctx, col, row, color, isCenter, hex) {
+function DrawOneHex(ctx, col, row, color, isCenter, hex,array) {
 
     //console.log(color);
     var loc = hexCenter(col, row);
@@ -337,7 +337,7 @@ function DrawOneHex(ctx, col, row, color, isCenter, hex) {
 
     var x = loc[0] + Math.sin(Math.PI / 6) * hex_size;
     var y = loc[1] - Math.cos(Math.PI / 6) * hex_size;
-    makeHexPath(ctx, x, y, hex_size, color,name);
+    makeHexPath(ctx, x, y, hex_size, color,name,array,col,row);
     if (isCenter) {
         textSpaceSectorCenterName(ctx, loc[0], loc[1], hex.spaceSectorName)
     }
@@ -418,10 +418,10 @@ function hexCenter(row, col) {
 }
 
 var buildingObj;
-function makeHexPath(ctx, x, y, size, color,name) {
+function makeHexPath(ctx, x, y, size, color, name, array, col, row) {
     //console.log("makeHexPath",x,y,size,color);
     var angle = 0;
-
+    ctx.save();
     ctx.beginPath();
     ctx.moveTo(x, y);
 
@@ -431,28 +431,55 @@ function makeHexPath(ctx, x, y, size, color,name) {
 
         //保存
         switch (i) {
-        case 0:
-            buildingObj.xmax = x;
-            buildingObj.ymin = y;
-            break;
-        case 3:
-            buildingObj.xmin = x;
-            buildingObj.ymax = y;
-            break;
+            case 0:
+                buildingObj.xmax = x;
+                buildingObj.ymin = y;
+                break;
+            case 3:
+                buildingObj.xmin = x;
+                buildingObj.ymax = y;
+                break;
         }
-
-
         angle += Math.PI / 3;
         x += Math.cos(angle) * size;
         y += Math.sin(angle) * size;
-
-
     }
     ctx.strokeStyle = "Black"
     ctx.fillStyle = color;
     ctx.fill();
     ctx.closePath();
     ctx.stroke();
+    ctx.restore();
+    var fudong = col % 2 == 0 ? 0 : 1;
+    if (row + 1 < 20 && ((array[row + 1][col] === null)||(array[row + 1][col] != null && array[row][col].spaceSectorName != array[row + 1][col].spaceSectorName))) {
+        DrawHexSpaceBianjie(ctx, x, y, 3,size);
+    }
+    if (row - 1 >= 0 && ((array[row - 1][col] === null) || (array[row - 1][col] != null && array[row][col].spaceSectorName != array[row - 1][col].spaceSectorName))) {
+        DrawHexSpaceBianjie(ctx, x, y, 6, size);
+    }
+    if (col - 1 >= 0 && ((array[row + fudong][col - 1] === null) || (array[row + fudong][col - 1] != null && array[row][col].spaceSectorName != array[row + fudong][col - 1].spaceSectorName))) {
+        DrawHexSpaceBianjie(ctx, x, y, 4, size);
+    }
+    if (col - 1 >= 0 && ((array[row + fudong - 1][col - 1] === null) || (array[row + fudong - 1][col - 1] != null && array[row][col].spaceSectorName != array[row + fudong - 1][col - 1].spaceSectorName))) {
+        DrawHexSpaceBianjie(ctx, x, y, 5, size);
+    }
+    if (col + 1 < 20 && ((array[row + fudong][col + 1] === null) || (array[row + fudong][col + 1] != null && array[row][col].spaceSectorName != array[row + fudong][col + 1].spaceSectorName))) {
+        DrawHexSpaceBianjie(ctx, x, y, 2, size);
+    }
+    if (col + 1 < 20 && ((array[row + fudong - 1][col + 1] === null) || (array[row + fudong - 1][col + 1] != null && array[row][col].spaceSectorName != array[row + fudong - 1][col + 1].spaceSectorName))) {
+        DrawHexSpaceBianjie(ctx, x, y, 1, size);
+    }
+    if (row == 0) {
+        DrawHexSpaceBianjie(ctx, x, y, 6, size);
+    }
+    if (col == 0) {
+        DrawHexSpaceBianjie(ctx, x, y, 4, size);
+        DrawHexSpaceBianjie(ctx, x, y, 5, size);
+    }
+    if (col == 19) {
+        DrawHexSpaceBianjie(ctx, x, y, 1, size);
+        DrawHexSpaceBianjie(ctx, x, y, 2, size);
+    }
 
     //添加元素
     if (color === "#D19FE8") {
@@ -463,6 +490,27 @@ function makeHexPath(ctx, x, y, size, color,name) {
     //console.log(color);
     activeObjList.push(buildingObj);
     //activeObjList.push({ "name": name, "row": row, "col": col });
+}
+
+function DrawHexSpaceBianjie(ctx, x, y,z,size) {
+    var angle = 0;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    for (var i = 0; i < 7; i++) {
+        if (i == z) {
+            ctx.lineTo(x, y);
+        } else {
+            ctx.moveTo(x, y);
+        }
+        angle += Math.PI / 3;
+        x += Math.cos(angle) * size;
+        y += Math.sin(angle) * size;
+    }
+    ctx.strokeStyle = "Black"
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.restore();
 }
 
 function DrawMine(ctx, row, col,name) {
