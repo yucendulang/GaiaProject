@@ -417,6 +417,10 @@ namespace GaiaCore.Gaia
                     if(faction.LeechPower(power, factionFrom, isLeech))
                     {
                         faction.PowerToken1++;
+                        return true;
+                    }
+                    else
+                    {
                         return false;
                     }
                 }
