@@ -7,7 +7,7 @@
 {
     <link rel="stylesheet" href="~/css/bootstrap-table.css">
     <script src="~/js/bootstrap-table.js"></script>
-    <p id="username">@ViewData["Message"]</p>
+    <p id="username" hidden="hidden">@ViewData["Message"]</p>
     <p><a href="/home/NewGame">创建新游戏</a></p>
     <h4>你的游戏</h4>
 
@@ -32,7 +32,7 @@
     <h4>已知问题将来会修复</h4>
     <li>升级科技之后的资源暂时无法convert</li>
     <li>出城算法检测问题</li>
-    <h4>12月15日之前以修BUG为主 最近更新如下</h4>
+    <h4>12月15日之前以修BUG为主 最近更新如下 最近一次更新时间@(ViewData["ServerStartTime"])</h4>
     <li>增加了一块新的SHAD5分 MG3分 TF4分的计分板</li>
     <li>增加两人计分中的虚拟玩家 持续优化最终得分面板</li>
     <li>修正Lantida族可以重复寄生同一个地点的问题</li>

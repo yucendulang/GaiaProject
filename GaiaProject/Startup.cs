@@ -35,7 +35,7 @@ namespace GaiaProject
                 DaemonMgr.StartAll();
                 GaiaCore.Gaia.GameMgr.RestoreDictionary(string.Empty);
             }
-
+            ServerStatus.ServerStartTime = DateTime.Now;
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
         }

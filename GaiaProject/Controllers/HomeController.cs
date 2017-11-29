@@ -32,6 +32,7 @@ namespace GaiaProject.Controllers
             {
                 ViewData["Message"] = task.Result.UserName;
                 ViewData["GameList"] = GameMgr.GetAllGame(task.Result.UserName);
+                ViewData["ServerStartTime"] = ServerStatus.ServerStartTime;
             }
 #if DEBUG
             //ViewData["Message"] = @"yucenyucen@126.com";
