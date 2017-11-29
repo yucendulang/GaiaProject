@@ -419,7 +419,14 @@ namespace GaiaCore.Gaia
             }
             else
             {
-                return GetFinalEndScore() + Score;
+                if (GaiaGame.FactionNextTurnList.Contains(this))
+                {
+                    return GetFinalEndScore() + Score;
+                }
+                else
+                {
+                    return GetFinalEndScore() + Score+ GameTileList.Sum(y => y.GetTurnEndScore(this));
+                }
             }
         }
         public int GetTechScoreCount()

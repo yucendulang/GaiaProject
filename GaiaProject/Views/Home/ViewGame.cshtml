@@ -490,6 +490,19 @@
                             </tr>
                             <tr>
                                 <td>
+                                    回合结束计分
+                                </td>
+                                @foreach (var fac in Model.FactionList)
+                                {
+                                    <td>@(fac.GameTileList.Sum(y => y.GetTurnEndScore(fac)))VP</td>
+                                }
+                                @if (Model.FactionList.Count == 2)
+                                {
+                                    <td></td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>
                                     结局总计分
                                 </td>
                                 @{            Model.FactionList.ForEach(x => x.FinalEndScore = 0);
