@@ -320,25 +320,20 @@
                 @if (User.Identity.Name.Equals(Model.GetCurrentUserName()))
                 {
 
-                    <div>
-
-                        <div asp-validation-summary="All" class="text-danger"></div>
-                        @*<div class="col-lg-3">*@
-                        <div class="input-group">
+                        <div class="form-inline">
                             @*<div class="input-group-btn">*@
-                            <span class="input-group-addon">命令</span>
-                            <input id="syntax" name="syntax" type="text" class="form-control" aria-label="Text input with multiple buttons">
-                            <button id="syn" type="button" class="btn btn-default">保存</button>
-                            @*</div>*@
+                            <a class="btn btn-default" data-toggle="collapse" href="#techDisplay" role="button" style="box-shadow:none">折叠科技</a>
+                            <div class="input-group">
+                                <span class="input-group-addon">命令</span>
+                                <input id="syntax" size="50" name="syntax" type="text" class="form-control" aria-label="Text input with multiple buttons">
+                            </div>
+                            <button id="syn" type="button" class="btn btn-primary">保存</button>
                             <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
                             @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
                             {
                                 <input id="test3" name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden" />
                             }
-                            <!-- /.input-group -->
-                        </div><!-- /.col-lg-6 -->
-                        @*</div>*@
-                    </div>
+                        </div>
                 }
 
 
@@ -532,7 +527,7 @@
 
         </div>
         <table class="table table-condensed">
-            <thead>
+            <thead data-toggle="collapse" data-target="#demo">
                 <tr>
                     <th>种族名</th>
                     <th class="text-right">变化数值</th>
@@ -551,7 +546,7 @@
                 </tr>
             </thead>
 
-            <tbody>
+            <tbody id="demo" class="collapse in">
                 @foreach (var item in Model.LogEntityList.OrderByDescending(x => x.Row))
                 {
                     <tr>

@@ -208,8 +208,9 @@
     }
 }
 
-
-
+.btn-default:focus {
+    background-color: #fff;
+}
 
 /*.container {
     width: 1640px;
