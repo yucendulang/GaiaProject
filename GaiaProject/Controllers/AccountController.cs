@@ -121,24 +121,42 @@ namespace GaiaProject.Controllers
 
                 //_userManager.AddClaimAsync()
                 //user.Friends.Add(user);
-
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                var isEmail = _userManager.FindByEmailAsync(user.Email);
+                //邮箱已经存在
+                if (isEmail.Result!=null)
                 {
-                    //发送邮箱确认
-                    if (1 == 2)
-                    {
-                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                        var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                        await _emailSender.SendEmailAsync(model.Email, "确认账户",
-                            $"请点击链接确认你的账户: <a href='{callbackUrl}'>link</a>");
-                    }
-
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation(3, "User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+                    model.UserName = string.Format("邮箱{0}已经存在!",user.Email);
                 }
-                AddErrors(result);
+                else
+                {
+                    var result = await _userManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        //发送邮箱确认
+                        if (1 == 2)
+                        {
+                            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                            var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account",
+                                new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                            await _emailSender.SendEmailAsync(model.Email, "确认账户",
+                                $"请点击链接确认你的账户: <a href='{callbackUrl}'>link</a>");
+                        }
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        _logger.LogInformation(3, "User created a new account with password.");
+                        return RedirectToLocal(returnUrl);
+                    }
+                    else
+                    {
+                        //错误信息
+                        var list = result.Errors.ToList();
+                        if (list.Count > 0)
+                        {
+                            model.UserName = list[0].Description;
+                        }
+                    }
+                    AddErrors(result);
+                }
+
             }
 
             // If we got this far, something failed, redisplay form
