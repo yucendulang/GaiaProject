@@ -101,9 +101,16 @@
                             高级科技
                         </td>
                         @foreach (var item in Model.ATTList)
-            {
-                            <td title="@item.name" align="center"> <div class="attcss @{@item.name}False"><span>@item.name<br />@item.desc</span></div></td>
-    }
+                        {
+                            if (item.isPicked)
+                            {
+                                <td title="@item.name" align="center"> <div class="attcss attusedcss @{@item.name}True"><span>@item.name<br />@item.desc</span></div></td>
+                            }
+                            else
+                            {
+                                <td title="@item.name" align="center"> <div class="attcss @{@item.name}False"><span>@item.name<br />@item.desc</span></div></td>
+                            }
+                        }
                     </tr>
                     <tr>
                         <td>

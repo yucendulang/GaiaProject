@@ -75,7 +75,7 @@
     /*margin: auto;*/
 }
 .attusedcss {
-    background: url('/images/attback.png');
+    background: url('/images/sttusedback.png');
 }
 
 .ATT1False {
@@ -88,6 +88,10 @@
 .ATT1True {
     background: url('/images/att1usedback.png');
 }
+.ATT1True span {
+    display: none
+}
+
 
 .ATT2False {
     background: url('/images/att2back.png');
