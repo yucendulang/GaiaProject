@@ -764,6 +764,7 @@ namespace GaiaCore.Gaia
         public virtual void ResetUnfinishAction()
         {
             ActionQueue.Clear();
+            UnDoActionQueue.Clear();
             TerraFormNumber = 0;
             TempShip = 0;
             m_TechTilesGet = 0;
@@ -1514,7 +1515,11 @@ namespace GaiaCore.Gaia
         public void DoAction(string actionStr,bool isFreeSyntax=false)
         {
             var func = ActionList[actionStr];
-            if (isFreeSyntax)
+            if ("stt1".Equals(actionStr))
+            {
+                ImmediAction(actionStr);
+            }
+            else if (isFreeSyntax)
             {
                 func.Invoke(this);
             }
@@ -1526,6 +1531,17 @@ namespace GaiaCore.Gaia
                 };
                 ActionQueue.Enqueue(action);
             }
+        }
+
+        private void ImmediAction(string actionStr)
+        {
+            var func = ActionList[actionStr];
+            func.Invoke(this);
+            UnDoActionQueue.Enqueue(() =>
+            {
+                GameTileGet(actionStr).UndoGameTileAction(this);
+            }
+            );
         }
 
         public bool IsIncreateTechValide(string tech, out string log, bool isIncreaseAllianceTileCost = false)

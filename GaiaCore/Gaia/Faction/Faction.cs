@@ -71,6 +71,7 @@ namespace GaiaCore.Gaia
             Score = 10;
             GaiaGame = gg;
             ActionQueue = new Queue<Action>();
+            UnDoActionQueue = new Queue<Action>();
             ActionList = new Dictionary<string, Func<Faction, bool>>();
             PredicateActionList = new Dictionary<string, Func<Faction, bool>>();
             GaiaGame.MapActionMrg.AddMapActionList(ActionList, PredicateActionList);
@@ -175,23 +176,23 @@ namespace GaiaCore.Gaia
 
         public virtual int PowerIncrease(int i)
         {
-            var ret = Math.Min(m_powerToken1 + m_powerToken2, i);
-            if (m_powerToken1 > i)
+            var ret = Math.Min(PowerToken1 + PowerToken2, i);
+            if (PowerToken1 > i)
             {
-                m_powerToken1 -= i;
-                m_powerToken2 += i;
+                PowerToken1 -= i;
+                PowerToken2 += i;
             }
-            else if (m_powerToken1 * 2 + m_powerToken2 > i)
+            else if (PowerToken1 * 2 + PowerToken2 > i)
             {
-                m_powerToken2 = m_powerToken2 - i + m_powerToken1 * 2;
-                m_powerToken3 += i - m_powerToken1;
-                m_powerToken1 = 0;
+                PowerToken2 = PowerToken2 - i + PowerToken1 * 2;
+                PowerToken3 += i - PowerToken1;
+                PowerToken1 = 0;
             }
             else
             {
-                m_powerToken3 += m_powerToken1 + m_powerToken2;
-                m_powerToken2 = 0;
-                m_powerToken1 = 0;
+                PowerToken3 += PowerToken1 + PowerToken2;
+                PowerToken2 = 0;
+                PowerToken1 = 0;
             }
             return ret;
         }
@@ -300,7 +301,14 @@ namespace GaiaCore.Gaia
         public List<Tuple<int, FactionName>> LeechPowerQueue { get; }
         public int Score { get; set; }
         public GaiaGame GaiaGame { get; }
+        /// <summary>
+        /// 单回合执行的命令Queue
+        /// </summary>
         public Queue<Action> ActionQueue { get; set; }
+        /// <summary>
+        /// 单回合回滚的命令Queue
+        /// </summary>
+        public Queue<Action> UnDoActionQueue { get; set; }
 
         public Dictionary<string, Func<Faction, bool>> ActionList { get; set; }
         public Dictionary<string, Func<Faction, bool>> PredicateActionList { get; set; }
@@ -446,7 +454,7 @@ namespace GaiaCore.Gaia
             return ret;
         }
 
-        private void RestoreResource(FactionBackup backup)
+        public void RestoreResource(FactionBackup backup)
         {
             if (backup != null)
             {

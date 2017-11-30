@@ -138,7 +138,7 @@ namespace GaiaCore.Gaia.Tiles
     /// </summary>
     public class STT1 : StandardTechnology
     {
-
+        FactionBackup backup;
 
         public override string desc
         {
@@ -151,11 +151,20 @@ namespace GaiaCore.Gaia.Tiles
         public const int powerIncreaseConst = 4;
 
         public override bool CanAction => true;
+        public override bool PredicateGameTileAction(Faction faction)
+        {
+            return base.PredicateGameTileAction(faction);
+        }
         public override bool InvokeGameTileAction(Faction faction)
         {
+            backup=faction.BackupResource();
             faction.PowerIncrease(powerIncreaseConst);
-
             return base.InvokeGameTileAction(faction);
+        }
+        public override bool UndoGameTileAction(Faction faction)
+        {
+            faction.RestoreResource(backup);
+            return base.UndoGameTileAction(faction);
         }
     }
     /// <summary>

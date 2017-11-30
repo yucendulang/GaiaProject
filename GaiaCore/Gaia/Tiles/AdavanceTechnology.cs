@@ -285,7 +285,7 @@ namespace GaiaCore.Gaia.Tiles
 
         public override bool OneTimeAction(Faction faction)
         {
-            faction.Score += faction.GameTileList.Where(x => x is AllianceTile).Count() * 3;
+            faction.Score += faction.GameTileList.Where(x => x is AllianceTile).Count() * 5;
             return true;
         }
     }

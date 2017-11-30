@@ -44,6 +44,11 @@ namespace GaiaCore.Gaia.Tiles
             IsUsed = true;
             return true;
         }
+        public virtual bool UndoGameTileAction(Faction faction)
+        {
+            IsUsed = false;
+            return true;
+        }
 
         public virtual bool PredicateGameTileAction(Faction faction) { return !IsUsed; }
         public virtual bool OneTimeAction(Faction faction) { return true; }

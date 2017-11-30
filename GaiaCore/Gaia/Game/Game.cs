@@ -461,8 +461,20 @@ namespace GaiaCore.Gaia
             faction.ResetUnfinishAction();
             return ret;
         }
-        
-        private bool ProcessCommandWithBackup(string[] commandList,Faction faction,out string log)
+        private bool ProcessCommandWithBackup(string[] commandList, Faction faction, out string log)
+        {
+            var ret = ProcessSingleCommand(commandList, faction, out log);
+            if (!ret)
+            {
+                //如果命令失败了回滚所有代码
+                foreach (var item in faction.UnDoActionQueue)
+                {
+                    item.Invoke();
+                }
+            }
+            return ret;
+        }
+        private bool ProcessSingleCommand(string[] commandList,Faction faction,out string log)
         {
             log = string.Empty;
             //faction.ResetUnfinishAction();
