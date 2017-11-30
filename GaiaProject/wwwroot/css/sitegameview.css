@@ -92,6 +92,24 @@
     display: none
 }
 
+.ATT1Picked {
+    background: url('/images/att1pickedback.png');
+}
+.ATT1Picked span {
+    display: none
+}
+.ATT2Picked {
+    background: url('/images/att2pickedback.png');
+}
+.ATT2Picked span {
+    display: none
+}
+.ATT3Picked {
+    background: url('/images/att3pickedback.png');
+}
+.ATT3Picked span {
+    display: none
+}
 
 .ATT2False {
     background: url('/images/att2back.png');
@@ -99,6 +117,8 @@
 .ATT2False span {
     display: none
 }
+
+
 .ATT2True {
     background: url('/images/att2usedback.png');
 }
