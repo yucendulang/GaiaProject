@@ -60,6 +60,11 @@ namespace GaiaProject
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.Configure<IdentityOptions>(options =>
             {
+                //邮箱不允许重复
+                options.User.RequireUniqueEmail = true;
+                //允许使用用户名
+                //options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+
                 options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 6;
                 options.Password.RequireNonAlphanumeric = false;

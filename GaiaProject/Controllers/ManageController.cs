@@ -208,6 +208,37 @@ namespace GaiaProject.Controllers
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
 
+        [HttpGet]
+        public IActionResult ChangeInfo()
+        {
+            var user =  GetCurrentUserAsync();
+            ChangeInfoModel changeInfoModel=new ChangeInfoModel()
+            {
+                UserName = user.Result.UserName,
+                Email = user.Result.Email,
+            };
+            return View(changeInfoModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeInfo(ChangeInfoModel model)
+        {
+            var user = await GetCurrentUserAsync();
+            var isPwd = await _userManager.CheckPasswordAsync(user, model.Password);
+            if (isPwd)
+            {
+                user.UserName = model.UserName;
+                user.Email = model.Email;
+                await _userManager.UpdateAsync(user);
+                return RedirectToAction("Login", "Account");
+                //return RedirectToAction(nameof(Index), new {Message = ManageMessageId.Error});
+            }
+            else
+            {
+                return View(model);
+            }
+        }
         //
         // GET: /Manage/ChangePassword
         [HttpGet]
