@@ -144,7 +144,7 @@
 }
 
 
-.AC2False {
+.AC2 {
     height: 90px;
     width: 100px;
     text-align: center;
@@ -152,15 +152,16 @@
     background: url('/images/ac2back.png');
     /*margin: auto;*/
 }
-    .AC2False span {
+    .AC2 span {
         display: none
     }
+
 .AC2True {
     background: url('/images/ac2usedback.png');
 }
 
 
-.BalAC2False {
+.BalAC2 {
     height: 90px;
     width: 100px;
     text-align: center;
@@ -169,7 +170,7 @@
     /*margin: auto;*/
 }
 
-.BalAC2False span {
+.BalAC2 span {
     display: none
 }
 

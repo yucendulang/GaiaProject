@@ -1438,7 +1438,7 @@ namespace GaiaCore.Gaia
             set { }
             get
             {
-                return STT6List.GroupBy(a => a.name).Select(g => new STTInfo { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name) }).ToList();
+                return STT6List.GroupBy(a => a.name).Select(g => new STTInfo { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name),Index = g.Max(item=>item.Index)}).ToList();
             }
         }
         /// <summary>
@@ -1449,7 +1449,7 @@ namespace GaiaCore.Gaia
             set {}
             get
             {
-                return STT3List.GroupBy(a => a.name).Select(g => new STTInfo { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name) }).ToList();
+                return STT3List.GroupBy(a => a.name).Select(g => new STTInfo { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name), Index = g.Max(item => item.Index) }).ToList();
             }
         }
 
@@ -1464,10 +1464,10 @@ namespace GaiaCore.Gaia
             {
                 
             }
-            public int count;
-            public string desc;
-            public string name;
-
+            public int count { get; set; }
+            public string desc { get; set; }
+            public string name { get; set; }
+            public int? Index { get; set; }
         }
 
 

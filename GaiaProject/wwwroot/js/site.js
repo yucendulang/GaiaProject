@@ -167,13 +167,24 @@ function createMap(data) {
             }
             else {
                 //$("#syntax").val("build " + clickObj.position);
-                if (userInfo.round === 0) {
-                    $("#syntax").val("build " + clickObj.position);
-                }
+//                if (userInfo.round === 0) {
+//                    $("#syntax").val("build " + clickObj.position);
+//                }
                 if (clickObj.mapcolor === userInfo.mapcolor) {
                     openQueryWindow("build " + clickObj.position, "确认进行建造?");
-                } else {
-                    $("#syntax").val("build " + clickObj.position);
+                }
+                else {
+                    if (userInfo.stage === 2) {
+                        alert("初始建筑必须放在原始星球上面");
+                        return;
+                    }
+                    ///空白星球
+                    else if (clickObj.mapcolor === "#FFFFFF") {
+                        alert("不能再空白星球上面建造");
+                        return;
+                    } else {
+                        $("#syntax").val("build " + clickObj.position);
+                    }
                 }
             }
 

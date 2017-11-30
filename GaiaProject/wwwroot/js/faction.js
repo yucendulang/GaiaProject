@@ -144,6 +144,12 @@ if (userInfo.isRound) {
             openQueryWindow(obj.attr("syntax") + this.id, "确认执行?");
         }
     );
+    //AC2=4C
+    $("#playerFaction .BalAC2False").click(function () {
+            var obj = $(this);
+            openQueryWindow(obj.attr("syntax") + this.id, "确认执行?");
+        }
+    );
 
     //种族能力
     $(".MapAction").click(function () {

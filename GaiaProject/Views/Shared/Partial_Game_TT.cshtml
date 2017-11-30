@@ -109,24 +109,36 @@
                         <td>
                             基础科技(6)
                         </td>
-                        @foreach (var item in Model.STT6ListGroup)
+                        @{ int stt6Index = 0;}
+                        @for (int i=0;i<6;i++)
                         {
-                            <td title="@item.name" align="center">
-
-                                <div class="sttcss @{@item.name}False"><span>@item.name (@item.count) <br /> @item.desc</span> </div>
-                            </td>
-    }
+                            if (Model.STT6ListGroup[stt6Index].Index == i)
+                            {
+                                var item = Model.STT6ListGroup[stt6Index];
+                                stt6Index++;
+                                <td title="@item.name" align="center">
+                                    <div class="sttcss @{@item.name}False"><span>@item.name (@item.count) <br /> @item.desc</span> </div>
+                                </td>
+                            }
+                            else
+                            {
+                                <td align="center">
+                                    
+                                </td>
+                            }
+                        }                 
                     </tr>
                     <tr>
                         <td>
                             基础科技(3)
                         </td>
+                       
                         @foreach (var item in Model.STT3ListGroup)
                         {
                             <td colspan="2" title="@item.name" class="" align="center">
                                 <div class="sttcss  @{@item.name}False"><span>@item.name (@item.count) <br /> @item.desc</span></div>
-                            </td>
-    }
+                                                      </td>
+                        }
                     </tr>
                 </tbody>
             </table>
