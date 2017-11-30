@@ -25,9 +25,13 @@
         <dd>
             <a asp-controller="Manage" asp-action="ChangeInfo" class="btn-bracketed">修改</a>
         </dd>
-        <dt>好友:</dt>
-        <dd>
-            <a asp-controller="UserFriend" asp-action="Index" class="btn-bracketed">查看</a>
-        </dd>
+        @if (Startup.isEnableFriend)
+        {
+            <dt>好友:</dt>
+            <dd>
+                <a asp-controller="UserFriend" asp-action="Index" class="btn-bracketed">查看</a>
+            </dd>
+        }
+
     </dl>
 </div>
