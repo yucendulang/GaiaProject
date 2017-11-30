@@ -339,19 +339,28 @@ namespace GaiaProject.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+//                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+//                {
+//                    // Don't reveal that the user does not exist or is not confirmed
+//                    return View("ForgotPasswordConfirmation");
+//                }
+
+                if (user == null)
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
+                    return View(model);
+                }
+                else
+                {
+                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
+                    // Send an email with this link
+                    var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var callbackUrl = Url.Action(nameof(ResetPassword), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    await _emailSender.SendEmailAsync(model.Email, "重置密码",
+                        $"请点击链接重置你的密码: <a href='{callbackUrl}'>链接</a>");
                     return View("ForgotPasswordConfirmation");
                 }
 
-                // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
-                // Send an email with this link
-                //var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                //var callbackUrl = Url.Action(nameof(ResetPassword), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                //await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-                //   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
-                //return View("ForgotPasswordConfirmation");
+
             }
 
             // If we got this far, something failed, redisplay form

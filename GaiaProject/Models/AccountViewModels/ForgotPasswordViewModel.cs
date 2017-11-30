@@ -10,6 +10,7 @@ namespace GaiaProject.Models.AccountViewModels
     {
         [Required]
         [EmailAddress]
+        [Display(Name = "邮箱")]
         public string Email { get; set; }
     }
 }
