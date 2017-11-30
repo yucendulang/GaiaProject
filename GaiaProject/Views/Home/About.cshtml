@@ -1,4 +1,111 @@
-﻿<div>人类 Terraner</div>
+﻿@using GaiaCore.Gaia
+
+
+<div class="panel panel-default" id="Terraner">
+    <div class="panel-heading"><span style="background-color: #16a0e0">人类 Terraner</span></div>
+    <table class="table">
+        <tr>
+            <td>
+                初始星球颜色：
+            </td>
+            <td>
+                蓝色（陆地）
+            </td>
+        </tr>
+        <tr>
+            <td>初始研究：</td>
+            <td>盖亚计划</td>
+        </tr>
+        <tr>
+            <td>
+                种族初始能力:
+            </td>
+            <td>
+                盖亚阶段时，盖亚区域的能量标记进入2号区域，而不是1号区域
+            </td>
+        </tr>
+        <tr>
+            <td>
+                星际要塞能力:
+            </td>
+            <td>
+                盖亚阶段时，盖亚区域的能量标记进入2号区域时，免费获得等同于盖亚区域能量标记数量的能量用于兑换资源，兑换比例与自由行动相同
+            </td>
+        </tr>
+        <tr>
+            <td>
+                盖亚阶段指令示例:
+            </td>
+            <td>
+                convert 3pw to 1o
+            </td>
+        </tr>
+        <tr>
+            <td>
+                特殊：
+            </td>
+            <td>
+                无
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">人类 Terraner</div>
+
+    <!-- Table -->
+    <table class="table">
+        <tr>
+            <td>
+                初始星球颜色：
+            </td>
+            <td>
+                蓝色（陆地）
+            </td>
+        </tr>
+        <tr>
+            <td>初始研究：</td>
+            <td>盖亚计划</td>
+        </tr>
+        <tr>
+            <td>
+                种族初始能力:
+            </td>
+            <td>
+                盖亚阶段时，盖亚区域的能量标记进入2号区域，而不是1号区域
+            </td>
+        </tr>
+        <tr>
+            <td>
+                星际要塞能力:
+            </td>
+            <td>
+                盖亚阶段时，盖亚区域的能量标记进入2号区域时，免费获得等同于盖亚区域能量标记数量的能量用于兑换资源，兑换比例与自由行动相同
+            </td>
+        </tr>
+        <tr>
+            <td>
+                盖亚阶段指令示例:
+            </td>
+            <td>
+                convert 3pw to 1o
+            </td>
+        </tr>
+        <tr>
+            <td>
+                特殊：
+            </td>
+            <td>
+                无
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+<div>人类 Terraner</div>
 
 <div>初始星球颜色：蓝色（陆地）</div>
 
@@ -198,3 +305,25 @@
 <div>星际要塞能力：立即获得1个专属联邦板块（1点知识,1个矿石,2点信用点,可翻面）</div>
 
 <div>特殊：要塞不生产能量指示物，额外生产1个矿石</div>
+
+
+<nav class="navbar navbar-default navbar-fixed-bottom">
+    <div class="container">
+        <div class="btn-group" role="group" aria-label="...">
+            
+            @foreach (var fac in (new List<Faction>() { new Terraner(null), new Lantida(null), new Hive(null), new HadschHalla(null), new BalTak(null), new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null), new MadAndroid(null), new Itar(null), new Nevla(null) }))
+            {
+                <button type="button" class="btn btn-default" style="background-color: @fac.ColorCode" divid="@fac.FactionName" id="@fac.FactionName" onclick="goDiv('@fac.FactionName')">
+                    @fac.ChineseName
+                </button>
+            }
+
+        </div>
+    </div>
+</nav>
+<script>
+    function goDiv(div) {
+        var a = $("#"+div).offset().top-50;
+        $("html,body").animate({scrollTop:a}, 'slow'); 
+    }
+</script>
