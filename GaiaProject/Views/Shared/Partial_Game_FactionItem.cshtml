@@ -26,14 +26,6 @@
         
         <span style="background-color: @Model.ColorCode">@Model.ChineseName @Model.FactionName @Model.UserName</span>
         
-        @*<button onclick="addFriend()">添加好友</button>
-        <script>
-            function addFriend() {
-                $.post("/UserFriend/AddFriend", "UserName=@UserManager.GetUserName(User)&UserNameTo=@Model.UserName&UserId=1&UserIdTo=2", function(data) {
-                    alert(data);
-                });
-            }
-        </script>*@
 
     </h3>
 </div>

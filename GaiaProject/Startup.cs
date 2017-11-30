@@ -18,6 +18,11 @@ namespace GaiaProject
 {
     public class Startup
     {
+        /// <summary>
+        /// 是否启用好友系统
+        /// </summary>
+        public static bool isEnableFriend = true;
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()

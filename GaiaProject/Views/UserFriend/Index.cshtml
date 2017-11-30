@@ -1,13 +1,54 @@
-﻿@model List<UserFriend>
+﻿@using GaiaProject.Data
+@using Microsoft.EntityFrameworkCore
+@model List<UserFriend>
 
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
 }
 
-<h2>
+
+<ul class="list-group">
+    
     @foreach (var  item in @Model)
     {
-        <div>@item.UserName</div>
+        <li class="list-group-item">@{@item.UserNameTo}(@item.Remark)</li>
     }
-</h2>
+</ul>
+
+
+
+<div class="row">
+    <div style="width: 700px">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="用户名" id="uf_username">
+            <input type="text" class="form-control" placeholder="备注" id="uf_remark">
+
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" onclick="addFriend()">添加好友</button>
+            </span>
+        </div><!-- /input-group -->
+    </div><!-- /.col-lg-6 -->
+</div><!-- /.row -->
+
+<script>
+    function addFriend() {
+        var value = $("#uf_username").val();
+        var remark = $("#uf_remark").val();
+        if (value === "") {
+            alert("请输入用户名");
+            return;
+        }
+        if (remark === "") {
+            remark = value;
+        }
+        $.post("/UserFriend/AddFriend", "UserNameTo=" + value + "&Remark=" + remark, function(data) {
+            if (data.info.state === 200) {
+                //alert("添加成功");
+                window.location.reload();
+            } else {
+                alert(data.info.message);
+            }
+        });
+    }
+</script>

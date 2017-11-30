@@ -11,11 +11,13 @@ namespace GaiaProject.Models.AccountViewModels
         [Key]
         public int Id { get; set; }
         public string UserName { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         public string UserNameTo { get; set; }
-        public int UserIdTo { get; set; }
-
-
+        public string UserIdTo { get; set; }
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string Remark { get; set; }
     }
 }

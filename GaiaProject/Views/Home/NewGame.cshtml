@@ -1,5 +1,8 @@
 ﻿@using System.Linq
+@using GaiaProject.Data
 @model GaiaProject.Models.HomeViewModels.NewGameViewModel
+@inject ApplicationDbContext dbContext
+
 @{
     ViewData["Title"] = "新游戏";
 }
@@ -7,14 +10,21 @@
 @inject UserManager<ApplicationUser> UserManager
 
 <h2>@ViewData["Title"].</h2>
-
-@*选择玩家:
-<div class="btn-group" role="group" aria-label="..." id="userList">
-@foreach (var user in UserManager.Users)
+@if (Startup.isEnableFriend)
 {
-        <button type="button" class="btn btn-default" id="@user.UserName">@user.UserName</button>      
+    var fList = dbContext.UserFriend.Where(item => item.UserName == User.Identity.Name).ToList();
+    if (fList.Count > 0)
+    {
+    <span>选择好友:</span>
+    <div class="btn-group" role="group" aria-label="..." id="userList">
+                                                            @foreach (var user in dbContext.UserFriend.Where(item=>item.UserName == User.Identity.Name))
+        {
+        <button type="button" class="btn btn-default" id="@user.UserNameTo">@{@user.UserNameTo}(@user.Remark)</button>      
+        }
+    </div>
+    }
 }
-</div>*@
+
 
 <script>
     //var inputList = $("#playForm input[type='email']");
