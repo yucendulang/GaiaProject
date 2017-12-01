@@ -535,46 +535,51 @@
         </div>
         <table class="table table-condensed">
             <thead data-toggle="collapse" data-target="#demo">
-                <tr>
-                    <th>种族名</th>
-                    <th class="text-right">变化数值</th>
-                    <th>分数</th>
-                    <th class="text-right">变化数值</th>
-                    <th>信用点</th>
-                    <th class="text-right">变化数值</th>
-                    <th>矿</th>
-                    <th class="text-right">变化数值</th>
-                    <th>QIC</th>
-                    <th class="text-right">变化数值</th>
-                    <th>知识</th>
-                    <th class="text-right">变化数值</th>
-                    <th>能量</th>
-                    <th>语句</th>
-                </tr>
+            <tr>
+                <th>种族名</th>
+                <th class="text-right">变化数值</th>
+                <th>分数</th>
+                <th class="text-right">变化数值</th>
+                <th>信用点</th>
+                <th class="text-right">变化数值</th>
+                <th>矿</th>
+                <th class="text-right">变化数值</th>
+                <th>QIC</th>
+                <th class="text-right">变化数值</th>
+                <th>知识</th>
+                <th class="text-right">变化数值</th>
+                <th>能量</th>
+                <th>语句</th>
+            </tr>
             </thead>
 
-            <tbody id="demo" class="collapse in">
-                @foreach (var item in Model.LogEntityList.OrderByDescending(x => x.Row))
-                {
-                    <tr>
-                        <td>@(item.FactionName ?? null)</td>
-                        <td class="text-right">@item.ResouceChange?.m_score</td>
-                        <td>@(item.ResouceEnd?.m_score)vp</td>
-                        <td class="text-right">@item.ResouceChange?.m_credit</td>
-                        <td>@(item.ResouceEnd?.m_credit)c</td>
-                        <td class="text-right">@item.ResouceChange?.m_ore</td>
-                        <td>@(item.ResouceEnd?.m_ore)o</td>
-                        <td class="text-right">@item.ResouceChange?.m_QICs</td>
-                        <td>@(item.ResouceEnd?.m_QICs)q</td>
-                        <td class="text-right">@item.ResouceChange?.m_knowledge</td>
-                        <td>@(item.ResouceEnd?.m_knowledge)k</td>
-                        <td class="text-right">@(item.ResouceChange?.m_powerToken2 + item.ResouceChange?.m_powerToken3 * 2)</td>
-                        <td>@(item.ResouceEnd?.m_powerToken1)/@(item.ResouceEnd?.m_powerToken2)/@(item.ResouceEnd?.m_powerToken3)</td>
-                        <td>@item.Syntax</td>
-                    </tr>
-                }
+            <tbody id="SyntaxLogList" class="collapse in">
+            @foreach (var item in Model.LogEntityList.OrderByDescending(x => x.Row).Take(20))
+            {
+                <tr>
+                    <td>@(item.FactionName ?? null)</td>
+                    <td class="text-right">@item.ResouceChange?.m_score</td>
+                    <td>@(item.ResouceEnd?.m_score)vp</td>
+                    <td class="text-right">@item.ResouceChange?.m_credit</td>
+                    <td>@(item.ResouceEnd?.m_credit)c</td>
+                    <td class="text-right">@item.ResouceChange?.m_ore</td>
+                    <td>@(item.ResouceEnd?.m_ore)o</td>
+                    <td class="text-right">@item.ResouceChange?.m_QICs</td>
+                    <td>@(item.ResouceEnd?.m_QICs)q</td>
+                    <td class="text-right">@item.ResouceChange?.m_knowledge</td>
+                    <td>@(item.ResouceEnd?.m_knowledge)k</td>
+                    <td class="text-right">@(item.ResouceChange?.m_powerToken2 + item.ResouceChange?.m_powerToken3 * 2)</td>
+                    <td>@(item.ResouceEnd?.m_powerToken1)/@(item.ResouceEnd?.m_powerToken2)/@(item.ResouceEnd?.m_powerToken3)</td>
+                    <td>@item.Syntax</td>
+                </tr>
+            }
             </tbody>
         </table>
+        @if (Model.LogEntityList.Count > 20)
+         {
+             <button class="btn btn-default" id="showAllLog">显示全部日志</button>
+         }
+
         @if (User.Identity.Name.Equals("yucenyucen@126.com"))
         {
             @foreach (var item in Model.UserActionLog.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
@@ -588,11 +593,18 @@
                 <p> @Model.LastErrorLog</p>
             }
         }
-        @*<script type='text/javascript' language='javascript' src='~/lib/jquery/dist/jquery.min.js'></script>*@
                                     <script type='text/javascript' language='javascript' src='~/js/site.js'></script>
 
                                     <script>
                                         var model = @Html.Raw(Json.Serialize(Model));
+                                        //显示全部日志
+                                        $("#showAllLog").click(function() {
+                                            $.get("/home/SyntaxLog/@ViewData["gameid"]",
+                                                function (data) {
+                                                    $("#SyntaxLogList").html(data.data);
+                                                });
+                                        });
+
                                     </script>
                                     <script type='text/javascript' language='javascript' src='~/js/faction.js'></script>
 
@@ -600,5 +612,5 @@
                                     }
                                     else
                                     {
-                                        < p > 没做完不好意思啊 </ p >
+                                        <p> 没做完不好意思啊 </p>
                                     }

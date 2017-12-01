@@ -99,10 +99,18 @@ function createMap(data) {
                     //var index = arr.indexOf('1');//为index赋值为0
                     //如果不是自己的建筑
                     var index = bList.indexOf(clickObj.typename);
-                    if (userInfo.mapcolor !== clickObj.mapcolor && index>-1 ) {
-                        openQueryWindow("build {0}".format(clickObj.position), "确认进行建造?".format(clickObj.position));
-                        return;
+                    if (index > -1) {
+                        //不是自己自己的建筑
+                        if (userInfo.buildcolor !== clickObj.buildcolor) {
+                            openQueryWindow("build {0}".format(clickObj.position), "确认进行建造?".format(clickObj.position));
+                            return;
+                        }
+                        //如果是自己的建筑，正常升级
+                        else if (userInfo.buildcolor === clickObj.buildcolor ) {
+
+                        }
                     }
+
                 }
                 else {
                     
@@ -110,6 +118,9 @@ function createMap(data) {
                 switch (clickObj.typename) {
                 case "Mine":
                     //$("#syntax").val("upgrade {0} to {1}".format(clickObj.position, "TC"));
+                        if (!clickObj.allowUpgrade && userInfo.factionName === "Lantida") {
+                            return;
+                        }
                     openQueryWindow("upgrade {0} to {1}".format(clickObj.position, "TC"), "是否要升级{0}建筑".format(clickObj.position));
                     break;
                 case "TradeCenter":
@@ -436,7 +447,7 @@ function makeHexPath(ctx, x, y, size, color, name, array, col, row) {
     ctx.beginPath();
     ctx.moveTo(x, y);
 
-    buildingObj = { "position": name }
+    buildingObj = { "position": name, "allowUpgrade": true  }
     for (var i = 0; i < 6; i++) {
         ctx.lineTo(x, y);
 
@@ -559,6 +570,9 @@ function DrawLantidaMine(ctx, row, col) {
     fillBuilding(ctx, 1);
 
     ctx.restore();
+
+    //标记是亚特兰斯建筑,不允许升级
+    buildingObj.allowUpgrade = false;
 }
 
 function DrawTradingPost(ctx, row, col, name) {

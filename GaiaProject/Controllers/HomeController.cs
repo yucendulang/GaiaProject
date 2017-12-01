@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GaiaCore.Gaia;
@@ -111,6 +112,7 @@ namespace GaiaProject.Controllers
             {
                 return Redirect("/home/index");
             }
+            ViewData["gameid"] = id;
             return View(gg);
         }
 
@@ -152,6 +154,8 @@ namespace GaiaProject.Controllers
                 return View(GameMgr.GetGameByName(name));
             }
         }
+
+
 
         [HttpPost]
         public string Syntax(string name, string syntax, string factionName)
@@ -259,6 +263,28 @@ namespace GaiaProject.Controllers
             return GameMgr.DeleteOneGame(id);
         }
 
+        /// <summary>
+        /// 获取操作日志
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<JsonResult> SyntaxLog(string id)
+        {
+
+
+            var gg = GameMgr.GetGameByName(id);
+            StringBuilder stringBuilder=new StringBuilder();
+
+            foreach(var item in gg.LogEntityList.OrderByDescending(x => x.Row))
+            {
+                stringBuilder.Append(string.Format("<tr><td>{0}</td><td class='text-right'>{1}</td><td>{2}vp</td><td class='text-right'>{3}</td><td>{4}c</td><td class='text-right'>{5}</td><td>{6}o</td><td class='text-right'>{7}</td><td>{8}q</td><td class='text-right'>{9}</td><td>{10}k</td><td class='text-right'>{11}</td><td>{12}/{13}/{14}</td><td>{15}</td></tr>", item.FactionName ?? null, @item.ResouceChange?.m_score, item.ResouceEnd?.m_score, item.ResouceChange?.m_credit, item.ResouceEnd?.m_credit, item.ResouceChange?.m_ore, item.ResouceEnd?.m_ore, item.ResouceChange?.m_QICs, item.ResouceEnd?.m_QICs, item.ResouceChange?.m_knowledge, item.ResouceEnd?.m_knowledge, item.ResouceChange?.m_powerToken2 + item.ResouceChange?.m_powerToken3 * 2, item.ResouceEnd?.m_powerToken1,item.ResouceEnd?.m_powerToken2,item.ResouceEnd?.m_powerToken3, item.Syntax));
+            }
+
+            return new JsonResult(new UserFriendController.JsonData()
+            {
+                data = stringBuilder.ToString(),info=new UserFriendController.Info() { state = 200}
+            });
+        }
         #region 管理工具
         public IActionResult BackupData()
         {
