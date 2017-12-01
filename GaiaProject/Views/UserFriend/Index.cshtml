@@ -12,7 +12,7 @@
     
     @foreach (var  item in @Model)
     {
-        <li class="list-group-item">@{@item.UserNameTo}(@item.Remark)</li>
+        <li class="list-group-item" id="@item.UserNameTo">@{@item.UserNameTo}(@item.Remark) <button type="button" class="btn btn-default" onclick="delFriend('@item.UserNameTo')">删除</button></li>
     }
 </ul>
 
@@ -32,6 +32,7 @@
 </div><!-- /.row -->
 
 <script>
+    //添加好友
     function addFriend() {
         var value = $("#uf_username").val();
         var remark = $("#uf_remark").val();
@@ -46,6 +47,19 @@
             if (data.info.state === 200) {
                 //alert("添加成功");
                 window.location.reload();
+            } else {
+                alert(data.info.message);
+            }
+        });
+    }
+
+    ///删除
+    function delFriend(name) {
+        $.post("/UserFriend/DelFriend", "UserNameTo=" + name, function(data) {
+            if (data.info.state === 200) {
+                //alert("添加成功");
+                //window.location.reload();
+                $("#" + name).parent().remove();
             } else {
                 alert(data.info.message);
             }

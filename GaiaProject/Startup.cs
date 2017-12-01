@@ -21,7 +21,7 @@ namespace GaiaProject
         /// <summary>
         /// 是否启用好友系统
         /// </summary>
-        public static bool isEnableFriend = false;
+        public static bool isEnableFriend = true;
 
         public Startup(IHostingEnvironment env)
         {

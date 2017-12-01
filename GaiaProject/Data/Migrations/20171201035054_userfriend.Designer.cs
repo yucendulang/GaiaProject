@@ -8,8 +8,8 @@ using GaiaProject.Data;
 namespace GaiaProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171130092531_Uf1130Rm")]
-    partial class Uf1130Rm
+    [Migration("20171201035054_userfriend")]
+    partial class userfriend
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,15 +22,20 @@ namespace GaiaProject.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Remark");
+                    b.Property<string>("Remark")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("UserIdTo");
+                    b.Property<string>("UserIdTo")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("UserName");
+                    b.Property<string>("UserName")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("UserNameTo");
+                    b.Property<string>("UserNameTo")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 

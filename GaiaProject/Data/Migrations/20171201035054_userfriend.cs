@@ -5,24 +5,21 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace GaiaProject.Data.Migrations
 {
-    public partial class UserFriendMigration : Migration
+    public partial class userfriend : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "testName",
-                table: "AspNetUsers");
-
             migrationBuilder.CreateTable(
                 name: "UserFriend",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<int>(nullable: false),
-                    UserIdTo = table.Column<int>(nullable: false),
-                    UserName = table.Column<string>(nullable: true),
-                    UserNameTo = table.Column<string>(nullable: true)
+                    Remark = table.Column<string>(maxLength: 50, nullable: true),
+                    UserId = table.Column<string>(maxLength: 50, nullable: true),
+                    UserIdTo = table.Column<string>(maxLength: 50, nullable: true),
+                    UserName = table.Column<string>(maxLength: 50, nullable: true),
+                    UserNameTo = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -34,11 +31,6 @@ namespace GaiaProject.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "UserFriend");
-
-            migrationBuilder.AddColumn<string>(
-                name: "testName",
-                table: "AspNetUsers",
-                nullable: true);
         }
     }
 }

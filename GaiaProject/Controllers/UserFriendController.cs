@@ -50,7 +50,7 @@ namespace GaiaProject.Controllers
         public async Task<JsonResult> AddFriend(UserFriend model)
         {
             JsonData jsonData=new JsonData();
-            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var user = await _userManager.GetUserAsync(HttpContext.User);           
             if (user != null)
             {
                 var userTo = await _userManager.FindByNameAsync(model.UserNameTo);
@@ -74,6 +74,43 @@ namespace GaiaProject.Controllers
                     else
                     {
                         var result = await dbContext.UserFriend.AddAsync(model);
+                        jsonData.info.state = 200;
+                        await dbContext.SaveChangesAsync();
+                    }
+                }
+
+
+            }
+            return new JsonResult(jsonData);
+        }
+
+
+        /// <summary>
+        /// 删除好友
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<JsonResult> DelFriend(UserFriend model)
+        {
+            JsonData jsonData = new JsonData();
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user != null)
+            {
+                var userTo = await _userManager.FindByNameAsync(model.UserNameTo);
+                //找不对对象用户
+                if (userTo == null)
+                {
+                    jsonData.info.state = 0;
+                    jsonData.info.message = "找不到用户" + model.UserNameTo;
+                }
+                else
+                {
+                   var uf = dbContext.UserFriend.SingleOrDefault(
+                        item => item.UserId == user.Id && item.UserNameTo == model.UserNameTo);
+                    if (uf != null)
+                    {
+                        dbContext.UserFriend.Remove(uf);
                         jsonData.info.state = 200;
                         await dbContext.SaveChangesAsync();
                     }
