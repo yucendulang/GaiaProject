@@ -255,6 +255,37 @@ namespace GaiaCore.Gaia
             return true;
         }
 
+        public static void ChangeAllGamesUsername(string userName1, string userName2)
+        {
+            if (string.IsNullOrEmpty(userName1) || string.IsNullOrEmpty(userName2))
+            {
+                return;
+            }
+            foreach (var item in m_dic)
+            {
+                for (int i = 0; i < item.Value.Username.Length; i++)
+                {
+                    if (item.Value.Username[i] != null && item.Value.Username[i].Equals(userName1))
+                    {
+                        item.Value.Username[i] = userName2;
+                    }
+                }
+                var needModify = item.Value.UserDic.Where(x => x.Key.Equals(userName1));
+                needModify.ToList().ForEach(x =>
+                {
+                    item.Value.UserDic.Add(userName2, x.Value);
+                    item.Value.UserDic.Remove(x.Key);
+                });
+                foreach(var fac in item.Value.FactionList)
+                {
+                    if (fac.UserName.Equals(userName1))
+                    {
+                        fac.UserName = userName2;
+                    }
+                }
+            }
+        }
+
         public static bool RedoOneStep(string id)
         {
             var gg = GetGameByName(id);

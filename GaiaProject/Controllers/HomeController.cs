@@ -74,6 +74,15 @@ namespace GaiaProject.Controllers
                 model.Name = Guid.NewGuid().ToString();
             }
             string[] username = new string[] { model.Player1, model.Player2, model.Player3, model.Player4 };
+            foreach(var item in username.Where(x=>!string.IsNullOrEmpty(x)))
+            {
+                var user=_userManager.FindByNameAsync(item);
+                if (user.Result==null)
+                {
+                    ModelState.AddModelError(string.Empty, item + "用户不存在");
+                    return View(model);
+                }
+            }
             GameMgr.CreateNewGame(model.Name, username, out GaiaGame result,model.MapSelction, isTestGame: model.IsTestGame);
 
             ViewData["ReturnUrl"] = "/Home/ViewGame/" + model.Name;

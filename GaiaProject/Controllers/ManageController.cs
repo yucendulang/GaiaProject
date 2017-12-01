@@ -228,14 +228,25 @@ namespace GaiaProject.Controllers
             var isPwd = await _userManager.CheckPasswordAsync(user, model.Password);
             if (isPwd)
             {
+                if (!string.IsNullOrEmpty(model.UserName)&&!user.UserName.Equals(model.UserName))
+                {
+                    GaiaCore.Gaia.GameMgr.ChangeAllGamesUsername(user.UserName, model.UserName);
+                }
                 user.UserName = model.UserName;
                 user.Email = model.Email;
-                await _userManager.UpdateAsync(user);
-                return RedirectToAction("Login", "Account");
+                var result=await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignOutAsync();
+                    return RedirectToAction("Login", "Account");
+                }
+                AddErrors(result);
+                return View(model);
                 //return RedirectToAction(nameof(Index), new {Message = ManageMessageId.Error});
             }
             else
             {
+                ModelState.AddModelError(string.Empty,"密码错误");
                 return View(model);
             }
         }

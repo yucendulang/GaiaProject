@@ -1,4 +1,5 @@
-﻿@model ChangeInfoModel
+﻿@using System.Text.RegularExpressions;
+@model ChangeInfoModel
 @{
     ViewData["Title"] = "修改信息";
 }
@@ -13,7 +14,14 @@
     <div class="form-group">
         <label asp-for="UserName" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <input asp-for="UserName" class="form-control" value="@Model.UserName"/>
+            @if ((new Regex(@"^.*@.*\..*$")).IsMatch(Model.UserName))
+            {
+                <input asp-for="UserName" class="form-control" value="@Model.UserName" />
+            }
+            else
+            {
+                <input asp-for="UserName" class="form-control" value="@Model.UserName" disabled/>
+            }
             <span asp-validation-for="UserName" class="text-danger"></span>
         </div>
     </div>
