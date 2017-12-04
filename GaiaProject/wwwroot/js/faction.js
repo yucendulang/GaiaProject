@@ -55,11 +55,16 @@ createMap({ id: "myCanvas", type:"build"});
 
 
 //弹出地图选择位置
-function selectMapPos(value) {
+function selectMapPos(value, syntax,action) {
     $("#allistdiv").hide();
-    $("#syntax").val("action {0}".format(value));
     $("#myModalCanves").modal();
-    createMap({ id: "myCanvasSelect",type: "act"});
+    if (action === undefined) {
+        action = "act";
+        $("#syntax").val("action {0}".format(value) + " {0}");
+    } else {
+        action = "planet";
+    }
+    createMap({ id: "myCanvasSelect", type: "act", action: action});
 }
 //选择种族，选择回合版,快速行动
 $(".selectchange").change(function () {
@@ -150,6 +155,11 @@ if (userInfo.isRound) {
             openQueryWindow(obj.attr("syntax") + this.id, "确认执行?");
         }
     );
+
+    //放置黑星
+    $("#planetMine").click(function () {
+        selectMapPos("", "planet {0}","planet");
+    });
 
     //种族能力
     $(".MapAction").click(function () {
