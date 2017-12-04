@@ -62,6 +62,28 @@ namespace GaiaProject.Controllers
         {
             return View();
         }
+        /// <summary>
+        /// 随机排序
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ListT"></param>
+        /// <returns></returns>
+        public List<T> RandomSortList<T>(T[] ListT)
+        {
+            Random random = new Random();
+            List<T> newList = new List<T>();
+            foreach (T item in ListT)
+            {
+                //空的就跳过
+                if (item == null || string.IsNullOrEmpty(item.ToString()))
+                {
+                    continue;
+                }
+                newList.Insert(random.Next(newList.Count + 1), item);
+            }
+            return newList;
+        }
+
         // POST: /Home/NewGame
         [HttpPost]
         public IActionResult NewGame(NewGameViewModel model)
@@ -75,7 +97,9 @@ namespace GaiaProject.Controllers
                 model.Name = Guid.NewGuid().ToString();
             }
             string[] username = new string[] { model.Player1, model.Player2, model.Player3, model.Player4 };
-            foreach(var item in username.Where(x=>!string.IsNullOrEmpty(x)))
+            //随机排序
+            username = this.RandomSortList<string>(username).ToArray();
+            foreach (var item in username.Where(x=>!string.IsNullOrEmpty(x)))
             {
                 var user=_userManager.FindByNameAsync(item);
                 if (user.Result==null)
