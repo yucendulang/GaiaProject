@@ -19,6 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Remove="Properties\PublishProfiles\gaiaproject2 - FTP.pubxml" />
+    <None Remove="Properties\PublishProfiles\gaiaproject2 - Web Deploy.pubxml" />
     <None Remove="Views\Shared\htmlpage.html" />
   </ItemGroup>
   <ItemGroup>
@@ -51,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="finishgame\" />
+    <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="wwwroot\lib\新文件夹1\" />
     <Folder Include="wwwroot\lib\新文件夹\" />
   </ItemGroup>
