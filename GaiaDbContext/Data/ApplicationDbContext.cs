@@ -4,13 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using GaiaProject.Models;
-using GaiaProject.Models.AccountViewModels;
+using GaiaDbContext.Models.AccountViewModels;
+using GaiaDbContext.Models.HomeViewModels;
+using GaiaDbContext.Models;
 
 namespace GaiaProject.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -24,6 +26,22 @@ namespace GaiaProject.Data
             // Add your customizations after calling base.OnModelCreating(builder);
         }
 
+        //public static ApplicationDbContext Create()
+        //{
+        //    return new ApplicationDbContext();
+        //}
+
         public DbSet<UserFriend> UserFriend { get; set; }
+
+        /// <summary>
+        /// 游戏信息
+        /// </summary>
+        public DbSet<GameInfoModel> GameInfoModel { get; set; }
+
+        /// <summary>
+        /// 游戏玩家种族信息
+        /// </summary>
+        public DbSet<GameFactionModel> GameFactionModel { get; set; }
+
     }
 }

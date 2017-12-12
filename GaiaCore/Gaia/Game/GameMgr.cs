@@ -31,6 +31,7 @@ namespace GaiaCore.Gaia
                 result.IsTestGame = isTestGame;
                 result.Syntax(GameSyntax.setupmap + " " + MapSelection, out string log);
                 result.Syntax(GameSyntax.setupGame + seed, out log);
+                result.GameName = name;//游戏名称
                 m_dic.Add(name, result);
                 return true;
             }

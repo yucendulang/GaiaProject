@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GaiaDbContext.Models;
+using GaiaDbContext.Models.AccountViewModels;
 using GaiaProject.Data;
 using GaiaProject.Models;
 using GaiaProject.Models.AccountViewModels;

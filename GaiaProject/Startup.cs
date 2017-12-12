@@ -9,10 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using GaiaProject.Data;
 using GaiaProject.Models;
 using GaiaProject.Services;
 using ManageTool;
+using GaiaProject.Data;
+using GaiaDbContext.Models;
 
 namespace GaiaProject
 {

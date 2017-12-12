@@ -10,16 +10,20 @@ using Microsoft.AspNetCore.Identity;
 using GaiaProject.Models;
 using GaiaCore.Gaia.User;
 using ManageTool;
+using GaiaDbContext.Models;
+using GaiaProject.Data;
 
 namespace GaiaProject.Controllers
 {
     public class HomeController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        public HomeController(
-            UserManager<ApplicationUser> userManager)
+        private readonly ApplicationDbContext dbContext;
+
+        public HomeController(ApplicationDbContext dbContext,UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
+            this.dbContext = dbContext;
         }
         public IActionResult Index()
         {
@@ -203,7 +207,7 @@ namespace GaiaProject.Controllers
                 {
                     syntax = string.Format("{0}:{1}", factionName, syntax);
                 }
-                GameMgr.GetGameByName(name).Syntax(syntax, out string log, task.Result.UserName);
+                GameMgr.GetGameByName(name).Syntax(syntax, out string log, task.Result.UserName,dbContext);
 
                 if (!string.IsNullOrEmpty(log))
                 {

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GaiaProject.Models.AccountViewModels
+namespace GaiaDbContext.Models.AccountViewModels
 {
     public class UserFriend
     {

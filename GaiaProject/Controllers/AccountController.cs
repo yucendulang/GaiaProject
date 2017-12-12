@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using GaiaProject.Models;
 using GaiaProject.Models.AccountViewModels;
 using GaiaProject.Services;
+using GaiaDbContext.Models;
 
 namespace GaiaProject.Controllers
 {

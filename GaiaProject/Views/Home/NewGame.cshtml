@@ -1,5 +1,6 @@
 ﻿@using System.Linq
 @using GaiaProject.Data
+@using GaiaDbContext.Models
 @model GaiaProject.Models.HomeViewModels.NewGameViewModel
 @inject ApplicationDbContext dbContext
 
@@ -15,13 +16,13 @@
     var fList = dbContext.UserFriend.Where(item => item.UserName == User.Identity.Name).ToList();
     if (fList.Count > 0)
     {
-    <span>选择好友:</span>
-    <div class="btn-group" role="group" aria-label="..." id="userList">
-                                                            @foreach (var user in dbContext.UserFriend.Where(item=>item.UserName == User.Identity.Name))
-        {
-        <button type="button" class="btn btn-default" id="@user.UserNameTo">@{@user.UserNameTo}(@user.Remark)</button>      
-        }
-    </div>
+        <span>选择好友:</span>
+        <div class="btn-group" role="group" aria-label="..." id="userList">
+            @foreach (var user in dbContext.UserFriend.Where(item => item.UserName == User.Identity.Name))
+            {
+                <button type="button" class="btn btn-default" id="@user.UserNameTo">@{@user.UserNameTo}(@user.Remark)</button>
+            }
+        </div>
     }
 }
 
@@ -30,9 +31,9 @@
     //var inputList = $("#playForm input[type='email']");
     $("#userList button").click(function () {
         var user = this.id;
-        var isHas=false;
+        var isHas = false;
         //alert($("#playForm input[type='email']").length);
-        $("#playForm .player").each(function() {
+        $("#playForm .player").each(function () {
             var value = $(this).val();
             if (value === user) {
                 $(this).val("");
@@ -40,11 +41,11 @@
                 return false;
             }
             else {
-                
+
             }
         });
         if (!isHas) {
-            $("#playForm .player").each(function() {
+            $("#playForm .player").each(function () {
                 var value = $(this).val();
                 if (value === "") {
                     $(this).val(user);
@@ -62,21 +63,21 @@
     <div class="form-group">
         <label asp-for="Name" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <input asp-for="Name"  class="form-control" value=""/>
+            <input asp-for="Name" class="form-control" value="" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
         <label asp-for="Player1" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <input asp-for="Player1" class="form-control player" value="@ViewData["Message"]"/>
+            <input asp-for="Player1" class="form-control player" value="@ViewData["Message"]" />
             <span asp-validation-for="Player1" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
         <label asp-for="Player2" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <input asp-for="Player2" class="form-control player"  />
+            <input asp-for="Player2" class="form-control player" />
             <span asp-validation-for="Player2" class="text-danger"></span>
         </div>
     </div>
@@ -106,14 +107,14 @@
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-                <label asp-for="MapSelction">
-                    <input asp-for="MapSelction" type="radio" value="fix2p" />双人固定
-                    <input asp-for="MapSelction" type="radio" value="random2p" />双人随机
-                    <input asp-for="MapSelction" type="radio" value="fix3p" />双人变体固定
-                    <input asp-for="MapSelction" type="radio" value="random3p" />双人变体随机
-                    <input asp-for="MapSelction" type="radio" value="fix4p" />四人固定
-                    <input asp-for="MapSelction" type="radio" value="random4p" checked="checked"/>四人随机
-                </label>
+            <label asp-for="MapSelction">
+                <input asp-for="MapSelction" type="radio" value="fix2p" />双人固定
+                <input asp-for="MapSelction" type="radio" value="random2p" />双人随机
+                <input asp-for="MapSelction" type="radio" value="fix3p" />双人变体固定
+                <input asp-for="MapSelction" type="radio" value="random3p" />双人变体随机
+                <input asp-for="MapSelction" type="radio" value="fix4p" />四人固定
+                <input asp-for="MapSelction" type="radio" value="random4p" checked="checked" />四人随机
+            </label>
         </div>
     </div>
     <div class="form-group">
