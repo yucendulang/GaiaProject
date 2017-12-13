@@ -1,0 +1,52 @@
+﻿@using GaiaProject.Controllers
+@model List<GaiaProject.Controllers.GameInfoController.StatisticsFaction>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+
+<table class="table">
+    <thead>
+    <tr>
+        <td>种族</td>
+
+        <td>局数</td>
+        <td>胜利场次</td>
+        <td>胜率</td>
+        <td>最低分</td>
+        <td>最高分</td>
+        <td>玩家</td>
+
+        <td>平均分</td>
+
+
+
+    </tr>
+    </thead>
+    <tbody>
+        
+    @foreach (GameInfoController.StatisticsFaction item in Model)
+    {
+        <tr>
+            <td>
+                @item.ChineseName
+            </td>
+            <td>
+                @item.count
+            </td>
+            <td>@item.numberwin</td>
+            <td>@item.winprobability</td>
+            <td>@item.scoremin</td>
+            <td>@item.scoremax</td>
+            <td>@item.scoremaxuser</td>
+
+            <td>@item.scoreavg</td>
+        </tr>
+    }
+
+    </tbody>
+</table>
+
+

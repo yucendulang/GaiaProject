@@ -28,7 +28,7 @@ namespace GaiaProject.Controllers
         }
         // GET: /<controller>/
         /// <summary>
-        /// 列表
+        /// 进行的游戏
         /// </summary>
         /// <returns></returns>
         public IActionResult Index(string username)
@@ -55,7 +55,7 @@ namespace GaiaProject.Controllers
             return View();
         }
         /// <summary>
-        /// 个人使用的种族信息
+        /// 使用的种族信息
         /// </summary>
         /// <returns></returns>
         public IActionResult FactionList(string username)
@@ -67,8 +67,64 @@ namespace GaiaProject.Controllers
             var gameFactionModels = this.dbContext.GameFactionModel.Where(item => item.username == username).ToList();
             return View(gameFactionModels);
         }
+        /// <summary>
+        /// 种族统计
+        /// </summary>
+        /// <returns></returns>
 
+        public IActionResult FactionStatistics()
+        {
+            var list = this.dbContext.GameFactionModel.GroupBy(item => item.FactionChineseName).Select(
+                g=>new StatisticsFaction ()
+                {
+                    ChineseName = g.Key,
+                    count = g.Count(),
+                    numberwin = g.Count(faction => faction.rank == 1),
+                    winprobability = g.Count(faction => faction.rank == 1)* 100 / (g.Count()),
+                    scoremin = g.Min(faction=>faction.scoreTotal),
+                    scoremax = g.Max(faction => faction.scoreTotal),
+                    scoremaxuser = g.OrderBy(faction => faction.scoreTotal).ToList()[0].username,
+                    scoreavg = g.Sum(faction => faction.scoreTotal)/g.Count(),
 
+                }).ToList();
+            return View(list);
+        }
+
+        public class StatisticsFaction
+        {
+            /// <summary>
+            /// 名称
+            /// </summary>
+            public string ChineseName { get; set; }
+            /// <summary>
+            /// 局数
+            /// </summary>
+            public int count { get; set; }
+            /// <summary>
+            /// 最低分
+            /// </summary>
+            public int scoremin { get; set; }
+
+            /// <summary>
+            /// 最高分
+            /// </summary>
+            public int scoremax { get; set; }
+
+            public string scoremaxuser { get; set; }
+            /// <summary>
+            /// 平均分
+            /// </summary>
+            public int scoreavg { get; set; }
+            /// <summary>
+            /// 胜率
+            /// </summary>
+            public int winprobability { get; set; }
+            /// <summary>
+            /// 胜利场次
+            /// </summary>
+            public int numberwin { get; set; }
+
+        }
 
     }
 }
