@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ManageTool", "ManageTool\Ma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GaiaProjectUnitTesting", "GaiaProjectUnitTesting\GaiaProjectUnitTesting.csproj", "{858CE0AC-80F1-4882-8F44-CFE2C2C91F0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GaiaDbContext", "GaiaDbContext\GaiaDbContext.csproj", "{E60F336C-69BD-4D14-BB65-CB501FE3E0B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GaiaDbContext", "GaiaDbContext\GaiaDbContext.csproj", "{E60F336C-69BD-4D14-BB65-CB501FE3E0B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

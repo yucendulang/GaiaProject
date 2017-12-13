@@ -12,6 +12,10 @@ namespace GaiaProject.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        /// <summary>
+        /// 是否保存结果
+        /// </summary>
+        public const bool isSaveResult = false;
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

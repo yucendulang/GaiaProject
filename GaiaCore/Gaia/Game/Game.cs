@@ -285,64 +285,71 @@ namespace GaiaCore.Gaia
                 throw new Exception("其他种族暂时不支持Gaia阶段行动");
             }
         }
+        /// <summary>
+        /// 保持结果到数据库
+        /// </summary>
+        private void SaveResultToDb()
+        {
+            //保存
+            if (ApplicationDbContext.isSaveResult)
+            {
+                //保存游戏结束时的信息
+                //先保存游戏信息
+                var gameinfo = new GaiaDbContext.Models.HomeViewModels.GameInfoModel()
+                {
+                    name = this.GameName,//名称
+                    GameStatus = 8,//状态
+                    version = this.version, //版本
+                    UserCount = this.UserCount, //玩家数量
+                    ATTList = string.Join("|", this.ATTList.Select(item => item.name)),
+                    FSTList = string.Join("|", this.FSTList.Select(item => item.name)),
+                    RBTList = string.Join("|", this.RBTList.Select(item => item.name)),
+                    RSTList = string.Join("|", this.RSTList.Select(item => item.name)),
+                    STT3List = string.Join("|", this.STT3List.GroupBy(item => item.name).Select(g => g.Max(item => item.name))),
+                    STT6List = string.Join("|", this.STT6List.GroupBy(item => item.name).Select(g => g.Max(item => item.name))),
+                    loginfo = string.Join("|", this.LogEntityList.Select(item => item.Syntax)),
+                };
+                var add = this.dbContext.GameInfoModel.AddAsync(gameinfo);
+                //再保存玩家信息
+                foreach (Faction faction in FactionList)
+                {
+                    var gamefaction = new GaiaDbContext.Models.HomeViewModels.GameFactionModel()
+                    {
+                        gameinfo_id = add.Id,
+                        gameinfo_name = this.GameName,
+                        FactionName = faction.FactionName.ToString(),
+                        FactionChineseName = faction.ChineseName,
+                        kjPostion = string.Join("|", faction.TransformLevel, faction.ShipLevel, faction.AILevel, faction.GaiaLevel, faction.EconomicLevel, faction.ScienceLevel),
+                        numberBuild = null,
+                        numberFst1 = 0,
+                        numberFst2 = 0,
+                        rank = 0,
+                        scoreFst1 = 0,
+                        scoreFst2 = 0,
+                        scoreKj = 0,
+                        scorePw = 0,
+                        scoreRound = null,
+                        scoreTotal = 0,
+                        userid = null,
+                        username = null,
+
+                    };
+                    this.dbContext.GameFactionModel.Add(gamefaction);
+                }
+                this.dbContext.SaveChanges();
+            }
+
+        }
 
         private void NewRound()
         {
-
-            //保存游戏结束时的信息
-            //先保存游戏信息
-            var gameinfo = new GaiaDbContext.Models.HomeViewModels.GameInfoModel() {
-                name = this.GameName,//名称
-                GameStatus = 8,//状态
-                version = this.version, //版本
-                UserCount = this.UserCount, //玩家数量
-                ATTList = string.Join("|", this.ATTList.Select(item => item.name)),
-                FSTList = string.Join("|", this.FSTList.Select(item => item.name)),
-                RBTList = string.Join("|", this.RBTList.Select(item => item.name)),
-                RSTList = string.Join("|", this.RSTList.Select(item => item.name)),
-                STT3List = string.Join("|", this.STT3List.GroupBy(item => item.name).Select(g => g.Max(item=>item.name))),
-                STT6List = string.Join("|", this.STT6List.GroupBy(item => item.name).Select(g => g.Max(item => item.name))),
-                loginfo = string.Join("|", this.LogEntityList.Select(item => item.Syntax)),
-            };
-            var add = this.dbContext.GameInfoModel.AddAsync(gameinfo);
-            //再保存玩家信息
-            foreach(Faction faction in FactionList)
-            {
-                var gamefaction = new GaiaDbContext.Models.HomeViewModels.GameFactionModel()
-                {
-                    gameinfo_id = add.Id,
-                    gameinfo_name = this.GameName,
-                    FactionName = faction.FactionName.ToString(),
-                    FactionChineseName = faction.ChineseName,
-                    kjPostion=string.Join("|", faction.TransformLevel, faction.ShipLevel, faction.AILevel, faction.GaiaLevel, faction.EconomicLevel, faction.ScienceLevel),
-                    numberBuild = null,
-                    numberFst1 = 0,
-                    numberFst2 = 0,
-                    rank = 0,
-                    scoreFst1 = 0,
-                    scoreFst2 = 0,
-                    scoreKj = 0,
-                    scorePw = 0,
-                    scoreRound = null,
-                    scoreTotal = 0,
-                    userid=null,
-                    username = null,
-
-                };
-                this.dbContext.GameFactionModel.Add(gamefaction);
-            }
-
-            this.dbContext.SaveChanges();
-
-
             //游戏结束
             if (GameStatus.RoundCount == GameConstNumber.GameRoundCount)
             {
                 CalGameEndScore();
                 ChangeGameStatus(Stage.GAMEEND);
 
-
-
+                this.SaveResultToDb();
             }
             else
             {
