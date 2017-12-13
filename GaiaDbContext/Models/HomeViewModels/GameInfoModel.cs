@@ -51,6 +51,10 @@ namespace GaiaDbContext.Models.HomeViewModels
         public string loginfo { get; set; }
 
         /// <summary>
+        /// 开始时间
+        /// </summary>
+        public DateTime starttime { get; set; }
+        /// <summary>
         /// 结束时间
         /// </summary>
         public DateTime endtime { get; set; }
@@ -59,6 +63,13 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// 最后得分情况
         /// </summary>
         public string scoreFaction { get; set; }
+
+
+        public int IsTestGame { get; set; }
+
+        public string userlist { get; set; }
+
+        public string MapSelction { get; set; }
 
     }
 }

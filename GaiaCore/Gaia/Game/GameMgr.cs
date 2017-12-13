@@ -17,6 +17,8 @@ namespace GaiaCore.Gaia
         {
             m_dic = new Dictionary<string, GaiaGame>();
         }
+
+
         public static bool CreateNewGame(string name, string[] username, out GaiaGame result, string MapSelection, int seed = 0, bool isTestGame = false)
         {
             if (m_dic.ContainsKey(name))
@@ -177,9 +179,9 @@ namespace GaiaCore.Gaia
             return m_dic.Keys;
         }
 
-        private static void RestoreGameWithActionLog(KeyValuePair<string, GaiaGame> item, Func<string, bool> DebugInvoke = null)
+        private static GaiaGame RestoreGameWithActionLog(KeyValuePair<string, GaiaGame> item, Func<string, bool> DebugInvoke = null,bool isTodict=true)
         {
-            var gg = new GaiaGame(item.Value.Username);
+            var gg = new GaiaGame(item.Value.Username,item.Value.GameName);
             gg.IsTestGame = item.Value.IsTestGame;
             if (item.Value.version == 0)
             {
@@ -221,14 +223,25 @@ namespace GaiaCore.Gaia
                 System.Diagnostics.Debug.WriteLine(item.Key + ":" + ex.ToString());
             }
             gg.LastMoveTime = item.Value.LastMoveTime;
-            if (m_dic.ContainsKey(item.Key))
+            if (isTodict)
             {
-                m_dic[item.Key] = gg;
+                if (m_dic.ContainsKey(item.Key))
+                {
+                    m_dic[item.Key] = gg;
+                }
+                else
+                {
+                    m_dic.Add(item.Key, gg);
+                }
             }
             else
             {
-                m_dic.Add(item.Key, gg);
+                if (m_dic.ContainsKey(item.Key))
+                {
+                    m_dic.Remove(item.Key);
+                }
             }
+            return gg;
         }
 
         public static bool ReportBug(string id)
@@ -393,6 +406,11 @@ namespace GaiaCore.Gaia
             RestoreGameWithActionLog(new KeyValuePair<string, GaiaGame>(GameName, gg));
             GetGameByName(GameName).RedoStack = Redo;
             return true;
+        }
+
+        public static GaiaGame RestoreGame(string GameName,GaiaGame gg)
+        {
+            return RestoreGameWithActionLog(new KeyValuePair<string, GaiaGame>(GameName, gg),null,false);
         }
     }
 }

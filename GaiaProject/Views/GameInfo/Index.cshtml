@@ -29,7 +29,9 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td>@item.name</td>
+            <td>
+                <a href="/Home/RestoreGame/@item.Id">@item.name</a>
+            </td>
             <td>@item.UserCount</td>
             <td>@item.endtime</td>
             <td>@item.RSTList</td>

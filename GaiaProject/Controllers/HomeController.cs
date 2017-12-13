@@ -12,6 +12,7 @@ using GaiaCore.Gaia.User;
 using ManageTool;
 using GaiaDbContext.Models;
 using GaiaProject.Data;
+using GaiaDbContext.Models.HomeViewModels;
 
 namespace GaiaProject.Controllers
 {
@@ -112,7 +113,26 @@ namespace GaiaProject.Controllers
                     return View(model);
                 }
             }
-            GameMgr.CreateNewGame(model.Name, username, out GaiaGame result,model.MapSelction, isTestGame: model.IsTestGame);
+            //创建
+            bool create = GameMgr.CreateNewGame(model.Name, username, out GaiaGame result,model.MapSelction, isTestGame: model.IsTestGame);
+            if (create)
+            {
+                //保存到数据库
+                GaiaDbContext.Models.HomeViewModels.GameInfoModel gameInfoModel =
+                    new GaiaDbContext.Models.HomeViewModels.GameInfoModel()
+                    {
+                        name = model.Name,
+                        userlist = string.Join("|", username),
+                        MapSelction = model.MapSelction,
+                        IsTestGame = model.IsTestGame?1:0,
+                        GameStatus = 0,
+                        starttime = DateTime.Now,
+                        endtime = DateTime.Now,
+                    };
+                this.dbContext.GameInfoModel.Add(gameInfoModel);
+                this.dbContext.SaveChanges();
+
+            }
 
             ViewData["ReturnUrl"] = "/Home/ViewGame/" + model.Name;
             return Redirect("/home/viewgame/" + System.Net.WebUtility.UrlEncode(model.Name));
@@ -143,7 +163,31 @@ namespace GaiaProject.Controllers
             ViewData["gameid"] = id;
             return View(gg);
         }
+        /// <summary>
+        /// 还原游戏
+        /// </summary>
+        public IActionResult RestoreGame(int id)
+        {
+            //游戏结果
+            GameInfoModel gameInfoModel = this.dbContext.GameInfoModel.SingleOrDefault(item => item.Id == id);
+            if (gameInfoModel != null)
+            {
+                string log = gameInfoModel.loginfo;
 
+                GameMgr.CreateNewGame(gameInfoModel.name, gameInfoModel.userlist.Split('|'), out GaiaGame result, gameInfoModel.MapSelction, isTestGame: gameInfoModel.IsTestGame == 1 ? true : false);
+                GaiaGame gg = GameMgr.GetGameByName(gameInfoModel.name);
+                gg.GameName = gameInfoModel.name;
+                gg.UserActionLog = log.Replace("|", "\r\n");
+
+                gg = GameMgr.RestoreGame(gameInfoModel.name, gg);
+
+                return View("ViewGame", gg);
+
+                //return Redirect("/home/View/" + gameInfoModel.name);
+            }
+            return null;
+            //GameMgr.UndoOneStep(id);
+        }
 
         [HttpPost]
         public IActionResult ViewGame(string name, string syntax, string factionName)
@@ -254,13 +298,7 @@ namespace GaiaProject.Controllers
         {
             return GameMgr.GetNextGame(name);
         }
-        /// <summary>
-        /// 还原游戏
-        /// </summary>
-        public void RestoreGame()
-        {
-            
-        }
+
         /// <summary>
         /// 回退一步
         /// </summary>

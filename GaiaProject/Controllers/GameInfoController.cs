@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GaiaCore.Gaia;
 using GaiaDbContext.Models;
+using GaiaDbContext.Models.HomeViewModels;
 using GaiaProject.Data;
+using GaiaProject.Models.HomeViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,7 +41,7 @@ namespace GaiaProject.Controllers
             //var myfaction = from score in this.dbContext.GameFactionModel.AsEnumerable() where score.username == HttpContext.User.Identity.Name select score.gameinfo_id;
             var list = from game in this.dbContext.GameInfoModel
                 from score in this.dbContext.GameFactionModel
-                where score.username == username && game.Id == score.gameinfo_id
+                where game.GameStatus==8 && score.username == username && game.Id == score.gameinfo_id
                 select game;
             var result = list.ToList();
             return View(result);
@@ -64,5 +67,8 @@ namespace GaiaProject.Controllers
             var gameFactionModels = this.dbContext.GameFactionModel.Where(item => item.username == username).ToList();
             return View(gameFactionModels);
         }
+
+
+
     }
 }
