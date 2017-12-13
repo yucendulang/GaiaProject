@@ -197,7 +197,12 @@ if (userInfo.isRound) {
 
 
     //快速行动插入
-    $(".ksaction").click(function() {
+    $(".ksaction").click(function () {
+        var oldcode = $("#syntax").val();
+        if (oldcode === "") {
+            alert("必须先选择主要行动");
+            return;
+        }
         var obj = $(this);
         //行动类型，前后
         var actionType = obj.attr("actionType");
@@ -217,9 +222,9 @@ if (userInfo.isRound) {
             value = syntax.format(value);
         }
         if (actionType === "before") {
-            $("#syntax").val(value + "." + $("#syntax").val());
+            $("#syntax").val(value + "." + oldcode);
         } else {
-            $("#syntax").val($("#syntax").val() + '.' + value);
+            $("#syntax").val(oldcode + '.' + value);
 
         }
     });
