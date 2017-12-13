@@ -24,7 +24,9 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td>@item.gameinfo_name</td>
+            <td>
+                <a href="/Home/RestoreGame/@item.gameinfo_id">@item.gameinfo_name</a>
+            </td>
             <td>@item.FactionChineseName</td>
             <td>@item.scoreTotal</td>
             <td>@item.kjPostion/@item.scoreKj vp</td>
