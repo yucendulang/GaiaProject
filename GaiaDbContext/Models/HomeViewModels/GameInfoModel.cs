@@ -50,5 +50,15 @@ namespace GaiaDbContext.Models.HomeViewModels
         //[System.ComponentModel.DataAnnotations.MaxLength(4000)]
         public string loginfo { get; set; }
 
+        /// <summary>
+        /// 结束时间
+        /// </summary>
+        public DateTime endtime { get; set; }
+
+        /// <summary>
+        /// 最后得分情况
+        /// </summary>
+        public string scoreFaction { get; set; }
+
     }
 }

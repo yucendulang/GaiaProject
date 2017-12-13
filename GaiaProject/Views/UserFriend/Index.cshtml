@@ -14,7 +14,12 @@
     
     @foreach (var  item in @Model)
     {
-        <li class="list-group-item" id="@item.UserNameTo">@{@item.UserNameTo}(@item.Remark) <button type="button" class="btn btn-default" onclick="delFriend('@item.UserNameTo')">删除</button></li>
+        <li class="list-group-item" id="@item.UserNameTo">
+            @{@item.UserNameTo}(@item.Remark)
+              <a href="/GameInfo?username=@item.UserNameTo">游戏</a> 
+            <a  href="/GameInfo/FactionList?username=@item.UserNameTo">种族</a>
+                   <button type="button" class="btn btn-default" onclick="delFriend('@item.UserNameTo')">删除</button>
+                   </li>
     }
 </ul>
 

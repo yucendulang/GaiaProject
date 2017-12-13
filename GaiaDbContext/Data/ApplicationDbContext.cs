@@ -15,7 +15,7 @@ namespace GaiaProject.Data
         /// <summary>
         /// 是否保存结果
         /// </summary>
-        public const bool isSaveResult = false;
+        public const bool isSaveResult = true;
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

@@ -363,7 +363,11 @@ namespace GaiaCore.Gaia
                 return System.IO.Path.Combine(Directory.GetCurrentDirectory(), "finishgame");
             }
         }
-
+        /// <summary>
+        /// 后退一步
+        /// </summary>
+        /// <param name="GameName"></param>
+        /// <returns></returns>
         public static bool UndoOneStep(string GameName)
         {
             var gg = GetGameByName(GameName);

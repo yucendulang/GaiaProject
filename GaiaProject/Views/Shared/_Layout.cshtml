@@ -72,9 +72,12 @@
 @*                </div>*@
 
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">首页</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">种族</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">帮助</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">我的游戏</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">种族介绍</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">游戏帮助</a></li>
+                    <li><a asp-area="" asp-controller="GameInfo" asp-action="Index">结束游戏</a></li>
+                    <li><a asp-area="" asp-controller="GameInfo" asp-action="FactionList">使用种族</a></li>
+
 @*                    @if (@User.Identity != null)*@
 @*                    {*@
 @*                        <li>*@

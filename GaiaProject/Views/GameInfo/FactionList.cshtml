@@ -1,0 +1,39 @@
+﻿    
+@model List<GaiaDbContext.Models.HomeViewModels.GameFactionModel>
+
+@{
+    ViewBag.Title = "使用种族";
+    Layout = "_Layout";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>游戏名称</td>
+            <td>种族名称</td>
+            <td>总得分</td>
+            <td>科技得分</td>
+            <td>终局计分1</td>
+            <td>终局计分2</td>
+            <td>建筑数量</td>
+
+        </tr>
+    </thead>
+    <tbody>
+        
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.gameinfo_name</td>
+            <td>@item.FactionChineseName</td>
+            <td>@item.scoreTotal</td>
+            <td>@item.kjPostion/@item.scoreKj vp</td>
+            <td>@item.numberFst1/@item.scoreFst1 vp</td>
+            <td>@item.numberFst2/@item.scoreFst2 vp</td>
+            <td>@item.numberBuild</td>
+        </tr>
+
+    }
+        
+    </tbody>
+</table>

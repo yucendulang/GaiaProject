@@ -1,0 +1,44 @@
+﻿@*@model System.Collections.Generic.IEnumerable<GaiaDbContext.Models.HomeViewModels.GameFactionModel>*@
+
+@using GaiaDbContext.Models.HomeViewModels
+
+@model List<GaiaDbContext.Models.HomeViewModels.GameInfoModel>
+@{
+    ViewBag.Title = "结束游戏";
+    Layout = "_Layout";
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>游戏名称</td>
+            <td>玩家数量</td>
+            <td>结束时间</td>
+            @*            <td>STT6List</td>*@
+            @*            <td>STT3List</td>*@
+            @*            <td>ATTList</td>*@
+            <td>RSTList</td>
+            <td>FSTList</td>
+            <td>得分</td>
+
+        </tr>
+    </thead>
+    <tbody>
+        
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.name</td>
+            <td>@item.UserCount</td>
+            <td>@item.endtime</td>
+            <td>@item.RSTList</td>
+            <td>@item.FSTList</td>
+
+            <td>@item.scoreFaction</td>
+        </tr>
+
+    }
+        
+    </tbody>
+</table>

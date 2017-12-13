@@ -254,7 +254,18 @@ namespace GaiaProject.Controllers
         {
             return GameMgr.GetNextGame(name);
         }
-
+        /// <summary>
+        /// 还原游戏
+        /// </summary>
+        public void RestoreGame()
+        {
+            
+        }
+        /// <summary>
+        /// 回退一步
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public bool UndoOneStep(string id)
         {
             if (!PowerUser.IsPowerUser(User.Identity.Name))
