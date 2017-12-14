@@ -30,7 +30,7 @@ namespace GaiaProject.Controllers
         /// 进行的游戏
         /// </summary>
         /// <returns></returns>
-        public IActionResult Index(string username,int? status)
+        public IActionResult Index(string username,int? status,int? isAdmin)
         {
 
             if (username == null)
@@ -41,29 +41,43 @@ namespace GaiaProject.Controllers
             {
                 status = 8;
             }
+            IQueryable<GameInfoModel> list;
             //this.dbContext.GameInfoModel.AsEnumerable()
             //var myfaction = from score in this.dbContext.GameFactionModel.AsEnumerable() where score.username == HttpContext.User.Identity.Name select score.gameinfo_id;
             //未结束
             if (status != 8)
             {
                 ViewBag.Title = "未结束游戏";
-                var list = from game in this.dbContext.GameInfoModel
+                list = from game in this.dbContext.GameInfoModel
                     where game.GameStatus == status 
                     select game;
-                var result = list.ToList();
-                return View(result);
             }
             else
             {
                 ViewBag.Title = "已结束游戏";
+                //如果是管理员查看全部游戏结果
+                if (isAdmin == 1)
+                {
+                    if (this._userManager.GetUserAsync(User).Result.groupid == 1)
+                    {
+                        list = from game in this.dbContext.GameInfoModel where game.GameStatus == status select game;
+                    }
+                    else
+                    {
+                        return View(null);
+                    }
+                }
+                else
+                {
+                    list = from game in this.dbContext.GameInfoModel
+                        from score in this.dbContext.GameFactionModel
+                        where game.GameStatus == status && score.username == username && game.Id == score.gameinfo_id
+                        select game;
+                }
 
-                var list = from game in this.dbContext.GameInfoModel
-                    from score in this.dbContext.GameFactionModel
-                    where game.GameStatus == status && score.username == username && game.Id == score.gameinfo_id
-                    select game;
-                var result = list.ToList();
-                return View(result);
             }
+            var result = list.ToList();
+            return View(result);
 
         }
         /// <summary>
