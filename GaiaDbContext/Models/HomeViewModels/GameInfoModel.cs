@@ -71,5 +71,10 @@ namespace GaiaDbContext.Models.HomeViewModels
 
         public string MapSelction { get; set; }
 
+        /// <summary>
+        /// 创建人
+        /// </summary>
+        public string username { get; set; }
+
     }
 }

@@ -128,6 +128,7 @@ namespace GaiaProject.Controllers
                         GameStatus = 0,
                         starttime = DateTime.Now,
                         endtime = DateTime.Now,
+                        username = HttpContext.User.Identity.Name,
                     };
                 this.dbContext.GameInfoModel.Add(gameInfoModel);
                 this.dbContext.SaveChanges();
