@@ -1,0 +1,51 @@
+﻿@using GaiaDbContext.Models
+@model List<GaiaDbContext.Models.ApplicationUser>
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewBag.Title = "用户列表";
+    Layout = "_Layout";
+}
+
+<h2>用户列表</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <td>用户名</td>
+        <td>邮箱</td>
+        <td>用户组</td>
+        <td></td>
+    </tr>
+    </thead>
+    <tbody>
+    @{ bool isAdmin = UserManager.GetUserAsync(User).Result != null && UserManager.GetUserAsync(User).Result.groupid == 1;}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <a href="/Home/RestoreGame/@item.Id">@item.UserName</a>
+            </td>
+            <td>@item.Email</td>
+            <td>
+                @if (@item.groupid == 1)
+                {
+                    <span>管理员</span>
+                }
+                else
+                {
+                    <span>会员</span>
+                }
+            </td>
+
+            <td>
+@*                @if (isAdmin)*@
+@*                {*@
+@*                    <button class="btn btn-default del" id="@item.Id">删除</button>*@
+@*                }*@
+            </td>
+        </tr>
+
+    }
+
+    </tbody>
+</table>

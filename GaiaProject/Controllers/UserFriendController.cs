@@ -15,27 +15,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GaiaProject.Controllers
 {
-    public class UserFriendController : Controller
+    public partial class UserFriendController : Controller
     {
-        public class Info
-        {
-            public int state { get; set; }
-            public string message { get; set; }
-        }
-        public class JsonData
-        {
-            public JsonData()
-            {
-                this.info=new Info();
-            }
-            public Info info { get; set; }
-            public object data;
-        }
 
         private readonly UserManager<ApplicationUser> _userManager;
-
-        // GET: /<controller>/
-
         private readonly ApplicationDbContext dbContext;
 
         public UserFriendController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
@@ -130,6 +113,16 @@ namespace GaiaProject.Controllers
 
             List<UserFriend> list = dbContext.UserFriend.Where(item => item.UserId == user.Result.Id).ToList();
             //List<UserFriend> list = dbContext.UserFriend.FindAsync(item => item.UserId == user.Result.Id).ToList();
+            return View(list);
+        }
+
+        /// <summary>
+        /// 全部用户
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult UserList()
+        {
+            List<ApplicationUser> list = this.dbContext.Users.ToList();
             return View(list);
         }
     }
