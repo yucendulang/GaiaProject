@@ -13,7 +13,8 @@ namespace GaiaCore.Gaia.User
         {
             "yucenyucen@126.com",
             "xsssssssch@hotmail.com",
-            "qqthomas@163.com"
+            "qqthomas@163.com",
+            "totofans",
         };
         public static bool IsPowerUser(string username)
         {
