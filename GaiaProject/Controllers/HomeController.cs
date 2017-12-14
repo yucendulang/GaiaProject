@@ -29,8 +29,6 @@ namespace GaiaProject.Controllers
         public IActionResult Index()
         {
 
-
-
             var task = _userManager.GetUserAsync(HttpContext.User);
             Task[] taskarray = new Task[] { task };
             Task.WaitAll(taskarray, millisecondsTimeout: 1000);

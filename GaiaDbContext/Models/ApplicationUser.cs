@@ -13,5 +13,10 @@ namespace GaiaDbContext.Models
         //public List<ApplicationUser> Friends { get; set; }
 
         //public string testName { get; set; }
+
+        /// <summary>
+        /// 分组ID，1=管理员
+        /// </summary>
+        public int? groupid { get; set; }
     }
 }

@@ -19,7 +19,6 @@ namespace GaiaProject.Controllers
         private readonly ApplicationDbContext dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
 
-
         public GameInfoController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
         {
             this.dbContext = dbContext;
@@ -31,29 +30,68 @@ namespace GaiaProject.Controllers
         /// 进行的游戏
         /// </summary>
         /// <returns></returns>
-        public IActionResult Index(string username)
+        public IActionResult Index(string username,int? status)
         {
+
             if (username == null)
             {
                 username = HttpContext.User.Identity.Name;
             }
+            if (status == null)
+            {
+                status = 8;
+            }
             //this.dbContext.GameInfoModel.AsEnumerable()
             //var myfaction = from score in this.dbContext.GameFactionModel.AsEnumerable() where score.username == HttpContext.User.Identity.Name select score.gameinfo_id;
-            var list = from game in this.dbContext.GameInfoModel
-                from score in this.dbContext.GameFactionModel
-                where game.GameStatus==8 && score.username == username && game.Id == score.gameinfo_id
-                select game;
-            var result = list.ToList();
-            return View(result);
+            //未结束
+            if (status != 8)
+            {
+                ViewBag.Title = "未结束游戏";
+                var list = from game in this.dbContext.GameInfoModel
+                    where game.GameStatus == status 
+                    select game;
+                var result = list.ToList();
+                return View(result);
+            }
+            else
+            {
+                ViewBag.Title = "已结束游戏";
+
+                var list = from game in this.dbContext.GameInfoModel
+                    from score in this.dbContext.GameFactionModel
+                    where game.GameStatus == status && score.username == username && game.Id == score.gameinfo_id
+                    select game;
+                var result = list.ToList();
+                return View(result);
+            }
+
         }
         /// <summary>
-        /// 显示详细
+        /// 删除游戏
         /// </summary>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public IActionResult Show()
+        [HttpPost]
+        public async Task<JsonResult> DelGame(int id)
         {
-            return View();
+            UserFriendController.JsonData jsonData = new UserFriendController.JsonData();
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user != null)
+            {
+                GameInfoModel gameInfoModel = this.dbContext.GameInfoModel.SingleOrDefault(item => item.Id == id);
+                if (gameInfoModel != null)
+                {
+                    GameMgr.DeleteOneGame(gameInfoModel.name);
+                    this.dbContext.GameInfoModel.Remove(gameInfoModel);
+                    this.dbContext.SaveChanges();
+                    jsonData.info.state = 200;
+                }
+            }
+            return new JsonResult(jsonData);
         }
+
+
+
         /// <summary>
         /// 使用的种族信息
         /// </summary>

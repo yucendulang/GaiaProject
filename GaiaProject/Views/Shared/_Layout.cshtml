@@ -1,28 +1,32 @@
-﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+﻿@using GaiaDbContext.Models
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+@inject UserManager<ApplicationUser> UserManager
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     @if (ViewData["Title"] != null && ViewData["Title"].ToString().Equals("viewgame"))
     {
-        <meta name = "viewport" content = "width=1000" />
+        <meta name="viewport" content="width=1000" />
     }
     else
     {
-        <meta name = "viewport" content = "width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
     }
 
     @*<meta name="viewport" content="width=device-width, initial-scale=0.4, minimum-scale=0.4, maximum-scale=2.0, user-scalable=yes" />*@
     <title>@ViewData["Title"] - 盖亚计划</title>
-    
-    
-    
+
+
+
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
 
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css"/>
-        <link rel="stylesheet" href="~/css/site.css"/>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
     </environment>
 
     <environment names="Staging,Production">
@@ -38,7 +42,7 @@
                 crossorigin="anonymous"
                 integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
         </script>
-        
+
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
@@ -60,16 +64,16 @@
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">盖亚计划</a>
             </div>
             <div class="navbar-collapse collapse">
-                
-@*                <div class="container-fluid">*@
-@*                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">*@
-@*                        <ul class="nav navbar-nav">*@
-@*                            <li><a href="#">首页</a></li>*@
-@*                            <li><a href="#">Link</a></li>*@
-@*                            <li><a href="#">Link</a></li>*@
-@*                        </ul>*@
-@*                    </div><!-- /.navbar-collapse -->*@
-@*                </div>*@
+
+                @*                <div class="container-fluid">*@
+                @*                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">*@
+                @*                        <ul class="nav navbar-nav">*@
+                @*                            <li><a href="#">首页</a></li>*@
+                @*                            <li><a href="#">Link</a></li>*@
+                @*                            <li><a href="#">Link</a></li>*@
+                @*                        </ul>*@
+                @*                    </div><!-- /.navbar-collapse -->*@
+                @*                </div>*@
 
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">游戏</a></li>
@@ -84,30 +88,44 @@
                             <li><a asp-area="" asp-controller="GameInfo" asp-action="FactionStatistics">种族统计</a></li>
                         </ul>
                     </li>
-@*                    @if (@User.Identity != null)*@
-@*                    {*@
-@*                        <li>*@
-@*                             Single button *@
-@*                            <div class="btn-group">*@
-@*                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">*@
-@*                                    Action <span class="caret"></span>*@
-@*                                </button>*@
-@*                                <ul class="dropdown-menu">*@
-@*                                    <li><a href="#">Action</a></li>*@
-@*                                    <li><a href="#">Another action</a></li>*@
-@*                                    <li><a href="#">Something else here</a></li>*@
-@*                                    <li role="separator" class="divider"></li>*@
-@*                                    <li><a href="#">Separated link</a></li>*@
-@*                                </ul>*@
-@*                            </div>*@
-@*                        </li>*@
-@**@
-@*                    }*@
-@*                    else*@
-@*                    {*@
-@*                        <li><a asp-area="" asp-controller="Account" asp-action="Register2">注册</a></li>*@
-@*                        <li><a asp-area="" asp-controller="Account" asp-action="Login">登陆 </a></li>*@
-@*                    }*@
+
+                    @if (UserManager.GetUserAsync(User).Result != null && UserManager.GetUserAsync(User).Result.groupid==1)
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">管理 <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="/GameInfo/Index?status=0">未结束游戏</a>
+                                </li>
+
+                            </ul>
+                        </li>
+                    }
+
+                    @*                    @if (@User.Identity != null)*@
+                    @*                    {*@
+                    @*                        <li>*@
+                    @*                             Single button *@
+                    @*                            <div class="btn-group">*@
+                    @*                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">*@
+                    @*                                    Action <span class="caret"></span>*@
+                    @*                                </button>*@
+                    @*                                <ul class="dropdown-menu">*@
+                    @*                                    <li><a href="#">Action</a></li>*@
+                    @*                                    <li><a href="#">Another action</a></li>*@
+                    @*                                    <li><a href="#">Something else here</a></li>*@
+                    @*                                    <li role="separator" class="divider"></li>*@
+                    @*                                    <li><a href="#">Separated link</a></li>*@
+                    @*                                </ul>*@
+                    @*                            </div>*@
+                    @*                        </li>*@
+                    @**@
+                    @*                    }*@
+                    @*                    else*@
+                    @*                    {*@
+                    @*                        <li><a asp-area="" asp-controller="Account" asp-action="Register2">注册</a></li>*@
+                    @*                        <li><a asp-area="" asp-controller="Account" asp-action="Login">登陆 </a></li>*@
+                    @*                    }*@
 
                 </ul>
 

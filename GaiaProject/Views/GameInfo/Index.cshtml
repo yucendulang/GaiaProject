@@ -1,10 +1,12 @@
 ﻿@*@model System.Collections.Generic.IEnumerable<GaiaDbContext.Models.HomeViewModels.GameFactionModel>*@
 
+@using GaiaDbContext.Models
 @using GaiaDbContext.Models.HomeViewModels
+@inject UserManager<ApplicationUser> UserManager
 
 @model List<GaiaDbContext.Models.HomeViewModels.GameInfoModel>
 @{
-    ViewBag.Title = "结束游戏";
+    //ViewBag.Title = "结束游戏";
     Layout = "_Layout";
 }
 
@@ -15,32 +17,49 @@
             <td>游戏名称</td>
             <td>玩家数量</td>
             <td>结束时间</td>
-            @*            <td>STT6List</td>*@
-            @*            <td>STT3List</td>*@
-            @*            <td>ATTList</td>*@
             <td>RSTList</td>
             <td>FSTList</td>
             <td>得分</td>
-
+            <td>创建时间</td>
+            <td></td>
         </tr>
     </thead>
     <tbody>
-        
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                <a href="/Home/RestoreGame/@item.Id">@item.name</a>
-            </td>
-            <td>@item.UserCount</td>
-            <td>@item.endtime</td>
-            <td>@item.RSTList</td>
-            <td>@item.FSTList</td>
+        @{ bool isAdmin = UserManager.GetUserAsync(User).Result != null && UserManager.GetUserAsync(User).Result.groupid == 1;}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a href="/Home/RestoreGame/@item.Id">@item.name</a>
+                </td>
+                <td>@item.UserCount</td>
+                <td>@item.endtime</td>
+                <td>@item.RSTList</td>
+                <td>@item.FSTList</td>
 
-            <td>@item.scoreFaction</td>
-        </tr>
+                <td>@item.scoreFaction</td>
+                <td>@item.starttime</td>
 
-    }
-        
+                <td>
+                    @if (isAdmin)
+                    {
+                        <button class="btn btn-default del" id="@item.Id">删除</button>
+                    }
+                </td>
+            </tr>
+
+        }
+
     </tbody>
 </table>
+<script>
+    $(".del").click(function () {
+        var id = this.id;
+        var button = $(this);
+        $.post("/GameInfo/DelGame/" + id, "", function (data) {
+            if (data.info.state === 200) {
+                button.parent().parent().remove();
+            }
+        });
+    })
+</script>

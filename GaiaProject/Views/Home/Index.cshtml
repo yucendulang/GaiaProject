@@ -13,8 +13,6 @@
     <h4>你的游戏</h4>
 
 
-
-
     @if (ViewData["GameList"] != null)
     {
         @Html.Partial("Partial_AllGameList", ViewData["GameList"])
@@ -63,7 +61,7 @@
     }
 
 
-    @if (UserManager.GetUserName(User).Equals("yucenyucen@126.com")|| UserManager.GetUserName(User).Equals("totofans"))
+    @if (UserManager.GetUserName(User).Equals("yucenyucen@126.com") || UserManager.GetUserName(User).Equals("totofans"))
     {
         <p><a href="/home/BackupData">备份所有游戏</a></p>
         <p><a href="/home/RestoreData">恢复所有游戏</a></p>
