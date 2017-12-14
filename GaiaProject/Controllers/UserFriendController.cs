@@ -122,7 +122,7 @@ namespace GaiaProject.Controllers
         /// <returns></returns>
         public IActionResult UserList()
         {
-            List<ApplicationUser> list = this.dbContext.Users.ToList();
+            List<ApplicationUser> list = this.dbContext.Users.OrderByDescending(item=>item.groupid).ToList();
             return View(list);
         }
     }
