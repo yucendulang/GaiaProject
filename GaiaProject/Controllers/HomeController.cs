@@ -199,6 +199,10 @@ namespace GaiaProject.Controllers
                     {
                         return View("Index");
                     }
+                    else
+                    {
+                        return Redirect("/Home/ViewGame/"+ gameInfoModel.name);
+                    }
                     log = game.UserActionLog;
                 }
 
