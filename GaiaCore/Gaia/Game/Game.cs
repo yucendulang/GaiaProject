@@ -315,21 +315,21 @@ namespace GaiaCore.Gaia
                             gameinfo.version = this.version; //版本
                             gameinfo.UserCount = this.UserCount; //玩家数量
                             gameinfo.endtime = DateTime.Now; //结束时间
-                            gameinfo.ATTList = string.Join("|", this.ATTList.Select(item => item.name));
-                            gameinfo.FSTList = string.Join("|", this.FSTList.Select(item => item.GetType().Name));
-                            gameinfo.RBTList = string.Join("|", this.RBTList.Select(item => item.name));
-                            gameinfo.RSTList = string.Join("|", this.RSTList.Select(item => item.GetType().Name));
-                            gameinfo.STT3List = string.Join("|",
-                                this.STT3List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
-                            gameinfo.STT6List = string.Join("|",
-                                this.STT6List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
+                            //gameinfo.ATTList = string.Join("|", this.ATTList.Select(item => item.name));
+                            //gameinfo.FSTList = string.Join("|", this.FSTList.Select(item => item.GetType().Name));
+                            //gameinfo.RBTList = string.Join("|", this.RBTList.Select(item => item.name));
+                            //gameinfo.RSTList = string.Join("|", this.RSTList.Select(item => item.GetType().Name));
+                            //gameinfo.STT3List = string.Join("|",
+                            //    this.STT3List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
+                            //gameinfo.STT6List = string.Join("|",
+                            //    this.STT6List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
                             gameinfo.loginfo = string.Join("|", this.LogEntityList.Select(item => item.Syntax)) + "|" +
                                                this.syntax;
                             gameinfo.scoreFaction =
                                 string.Join(":",
-                                    this.FactionList.OrderBy(item => item.GetFinalEndScorePreview())
+                                    this.FactionList.OrderBy(item => item.Score)
                                         .Select(item => string.Format("{0}{1}({2})", item.ChineseName,
-                                            item.GetFinalEndScorePreview(), item.UserName))); //最后的得分情况
+                                            item.Score, item.UserName))); //最后的得分情况
 
                             this.dbContext.GameInfoModel.Update(gameinfo);
 
@@ -1263,7 +1263,7 @@ namespace GaiaCore.Gaia
         /// </summary>
         private ApplicationDbContext dbContext;
 
-        private string syntax;//最后一条保存
+        public string syntax;//最后一条保存
         public void Syntax(string syntax, out string log, string user = "",ApplicationDbContext dbContext = null)
         {
             //赋值

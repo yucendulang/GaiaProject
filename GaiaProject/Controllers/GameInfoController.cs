@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GaiaProject.Controllers
 {
-    public class GameInfoController : Controller
+    public partial class GameInfoController : Controller
     {
         private readonly ApplicationDbContext dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -88,7 +88,7 @@ namespace GaiaProject.Controllers
         [HttpPost]
         public async Task<JsonResult> DelGame(int id)
         {
-            UserFriendController.JsonData jsonData = new UserFriendController.JsonData();
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user != null)
             {
@@ -97,6 +97,8 @@ namespace GaiaProject.Controllers
                 {
                     GameMgr.DeleteOneGame(gameInfoModel.name);
                     this.dbContext.GameInfoModel.Remove(gameInfoModel);
+                    //删除下面的种族信息
+                    this.dbContext.GameFactionModel.RemoveRange(this.dbContext.GameFactionModel.Where(item => item.gameinfo_id == gameInfoModel.Id).ToList());
                     this.dbContext.SaveChanges();
                     jsonData.info.state = 200;
                 }
@@ -127,7 +129,7 @@ namespace GaiaProject.Controllers
         public IActionResult FactionStatistics()
         {
             var list = this.dbContext.GameFactionModel.GroupBy(item => item.FactionChineseName).Select(
-                g=>new StatisticsFaction ()
+                g=>new Models.Data.GameInfoController.StatisticsFaction ()
                 {
                     ChineseName = g.Key,
                     count = g.Count(),
@@ -137,46 +139,73 @@ namespace GaiaProject.Controllers
                     scoremax = g.Max(faction => faction.scoreTotal),
                     scoremaxuser = g.OrderBy(faction => faction.scoreTotal).ToList()[0].username,
                     scoreavg = g.Sum(faction => faction.scoreTotal)/g.Count(),
-
+                    
                 }).ToList();
             return View(list);
         }
 
-        public class StatisticsFaction
+
+
+        /// <summary>
+        /// 从内存更新游戏
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult UpdateGame()
         {
-            /// <summary>
-            /// 名称
-            /// </summary>
-            public string ChineseName { get; set; }
-            /// <summary>
-            /// 局数
-            /// </summary>
-            public int count { get; set; }
-            /// <summary>
-            /// 最低分
-            /// </summary>
-            public int scoremin { get; set; }
+            var list = GameMgr.GetAllGame();
+            foreach (KeyValuePair<string, GaiaGame> keyValuePair in list)
+            {
+                GaiaDbContext.Models.HomeViewModels.GameInfoModel gameInfoModel;
+                gameInfoModel= this.dbContext.GameInfoModel.SingleOrDefault(item => item.name == keyValuePair.Key);
+                //如果不存在
+                bool isExist = true;
+                if (gameInfoModel == null)
+                {
+                    isExist = false;
+                    gameInfoModel =
+                        new GaiaDbContext.Models.HomeViewModels.GameInfoModel()
+                        {
+                            name = keyValuePair.Key,
+                            userlist = string.Join("|", keyValuePair.Value.Username),
+                            UserCount = keyValuePair.Value.Username.Length,
+                            MapSelction = keyValuePair.Value.MapSelection.ToString(),
+                            IsTestGame = keyValuePair.Value.IsTestGame ? 1 : 0,
+                            GameStatus = 0,
+                            starttime = DateTime.Now,
+                            endtime = DateTime.Now,
+                            //username = HttpContext.User.Identity.Name,
+                        };
+                }
 
-            /// <summary>
-            /// 最高分
-            /// </summary>
-            public int scoremax { get; set; }
+                var result = keyValuePair.Value;
+                gameInfoModel.round = result.GameStatus.RoundCount;
+                gameInfoModel.ATTList = string.Join("|", result.ATTList.Select(item => item.name));
+                gameInfoModel.FSTList = string.Join("|", result.FSTList.Select(item => item.GetType().Name));
+                gameInfoModel.RBTList = string.Join("|", result.RBTList.Select(item => item.name));
+                gameInfoModel.RSTList = string.Join("|", result.RSTList.Select(item => item.GetType().Name));
+                gameInfoModel.STT3List = string.Join("|",
+                    result.STT3List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
+                gameInfoModel.STT6List = string.Join("|",
+                    result.STT6List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
+                gameInfoModel.scoreFaction =
+                    string.Join(":",
+                        result.FactionList.OrderBy(item => item.Score)
+                            .Select(item => string.Format("{0}{1}({2})", item.ChineseName,
+                                item.Score, item.UserName))); //最后的得分情况
+                gameInfoModel.loginfo = string.Join("|", result.LogEntityList.Select(item => item.Syntax));
+                if (isExist)
+                {
+                    this.dbContext.GameInfoModel.Update(gameInfoModel);
 
-            public string scoremaxuser { get; set; }
-            /// <summary>
-            /// 平均分
-            /// </summary>
-            public int scoreavg { get; set; }
-            /// <summary>
-            /// 胜率
-            /// </summary>
-            public int winprobability { get; set; }
-            /// <summary>
-            /// 胜利场次
-            /// </summary>
-            public int numberwin { get; set; }
+                }
+                else
+                {
+                    this.dbContext.GameInfoModel.Add(gameInfoModel);
+                }
+            }
+            this.dbContext.SaveChanges();
 
+            return Redirect("/GameInfo/Index?status=0");
         }
-
     }
 }

@@ -121,6 +121,7 @@ namespace GaiaProject.Controllers
                     {
                         name = model.Name,
                         userlist = string.Join("|", username),
+                        UserCount = username.Length,
                         MapSelction = model.MapSelction,
                         IsTestGame = model.IsTestGame?1:0,
                         GameStatus = 0,
@@ -128,6 +129,20 @@ namespace GaiaProject.Controllers
                         endtime = DateTime.Now,
                         username = HttpContext.User.Identity.Name,
                     };
+                //配置信息
+                gameInfoModel.ATTList = string.Join("|", result.ATTList.Select(item => item.name));
+                gameInfoModel.FSTList = string.Join("|", result.FSTList.Select(item => item.GetType().Name));
+                gameInfoModel.RBTList = string.Join("|", result.RBTList.Select(item => item.name));
+                gameInfoModel.RSTList = string.Join("|", result.RSTList.Select(item => item.GetType().Name));
+                gameInfoModel.STT3List = string.Join("|",
+                    result.STT3List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
+                gameInfoModel.STT6List = string.Join("|",
+                    result.STT6List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
+                gameInfoModel.scoreFaction =
+                    string.Join(":",
+                        result.FactionList.OrderBy(item => item.Score)
+                            .Select(item => string.Format("{0}{1}({2})", item.ChineseName,
+                                "", item.UserName))); //最后的得分情况
                 this.dbContext.GameInfoModel.Add(gameInfoModel);
                 this.dbContext.SaveChanges();
 
@@ -171,7 +186,21 @@ namespace GaiaProject.Controllers
             GameInfoModel gameInfoModel = this.dbContext.GameInfoModel.SingleOrDefault(item => item.Id == id);
             if (gameInfoModel != null)
             {
-                string log = gameInfoModel.loginfo;
+                string log;
+                //游戏已经结束
+                if (gameInfoModel.GameStatus == 8)
+                {
+                    log = gameInfoModel.loginfo;
+                }
+                else
+                {
+                    var game = GameMgr.GetGameByName(gameInfoModel.name);
+                    if (game == null)//游戏不存在
+                    {
+                        return View("Index");
+                    }
+                    log = game.UserActionLog;
+                }
 
                 GameMgr.CreateNewGame(gameInfoModel.name, gameInfoModel.userlist.Split('|'), out GaiaGame result, gameInfoModel.MapSelction, isTestGame: gameInfoModel.IsTestGame == 1 ? true : false);
                 GaiaGame gg = GameMgr.GetGameByName(gameInfoModel.name);
@@ -356,9 +385,9 @@ namespace GaiaProject.Controllers
                 stringBuilder.Append(string.Format("<tr><td>{0}</td><td class='text-right'>{1}</td><td>{2}vp</td><td class='text-right'>{3}</td><td>{4}c</td><td class='text-right'>{5}</td><td>{6}o</td><td class='text-right'>{7}</td><td>{8}q</td><td class='text-right'>{9}</td><td>{10}k</td><td class='text-right'>{11}</td><td>{12}/{13}/{14}</td><td>{15}</td></tr>", item.FactionName ?? null, @item.ResouceChange?.m_score, item.ResouceEnd?.m_score, item.ResouceChange?.m_credit, item.ResouceEnd?.m_credit, item.ResouceChange?.m_ore, item.ResouceEnd?.m_ore, item.ResouceChange?.m_QICs, item.ResouceEnd?.m_QICs, item.ResouceChange?.m_knowledge, item.ResouceEnd?.m_knowledge, item.ResouceChange?.m_powerToken2 + item.ResouceChange?.m_powerToken3 * 2, item.ResouceEnd?.m_powerToken1,item.ResouceEnd?.m_powerToken2,item.ResouceEnd?.m_powerToken3, item.Syntax));
             }
 
-            return new JsonResult(new UserFriendController.JsonData()
+            return new JsonResult(new Models.Data.UserFriendController.JsonData()
             {
-                data = stringBuilder.ToString(),info=new UserFriendController.Info() { state = 200}
+                data = stringBuilder.ToString(),info=new Models.Data.UserFriendController.Info() { state = 200}
             });
         }
         #region 管理工具

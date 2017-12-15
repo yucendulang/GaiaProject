@@ -75,6 +75,10 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// 创建人
         /// </summary>
         public string username { get; set; }
+        /// <summary>
+        /// 回合数量
+        /// </summary>
+        public int round { get; set; }
 
     }
 }

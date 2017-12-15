@@ -170,6 +170,7 @@ else
                         <div class="modal-body" id="">
                             <p id="querytitle">您确认要执行吗？</p>
                             <p id="querysyntax"></p>
+                            <p id="querytishi"></p>
 
 
                         </div>
@@ -233,29 +234,32 @@ else
                 <p>
                     现在等待 <span style="background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 做Gaia行动 Pass跳过此行动阶段 Itar 用+sttx/attx获取板子 一次只能拿一块 人类正常使用Convert命令 一次只能转换一种资源
                 </p>
-
-                @if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Itar)
+                
+                @if (isRound)
                 {
-                    <div class="btn-group" role="group" aria-label="...">
-                        <button class="btn btn-default" onclick="openSelectTT('{0}')">选择科技版</button>
+                    @if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Itar)
+                     {
+                         <div class="btn-group" role="group" aria-label="...">
+                             <button class="btn btn-default" onclick="openSelectTT('{0}')">选择科技版</button>
 
-                        <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
-                    </div>
-                }
-                else if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Terraner)
-                {
+                             <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
+                         </div>
+                     }
+                     else if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Terraner)
+                     {
 
-                    <div>
-                        <span>PG:@Model.FactionList[Model.GameStatus.PlayerIndex].PowerTokenGaia</span>
-                        @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTerraner, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert " })
+                         <div>
+                             <span>PG:@Model.FactionList[Model.GameStatus.PlayerIndex].PowerTokenGaia</span>
+                             @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTerraner, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert " })
 
 
 
-                        <button class="btn btn-default" onclick="submitData();">确认</button>
+                             <button class="btn btn-default" onclick="submitData();">确认</button>
 
-                        <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
-                    </div>
+                             <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
+                         </div>
 
+                     }
                 }
 
 

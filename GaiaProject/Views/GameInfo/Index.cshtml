@@ -16,11 +16,11 @@
         <tr>
             <td>游戏名称</td>
             <td>玩家数量</td>
-            <td>结束时间</td>
-            <td>RSTList</td>
-            <td>FSTList</td>
+            @*<td>FSTList</td>*@
             <td>得分</td>
             <td>创建时间</td>
+            <td>结束时间</td>
+
             <td></td>
         </tr>
     </thead>
@@ -33,12 +33,11 @@
                     <a href="/Home/RestoreGame/@item.Id">@item.name</a>
                 </td>
                 <td>@item.UserCount</td>
-                <td>@item.endtime</td>
-                <td>@item.RSTList</td>
-                <td>@item.FSTList</td>
+                @*<td>@item.FSTList</td>*@
 
                 <td>@item.scoreFaction</td>
                 <td>@item.starttime</td>
+                <td>@item.endtime</td>
 
                 <td>
                     @if (isAdmin)

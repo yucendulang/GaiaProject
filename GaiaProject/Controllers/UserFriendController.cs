@@ -34,7 +34,7 @@ namespace GaiaProject.Controllers
         [HttpPost]
         public async Task<JsonResult> AddFriend(UserFriend model)
         {
-            JsonData jsonData=new JsonData();
+            Models.Data.UserFriendController.JsonData jsonData=new Models.Data.UserFriendController.JsonData();
             var user = await _userManager.GetUserAsync(HttpContext.User);           
             if (user != null)
             {
@@ -78,7 +78,7 @@ namespace GaiaProject.Controllers
         [HttpPost]
         public async Task<JsonResult> DelFriend(UserFriend model)
         {
-            JsonData jsonData = new JsonData();
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user != null)
             {

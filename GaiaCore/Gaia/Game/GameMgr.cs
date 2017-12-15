@@ -223,6 +223,7 @@ namespace GaiaCore.Gaia
                 System.Diagnostics.Debug.WriteLine(item.Key + ":" + ex.ToString());
             }
             gg.LastMoveTime = item.Value.LastMoveTime;
+            //需要加载到内存
             if (isTodict)
             {
                 if (m_dic.ContainsKey(item.Key))
@@ -236,10 +237,10 @@ namespace GaiaCore.Gaia
             }
             else
             {
-                if (m_dic.ContainsKey(item.Key))
-                {
-                    m_dic.Remove(item.Key);
-                }
+//                if (m_dic.ContainsKey(item.Key))
+//                {
+//                    m_dic.Remove(item.Key);
+//                }
             }
             return gg;
         }

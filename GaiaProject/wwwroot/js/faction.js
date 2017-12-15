@@ -93,7 +93,7 @@ if (userInfo.isRound) {
     $("#actBody div").click(function () {
         var value = this.id.replace(" ", "");
         if ($(this).find("a").css("color") === "rgb(255, 0, 0)") {
-            alert("行动以被执行");
+            alert("行动已被执行");
         }
         else {
 
@@ -108,7 +108,7 @@ if (userInfo.isRound) {
                 $("#myAltModal").modal();
             }
             else {
-                openQueryWindow("action {0}".format(value));
+                openQueryWindow("action {0}".format(value),"确认执行?",$(this).attr("tishi"));
                 //$("#syntax").val("action {0}".format(value));
             }
         }
@@ -233,11 +233,14 @@ if (userInfo.isRound) {
 
 
 //弹出确认对话框
-function openQueryWindow(type, title) {
+function openQueryWindow(type, title,tishi) {
     //actType = "action {0}".format(actType);
     //actType = type;
     $("#syntax").val(type);
     $("#querysyntax").text(type);
+    if (tishi != undefined) {
+        $("#querytishi").html(tishi);
+    }
     if (title != undefined) {
         $("#querytitle").html(title);
     } else {
