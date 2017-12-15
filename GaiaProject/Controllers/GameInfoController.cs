@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GaiaCore.Gaia;
+using GaiaCore.Gaia.Game;
 using GaiaDbContext.Models;
 using GaiaDbContext.Models.HomeViewModels;
 using GaiaProject.Data;
@@ -144,7 +145,19 @@ namespace GaiaProject.Controllers
             return View(list);
         }
 
-
+        public bool FinishGame(GaiaDbContext.Models.HomeViewModels.GameInfoModel gameInfoModel,GaiaGame result)
+        {
+            //实际上已经结束，但是数据库没有更新的
+            if (result.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
+            {
+                gameInfoModel.GameStatus = 8; //状态
+                gameInfoModel.round = 7; //代表结束
+                gameInfoModel.UserCount = result.Username.Length; //玩家数量
+                gameInfoModel.endtime = DateTime.Now; //结束时间
+                return true;
+            }
+            return false;
+        }
 
         /// <summary>
         /// 从内存更新游戏
@@ -153,21 +166,7 @@ namespace GaiaProject.Controllers
         public IActionResult UpdateGame()
         {
             var list = GameMgr.GetAllGame();
-            //检查有没有结束
-            Action<GaiaDbContext.Models.HomeViewModels.GameInfoModel, GaiaGame> CheckFinish = (gameInfoModel, result) =>
-            {
-                if (result.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
-                {
-                    //实际上已经结束，但是数据库没有更新的
-                    if (result.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
-                    {
-                        gameInfoModel.GameStatus = 8; //状态
-                        gameInfoModel.round = 7; //代表结束
-                        gameInfoModel.UserCount = result.Username.Length; //玩家数量
-                        gameInfoModel.endtime = DateTime.Now; //结束时间
-                    }
-                }
-            };
+
             foreach (KeyValuePair<string, GaiaGame> keyValuePair in list)
             {
                 var result = keyValuePair.Value;
@@ -192,9 +191,9 @@ namespace GaiaProject.Controllers
                             endtime = DateTime.Now,
                             round = 0,
 
-                    //username = HttpContext.User.Identity.Name,
-                };
-                    CheckFinish(gameInfoModel, result);
+                            //username = HttpContext.User.Identity.Name,
+                        };
+                    this.FinishGame(gameInfoModel, result);
                 }
                 else
                 {
@@ -206,7 +205,7 @@ namespace GaiaProject.Controllers
                     else
                     {
                         gameInfoModel.round = result.GameStatus.RoundCount;
-                        CheckFinish(gameInfoModel, result);
+                        this.FinishGame(gameInfoModel, result);
                     }
                 }
 
@@ -224,6 +223,7 @@ namespace GaiaProject.Controllers
                             .Select(item => string.Format("{0}{1}({2})", item.ChineseName,
                                 item.Score, item.UserName))); //最后的得分情况
                 gameInfoModel.loginfo = string.Join("|", result.LogEntityList.Select(item => item.Syntax));
+
                 if (isExist)
                 {
                     this.dbContext.GameInfoModel.Update(gameInfoModel);
@@ -237,6 +237,42 @@ namespace GaiaProject.Controllers
             this.dbContext.SaveChanges();
 
             return Redirect("/GameInfo/Index?status=0");
+        }
+        /// <summary>
+        /// 从数据库日志更新游戏
+        /// </summary>
+        /// <returns></returns>
+        public string UpdateGameFromDb()
+        {
+            List<GameInfoModel> list = this.dbContext.GameInfoModel.Where(item => item.GameStatus != 8).ToList();
+            foreach (GameInfoModel gameInfoModel in list)
+            {
+                //如果日志不是空的
+                if (!string.IsNullOrEmpty(gameInfoModel.loginfo))
+                {
+                    GameMgr.CreateNewGame(gameInfoModel.name, gameInfoModel.userlist.Split('|'), out GaiaGame result, gameInfoModel.MapSelction, isTestGame: gameInfoModel.IsTestGame == 1 ? true : false);
+                    GaiaGame gg = GameMgr.GetGameByName(gameInfoModel.name);
+                    gg.GameName = gameInfoModel.name;
+                    gg.UserActionLog = gameInfoModel.loginfo.Replace("|", "\r\n");
+
+                    gg = GameMgr.RestoreGame(gameInfoModel.name, gg);
+                    //是否应该结束
+                    if (this.FinishGame(gameInfoModel, gg))
+                    {
+                        this.dbContext.GameInfoModel.Update(gameInfoModel);
+                        //没有找到任何的种族信息
+                        if (!this.dbContext.GameFactionModel.Any(item => item.gameinfo_id == gameInfoModel.Id))
+                        {
+                            //保存种族信息
+                            GameSave.SaveFactionToDb(this.dbContext, gg, gameInfoModel);
+                        }
+                    }
+
+
+                }
+            }
+            this.dbContext.SaveChanges();
+            return "success";
         }
     }
 }

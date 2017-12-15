@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using GaiaCore.Gaia.Game;
 using GaiaDbContext.Models.HomeViewModels;
 
 namespace GaiaCore.Gaia
@@ -287,110 +288,7 @@ namespace GaiaCore.Gaia
                 throw new Exception("其他种族暂时不支持Gaia阶段行动");
             }
         }
-        /// <summary>
-        /// 保持结果到数据库
-        /// </summary>
-        private void SaveResultToDb()
-        {
-            //游戏结束
-            bool flag = GameStatus.RoundCount == GameConstNumber.GameRoundCount;
-            if (flag)
-            {
-                //保存
-                if (ApplicationDbContext.isSaveResult)
-                {
-                    try
-                    {
-                        //保存游戏结束时的信息
-                        //先保存游戏信息
-                        var gameinfo = this.dbContext.GameInfoModel.SingleOrDefault(item => item.name == this.GameName);
 
-                        if (gameinfo != null)
-                        {
-                            if (gameinfo.GameStatus == 8)
-                            {
-                                return;
-                            }
-                            gameinfo.GameStatus = 8; //状态
-                            gameinfo.round = 7;//代表结束
-                            gameinfo.version = this.version; //版本
-                            gameinfo.UserCount = this.UserCount; //玩家数量
-                            gameinfo.endtime = DateTime.Now; //结束时间
-                            //gameinfo.ATTList = string.Join("|", this.ATTList.Select(item => item.name));
-                            //gameinfo.FSTList = string.Join("|", this.FSTList.Select(item => item.GetType().Name));
-                            //gameinfo.RBTList = string.Join("|", this.RBTList.Select(item => item.name));
-                            //gameinfo.RSTList = string.Join("|", this.RSTList.Select(item => item.GetType().Name));
-                            //gameinfo.STT3List = string.Join("|",
-                            //    this.STT3List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
-                            //gameinfo.STT6List = string.Join("|",
-                            //    this.STT6List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
-                            gameinfo.loginfo = string.Join("|", this.LogEntityList.Select(item => item.Syntax)) + "|" +
-                                               this.syntax;
-                            gameinfo.scoreFaction =
-                                string.Join(":",
-                                    this.FactionList.OrderBy(item => item.Score)
-                                        .Select(item => string.Format("{0}{1}({2})", item.ChineseName,
-                                            item.Score, item.UserName))); //最后的得分情况
-
-                            this.dbContext.GameInfoModel.Update(gameinfo);
-
-
-                            //this.dbContext.SaveChanges();
-
-
-                            //再保存玩家信息
-                            Func<Faction, int, int> getscore = (faction, index) =>
-                            {
-                                this.FSTList[index].InvokeGameTileAction(this.FactionList);
-                                return faction.FinalEndScore;
-                            };
-                            //排名
-                            int rankindex = 1;
-                            foreach (Faction faction in FactionList.OrderByDescending(f => f.Score))
-                            {
-                                var gamefaction = new GaiaDbContext.Models.HomeViewModels.GameFactionModel()
-                                {
-                                    gameinfo_id = gameinfo.Id,
-                                    gameinfo_name = this.GameName,
-                                    FactionName = faction.FactionName.ToString(),
-                                    FactionChineseName = faction.ChineseName,
-                                    kjPostion = string.Join("|", faction.TransformLevel, faction.ShipLevel,
-                                        faction.AILevel, faction.GaiaLevel, faction.EconomicLevel,
-                                        faction.ScienceLevel),
-                                    numberBuild = string.Join("|", 8 - faction.Mines.Count,
-                                        4 - faction.TradeCenters.Count, 3 - faction.ResearchLabs.Count,
-                                        faction.Academy1 == null ? 1 : 0, faction.Academy2 == null ? 1 : 0,
-                                        faction.StrongHold == null ? 1 : 0),
-                                    numberFst1 = this.FSTList[0].TargetNumber(faction),
-                                    numberFst2 = this.FSTList[1].TargetNumber(faction),
-                                    scoreFst1 = getscore(faction, 0),
-                                    scoreFst2 = getscore(faction, 1),
-                                    scoreKj = faction.GetTechScoreCount() * 4,
-                                    scorePw = 0,
-                                    scoreRound = null,
-                                    scoreTotal = faction.Score,
-                                    userid = null,
-                                    username = faction.UserName,
-                                    rank = rankindex,//排名
-                                };
-                                this.dbContext.GameFactionModel.Add(gamefaction);
-                                rankindex++;
-                            }
-
-                            this.dbContext.SaveChanges();
-                        }
-
-
-                    }
-                    catch (Exception e)
-                    {
-                        string msg = e.Message;
-                        int a = 1;
-                    }
-                }
-            }
-
-        }
 
         private void NewRound()
         {
@@ -421,7 +319,7 @@ namespace GaiaCore.Gaia
             }
 
             //保存结果到数据库
-            this.SaveResultToDb();
+            GameSave.SaveGameToDb(this.dbContext,this);
         }
 
         private void IncomePhaseNextPlayer()
