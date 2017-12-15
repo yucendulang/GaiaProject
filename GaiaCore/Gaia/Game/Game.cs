@@ -312,6 +312,7 @@ namespace GaiaCore.Gaia
                                 return;
                             }
                             gameinfo.GameStatus = 8; //状态
+                            gameinfo.round = 7;//代表结束
                             gameinfo.version = this.version; //版本
                             gameinfo.UserCount = this.UserCount; //玩家数量
                             gameinfo.endtime = DateTime.Now; //结束时间

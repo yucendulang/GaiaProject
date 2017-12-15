@@ -62,7 +62,7 @@ else
 
 @if (SignInManager.IsSignedIn(User))
 {
-    @if (User.Identity.Name.Equals("yucenyucen@126.com") || User.Identity.Name.Equals("xsssssssch@hotmail.com") || User.Identity.Name.Equals("qqthomas@163.com"))
+    @if (UserManager.GetUserAsync(User).Result != null && UserManager.GetUserAsync(User).Result.groupid == 1)
     {
         <div class="input-group-btn">
             <button id="undo" type="button" class="btn btn-default">undo</button>

@@ -176,6 +176,14 @@ namespace GaiaProject.Controllers
                             //username = HttpContext.User.Identity.Name,
                         };
                 }
+                else
+                {
+                    //结束的游戏不需要更新
+                    if (gameInfoModel.GameStatus == 8)
+                    {
+                        continue;
+                    }
+                }
 
                 var result = keyValuePair.Value;
                 gameInfoModel.round = result.GameStatus.RoundCount;

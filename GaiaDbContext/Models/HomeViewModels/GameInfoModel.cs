@@ -57,7 +57,7 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// <summary>
         /// 结束时间
         /// </summary>
-        public DateTime endtime { get; set; }
+        public DateTime? endtime { get; set; }
 
         /// <summary>
         /// 最后得分情况

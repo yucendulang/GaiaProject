@@ -15,11 +15,12 @@
     <thead>
         <tr>
             <td>游戏名称</td>
-            <td>玩家数量</td>
+            <td>人数</td>
             @*<td>FSTList</td>*@
             <td>得分</td>
-            <td>创建时间</td>
-            <td>结束时间</td>
+            <td>回合</td>
+
+            <td>创建时间/结束时间</td>
 
             <td></td>
         </tr>
@@ -36,8 +37,9 @@
                 @*<td>@item.FSTList</td>*@
 
                 <td>@item.scoreFaction</td>
-                <td>@item.starttime</td>
-                <td>@item.endtime</td>
+                <td>@item.round</td>
+
+                <td>@item.starttime.ToString("yyyy-MM-dd")/@item.endtime?.ToString("yyyy-MM-dd")</td>
 
                 <td>
                     @if (isAdmin)
