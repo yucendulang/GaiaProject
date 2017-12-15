@@ -8,6 +8,20 @@
 
 <h2>用户列表</h2>
 
+<form>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="用户名" id="UserName" name="UserName">
+                <input type="text" class="form-control" placeholder="邮箱" id="Email" name="Email">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">搜索</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</form>
+
 <table class="table">
     <thead>
     <tr>
@@ -23,7 +37,7 @@
     {
         <tr>
             <td>
-                <a href="/Home/RestoreGame/@item.Id">@item.UserName</a>
+                <a href="/GameInfo?username=@item.UserName">@item.UserName</a>
             </td>
             <td>@item.Email</td>
             <td>
@@ -49,3 +63,56 @@
 
     </tbody>
 </table>
+<nav aria-label="Page navigation">
+    <ul class="pagination" id="pagelist">
+        <li>
+            <a href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+@*        <li><a href="#">首页</a></li>*@
+        <li>
+            <a href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+    <span>
+        
+    </span>
+</nav>
+
+<script>
+
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+
+
+    $(function() {
+        $("#pagelist a").click(function () {
+            var obj = $(this);
+            var value = obj.attr("aria-label");
+            var pageindex = GetQueryString("pageindex");
+            if (pageindex === null) {
+                pageindex = 1;
+            }
+            if (value === "Previous") {
+                pageindex--;
+            }
+            else if (value === "Next") {
+                pageindex++;
+            } else {
+                pageindex = obj.text();
+            }
+            if (pageindex === 0) {
+                pageindex = 1;
+            }
+            window.location.href = "?pageindex=" + pageindex;
+
+        });
+    })
+</script>

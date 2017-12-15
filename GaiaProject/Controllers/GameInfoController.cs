@@ -219,7 +219,7 @@ namespace GaiaProject.Controllers
                     result.STT6List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
                 gameInfoModel.scoreFaction =
                     string.Join(":",
-                        result.FactionList.OrderBy(item => item.Score)
+                        result.FactionList.OrderByDescending(item => item.Score)
                             .Select(item => string.Format("{0}{1}({2})", item.ChineseName,
                                 item.Score, item.UserName))); //最后的得分情况
                 gameInfoModel.loginfo = string.Join("|", result.LogEntityList.Select(item => item.Syntax));

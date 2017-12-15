@@ -120,9 +120,9 @@ namespace GaiaProject.Controllers
         /// 全部用户
         /// </summary>
         /// <returns></returns>
-        public IActionResult UserList()
+        public IActionResult UserList(Models.AccountViewModels.RegisterViewModel model,int pageindex=1)
         {
-            List<ApplicationUser> list = this.dbContext.Users.OrderByDescending(item=>item.groupid).ToList();
+            List<ApplicationUser> list = this.dbContext.Users.Where(item=> (model.UserName == null || item.UserName==model.UserName) && (model.Email==null || item.Email == model.Email)).OrderByDescending(item=>item.groupid).Skip(50*(pageindex-1)).Take(50).ToList();
             return View(list);
         }
     }

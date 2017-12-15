@@ -54,7 +54,7 @@ namespace GaiaCore.Gaia.Game
                                                gaiaGame.syntax;
                             gameinfo.scoreFaction =
                                 string.Join(":",
-                                    gaiaGame.FactionList.OrderBy(item => item.Score)
+                                    gaiaGame.FactionList.OrderByDescending(item => item.Score)
                                         .Select(item => string.Format("{0}{1}({2})", item.ChineseName,
                                             item.Score, item.UserName))); //最后的得分情况
 
