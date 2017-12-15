@@ -153,8 +153,25 @@ namespace GaiaProject.Controllers
         public IActionResult UpdateGame()
         {
             var list = GameMgr.GetAllGame();
+            //检查有没有结束
+            Action<GaiaDbContext.Models.HomeViewModels.GameInfoModel, GaiaGame> CheckFinish = (gameInfoModel, result) =>
+            {
+                if (result.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
+                {
+                    //实际上已经结束，但是数据库没有更新的
+                    if (result.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
+                    {
+                        gameInfoModel.GameStatus = 8; //状态
+                        gameInfoModel.round = 7; //代表结束
+                        gameInfoModel.UserCount = result.Username.Length; //玩家数量
+                        gameInfoModel.endtime = DateTime.Now; //结束时间
+                    }
+                }
+            };
             foreach (KeyValuePair<string, GaiaGame> keyValuePair in list)
             {
+                var result = keyValuePair.Value;
+
                 GaiaDbContext.Models.HomeViewModels.GameInfoModel gameInfoModel;
                 gameInfoModel= this.dbContext.GameInfoModel.SingleOrDefault(item => item.name == keyValuePair.Key);
                 //如果不存在
@@ -166,15 +183,18 @@ namespace GaiaProject.Controllers
                         new GaiaDbContext.Models.HomeViewModels.GameInfoModel()
                         {
                             name = keyValuePair.Key,
-                            userlist = string.Join("|", keyValuePair.Value.Username),
-                            UserCount = keyValuePair.Value.Username.Length,
+                            userlist = string.Join("|", result.Username),
+                            UserCount = result.Username.Length,
                             MapSelction = keyValuePair.Value.MapSelection.ToString(),
                             IsTestGame = keyValuePair.Value.IsTestGame ? 1 : 0,
                             GameStatus = 0,
                             starttime = DateTime.Now,
                             endtime = DateTime.Now,
-                            //username = HttpContext.User.Identity.Name,
-                        };
+                            round = 0,
+
+                    //username = HttpContext.User.Identity.Name,
+                };
+                    CheckFinish(gameInfoModel, result);
                 }
                 else
                 {
@@ -183,10 +203,13 @@ namespace GaiaProject.Controllers
                     {
                         continue;
                     }
+                    else
+                    {
+                        gameInfoModel.round = result.GameStatus.RoundCount;
+                        CheckFinish(gameInfoModel, result);
+                    }
                 }
 
-                var result = keyValuePair.Value;
-                gameInfoModel.round = result.GameStatus.RoundCount;
                 gameInfoModel.ATTList = string.Join("|", result.ATTList.Select(item => item.name));
                 gameInfoModel.FSTList = string.Join("|", result.FSTList.Select(item => item.GetType().Name));
                 gameInfoModel.RBTList = string.Join("|", result.RBTList.Select(item => item.name));
