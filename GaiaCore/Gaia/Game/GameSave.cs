@@ -95,7 +95,13 @@ namespace GaiaCore.Gaia.Game
             };
             //排名
             int rankindex = 1;
-            foreach (Faction faction in gaiaGame.FactionList.OrderByDescending(f => f.Score))
+            var factionList = gaiaGame.FactionList.OrderByDescending(f => f.Score).ToList();
+            //如果第一名小于100
+            if (factionList[0].Score < 100)
+            {
+
+            }
+            foreach (Faction faction in factionList)
             {
                 var gamefaction = new GaiaDbContext.Models.HomeViewModels.GameFactionModel()
                 {
