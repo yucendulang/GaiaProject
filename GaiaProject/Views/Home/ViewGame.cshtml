@@ -62,15 +62,7 @@ else
 
 @if (SignInManager.IsSignedIn(User))
 {
-    @if (UserManager.GetUserAsync(User).Result != null && UserManager.GetUserAsync(User).Result.groupid == 1)
-    {
-        <div class="input-group-btn">
-            <button id="undo" type="button" class="btn btn-default">undo</button>
-            <button id="delete" type="button" class="btn btn-default">delete</button>
-            <button id="redo" type="button" class="btn btn-default">redo</button>
-            <button id="report" type="button" class="btn btn-default">report</button>
-        </div>
-    }
+
     <div id="gameTopInfo" style="font-size:20px">
         @if (@Model.FactionList.Count > @Model.GameStatus.PlayerIndex)
         {
@@ -539,6 +531,17 @@ else
 
 
     </div>
+
+    @if (UserManager.GetUserAsync(User).Result != null && UserManager.GetUserAsync(User).Result.groupid == 1)
+    {
+        <div class="input-group-btn">
+            <button id="undo" type="button" class="btn btn-default">undo</button>
+            <button id="delete" type="button" class="btn btn-default">delete</button>
+            <button id="redo" type="button" class="btn btn-default">redo</button>
+            <button id="report" type="button" class="btn btn-default">report</button>
+        </div>
+    }
+
     <table class="table table-condensed">
         <thead data-toggle="collapse" data-target="#demo">
             <tr>

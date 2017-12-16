@@ -172,7 +172,15 @@ namespace GaiaProject.Controllers
                 var result = keyValuePair.Value;
 
                 GaiaDbContext.Models.HomeViewModels.GameInfoModel gameInfoModel;
-                gameInfoModel= this.dbContext.GameInfoModel.SingleOrDefault(item => item.name == keyValuePair.Key);
+                var listG = this.dbContext.GameInfoModel.Where(item => item.name == keyValuePair.Key).OrderByDescending(item=>item.starttime).ToList();
+                if (listG.Count > 0)
+                {
+                    gameInfoModel = listG[0];
+                }
+                else
+                {
+                    continue;
+                }
                 //如果不存在
                 bool isExist = true;
                 if (gameInfoModel == null)

@@ -100,6 +100,12 @@ namespace GaiaProject.Controllers
                 model.Name = Guid.NewGuid().ToString();
             }
             string[] username = new string[] { model.Player1, model.Player2, model.Player3, model.Player4 };
+            if (this.dbContext.GameInfoModel.Any(item => item.name == model.Name))
+            {
+                ModelState.AddModelError(string.Empty,  "游戏名称已经存在");
+                return View(model);
+
+            }
             //随机排序
             username = this.RandomSortList<string>(username).ToArray();
             foreach (var item in username.Where(x=>!string.IsNullOrEmpty(x)))
@@ -197,13 +203,17 @@ namespace GaiaProject.Controllers
                     var game = GameMgr.GetGameByName(gameInfoModel.name);
                     if (game == null)//游戏不存在
                     {
-                        return View("Index");
+                        if (string.IsNullOrEmpty(gameInfoModel.loginfo))
+                        {
+                            return View("Index");
+                        }
+                        log = gameInfoModel.loginfo;
                     }
                     else
                     {
                         return Redirect("/Home/ViewGame/"+ gameInfoModel.name);
                     }
-                    log = game.UserActionLog;
+                    //log = game.UserActionLog;
                 }
 
                 GameMgr.CreateNewGame(gameInfoModel.name, gameInfoModel.userlist.Split('|'), out GaiaGame result, gameInfoModel.MapSelction, isTestGame: gameInfoModel.IsTestGame == 1 ? true : false);
