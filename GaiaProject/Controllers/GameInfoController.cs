@@ -213,7 +213,16 @@ namespace GaiaProject.Controllers
                     else
                     {
                         gameInfoModel.round = result.GameStatus.RoundCount;
-                        this.FinishGame(gameInfoModel, result);
+                        //如果游戏结束
+                        if (this.FinishGame(gameInfoModel, result))
+                        {
+                            //并且没有找到任何的种族信息
+                            if (!this.dbContext.GameFactionModel.Any(item => item.gameinfo_id == gameInfoModel.Id))
+                            {
+                                //保存种族信息
+                                GameSave.SaveFactionToDb(this.dbContext, result, gameInfoModel);
+                            }
+                        }
                     }
                 }
 
@@ -246,13 +255,29 @@ namespace GaiaProject.Controllers
 
             return Redirect("/GameInfo/Index?status=0");
         }
+
+
         /// <summary>
         /// 从数据库日志更新游戏
         /// </summary>
         /// <returns></returns>
-        public string UpdateGameFromDb()
+        public string UpdatenNoFromDb()
         {
-            List<GameInfoModel> list = this.dbContext.GameInfoModel.Where(item => item.GameStatus != 8).ToList();
+            return UpdateFromDb(item => item.GameStatus != 8);
+        }
+
+        /// <summary>
+        /// 检测游戏结束但没有种族信息的
+        /// </summary>
+        /// <returns></returns>
+        public string UpdatenFinishFromDb()
+        {
+            return UpdateFromDb(item => item.GameStatus == 8);
+        }
+
+        public string UpdateFromDb(Func<GameInfoModel,bool> func)
+        {
+            List<GameInfoModel> list = this.dbContext.GameInfoModel.Where(func).ToList();//item => item.GameStatus != 8
             foreach (GameInfoModel gameInfoModel in list)
             {
                 //如果日志不是空的
@@ -276,7 +301,7 @@ namespace GaiaProject.Controllers
                         }
                     }
 
-
+                    GameMgr.DeleteOneGame(gameInfoModel.name);
                 }
             }
             this.dbContext.SaveChanges();

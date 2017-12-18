@@ -9,7 +9,13 @@
     //ViewBag.Title = "结束游戏";
     Layout = "_Layout";
 }
+@{ bool isAdmin = UserManager.GetUserAsync(User).Result != null && UserManager.GetUserAsync(User).Result.groupid == 1;}
 
+@if (isAdmin)
+{
+    <a href="/GameInfo/UpdatenFinishFromDb">检测游戏结束但没有种族信息的</a>
+
+}
 
 <table class="table">
     <thead>
@@ -26,7 +32,6 @@
         </tr>
     </thead>
     <tbody>
-        @{ bool isAdmin = UserManager.GetUserAsync(User).Result != null && UserManager.GetUserAsync(User).Result.groupid == 1;}
         @foreach (var item in Model)
         {
             <tr>
