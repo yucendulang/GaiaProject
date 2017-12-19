@@ -144,22 +144,41 @@ namespace GaiaProject.Controllers
         /// </summary>
         /// <returns></returns>
 
-        public IActionResult FactionStatistics()
+        public IActionResult FactionStatistics(int? usercount,string username)
         {
-            var list = this.dbContext.GameFactionModel.GroupBy(item => item.FactionChineseName).Select(
-                g=>new Models.Data.GameInfoController.StatisticsFaction ()
+            IQueryable<GameFactionModel> query;
+            if (!string.IsNullOrEmpty(username))
+            {
+                query = this.dbContext.GameFactionModel.Where(item => item.username == username);
+            }
+            else
+            {
+                query = this.dbContext.GameFactionModel.AsQueryable();
+            }
+            if (usercount > 0)
+            {
+//                query =from gameFactionModel in query
+//                    from gameInfoModel in this.dbContext.GameInfoModel.AsQueryable()
+//                    where gameInfoModel.UserCount == usercount && gameInfoModel.GameStatus==8 && gameInfoModel.Id==gameFactionModel.gameinfo_id
+//                    select gameFactionModel;
+                query = query.Where(item => this.dbContext.GameInfoModel.Where(game => game.GameStatus == 8 && game.UserCount == usercount).Select(game=>game.Id).Contains(item.gameinfo_id) );
+            }
+            var list = query.GroupBy(item => item.FactionChineseName).Select(
+                g => new Models.Data.GameInfoController.StatisticsFaction()
                 {
                     ChineseName = g.Key,
                     count = g.Count(),
                     numberwin = g.Count(faction => faction.rank == 1),
-                    winprobability = g.Count(faction => faction.rank == 1)* 100 / (g.Count()),
-                    scoremin = g.Min(faction=>faction.scoreTotal),
+                    winprobability = g.Count(faction => faction.rank == 1) * 100 / (g.Count()),
+                    scoremin = g.Min(faction => faction.scoreTotal),
                     scoremax = g.Max(faction => faction.scoreTotal),
                     scoremaxuser = g.OrderBy(faction => faction.scoreTotal).ToList()[0].username,
-                    scoreavg = g.Sum(faction => faction.scoreTotal)/g.Count(),
-                    
-                }).ToList();
-            return View(list);
+                    scoreavg = g.Sum(faction => faction.scoreTotal) / g.Count(),
+
+                });
+
+
+            return View(list.ToList());
         }
 
         public bool FinishGame(GaiaDbContext.Models.HomeViewModels.GameInfoModel gameInfoModel,GaiaGame result)
