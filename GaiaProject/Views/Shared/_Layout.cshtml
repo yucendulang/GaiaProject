@@ -82,9 +82,13 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">统计 <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a asp-area="" asp-controller="GameInfo" asp-action="Index">结束游戏</a></li>
-                            <li><a asp-area="" asp-controller="GameInfo" asp-action="FactionList">使用种族</a></li>
+                            <li><a href="/GameInfo/Index?GameStatus=8">结束游戏</a></li>
+                            <li><a href="/GameInfo/Index?GameStatus=0">参与游戏</a></li>
+                            <li><a href="/GameInfo/Index?isAdmin=2">公开游戏</a></li>
+                                                   
                             <li role="separator" class="divider"></li>
+
+                            <li><a asp-area="" asp-controller="GameInfo" asp-action="FactionList">使用种族</a></li>
                             <li><a asp-area="" asp-controller="GameInfo" asp-action="FactionStatistics">种族统计</a></li>
                         </ul>
                     </li>
@@ -95,8 +99,10 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">管理 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="/GameInfo/Index?status=0">未结束游戏</a>
-                                    <a href="/GameInfo/Index?isAdmin=1">全部结束游戏</a>
+                                    <a href="/GameInfo/Index?isAdmin=1">全部游戏</a>
+
+                                    <a href="/GameInfo/Index?GameStatus=0">未结束游戏</a>
+                                    <a href="/GameInfo/Index?isAdmin=1&GameStatus=8">全部结束游戏</a>
                                     <a href="/UserFriend/UserList">全部用户</a>
                                     <a href="/GameInfo/UpdateGame">更新未结束游戏</a>
 

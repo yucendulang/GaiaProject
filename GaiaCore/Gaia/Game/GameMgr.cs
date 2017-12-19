@@ -60,7 +60,12 @@ namespace GaiaCore.Gaia
             }
             if (m_dic.ContainsKey(name))
             {
-                return m_dic[name];
+                GaiaGame gaiaGame = m_dic[name];
+                if (gaiaGame.GameName == null)
+                {
+                    gaiaGame.GameName = name;
+                }
+                return gaiaGame;
             }
             else
             {
@@ -128,7 +133,7 @@ namespace GaiaCore.Gaia
         public static bool BackupDictionary()
         {
             JsonSerializerSettings jsetting = new JsonSerializerSettings();
-            jsetting.ContractResolver = new LimitPropsContractResolver(new string[] { "UserActionLog", "Username", "IsTestGame", "LastMoveTime", "version" });
+            jsetting.ContractResolver = new LimitPropsContractResolver(new string[] { "UserActionLog", "Username", "IsTestGame", "LastMoveTime", "version", "GameName" });
             var str = JsonConvert.SerializeObject(m_dic, Formatting.Indented, jsetting);
             var logPath = System.IO.Path.Combine(BackupDataPath, DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt");
             var logWriter = System.IO.File.CreateText(logPath);

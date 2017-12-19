@@ -38,6 +38,7 @@ namespace GaiaProject
             }
             else
             {
+                //启动备份计划
                 DaemonMgr.StartAll();
                 GaiaCore.Gaia.GameMgr.RestoreDictionary(string.Empty);
             }
@@ -73,6 +74,7 @@ namespace GaiaProject
 
                 options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;

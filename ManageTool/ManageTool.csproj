@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GaiaCore\GaiaCore.csproj" />
+    <ProjectReference Include="..\GaiaDbContext\GaiaDbContext.csproj" />
   </ItemGroup>
 
 </Project>

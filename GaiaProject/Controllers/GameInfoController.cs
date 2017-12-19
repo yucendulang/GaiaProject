@@ -31,56 +31,73 @@ namespace GaiaProject.Controllers
         /// 进行的游戏
         /// </summary>
         /// <returns></returns>
-        public IActionResult Index(string username,int? status,int? isAdmin)
+        public IActionResult Index(string username, int? isAdmin, GameInfoModel gameInfoModel, string joinname = null)
         {
 
             if (username == null)
             {
                 username = HttpContext.User.Identity.Name;
             }
-            if (status == null)
-            {
-                status = 8;
-            }
             IQueryable<GameInfoModel> list;
-            //this.dbContext.GameInfoModel.AsEnumerable()
-            //var myfaction = from score in this.dbContext.GameFactionModel.AsEnumerable() where score.username == HttpContext.User.Identity.Name select score.gameinfo_id;
-            //未结束
-            if (status != 8)
+
+            ViewBag.Title = "游戏列表";
+            //如果是管理员查看全部游戏结果
+            if (isAdmin == 1)
             {
-                ViewBag.Title = "未结束游戏";
+                if (this._userManager.GetUserAsync(User).Result.groupid == 1)
+                {
+                    list = from game in this.dbContext.GameInfoModel select game;
+                }
+                else
+                {
+                    return View(null);
+                }
+                //回合
+                if (gameInfoModel.round != null)
+                {
+                    list = list.Where(item => item.round == gameInfoModel.round);
+                }
+                //创建人
+                list = gameInfoModel.username == null
+                    ? list
+                    : list.Where(item => item.username == gameInfoModel.username);
+                //参加人
+                if (joinname != null)
+                {
+                    list = from game in list
+                        from score in this.dbContext.GameFactionModel
+                        where score.username == joinname && game.Id == score.gameinfo_id
+                        select game;
+                }
+            }
+            //查看其他人的游戏
+            else if (isAdmin==2)
+            {
                 list = from game in this.dbContext.GameInfoModel
-                    where game.GameStatus == status 
+                    //from score in this.dbContext.GameFactionModel
+                    where game.IsAllowLook 
                     select game;
             }
             else
             {
-                ViewBag.Title = "已结束游戏";
-                //如果是管理员查看全部游戏结果
-                if (isAdmin == 1)
-                {
-                    if (this._userManager.GetUserAsync(User).Result.groupid == 1)
-                    {
-                        list = from game in this.dbContext.GameInfoModel where game.GameStatus == status select game;
-                    }
-                    else
-                    {
-                        return View(null);
-                    }
-                }
-                else
-                {
-                    list = from game in this.dbContext.GameInfoModel
-                        from score in this.dbContext.GameFactionModel
-                        where game.GameStatus == status && score.username == username && game.Id == score.gameinfo_id
-                        select game;
-                }
-
+                list = from game in this.dbContext.GameInfoModel
+                    from score in this.dbContext.GameFactionModel
+                    where score.username == username && game.Id == score.gameinfo_id
+                    select game;
             }
+
+
+            //状态
+            list = gameInfoModel.GameStatus == null
+                ? list
+                : list.Where(item => item.GameStatus == gameInfoModel.GameStatus);
+
+
             var result = list.ToList();
             return View(result);
 
         }
+
         /// <summary>
         /// 删除游戏
         /// </summary>
@@ -305,6 +322,29 @@ namespace GaiaProject.Controllers
                 }
             }
             this.dbContext.SaveChanges();
+            return "success";
+        }
+        /// <summary>
+        /// 删除游戏未结束，但是内存没有的游戏
+        /// </summary>
+        /// <returns></returns>
+
+        public  string DeleteGameInvalid()
+        {
+            List<GameInfoModel> list = this.dbContext.GameInfoModel.Where(item => item.GameStatus != 8).ToList();//item => item.GameStatus != 8
+            foreach (GameInfoModel gameInfoModel in list)
+            {
+                if (gameInfoModel.GameStatus != 8)
+                {
+                    //内存没有
+                    if (GameMgr.GetGameByName(gameInfoModel.name) == null)
+                    {
+#if  !DEBUG
+                        this.DelGame(id: gameInfoModel.Id);
+#endif
+                    }
+                }
+            }
             return "success";
         }
     }

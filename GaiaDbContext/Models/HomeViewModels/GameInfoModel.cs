@@ -21,7 +21,7 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// 状态
         /// </summary>
 
-        public int GameStatus { set; get; }
+        public int? GameStatus { set; get; }
 
         [System.ComponentModel.DataAnnotations.MaxLength(50)]
         public string STT6List { get; set; }
@@ -78,7 +78,13 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// <summary>
         /// 回合数量
         /// </summary>
-        public int round { get; set; }
+        public int? round { get; set; }
+
+        //[Display(Name = "随机顺位")]
+        public bool IsRandomOrder { set; get; }
+
+        //[Display(Name = "允许观看")]
+        public bool IsAllowLook { set; get; }
 
     }
 }

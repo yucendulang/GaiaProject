@@ -23,6 +23,12 @@
 <script src="~/js/bootstrap-table.js"></script>
 
 
+<environment names="Development">
+    <div>
+        <a href="/Home/SkipRound/@Model.GameName?round=6">进入第六回合</a>
+    </div>
+</environment>
+
 @if (@Model.GameStatus.RoundCount > 0)
 {
 
@@ -218,7 +224,7 @@ else
         else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
         {
 
-            <p>游戏结束 @string.Join("|", @Model.FactionList.OrderBy(x => x.Score).Select(x => string.Format("{0}:{1}", x.ChineseName, x.Score)))</p>
+            <p>游戏结束 @string.Join("|", @Model.FactionList.OrderByDescending(x => x.Score).Select(x => string.Format("{0}:{1}", x.ChineseName, x.Score)))</p>
         }
         else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
         {

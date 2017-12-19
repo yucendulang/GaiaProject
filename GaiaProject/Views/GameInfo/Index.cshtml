@@ -14,8 +14,30 @@
 @if (isAdmin)
 {
     <a href="/GameInfo/UpdatenFinishFromDb">检测游戏结束但没有种族信息的</a>
+    <a href="/GameInfo/UpdatenNoFromDb">检测游戏应该结束但没有更新的</a>
+
+    <a href="/GameInfo/DeleteGameInvalid">删除未结束但内存没有的游戏</a>
+
+    <form>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="input-group">
+                    <input type="text" class="form-control" style="width: 100px" placeholder="回合" id="round" name="round">
+                    <input type="text" class="form-control" placeholder="创建人" id="username" name="username">
+                    <input type="text" class="form-control" placeholder="参与人" id="joinname" name="joinname">
+                    <input type="hidden" class="form-control" value="1" placeholder="管理员" id="isAdmin" name="isAdmin">
+
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">搜索</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </form>
 
 }
+
+
 
 <table class="table">
     <thead>
@@ -26,7 +48,7 @@
             <td>得分</td>
             <td>回合</td>
 
-            <td>创建时间/结束时间</td>
+            <td>创建人/创建时间/结束时间</td>
 
             <td></td>
         </tr>
@@ -44,7 +66,7 @@
                 <td>@item.scoreFaction</td>
                 <td>@item.round</td>
 
-                <td>@item.starttime.ToString("yyyy-MM-dd")/@item.endtime?.ToString("yyyy-MM-dd")</td>
+                <td>@item.username/@item.starttime.ToString("yyyy-MM-dd")/@item.endtime?.ToString("yyyy-MM-dd")</td>
 
                 <td>
                     @if (isAdmin)

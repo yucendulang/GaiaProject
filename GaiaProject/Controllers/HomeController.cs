@@ -106,9 +106,14 @@ namespace GaiaProject.Controllers
                 return View(model);
 
             }
+            //删除空白玩家
+            username = username.Where(x => !string.IsNullOrEmpty(x)).ToArray();
             //随机排序
-            username = this.RandomSortList<string>(username).ToArray();
-            foreach (var item in username.Where(x=>!string.IsNullOrEmpty(x)))
+            if (model.IsRandomOrder)
+            {
+                username = this.RandomSortList<string>(username).ToArray();
+            }
+            foreach (var item in username)
             {
                 var user=_userManager.FindByNameAsync(item);
                 if (user.Result==null)
@@ -134,6 +139,9 @@ namespace GaiaProject.Controllers
                         starttime = DateTime.Now,
                         endtime = DateTime.Now,
                         username = HttpContext.User.Identity.Name,
+
+                        IsAllowLook = model.IsAllowLook,
+                        IsRandomOrder = model.IsRandomOrder,
                     };
                 //配置信息
                 gameInfoModel.ATTList = string.Join("|", result.ATTList.Select(item => item.name));
@@ -232,6 +240,23 @@ namespace GaiaProject.Controllers
             return null;
             //GameMgr.UndoOneStep(id);
         }
+        /// <summary>
+        /// 跳过回合
+        /// </summary>
+        public void SkipRound(string id,int round=6)
+        {
+            GaiaGame gaiaGame = GameMgr.GetGameByName(id);
+            for (int i = gaiaGame.GameStatus.RoundCount; i < 6; i++)
+            {
+                for (int count = 0; count < gaiaGame.UserCount; count++)
+                {
+                    gaiaGame.Syntax(
+                        string.Format("{1}:pass {0}", gaiaGame.RBTList[0].name,
+                            gaiaGame.FactionList[gaiaGame.GameStatus.PlayerIndex].FactionName), out string log,dbContext:this.dbContext);
+
+                }
+            }
+        }
 
         [HttpPost]
         public IActionResult ViewGame(string name, string syntax, string factionName)
@@ -256,7 +281,7 @@ namespace GaiaProject.Controllers
                 {
                     syntax = string.Format("{0}:{1}", factionName, syntax);
                 }
-                GameMgr.GetGameByName(name).Syntax(syntax, out string log, task.Result.UserName);
+                GameMgr.GetGameByName(name).Syntax(syntax, out string log, task.Result.UserName,dbContext:this.dbContext);
 
                 if (!string.IsNullOrEmpty(log))
                 {
@@ -295,7 +320,7 @@ namespace GaiaProject.Controllers
                 {
                     syntax = string.Format("{0}:{1}", factionName, syntax);
                 }
-                GameMgr.GetGameByName(name).Syntax(syntax, out string log, task.Result.UserName,dbContext);
+                GameMgr.GetGameByName(name).Syntax(syntax, out string log, task.Result.UserName,dbContext:this.dbContext);
 
                 if (!string.IsNullOrEmpty(log))
                 {
@@ -329,7 +354,7 @@ namespace GaiaProject.Controllers
                 var pwFirst = isPwFirst.GetValueOrDefault() ? "pw" : "pwt";
                 syntax = syntax + " " + pwFirst;
             }
-            GameMgr.GetGameByName(name).Syntax(syntax, out string log);
+            GameMgr.GetGameByName(name).Syntax(syntax, out string log,dbContext:this.dbContext);
             return Redirect("/home/viewgame/" + System.Net.WebUtility.UrlEncode(name));
         }
 
@@ -413,6 +438,11 @@ namespace GaiaProject.Controllers
             GameMgr.BackupDictionary();
             return View();
         }
+        /// <summary>
+        /// 恢复备份
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public IActionResult RestoreData(string filename)
         {
             if (!PowerUser.IsPowerUser(User.Identity.Name))
@@ -420,6 +450,8 @@ namespace GaiaProject.Controllers
                 return Redirect("/home/index");
             }
             ViewData["nameList"] = string.Join(",", GameMgr.RestoreDictionary(filename));
+            //恢复到未维护状态
+            ServerStatus.IsStopSyntax = false;
             return Redirect("/home/viewgame/" + "test01");
             //return View();
         }

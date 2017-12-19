@@ -4,6 +4,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using GaiaProject.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ManageTool
 {
@@ -16,6 +18,11 @@ namespace ManageTool
 
         public override void InvokeAction()
         {
+            //备份到数据库
+            //DbContextOptions<ApplicationDbContext> dbContextOptions=new DbContextOptions<ApplicationDbContext>();
+            //ApplicationDbContext dbContext=new ApplicationDbContext(options: dbContextOptions);
+
+            //备份到文件
             GameMgr.BackupDictionary();
             GameMgr.RemoveOldBackupData();
         }

@@ -20,6 +20,7 @@ namespace GaiaCore.Gaia.Game
 
             //游戏结束
             bool flag = gaiaGame.GameStatus.RoundCount == GameConstNumber.GameRoundCount;
+
             if (flag)
             {
                 //保存
@@ -37,6 +38,7 @@ namespace GaiaCore.Gaia.Game
                             {
                                 return;
                             }
+
                             gameinfo.GameStatus = 8; //状态
                             gameinfo.round = 7;//代表结束
                             gameinfo.version = gaiaGame.version; //版本

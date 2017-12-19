@@ -1346,6 +1346,11 @@ namespace GaiaCore.Gaia
         {
             foreach(var item in FactionList.Where(x => !x.FactionName.Equals(factionName)))
             {
+                //如果是第六回合并且PASS的玩家不需要吸收魔力
+                //if (this.GameStatus.RoundCount == 6 && this.FactionNextTurnList.Contains(item))
+                //{
+                //    continue;
+                //}
                 var power=Map.CalHighestPowerBuilding(row,col,item);
                 if (power != 0)
                 {

@@ -22,8 +22,17 @@ namespace GaiaProject.Models.HomeViewModels
         public string Player3 { set; get; }
         [Display(Name = "玩家4")]
         public string Player4 { set; get; }
+
+
+        [Display(Name = "随机顺位")]
+        public bool IsRandomOrder { set; get; }
+
+        [Display(Name = "允许观看(其他玩家可以查看)")]
+        public bool IsAllowLook { set; get; }
+
         [Display(Name = "是否为测试局")]
         public bool IsTestGame { set; get; }
+
         [Display(Name = "地图选择")]
         public string MapSelction { set; get; }
     }
