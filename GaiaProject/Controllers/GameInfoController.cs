@@ -80,6 +80,7 @@ namespace GaiaProject.Controllers
             }
             else
             {
+                
                 list = from game in this.dbContext.GameInfoModel
                     from score in this.dbContext.GameFactionModel
                     where score.username == username && game.Id == score.gameinfo_id
@@ -130,13 +131,21 @@ namespace GaiaProject.Controllers
         /// 使用的种族信息
         /// </summary>
         /// <returns></returns>
-        public IActionResult FactionList(string username)
+        public IActionResult FactionList(string username,int? type)
         {
             if (username == null)
             {
                 username = HttpContext.User.Identity.Name;
             }
-            var gameFactionModels = this.dbContext.GameFactionModel.Where(item => item.username == username).ToList();
+            List<GameFactionModel> gameFactionModels;
+            if (type == 1)
+            {
+                gameFactionModels = this.dbContext.GameFactionModel.ToList();
+            }
+            else
+            {
+                gameFactionModels = this.dbContext.GameFactionModel.Where(item => item.username == username).ToList();
+            }
             return View(gameFactionModels);
         }
         /// <summary>

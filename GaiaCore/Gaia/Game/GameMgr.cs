@@ -29,7 +29,7 @@ namespace GaiaCore.Gaia
             else
             {
                 seed = seed == 0 ? RandomInstance.Next(int.MaxValue) : seed;
-                result = new GaiaGame(username);
+                result = new GaiaGame(username,name);
                 result.IsTestGame = isTestGame;
                 result.Syntax(GameSyntax.setupmap + " " + MapSelection, out string log);
                 result.Syntax(GameSyntax.setupGame + seed, out log);
