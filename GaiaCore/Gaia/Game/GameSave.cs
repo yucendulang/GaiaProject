@@ -92,6 +92,7 @@ namespace GaiaCore.Gaia.Game
             //再保存玩家信息
             Func<Faction, int, int> getscore = (faction, index) =>
             {
+                faction.FinalEndScore = 0;
                 gaiaGame.FSTList[index].InvokeGameTileAction(gaiaGame.FactionList);
                 return faction.FinalEndScore;
             };
@@ -105,32 +106,55 @@ namespace GaiaCore.Gaia.Game
             }
             foreach (Faction faction in factionList)
             {
-                var gamefaction = new GaiaDbContext.Models.HomeViewModels.GameFactionModel()
+                GameFactionModel gameFactionModel = dbContext.GameFactionModel.SingleOrDefault(
+                    item => item.gameinfo_id == gameInfoModel.Id && item.FactionName == faction.FactionName.ToString());
+                //没有就新建
+                bool isAdd = true;
+                if (gameFactionModel == null)
                 {
-                    gameinfo_id = gameInfoModel.Id,
-                    gameinfo_name = gaiaGame.GameName,
-                    FactionName = faction.FactionName.ToString(),
-                    FactionChineseName = faction.ChineseName,
-                    kjPostion = string.Join("|", faction.TransformLevel, faction.ShipLevel,
-                        faction.AILevel, faction.GaiaLevel, faction.EconomicLevel,
-                        faction.ScienceLevel),
-                    numberBuild = string.Join("|", 8 - faction.Mines.Count,
-                        4 - faction.TradeCenters.Count, 3 - faction.ResearchLabs.Count,
-                        faction.Academy1 == null ? 1 : 0, faction.Academy2 == null ? 1 : 0,
-                        faction.StrongHold == null ? 1 : 0),
-                    numberFst1 = gaiaGame.FSTList[0].TargetNumber(faction),
-                    numberFst2 = gaiaGame.FSTList[1].TargetNumber(faction),
-                    scoreFst1 = getscore(faction, 0),
-                    scoreFst2 = getscore(faction, 1),
-                    scoreKj = faction.GetTechScoreCount() * 4,
-                    scorePw = 0,
-                    scoreRound = null,
-                    scoreTotal = faction.Score,
-                    userid = null,
-                    username = faction.UserName,
-                    rank = rankindex,//排名
-                };
-                dbContext.GameFactionModel.Add(gamefaction);
+                    gameFactionModel = new GaiaDbContext.Models.HomeViewModels.GameFactionModel()
+                    {
+                        gameinfo_id = gameInfoModel.Id,
+                        gameinfo_name = gaiaGame.GameName,
+                        FactionName = faction.FactionName.ToString(),
+                        FactionChineseName = faction.ChineseName,
+
+                    };
+                    gameFactionModel.userid = null;
+                    gameFactionModel.username = faction.UserName;
+                    gameFactionModel.scoreRound = null;
+                    gameFactionModel.scorePw = 0;
+
+                }
+                else
+                {
+                    isAdd = false;
+                }
+                //修改属性
+                gameFactionModel.kjPostion = string.Join("|", faction.TransformLevel, faction.ShipLevel,
+                    faction.AILevel, faction.GaiaLevel, faction.EconomicLevel,
+                    faction.ScienceLevel);
+                gameFactionModel.numberBuild = string.Join("|", 8 - faction.Mines.Count,
+                    4 - faction.TradeCenters.Count, 3 - faction.ResearchLabs.Count,
+                    faction.Academy1 == null ? 1 : 0, faction.Academy2 == null ? 1 : 0,
+                    faction.StrongHold == null ? 1 : 0);
+                gameFactionModel.numberFst1 = gaiaGame.FSTList[0].TargetNumber(faction);
+                gameFactionModel.numberFst2 = gaiaGame.FSTList[1].TargetNumber(faction);
+                gameFactionModel.scoreFst1 = getscore(faction, 0);
+                gameFactionModel.scoreFst2 = getscore(faction, 1);
+                gameFactionModel.scoreKj = faction.GetTechScoreCount() * 4;
+                gameFactionModel.scoreTotal = faction.Score;
+                gameFactionModel.rank = rankindex;//排名
+
+                if (isAdd)
+                {
+                    dbContext.GameFactionModel.Add(gameFactionModel);
+                }
+                else
+                {
+                    dbContext.GameFactionModel.Update(gameFactionModel);
+                }
+
                 rankindex++;
             }
         }

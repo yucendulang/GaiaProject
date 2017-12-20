@@ -131,20 +131,25 @@ namespace GaiaProject.Controllers
         /// 使用的种族信息
         /// </summary>
         /// <returns></returns>
-        public IActionResult FactionList(string username,int? type)
+        public IActionResult FactionList(GameFactionModel gameFactionModel,int? type)
         {
-            if (username == null)
+            if (gameFactionModel.username == null)
             {
-                username = HttpContext.User.Identity.Name;
+                gameFactionModel.username = HttpContext.User.Identity.Name;
             }
             List<GameFactionModel> gameFactionModels;
             if (type == 1)
             {
                 gameFactionModels = this.dbContext.GameFactionModel.ToList();
+                if (gameFactionModel.FactionName != null)
+                {
+                    gameFactionModels = gameFactionModels.Where(item => item.FactionName == gameFactionModel.FactionName)
+                        .ToList();
+                }
             }
             else
             {
-                gameFactionModels = this.dbContext.GameFactionModel.Where(item => item.username == username).ToList();
+                gameFactionModels = this.dbContext.GameFactionModel.Where(item => item.username == gameFactionModel.username).ToList();
             }
             return View(gameFactionModels);
         }
@@ -343,6 +348,11 @@ namespace GaiaProject.Controllers
                         {
                             //保存种族信息
                             GameSave.SaveFactionToDb(this.dbContext, gg, gameInfoModel);
+                        }
+                        else
+                        {
+                            //总局计分问题，需要重新计算
+                            //GameSave.SaveFactionToDb(this.dbContext, gg, gameInfoModel);
                         }
                     }
 

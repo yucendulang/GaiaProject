@@ -184,7 +184,7 @@ namespace GaiaCore.Gaia
             return m_dic.Keys;
         }
 
-        private static GaiaGame RestoreGameWithActionLog(KeyValuePair<string, GaiaGame> item, Func<string, bool> DebugInvoke = null,bool isTodict=true)
+        private static GaiaGame RestoreGameWithActionLog(KeyValuePair<string, GaiaGame> item, Func<string, bool> DebugInvoke = null,bool isTodict=true,int? row=null)
         {
             var gg = new GaiaGame(item.Value.Username,item.Value.GameName);
             gg.IsTestGame = item.Value.IsTestGame;
@@ -200,6 +200,7 @@ namespace GaiaCore.Gaia
             
             try
             {
+                int rowIndex = 1;
                 foreach (var str in item.Value.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
 
@@ -217,6 +218,19 @@ namespace GaiaCore.Gaia
                     {
                         //System.Diagnostics.Debug.WriteLine(str);
                     }
+                    if (row != null)
+                    {
+                        //相等，终止恢复
+                        if (rowIndex == row)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            rowIndex++;
+                        }
+                    }
+                    
                 }
             }
             catch (Exception ex)
@@ -414,9 +428,9 @@ namespace GaiaCore.Gaia
             return true;
         }
 
-        public static GaiaGame RestoreGame(string GameName,GaiaGame gg)
+        public static GaiaGame RestoreGame(string GameName,GaiaGame gg,int? row=null)
         {
-            return RestoreGameWithActionLog(new KeyValuePair<string, GaiaGame>(GameName, gg),null,false);
+            return RestoreGameWithActionLog(new KeyValuePair<string, GaiaGame>(GameName, gg),null,false,row:row);
         }
     }
 }

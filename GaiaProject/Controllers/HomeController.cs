@@ -192,9 +192,12 @@ namespace GaiaProject.Controllers
             return View(gg);
         }
         /// <summary>
-        /// 还原游戏
+        /// 
         /// </summary>
-        public IActionResult RestoreGame(int id)
+        /// <param name="id">游戏ID</param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private GaiaGame RestoreGame(int id,out int type, int? row = null)
         {
             //游戏结果
             GameInfoModel gameInfoModel = this.dbContext.GameInfoModel.SingleOrDefault(item => item.Id == id);
@@ -213,13 +216,15 @@ namespace GaiaProject.Controllers
                     {
                         if (string.IsNullOrEmpty(gameInfoModel.loginfo))
                         {
-                            return View("Index");
+                            
                         }
                         log = gameInfoModel.loginfo;
                     }
                     else
                     {
-                        return Redirect("/Home/ViewGame/"+ gameInfoModel.name);
+                        type = 1;//跳转
+                        return null;
+                        //return Redirect("/Home/ViewGame/" + gameInfoModel.name);
                     }
                     //log = game.UserActionLog;
                 }
@@ -229,15 +234,34 @@ namespace GaiaProject.Controllers
                 gg.GameName = gameInfoModel.name;
                 gg.UserActionLog = log.Replace("|", "\r\n");
 
-                gg = GameMgr.RestoreGame(gameInfoModel.name, gg);
+                gg = GameMgr.RestoreGame(gameInfoModel.name, gg,row);
                 //从内存删除
                 GameMgr.DeleteOneGame(gameInfoModel.name);
-
-                return View("ViewGame", gg);
-
-                //return Redirect("/home/View/" + gameInfoModel.name);
+                type = 200;
+                return gg;
             }
+            type = 0;
             return null;
+        }
+        /// <summary>
+        /// 还原游戏
+        /// </summary>
+        public IActionResult RestoreGame(int id,int? row)
+        {
+            GaiaGame gaiaGame = this.RestoreGame(id, out int type, row);
+            if (type == 200)
+            {
+                ViewData["row"] = row;
+                return View("ViewGame",gaiaGame);
+            }
+            else if (type == 1)
+            {
+                return Redirect("/Home/ViewGame/" + gaiaGame.GameName);
+            }
+            else
+            {
+                return View("Index");
+            }
             //GameMgr.UndoOneStep(id);
         }
         /// <summary>
@@ -419,11 +443,26 @@ namespace GaiaProject.Controllers
 
 
             var gg = GameMgr.GetGameByName(id);
-            StringBuilder stringBuilder=new StringBuilder();
-
-            foreach(var item in gg.LogEntityList.OrderByDescending(x => x.Row))
+            StringBuilder stringBuilder = new StringBuilder();
+            //数据库查询
+            GameInfoModel singleOrDefault = this.dbContext.GameInfoModel.SingleOrDefault(item => item.name == id);
+            //内存没有游戏
+            if (gg == null)
             {
-                stringBuilder.Append(string.Format("<tr><td>{0}</td><td class='text-right'>{1}</td><td>{2}vp</td><td class='text-right'>{3}</td><td>{4}c</td><td class='text-right'>{5}</td><td>{6}o</td><td class='text-right'>{7}</td><td>{8}q</td><td class='text-right'>{9}</td><td>{10}k</td><td class='text-right'>{11}</td><td>{12}/{13}/{14}</td><td>{15}</td></tr>", item.FactionName ?? null, @item.ResouceChange?.m_score, item.ResouceEnd?.m_score, item.ResouceChange?.m_credit, item.ResouceEnd?.m_credit, item.ResouceChange?.m_ore, item.ResouceEnd?.m_ore, item.ResouceChange?.m_QICs, item.ResouceEnd?.m_QICs, item.ResouceChange?.m_knowledge, item.ResouceEnd?.m_knowledge, item.ResouceChange?.m_powerToken2 + item.ResouceChange?.m_powerToken3 * 2, item.ResouceEnd?.m_powerToken1,item.ResouceEnd?.m_powerToken2,item.ResouceEnd?.m_powerToken3, item.Syntax));
+                //singleOrDefault = this.dbContext.GameInfoModel.SingleOrDefault(item => item.name == id);
+                if (singleOrDefault != null)
+                {
+                   gg = this.RestoreGame(singleOrDefault.Id, out int type);
+                }
+            }
+            if (gg != null)
+            {
+                foreach (var item in gg.LogEntityList.OrderByDescending(x => x.Row))
+                {
+                    stringBuilder.Append(string.Format("<tr><td>{0}</td><td class='text-right'>{1}</td><td>{2}vp</td><td class='text-right'>{3}</td><td>{4}c</td><td class='text-right'>{5}</td><td>{6}o</td><td class='text-right'>{7}</td><td>{8}q</td><td class='text-right'>{9}</td><td>{10}k</td><td class='text-right'>{11}</td><td>{12}/{13}/{14}</td><td>{15}</td>{16}</tr>", item.FactionName ?? null, @item.ResouceChange?.m_score, item.ResouceEnd?.m_score, item.ResouceChange?.m_credit, item.ResouceEnd?.m_credit, item.ResouceChange?.m_ore, item.ResouceEnd?.m_ore, item.ResouceChange?.m_QICs, item.ResouceEnd?.m_QICs, item.ResouceChange?.m_knowledge, item.ResouceEnd?.m_knowledge, item.ResouceChange?.m_powerToken2 + item.ResouceChange?.m_powerToken3 * 2, item.ResouceEnd?.m_powerToken1, item.ResouceEnd?.m_powerToken2, item.ResouceEnd?.m_powerToken3, item.Syntax,
+                        singleOrDefault.GameStatus==8?string.Format("<td><a href='/Home/RestoreGame/{1}/?row={0}'>转到</a></td>", item.Row, singleOrDefault?.Id):null)
+                        );
+                }
             }
 
             return new JsonResult(new Models.Data.UserFriendController.JsonData()

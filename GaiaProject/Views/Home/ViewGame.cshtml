@@ -6,6 +6,7 @@
 @using GaiaCore.Gaia
 @using Microsoft.AspNetCore.Mvc.Rendering
 @using GaiaDbContext.Models
+@using Microsoft.AspNetCore.Http
 
 @model GaiaCore.Gaia.GaiaGame
 @inject SignInManager<ApplicationUser> SignInManager
@@ -28,6 +29,18 @@
         <a href="/Home/SkipRound/@Model.GameName?round=6">进入第六回合</a>
     </div>
 </environment>
+
+@if (ViewData["row"] != null)
+{
+    int row = (int) ViewData["row"];
+    <div>
+        
+        @if (row > 1) { <span>@Model.LogEntityList[row - 1].Syntax</span>}
+        <a href="?row=@(row - 1)">上一步</a>
+        <a href="?row=@(row + 1)">下一步</a>
+
+    </div>
+}
 
 @if (@Model.GameStatus.RoundCount > 0)
 {
@@ -232,32 +245,32 @@ else
                 <p>
                     现在等待 <span style="background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 做Gaia行动 Pass跳过此行动阶段 Itar 用+sttx/attx获取板子 一次只能拿一块 人类正常使用Convert命令 一次只能转换一种资源
                 </p>
-                
+
                 @if (isRound)
                 {
                     @if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Itar)
-                     {
-                         <div class="btn-group" role="group" aria-label="...">
-                             <button class="btn btn-default" onclick="openSelectTT('{0}')">选择科技版</button>
+                    {
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button class="btn btn-default" onclick="openSelectTT('{0}')">选择科技版</button>
 
-                             <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
-                         </div>
-                     }
-                     else if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Terraner)
-                     {
+                            <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
+                        </div>
+                    }
+                    else if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Terraner)
+                    {
 
-                         <div>
-                             <span>PG:@Model.FactionList[Model.GameStatus.PlayerIndex].PowerTokenGaia</span>
-                             @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTerraner, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert " })
+                        <div>
+                            <span>PG:@Model.FactionList[Model.GameStatus.PlayerIndex].PowerTokenGaia</span>
+                            @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTerraner, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert " })
 
 
 
-                             <button class="btn btn-default" onclick="submitData();">确认</button>
+                            <button class="btn btn-default" onclick="submitData();">确认</button>
 
-                             <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
-                         </div>
+                            <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
+                        </div>
 
-                     }
+                    }
                 }
 
 
@@ -565,6 +578,10 @@ else
                 <th class="text-right">变化数值</th>
                 <th>能量</th>
                 <th>语句</th>
+                @*                @if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)*@
+                @*                {*@
+                @*                    <th>步骤</th>*@
+                @*                }*@
             </tr>
         </thead>
 
@@ -589,6 +606,7 @@ else
                 </tr>
             }
         </tbody>
+
     </table>
     @if (Model.LogEntityList.Count > 20)
     {
@@ -614,7 +632,7 @@ else
                                         var model = @Html.Raw(Json.Serialize(Model));
                                         //显示全部日志
                                         $("#showAllLog").click(function() {
-                                            $.get("/home/SyntaxLog/@ViewData["gameid"]",
+                                            $.get("/home/SyntaxLog/@Model.GameName",
                                                 function (data) {
                                                     $("#SyntaxLogList").html(data.data);
                                                 });
