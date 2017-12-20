@@ -352,7 +352,9 @@ namespace GaiaProject.Controllers
                         else
                         {
                             //总局计分问题，需要重新计算
-                            //GameSave.SaveFactionToDb(this.dbContext, gg, gameInfoModel);
+#if  DEBUG
+                            GameSave.SaveFactionToDb(this.dbContext, gg, gameInfoModel);
+#endif
                         }
                     }
 

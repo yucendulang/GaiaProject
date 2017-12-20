@@ -1,157 +1,181 @@
-﻿@model GaiaCore.Gaia.GaiaGame
+﻿@using GaiaCore.Gaia
+@model GaiaCore.Gaia.GaiaGame
+
+@{
+    List<string> mySttList = null;
+    if (User != null)
+    {
+        Faction myFaction = Model.FactionList.SingleOrDefault(item => item.UserName == User.Identity.Name);
+        if (myFaction != null)
+        {
+            mySttList = myFaction.GameTileList.Where(item => item.typename == "stt").Select(item=>item.name).ToList();
+        }
+    }
+}
 
 <div class="row">
-        <div id="techDisplay" class="panel-collapse collapse in">
-            <table class="table" style="text-align: center">
-                <thead>
-                    <tr>
-                        <td>Level</td>
-                        <td>地形改造</td>
-                        <td>航行</td>
-                        <td>人工智能</td>
-                        <td>盖亚计划</td>
-                        <td>经济</td>
-                        <td>科学</td>
-                    </tr>
-                </thead>
-                <tbody>
+    <div id="techDisplay" class="panel-collapse collapse in">
+        <table class="table" style="text-align: center">
+            <thead>
+                <tr>
+                    <td>Level</td>
+                    <td>地形改造</td>
+                    <td>航行</td>
+                    <td>人工智能</td>
+                    <td>盖亚计划</td>
+                    <td>经济</td>
+                    <td>科学</td>
+                </tr>
+            </thead>
+            <tbody>
 
 
-                    <tr id="tt_l5" style="background-color: #c3c3c3">
-                        <td>5(12vp)</td>
-                        <td>@Model.AllianceTileForTransForm.GetType().Name @Model.AllianceTileForTransForm.desc</td>
-                        <td>
-                            Ship Level 4
-                            Lost Planet
-                        </td>
-                        <td>4q</td>
-                        <td>4vp+1vp*M(G)</td>
-                        <td>3o,6c,6pw</td>
-                        <td>9k</td>
-                    </tr>
-                    <tr id="tt_l4" style="background-color: #c3c3c3">
-                        <td>4(8vp)</td>
-                        <td>2o</td>
-                        <td>Ship Level 3</td>
-                        <td>2q</td>
-                        <td>
-                            3 Gaia Unit
-                            3pw Gaia Cost
-                        </td>
-                        <td>+2o,+4c,+4pw</td>
-                        <td>+4k</td>
-                    </tr>
-                    <tr id="tt_l3" style="background-color: #c3c3c3">
+                <tr id="tt_l5" style="background-color: #c3c3c3">
+                    <td>5(12vp)</td>
+                    <td>@Model.AllianceTileForTransForm.GetType().Name @Model.AllianceTileForTransForm.desc</td>
+                    <td>
+                        Ship Level 4
+                        Lost Planet
+                    </td>
+                    <td>4q</td>
+                    <td>4vp+1vp*M(G)</td>
+                    <td>3o,6c,6pw</td>
+                    <td>9k</td>
+                </tr>
+                <tr id="tt_l4" style="background-color: #c3c3c3">
+                    <td>4(8vp)</td>
+                    <td>2o</td>
+                    <td>Ship Level 3</td>
+                    <td>2q</td>
+                    <td>
+                        3 Gaia Unit
+                        3pw Gaia Cost
+                    </td>
+                    <td>+2o,+4c,+4pw</td>
+                    <td>+4k</td>
+                </tr>
+                <tr id="tt_l3" style="background-color: #c3c3c3">
 
-                        <td>3(4vp)</td>
-                        <td>Tf Level 3</td>
-                        <td>1q</td>
-                        <td>2q</td>
-                        <td>
-                            2 Gaia Unit
-                            4pw Gaia Cost
-                        </td>
-                        <td>+1o,+3c,+3pw</td>
-                        <td>+3k</td>
-                    </tr>
-                    <tr>
-                        <td class="text-center" colspan="6">3pw</td>
-                    </tr>
-                    <tr id="tt_l2" style="background-color: #c3c3c3">
+                    <td>3(4vp)</td>
+                    <td>Tf Level 3</td>
+                    <td>1q</td>
+                    <td>2q</td>
+                    <td>
+                        2 Gaia Unit
+                        4pw Gaia Cost
+                    </td>
+                    <td>+1o,+3c,+3pw</td>
+                    <td>+3k</td>
+                </tr>
+                <tr>
+                    <td class="text-center" colspan="6">3pw</td>
+                </tr>
+                <tr id="tt_l2" style="background-color: #c3c3c3">
 
-                        <td>2</td>
-                        <td>Tf Level 2</td>
-                        <td>Ship Level 2</td>
-                        <td>1q</td>
-                        <td>3pwt</td>
-                        <td>+1o,+2c,+2pw</td>
-                        <td>+2k</td>
-                    </tr>
-                    <tr id="tt_l1" style="background-color: #c3c3c3">
+                    <td>2</td>
+                    <td>Tf Level 2</td>
+                    <td>Ship Level 2</td>
+                    <td>1q</td>
+                    <td>3pwt</td>
+                    <td>+1o,+2c,+2pw</td>
+                    <td>+2k</td>
+                </tr>
+                <tr id="tt_l1" style="background-color: #c3c3c3">
 
-                        <td>1</td>
-                        <td>2o</td>
-                        <td>1q</td>
-                        <td>1q</td>
-                        <td>
-                            1 Gaia Unit
-                            6pw Gaia Cost
-                        </td>
-                        <td>+2c,+1pw</td>
-                        <td>+1k</td>
-                    </tr>
-
-
-                    <tr>
-                    <tr id="tt_l0">
-
-                        <td>0</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+                    <td>1</td>
+                    <td>2o</td>
+                    <td>1q</td>
+                    <td>1q</td>
+                    <td>
+                        1 Gaia Unit
+                        6pw Gaia Cost
+                    </td>
+                    <td>+2c,+1pw</td>
+                    <td>+1k</td>
+                </tr>
 
 
+                <tr>
+                <tr id="tt_l0">
 
-                    <tr>
-                        <td>
-                            高级科技
-                        </td>
-                        @foreach (var item in Model.ATTList)
+                    <td>0</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+
+
+                <tr>
+                    <td>
+                        高级科技
+                    </td>
+                    @foreach (var item in Model.ATTList)
+                    {
+                        if (item.isPicked)
                         {
-                            if (item.isPicked)
-                            {
-                                <td title="@item.name" align="center"> <div class="attcss attusedcss @{@item.name}Picked"><span>@item.name<br />@item.desc</span></div></td>
-                            }
-                            else
-                            {
-                                <td title="@item.name" align="center"> <div class="attcss @{@item.name}False"><span>@item.name<br />@item.desc</span></div></td>
-                            }
+                            <td title="@item.name" align="center"> <div class="attcss attusedcss @{@item.name}Picked"><span>@item.name<br />@item.desc</span></div></td>
                         }
-                    </tr>
-                    <tr>
-                        <td>
-                            基础科技(6)
-                        </td>
-                        @{ int stt6Index = 0;}
-                        @for (int i=0;i<6;i++)
+                        else
                         {
-                            if (Model.STT6ListGroup[stt6Index].Index == i)
-                            {
-                                var item = Model.STT6ListGroup[stt6Index];
-                                stt6Index++;
-                                <td title="@item.name" align="center">
-                                    <div class="sttcss @{@item.name}False"><span>@item.name (@item.count) <br /> @item.desc</span> </div>
-                                </td>
-                            }
-                            else
-                            {
-                                <td align="center">
-                                    
-                                </td>
-                            }
-                        }                 
-                    </tr>
-                    <tr>
-                        <td>
-                            基础科技(3)
-                        </td>
-                       
-                        @foreach (var item in Model.STT3ListGroup)
-                        {
-                            <td colspan="2" title="@item.name" class="" align="center">
-                                <div class="sttcss  @{@item.name}False"><span>@item.name (@item.count) <br /> @item.desc</span></div>
-                                                      </td>
+                            <td title="@item.name" align="center"> <div class="attcss @{@item.name}False"><span>@item.name<br />@item.desc</span></div></td>
                         }
-                    </tr>
-                </tbody>
-            </table>
+                    }
+                </tr>
+                <tr>
+                    <td>
+                        基础科技(6)
+                    </td>
+                    @{ int stt6Index = 0;}
+                    @for (int i = 0; i < 6; i++)
+                    {
+                        if (Model.STT6ListGroup[stt6Index].Index == i)
+                        {
+                            var item = Model.STT6ListGroup[stt6Index];
+                            stt6Index++;
+                            <td title="@item.name" align="center">
+ 
+                                <div class="sttcss @{@item.name}False">
+                                                         @if (mySttList?.Contains(item.name)==true)
+                                                         {
+                                    <p style="z-index: 120; position: absolute;background-color: red">&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                                         }
+                                                         <span>@item.name (@item.count) <br/> @item.desc</span>                   
+                                </div>
+                            </td>
+                        }
+                        else
+                        {
+                            <td align="center"></td>
+                        }
+                    }
+                </tr>
+                <tr>
+                    <td>
+                        基础科技(3)
+                    </td>
 
-        </div>
-
+                    @foreach (var item in Model.STT3ListGroup)
+                    {
+                        <td colspan="2" title="@item.name" class="" align="center">
+                            <div class="sttcss  @{@item.name}False">
+                                                      @if (mySttList?.Contains(item.name)==true)
+                                                      {
+                                                          <p style="z-index: 120; position: absolute;background-color: red">&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                                      }
+                                                      <span>@item.name (@item.count) <br/> @item.desc</span>
+                                                  </div>
+                        </td>
+                    }
+                </tr>
+            </tbody>
+        </table>
 
     </div>
+
+
+</div>
 
