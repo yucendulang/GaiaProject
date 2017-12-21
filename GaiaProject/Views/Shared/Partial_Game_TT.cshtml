@@ -5,11 +5,16 @@
     List<string> mySttList = null;
     if (User != null)
     {
-        Faction myFaction = Model.FactionList.SingleOrDefault(item => item.UserName == User.Identity.Name);
-        if (myFaction != null)
+        List<Faction> listFaction = Model.FactionList.Where(item => item.UserName == User.Identity.Name).ToList();
+        if (listFaction.Count == 1)
         {
-            mySttList = myFaction.GameTileList.Where(item => item.typename == "stt").Select(item=>item.name).ToList();
+            Faction myFaction = listFaction[0];
+            if (myFaction != null)
+            {
+                mySttList = myFaction.GameTileList.Where(item => item.typename == "stt").Select(item=>item.name).ToList();
+            }
         }
+
     }
 }
 
