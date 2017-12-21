@@ -137,21 +137,22 @@ namespace GaiaProject.Controllers
             {
                 gameFactionModel.username = HttpContext.User.Identity.Name;
             }
-            List<GameFactionModel> gameFactionModels;
+            IQueryable<GameFactionModel> gameFactionModels;
             if (type == 1)
             {
-                gameFactionModels = this.dbContext.GameFactionModel.ToList();
+                gameFactionModels = this.dbContext.GameFactionModel.AsQueryable();
                 if (gameFactionModel.FactionName != null)
                 {
                     gameFactionModels = gameFactionModels.Where(item => item.FactionName == gameFactionModel.FactionName)
-                        .ToList();
+                        ;
                 }
             }
             else
             {
-                gameFactionModels = this.dbContext.GameFactionModel.Where(item => item.username == gameFactionModel.username).ToList();
+                gameFactionModels = this.dbContext.GameFactionModel.Where(item => item.username == gameFactionModel.username);
             }
-            return View(gameFactionModels);
+            gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal);
+            return View(gameFactionModels.ToList());
         }
         /// <summary>
         /// 种族统计
