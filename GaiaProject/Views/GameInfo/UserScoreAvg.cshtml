@@ -1,0 +1,79 @@
+﻿@using GaiaCore.Gaia
+@using GaiaProject.Models.Data
+@model List<GaiaProject.Models.Data.GameInfoController.StatisticsFaction>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+
+<form>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="input-group">
+                
+                @Html.DropDownList("FactionName", new SelectList(new List<Faction>() { new Terraner(null), new Lantida(null), new Hive(null), new HadschHalla(null), new BalTak(null), new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null), new MadAndroid(null), new Itar(null), new Nevla(null) }, "FactionName", "ChineseName"),
+                    "--种族--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList" })
+
+@*                <input type="text" class="form-control" style="width: 100px" placeholder="人数" id="usercount" name="usercount">*@
+@*                <input type="text" class="form-control" placeholder="玩家ID" id="username" name="username">*@
+                
+                <select class="btn dropdown-toggle form-control" id="orderType" name="orderType"><option value="">--排序方式--</option>
+                    <option value="1">局数</option>
+                    <option value="2">平均分</option>
+                    <option value="3">胜利场次</option>
+                    <option value="4">胜率</option>
+                </select>
+
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">搜索</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+    <tr>
+        <td>玩家</td>
+
+        <td>局数</td>
+        <td>胜利场次</td>
+        <td>胜率</td>
+        <td>最低分</td>
+        <td>最高分</td>
+
+        <td>平均分</td>
+
+
+
+    </tr>
+    </thead>
+    <tbody>
+
+    @foreach (GameInfoController.StatisticsFaction item in Model)
+    {
+        <tr>
+            <td>
+                @item.ChineseName
+            </td>
+            <td>
+                @item.count
+            </td>
+            <td>@item.numberwin</td>
+            <td>@item.winprobability</td>
+            <td>@item.scoremin</td>
+            <td>@item.scoremax</td>
+
+            <td>@item.scoreavg</td>
+        </tr>
+    }
+
+    </tbody>
+</table>
+
+<div>
+    注:90分以下的不纳入统计，场次低于3场的不纳入统计
+</div>

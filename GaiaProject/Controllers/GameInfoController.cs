@@ -128,7 +128,7 @@ namespace GaiaProject.Controllers
 
 
         /// <summary>
-        /// 使用的种族信息
+        /// 个人使用的种族信息
         /// </summary>
         /// <returns></returns>
         public IActionResult FactionList(GameFactionModel gameFactionModel,int? type)
@@ -178,6 +178,7 @@ namespace GaiaProject.Controllers
 //                    select gameFactionModel;
                 query = query.Where(item => this.dbContext.GameInfoModel.Where(game => game.GameStatus == 8 && game.UserCount == usercount).Select(game=>game.Id).Contains(item.gameinfo_id) );
             }
+
             var list = query.GroupBy(item => item.FactionChineseName).Select(
                 g => new Models.Data.GameInfoController.StatisticsFaction()
                 {
@@ -190,9 +191,65 @@ namespace GaiaProject.Controllers
                     scoremaxuser = g.OrderBy(faction => faction.scoreTotal).ToList()[0].username,
                     scoreavg = g.Sum(faction => faction.scoreTotal) / g.Count(),
 
+                }).OrderByDescending(item=>item.count);
+
+
+            return View(list.ToList());
+        }
+
+        /// <summary>
+        /// 玩家的平均分
+        /// </summary>
+        public IActionResult UserScoreAvg(GameFactionModel gameFactionModel,int? orderType)
+        {
+            IQueryable<GameFactionModel> query;
+            //90一下的不纳入统计
+            query = this.dbContext.GameFactionModel.Where(item=>item.scoreTotal>90);
+            //查询种族
+            if (gameFactionModel.FactionName != null)
+            {
+                query = query.Where(item => item.FactionName == gameFactionModel.FactionName);
+            }
+
+
+            var list = query.GroupBy(item => item.username).Select(
+                g => new Models.Data.GameInfoController.StatisticsFaction()
+                {
+                    ChineseName = g.Key,
+                    count = g.Count(),
+                    numberwin = g.Count(faction => faction.rank == 1),
+                    winprobability = g.Count(faction => faction.rank == 1) * 100 / (g.Count()),
+                    scoremin = g.Min(faction => faction.scoreTotal),
+                    scoremax = g.Max(faction => faction.scoreTotal),
+                    scoremaxuser = g.OrderBy(faction => faction.scoreTotal).ToList()[0].username,
+                    scoreavg = g.Sum(faction => faction.scoreTotal) / g.Count(),
+
                 });
-
-
+            //场次要大于3场
+            list = list.Where(item => item.count > 2);
+            //排序方式
+            if (orderType != null)
+            {
+                switch (orderType)
+                {
+                    case 1:
+                        list = list.OrderByDescending(item => item.count);
+                        break;
+                    case 2:
+                        list = list.OrderByDescending(item => item.scoreavg);
+                        break;
+                    case 3:
+                        list = list.OrderByDescending(item => item.numberwin);
+                        break;
+                    case 4:
+                        list = list.OrderByDescending(item => item.winprobability);
+                        break;
+                }
+            }
+            else
+            {
+                list = list.OrderByDescending(item => item.count);
+            }
             return View(list.ToList());
         }
 
