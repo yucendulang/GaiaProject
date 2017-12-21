@@ -223,7 +223,7 @@ namespace GaiaProject.Controllers
                     else
                     {
                         type = 1;//跳转
-                        return null;
+                        return game;
                         //return Redirect("/Home/ViewGame/" + gameInfoModel.name);
                     }
                     //log = game.UserActionLog;
@@ -249,12 +249,12 @@ namespace GaiaProject.Controllers
         public IActionResult RestoreGame(int id,int? row)
         {
             GaiaGame gaiaGame = this.RestoreGame(id, out int type, row);
-            if (type == 200)
+            if (type == 200)//从日志恢复的
             {
                 ViewData["row"] = row;
                 return View("ViewGame",gaiaGame);
             }
-            else if (type == 1)
+            else if (type == 1)//内存中的游戏
             {
                 return Redirect("/Home/ViewGame/" + gaiaGame.GameName);
             }
