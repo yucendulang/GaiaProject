@@ -235,6 +235,7 @@ namespace GaiaProject.Controllers
                 gg.UserActionLog = log.Replace("|", "\r\n");
 
                 gg = GameMgr.RestoreGame(gameInfoModel.name, gg,row);
+                gg.GameName = gameInfoModel.name;
                 //从内存删除
                 GameMgr.DeleteOneGame(gameInfoModel.name);
                 type = 200;

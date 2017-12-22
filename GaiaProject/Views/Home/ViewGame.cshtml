@@ -632,7 +632,7 @@ else
                                         var model = @Html.Raw(Json.Serialize(Model));
                                         //显示全部日志
                                         $("#showAllLog").click(function() {
-                                            $.get("/home/SyntaxLog/@Model.GameName",
+                                            $.get("/home/SyntaxLog/@Html.Raw(Model.GameName)",
                                                 function (data) {
                                                     $("#SyntaxLogList").html(data.data);
                                                 });
