@@ -85,12 +85,10 @@
                             <li><a href="/GameInfo/Index?GameStatus=8">结束游戏</a></li>
                             <li><a asp-area="" asp-controller="GameInfo" asp-action="FactionList">使用种族</a></li>
 
-@*                            <li><a href="/GameInfo/Index?GameStatus=0">参与游戏</a></li>*@
-                            <li><a href="/GameInfo/Index?isAdmin=2">公开游戏</a></li>
-                                                   
                             <li role="separator" class="divider"></li>
+                            <li><a href="/GameInfo/Index?isAdmin=2">公开游戏</a></li>
                             <li><a asp-area="" asp-controller="GameInfo" asp-action="UserScoreAvg">玩家统计</a></li>
-
+                            <li><a href="/GameInfo/FactionList?type=2">种族高分</a></li>
                             <li><a asp-area="" asp-controller="GameInfo" asp-action="FactionStatistics">种族统计</a></li>
                         </ul>
                     </li>

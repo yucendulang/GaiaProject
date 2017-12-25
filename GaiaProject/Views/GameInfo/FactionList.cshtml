@@ -5,6 +5,7 @@
 @{
     ViewBag.Title = "使用种族";
     Layout = "_Layout";
+    string type = this.Context.Request.Query["type"];
 }
 
 <form>
@@ -16,7 +17,7 @@
         "--种族--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList" })
 
 
-                <input type="hidden" value="1" name="type"/>
+                <input type="hidden" value="@type" name="type"/>
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="submit">搜索</button>
                 </span>
@@ -48,7 +49,14 @@
     {
         <tr>
             <td>
-                <a href="/Home/RestoreGame/@item.gameinfo_id">@item.gameinfo_name</a>
+                @if (type == "2")
+                {
+                    <span>xxx</span>
+                }
+                else
+                {
+                  <a href="/Home/RestoreGame/@item.gameinfo_id">@item.gameinfo_name</a>
+                }
             </td>
             <td>@item.FactionChineseName</td>
             <td>@item.rank</td>

@@ -124,7 +124,7 @@ namespace GaiaProject.Controllers
             }
             //创建
             bool create = GameMgr.CreateNewGame(model.Name, username, out GaiaGame result,model.MapSelction, isTestGame: model.IsTestGame);
-            if (create)
+            if (create && !model.IsTestGame)//测试局暂时不保留数据
             {
                 //保存到数据库
                 GaiaDbContext.Models.HomeViewModels.GameInfoModel gameInfoModel =

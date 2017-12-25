@@ -133,6 +133,7 @@ namespace GaiaProject.Controllers
         /// <returns></returns>
         public IActionResult FactionList(GameFactionModel gameFactionModel,int? type)
         {
+
             if (gameFactionModel.username == null)
             {
                 gameFactionModel.username = HttpContext.User.Identity.Name;
@@ -143,9 +144,17 @@ namespace GaiaProject.Controllers
                 gameFactionModels = this.dbContext.GameFactionModel.AsQueryable();
                 if (gameFactionModel.FactionName != null)
                 {
-                    gameFactionModels = gameFactionModels.Where(item => item.FactionName == gameFactionModel.FactionName)
-                        ;
+                    gameFactionModels = gameFactionModels.Where(item => item.FactionName == gameFactionModel.FactionName)                        ;
                 }
+            }
+            else if (type == 2)
+            {
+                gameFactionModels = this.dbContext.GameFactionModel.AsQueryable();
+                if (gameFactionModel.FactionName != null)
+                {
+                    gameFactionModels = gameFactionModels.Where(item => item.FactionName == gameFactionModel.FactionName);
+                }
+                gameFactionModels = gameFactionModels.Take(30);
             }
             else
             {
@@ -293,6 +302,11 @@ namespace GaiaProject.Controllers
                 bool isExist = true;
                 if (gameInfoModel == null)
                 {
+                    //测试游戏跳过
+                    if (result.IsTestGame)
+                    {
+                        continue;
+                    }
                     isExist = false;
                     gameInfoModel =
                         new GaiaDbContext.Models.HomeViewModels.GameInfoModel()
