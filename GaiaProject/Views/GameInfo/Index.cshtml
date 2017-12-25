@@ -9,35 +9,45 @@
     //ViewBag.Title = "结束游戏";
     Layout = "_Layout";
 }
-@{ bool isAdmin = UserManager.GetUserAsync(User).Result != null && UserManager.GetUserAsync(User).Result.groupid == 1;}
+@{
+    bool isAdmin = UserManager.GetUserAsync(User).Result != null && UserManager.GetUserAsync(User).Result.groupid == 1;
+    string adminType = this.Context.Request.Query["isAdmin"];
+}
 
 @if (isAdmin)
 {
-    <a href="/GameInfo/UpdatenFinishFromDb">检测游戏结束但没有种族信息的</a>
-    <a href="/GameInfo/UpdatenNoFromDb">检测游戏应该结束但没有更新的</a>
+    <div>
+        <span>菜单仅管理员可见</span>
+        <a href="/GameInfo/UpdatenFinishFromDb">检测游戏结束但没有种族信息的</a>
+        <a href="/GameInfo/UpdatenNoFromDb">检测游戏应该结束但没有更新的</a>
 
-    <a href="/GameInfo/DeleteGameInvalid">删除未结束但内存没有的游戏</a>
-    <a href="/GameInfo/UpdateGame">将内存的游戏重新保存到数据库</a>
-
-    <form>
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="input-group">
-                    <input type="text" class="form-control" style="width: 100px" placeholder="回合" id="round" name="round">
-                    <input type="text" class="form-control" placeholder="创建人" id="username" name="username">
-                    <input type="text" class="form-control" placeholder="参与人" id="joinname" name="joinname">
-                    <input type="hidden" class="form-control" value="1" placeholder="管理员" id="isAdmin" name="isAdmin">
-
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit">搜索</button>
-                    </span>
-                </div>
-            </div>
-        </div>
-    </form>
+        <a href="/GameInfo/DeleteGameInvalid">删除未结束但内存没有的游戏</a>
+        <a href="/GameInfo/UpdateGame">将内存的游戏重新保存到数据库</a>
+    </div>
 
 }
 
+
+<form>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="input-group">
+                <input type="text" class="form-control" style="width: 100px" placeholder="回合" id="round" name="round">
+                <input type="text" class="form-control" style="width: 200px" placeholder="创建人" id="username" name="username">
+                <input type="text" class="form-control" style="width: 200px" placeholder="参与人" id="joinname" name="joinname">
+                @if (adminType == "1")
+                {
+                    <input type="text" class="form-control" style="width: 100px" placeholder="最低分" id="scoremin" name="scoremin">
+                }
+                <input type="hidden" class="form-control" value="@adminType" placeholder="管理员" id="isAdmin" name="isAdmin">
+
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">搜索</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</form>
 
 
 <table class="table">

@@ -31,7 +31,7 @@ namespace GaiaProject.Controllers
         /// 进行的游戏
         /// </summary>
         /// <returns></returns>
-        public IActionResult Index(string username, int? isAdmin, GameInfoModel gameInfoModel, string joinname = null)
+        public IActionResult Index(string username, int? isAdmin, GameInfoModel gameInfoModel, string joinname = null,int? scoremin=null)
         {
 
             if (username == null)
@@ -41,17 +41,44 @@ namespace GaiaProject.Controllers
             IQueryable<GameInfoModel> list;
 
             ViewBag.Title = "游戏列表";
-            //如果是管理员查看全部游戏结果
-            if (isAdmin == 1)
+            if (isAdmin == null)
             {
-                if (this._userManager.GetUserAsync(User).Result.groupid == 1)
+                list = from game in this.dbContext.GameInfoModel
+                    from score in this.dbContext.GameFactionModel
+                    where score.username == username && game.Id == score.gameinfo_id
+                    select game;
+            }
+            else
+            {
+                //如果是管理员查看全部游戏结果
+                if (isAdmin == 1)
                 {
-                    list = from game in this.dbContext.GameInfoModel select game;
+                    if (this._userManager.GetUserAsync(User).Result.groupid == 1)
+                    {
+                        list = from game in this.dbContext.GameInfoModel select game;
+                    }
+                    else
+                    {
+                        return View(null);
+                    }
+
+                }
+                //查看其他人的游戏
+                else if (isAdmin == 2)
+                {
+                    list = from game in this.dbContext.GameInfoModel
+                        //from score in this.dbContext.GameFactionModel
+                        where game.IsAllowLook
+                        select game;
                 }
                 else
                 {
-                    return View(null);
+                    list = from game in this.dbContext.GameInfoModel
+                        from score in this.dbContext.GameFactionModel
+                        where score.username == username && game.Id == score.gameinfo_id
+                        select game;
                 }
+
                 //回合
                 if (gameInfoModel.round != null)
                 {
@@ -69,23 +96,16 @@ namespace GaiaProject.Controllers
                         where score.username == joinname && game.Id == score.gameinfo_id
                         select game;
                 }
+                //最低分
+                if (scoremin != null)
+                {
+                    list = from game in list
+                        from score in this.dbContext.GameFactionModel
+                        where score.scoreTotal <= scoremin && game.Id == score.gameinfo_id
+                        select game;
+                }
             }
-            //查看其他人的游戏
-            else if (isAdmin==2)
-            {
-                list = from game in this.dbContext.GameInfoModel
-                    //from score in this.dbContext.GameFactionModel
-                    where game.IsAllowLook 
-                    select game;
-            }
-            else
-            {
-                
-                list = from game in this.dbContext.GameInfoModel
-                    from score in this.dbContext.GameFactionModel
-                    where score.username == username && game.Id == score.gameinfo_id
-                    select game;
-            }
+
 
 
             //状态

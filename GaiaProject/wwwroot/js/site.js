@@ -26,6 +26,7 @@ function getKjTile() {
             return false;
         }
         else if (kj === "") {
+            //execcode = "".format()
             alert("请选择升级科技");
             return false;
         } else {
@@ -40,8 +41,9 @@ function getKjTile() {
     //基础科技-选择科技
     else {
         if (kj === "") {
-            alert("请选择升级科技");
-            return false;
+            execcode = " ";
+            //alert("请选择升级科技");
+            //return false;
         }
         else {
             execcode = ("+{0}. advance {1}".format($("#stt3List").val(), $("#updatekj").val()));
@@ -51,6 +53,10 @@ function getKjTile() {
         return execcode;
 
     } else {
+        //没有选择科技版
+        if (execcode === "") {
+            return upJz;
+        }
         return upJz+"."+execcode;
 
     }

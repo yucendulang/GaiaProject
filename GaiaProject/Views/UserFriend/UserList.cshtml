@@ -71,7 +71,6 @@
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
-@*        <li><a href="#">首页</a></li>*@
         <li>
             <a href="#" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
@@ -94,7 +93,7 @@
 
 
     $(function() {
-        $("#pagelist a").click(function () {
+        $("#pagelist a").click(function() {
             var obj = $(this);
             var value = obj.attr("aria-label");
             var pageindex = GetQueryString("pageindex");
@@ -103,8 +102,7 @@
             }
             if (value === "Previous") {
                 pageindex--;
-            }
-            else if (value === "Next") {
+            } else if (value === "Next") {
                 pageindex++;
             } else {
                 pageindex = obj.text();
@@ -112,8 +110,19 @@
             if (pageindex === 0) {
                 pageindex = 1;
             }
-            window.location.href = "?pageindex=" + pageindex;
+            var url = window.location.href;
+            if (url.indexOf("?") > -1) {
+                //如果已经有翻页信息
+                if (url.indexOf("pageindex=")>-1) {
+                    url = url.replace(/pageindex=\d*/, "pageindex=" + pageindex);
+                } else {
+                    url = url + "&pageindex=" + pageindex;
+                }
+            } else {
+                url = url + "?pageindex=" + pageindex;
+            }
+            window.location.href = url;
 
         });
-    })
+    });
 </script>

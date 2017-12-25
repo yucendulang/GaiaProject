@@ -108,6 +108,7 @@ namespace GaiaProject.Controllers
             }
             //删除空白玩家
             username = username.Where(x => !string.IsNullOrEmpty(x)).ToArray();
+
             //随机排序
             if (model.IsRandomOrder)
             {
@@ -124,7 +125,7 @@ namespace GaiaProject.Controllers
             }
             //创建
             bool create = GameMgr.CreateNewGame(model.Name, username, out GaiaGame result,model.MapSelction, isTestGame: model.IsTestGame);
-            if (create && !model.IsTestGame)//测试局暂时不保留数据
+            if (create && !model.IsTestGame && username[0]!=username[1])//测试局以及自己对战的局暂时不保留数据
             {
                 //保存到数据库
                 GaiaDbContext.Models.HomeViewModels.GameInfoModel gameInfoModel =
@@ -216,7 +217,8 @@ namespace GaiaProject.Controllers
                     {
                         if (string.IsNullOrEmpty(gameInfoModel.loginfo))
                         {
-                            
+                            type = 0;
+                            return null;
                         }
                         log = gameInfoModel.loginfo;
                     }
@@ -232,7 +234,7 @@ namespace GaiaProject.Controllers
                 GameMgr.CreateNewGame(gameInfoModel.name, gameInfoModel.userlist.Split('|'), out GaiaGame result, gameInfoModel.MapSelction, isTestGame: gameInfoModel.IsTestGame == 1 ? true : false);
                 GaiaGame gg = GameMgr.GetGameByName(gameInfoModel.name);
                 gg.GameName = gameInfoModel.name;
-                gg.UserActionLog = log.Replace("|", "\r\n");
+                gg.UserActionLog = log?.Replace("|", "\r\n");
 
                 gg = GameMgr.RestoreGame(gameInfoModel.name, gg,row);
                 gg.GameName = gameInfoModel.name;
