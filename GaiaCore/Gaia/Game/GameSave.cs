@@ -145,10 +145,22 @@ namespace GaiaCore.Gaia.Game
                 gameFactionModel.scoreFst2 = getscore(faction, 1);
                 gameFactionModel.scoreKj = faction.GetTechScoreCount() * 4;
                 gameFactionModel.scoreTotal = faction.Score;
-                gameFactionModel.rank = rankindex;//排名
+
+                //如果是后面的玩家并且与上一名玩家分数相同
+                if (rankindex>1 && gameFactionModel.scoreTotal == factionList[rankindex-2].Score)
+                {
+                    gameFactionModel.rank = dbContext.GameFactionModel.SingleOrDefault(
+                        item => item.gameinfo_id == gameInfoModel.Id && item.FactionName == factionList[rankindex - 2].FactionName.ToString()).rank;//排名
+                }
+                else
+                {
+                    gameFactionModel.rank = rankindex;//排名
+                }
                 //计算裸分
                 gameFactionModel.scoreLuo = gameFactionModel.scoreTotal - gameFactionModel.scoreFst1 -
                                             gameFactionModel.scoreFst2 - gameFactionModel.scoreKj;
+
+
                 if (isAdd)
                 {
                     dbContext.GameFactionModel.Add(gameFactionModel);
@@ -158,7 +170,9 @@ namespace GaiaCore.Gaia.Game
                     dbContext.GameFactionModel.Update(gameFactionModel);
                 }
 
+
                 rankindex++;
+                
             }
         }
     }

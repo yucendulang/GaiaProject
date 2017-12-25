@@ -201,8 +201,13 @@ else
         {
             <p>现在等待 @Model.Username[Model.GameStatus.PlayerIndex] 选种族 setup xxx.</p>
 
+            <p>玩家顺序是 @string.Join("|",Model.Username)</p>
             <div class="btn-group" id="selectfaction" role="group" aria-label="...">
-                @foreach (var fac in (new List<Faction>() { new Terraner(null), new Lantida(null), new Hive(null), new HadschHalla(null), new BalTak(null), new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null), new MadAndroid(null), new Itar(null), new Nevla(null) }))
+                @foreach (var
+                 fac in
+                 (new List<Faction>() { new Terraner(null), new Lantida(null), new Hive(null), new HadschHalla(null), new BalTak(null),
+                        new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null),
+                       new MadAndroid(null), new Itar(null), new Nevla(null) }).Where(item=> !Model.FactionList.Select(fa=> fa.ColorCode).Contains(item.ColorCode) ))
                 {
                     <button type="button" class="btn btn-default" style="background-color: @fac.ColorCode" id="@fac.FactionName" syntax="setup ">@fac.ChineseName</button>
 
