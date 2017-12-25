@@ -146,7 +146,9 @@ namespace GaiaCore.Gaia.Game
                 gameFactionModel.scoreKj = faction.GetTechScoreCount() * 4;
                 gameFactionModel.scoreTotal = faction.Score;
                 gameFactionModel.rank = rankindex;//排名
-
+                //计算裸分
+                gameFactionModel.scoreLuo = gameFactionModel.scoreTotal - gameFactionModel.scoreFst1 -
+                                            gameFactionModel.scoreFst2 - gameFactionModel.scoreKj;
                 if (isAdd)
                 {
                     dbContext.GameFactionModel.Add(gameFactionModel);

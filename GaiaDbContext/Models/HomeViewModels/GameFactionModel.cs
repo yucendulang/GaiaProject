@@ -104,5 +104,7 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// </summary>
         public int? UserCount { get; set; }
 
+        public int? scoreLuo { get; set; }
+
     }
 }
