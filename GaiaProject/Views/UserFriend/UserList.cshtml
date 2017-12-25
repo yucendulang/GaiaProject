@@ -64,65 +64,6 @@
 
     </tbody>
 </table>
-<nav aria-label="Page navigation">
-    <ul class="pagination" id="pagelist">
-        <li>
-            <a href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
-        <li>
-            <a href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
-    </ul>
-    <span>
-        
-    </span>
-</nav>
 
-<script>
+@Html.Partial("Partial_PageInfo", Model)
 
-    function GetQueryString(name)
-    {
-        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-        var r = window.location.search.substr(1).match(reg);
-        if(r!=null)return  unescape(r[2]); return null;
-    }
-
-
-    $(function() {
-        $("#pagelist a").click(function() {
-            var obj = $(this);
-            var value = obj.attr("aria-label");
-            var pageindex = GetQueryString("pageindex");
-            if (pageindex === null) {
-                pageindex = 1;
-            }
-            if (value === "Previous") {
-                pageindex--;
-            } else if (value === "Next") {
-                pageindex++;
-            } else {
-                pageindex = obj.text();
-            }
-            if (pageindex === 0) {
-                pageindex = 1;
-            }
-            var url = window.location.href;
-            if (url.indexOf("?") > -1) {
-                //如果已经有翻页信息
-                if (url.indexOf("pageindex=")>-1) {
-                    url = url.replace(/pageindex=\d*/, "pageindex=" + pageindex);
-                } else {
-                    url = url + "&pageindex=" + pageindex;
-                }
-            } else {
-                url = url + "?pageindex=" + pageindex;
-            }
-            window.location.href = url;
-
-        });
-    });
-</script>

@@ -11,12 +11,8 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="input-group">
-                <select class="btn dropdown-toggle form-control" id="usercount" name="usercount"><option value="">--人数--</option>
-                    <option value="0">全部</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                </select>
+                @Html.Partial("Partial_Html_UserCount", this)
+
                 <input type="text" class="form-control" placeholder="玩家ID" id="username" name="username">
 
                 <span class="input-group-btn">
@@ -26,10 +22,7 @@
         </div>
     </div>
 </form>
-<script>
-    var ucount = @this.Context.Request.Query["usercount"];
-    $("#usercount").val(ucount);
-</script>
+
 
 
 <table class="table">

@@ -102,7 +102,7 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// <summary>
         /// 玩家数量
         /// </summary>
-        public int UserCount { get; set; }
+        public int? UserCount { get; set; }
 
     }
 }

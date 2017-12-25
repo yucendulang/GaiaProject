@@ -87,7 +87,9 @@
 
                             <li role="separator" class="divider"></li>
                             <li><a href="/GameInfo/Index?isAdmin=2">公开游戏</a></li>
-                            <li><a asp-area="" asp-controller="GameInfo" asp-action="UserScoreAvg">玩家统计</a></li>
+                            <li>
+                                <a href="/GameInfo/UserScoreAvg?usercount=4">玩家统计</a>
+                            </li>
                             <li><a href="/GameInfo/FactionList?type=2&usercount=4">种族高分</a></li>
                             <li>
                                 <a href="/GameInfo/FactionStatistics?usercount=4">种族统计</a>
@@ -103,7 +105,7 @@
                                 <li>
                                     <a href="/GameInfo/Index?isAdmin=1">全部游戏</a>
 
-                                    <a href="/GameInfo/Index?GameStatus=0">未结束游戏</a>
+                                    <a href="/GameInfo/Index?isAdmin=1&GameStatus=0">未结束游戏</a>
                                     <a href="/GameInfo/Index?isAdmin=1&GameStatus=8">全部结束游戏</a>
 
                                     <a href="/GameInfo/FactionList?type=1">全部种族</a>

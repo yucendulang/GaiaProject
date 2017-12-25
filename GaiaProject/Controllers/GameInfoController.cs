@@ -31,7 +31,7 @@ namespace GaiaProject.Controllers
         /// 进行的游戏
         /// </summary>
         /// <returns></returns>
-        public IActionResult Index(string username, int? isAdmin, GameInfoModel gameInfoModel, string joinname = null,int? scoremin=null)
+        public IActionResult Index(string username, int? isAdmin, GameInfoModel gameInfoModel, string joinname = null,int? scoremin=null,int pageindex=1)
         {
 
             if (username == null)
@@ -113,6 +113,8 @@ namespace GaiaProject.Controllers
                 ? list
                 : list.Where(item => item.GameStatus == gameInfoModel.GameStatus);
 
+            //pageindex = pageindex == 0 ? 1 : pageindex;
+            list = list.OrderByDescending(item=>item.starttime).Skip(30 * (pageindex - 1)).Take(30);
 
             var result = list.ToList();
             return View(result);
@@ -159,7 +161,7 @@ namespace GaiaProject.Controllers
                 gameFactionModel.username = HttpContext.User.Identity.Name;
             }
             IQueryable<GameFactionModel> gameFactionModels;
-            if (type == 1)
+            if (type == 1)//全部
             {
                 gameFactionModels = this.dbContext.GameFactionModel.AsQueryable();
                 if (gameFactionModel.FactionName != null)
@@ -167,26 +169,31 @@ namespace GaiaProject.Controllers
                     gameFactionModels = gameFactionModels.Where(item => item.FactionName == gameFactionModel.FactionName)                        ;
                 }
             }
-            else if (type == 2)
+            else if (type == 2)//高分
             {
                 gameFactionModels = this.dbContext.GameFactionModel.AsQueryable();
                 if (gameFactionModel.FactionName != null)
                 {
                     gameFactionModels = gameFactionModels.Where(item => item.FactionName == gameFactionModel.FactionName);
                 }
-                usercount = usercount ?? 4;
-                if (usercount > 0)
-                {
-                    gameFactionModels = gameFactionModels.Where(item => item.UserCount == usercount);
-                }
 
-                gameFactionModels = gameFactionModels.Take(30);
+
             }
-            else
+            else//自己的
             {
                 gameFactionModels = this.dbContext.GameFactionModel.Where(item => item.username == gameFactionModel.username);
             }
-            gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal);
+            //人数
+            usercount = usercount ?? 4;
+            if (usercount > 0)
+            {
+                gameFactionModels = gameFactionModels.Where(item => item.UserCount == usercount);
+            }
+            if (type != 1)
+            {
+                gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal).Take(30);
+            }
+            //gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal);
             return View(gameFactionModels.ToList());
         }
         /// <summary>
@@ -233,11 +240,16 @@ namespace GaiaProject.Controllers
         /// <summary>
         /// 玩家的平均分
         /// </summary>
-        public IActionResult UserScoreAvg(GameFactionModel gameFactionModel,int? orderType)
+        public IActionResult UserScoreAvg(GameFactionModel gameFactionModel,int? orderType,int usercount=4)
         {
             IQueryable<GameFactionModel> query;
             //90一下的不纳入统计
             query = this.dbContext.GameFactionModel.Where(item=>item.scoreTotal>90);
+            //人数
+            if (usercount > 0)
+            {
+                query = query.Where(item => item.UserCount == usercount);
+            }
             //查询种族
             if (gameFactionModel.FactionName != null)
             {
