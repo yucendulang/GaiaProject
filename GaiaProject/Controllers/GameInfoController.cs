@@ -151,7 +151,7 @@ namespace GaiaProject.Controllers
         /// 个人使用的种族信息
         /// </summary>
         /// <returns></returns>
-        public IActionResult FactionList(GameFactionModel gameFactionModel,int? type)
+        public IActionResult FactionList(GameFactionModel gameFactionModel,int? type,int? usercount)
         {
 
             if (gameFactionModel.username == null)
@@ -174,6 +174,12 @@ namespace GaiaProject.Controllers
                 {
                     gameFactionModels = gameFactionModels.Where(item => item.FactionName == gameFactionModel.FactionName);
                 }
+                usercount = usercount ?? 4;
+                if (usercount > 0)
+                {
+                    gameFactionModels = gameFactionModels.Where(item => item.UserCount == usercount);
+                }
+
                 gameFactionModels = gameFactionModels.Take(30);
             }
             else
@@ -199,13 +205,11 @@ namespace GaiaProject.Controllers
             {
                 query = this.dbContext.GameFactionModel.AsQueryable();
             }
+            usercount = usercount ?? 4;
             if (usercount > 0)
             {
-//                query =from gameFactionModel in query
-//                    from gameInfoModel in this.dbContext.GameInfoModel.AsQueryable()
-//                    where gameInfoModel.UserCount == usercount && gameInfoModel.GameStatus==8 && gameInfoModel.Id==gameFactionModel.gameinfo_id
-//                    select gameFactionModel;
-                query = query.Where(item => this.dbContext.GameInfoModel.Where(game => game.GameStatus == 8 && game.UserCount == usercount).Select(game=>game.Id).Contains(item.gameinfo_id) );
+                //query = query.Where(item => this.dbContext.GameInfoModel.Where(game => game.GameStatus == 8 && game.UserCount == usercount).Select(game=>game.Id).Contains(item.gameinfo_id) );
+                query = query.Where(item => item.UserCount == usercount);
             }
 
             var list = query.GroupBy(item => item.FactionChineseName).Select(

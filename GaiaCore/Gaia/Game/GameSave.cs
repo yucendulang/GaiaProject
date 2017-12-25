@@ -124,7 +124,8 @@ namespace GaiaCore.Gaia.Game
                     gameFactionModel.username = faction.UserName;
                     gameFactionModel.scoreRound = null;
                     gameFactionModel.scorePw = 0;
-
+                    //玩家人数
+                    gameFactionModel.UserCount = gameInfoModel.UserCount;
                 }
                 else
                 {

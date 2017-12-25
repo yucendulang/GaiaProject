@@ -99,5 +99,10 @@ namespace GaiaDbContext.Models.HomeViewModels
         [System.ComponentModel.DataAnnotations.MaxLength(20)]
         public string numberBuild { get; set; }
 
+        /// <summary>
+        /// 玩家数量
+        /// </summary>
+        public int UserCount { get; set; }
+
     }
 }

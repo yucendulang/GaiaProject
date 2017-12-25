@@ -1,4 +1,4 @@
-﻿    
+﻿
 @using GaiaCore.Gaia
 @model List<GaiaDbContext.Models.HomeViewModels.GameFactionModel>
 
@@ -14,10 +14,16 @@
             <div class="input-group">
 
                 @Html.DropDownList("FactionName", new SelectList(new List<Faction>() { new Terraner(null), new Lantida(null), new Hive(null), new HadschHalla(null), new BalTak(null), new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null), new MadAndroid(null), new Itar(null), new Nevla(null) }, "FactionName", "ChineseName"),
-        "--种族--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList" })
+             "--种族--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList" })
 
-
-                <input type="hidden" value="@type" name="type"/>
+                <select class="btn dropdown-toggle form-control" id="usercount" name="usercount">
+                    <option value="">--人数--</option>
+                    <option value="0">全部</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+                <input type="hidden" value="@type" name="type" />
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="submit">搜索</button>
                 </span>
@@ -26,12 +32,23 @@
         </div>
     </div>
 </form>
+<script>
+    var ucount = @this.Context.Request.Query["usercount"];
+    $("#usercount").val(ucount);
+</script>
 
 
 <table class="table">
     <thead>
         <tr>
-            <td>游戏名称</td>
+            @if (type == "2")
+            {
+                <td>玩家</td>
+            }
+            else
+            {
+                <td>游戏名称</td>
+            }
             <td>种族名称</td>
             <td>排名</td>
 
@@ -41,34 +58,35 @@
             <td>终局计分2</td>
             <td>建筑数量</td>
 
+
         </tr>
     </thead>
     <tbody>
-        
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @if (type == "2")
-                {
-                    <span>xxx</span>
-                }
-                else
-                {
-                  <a href="/Home/RestoreGame/@item.gameinfo_id">@item.gameinfo_name</a>
-                }
-            </td>
-            <td>@item.FactionChineseName</td>
-            <td>@item.rank</td>
 
-            <td>@item.scoreTotal</td>
-            <td>@item.kjPostion/@item.scoreKj vp</td>
-            <td>@item.numberFst1/@item.scoreFst1 vp</td>
-            <td>@item.numberFst2/@item.scoreFst2 vp</td>
-            <td>@item.numberBuild</td>
-        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (type == "2")
+                    {
+                        <span>@item.username</span>
+                    }
+                    else
+                    {
+                        <a href="/Home/RestoreGame/@item.gameinfo_id">@item.gameinfo_name</a>
+                    }
+                </td>
+                <td>@item.FactionChineseName</td>
+                <td>@item.rank</td>
 
-    }
-        
+                <td>@item.scoreTotal</td>
+                <td>@item.kjPostion/@item.scoreKj vp</td>
+                <td>@item.numberFst1/@item.scoreFst1 vp</td>
+                <td>@item.numberFst2/@item.scoreFst2 vp</td>
+                <td>@item.numberBuild</td>
+            </tr>
+
+        }
+
     </tbody>
 </table>
