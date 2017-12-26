@@ -125,7 +125,7 @@
                     <div class="col-lg-6">
                         <div class="input-group">
 
-                            @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTaklons, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control", @id = "TaklonsKs", @syntax = "convert {0}" })
+                            @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTaklons, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control", @id = "TaklonsKs", @syntax = "{0}" })
 
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#TaklonsKs">前</button>
