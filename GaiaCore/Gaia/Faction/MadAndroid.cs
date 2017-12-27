@@ -10,8 +10,7 @@ namespace GaiaCore.Gaia
         public MadAndroid(GaiaGame gg) : base(FactionName.MadAndroid, gg)
         {
             this.ChineseName = "疯狂机器";
-            this.ColorCode = colorList[5];
-            this.ColorMap = colorMapList[5];
+            base.SetColor(5);
             IsMadAndroidAbilityUsed = false;
             Knowledge -= 2;
             StrongHold = new MadAndroidSpecialBuildings.StrongHold();

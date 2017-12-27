@@ -9,8 +9,7 @@ namespace GaiaCore.Gaia
         public Itar(GaiaGame gg) :base(FactionName.Itar, gg)
         {
             this.ChineseName = "伊塔星人";
-            this.ColorCode = colorList[6];
-            this.ColorMap = colorMapList[6];
+            base.SetColor(6);
 
             m_ore += 1;
             m_powerToken1 += 2;

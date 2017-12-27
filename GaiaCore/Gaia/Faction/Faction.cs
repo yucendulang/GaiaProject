@@ -11,6 +11,8 @@ namespace GaiaCore.Gaia
     {
         public Faction(FactionName name, GaiaGame gg)
         {
+
+
             FactionName = name;
             if (gg == null)
             {
@@ -142,8 +144,24 @@ namespace GaiaCore.Gaia
         public string ChineseName { get; set; }
         public string UserName { get; set; }
 
+        //种族颜色
+        // 0-人类 1-逢人 2-炽焰 3-格伦 4-大使 5-章鱼 6-伊塔
         public string[] colorList = new string[] { "#16a0e0", "#d71729", "#d75d0c", "#deb703", "#8b3a0e", "#6b6868", "#ebfafb" };
+        //地图颜色列表
         public string[] colorMapList = new string[] { "#6bd8f3", "#f23c4d", "#ea8736", "#facd2f", "#ad5e2f", "#a3a3a3", "#d3f1f5" };
+        /// <summary>
+        /// 设置颜色代码
+        /// </summary>
+        protected void SetColor(int colorIndex)
+        {
+            this.colorIndex = colorIndex;
+            this.ColorCode = colorList[this.colorIndex];
+            this.ColorMap = colorMapList[this.colorIndex];
+        }
+        /// <summary>
+        /// 颜色索引
+        /// </summary>
+        public int colorIndex { get; set; }
         /// <summary>
         /// 种族颜色代码
         /// </summary>

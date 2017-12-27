@@ -9,7 +9,7 @@ namespace GaiaCore.Gaia
         public Terraner(GaiaGame gg) : base(FactionName.Terraner, gg)
         {
             this.ChineseName = "人类";
-            this.ColorCode = colorList[0]; this.ColorMap = colorMapList[0];
+            base.SetColor(0);
 
             m_powerToken1 += 2;
             if (gg != null)

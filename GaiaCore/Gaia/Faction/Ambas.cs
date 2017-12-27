@@ -9,8 +9,7 @@ namespace GaiaCore.Gaia
         public Ambas(GaiaGame gg) : base(FactionName.Ambas, gg)
         {
             this.ChineseName = "大使星人";
-            this.ColorCode = colorList[4];
-            this.ColorMap = colorMapList[4];
+            base.SetColor(4);
             if (gg != null)
             {
                 IncreaseTech("ship");

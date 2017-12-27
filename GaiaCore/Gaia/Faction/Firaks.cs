@@ -11,8 +11,7 @@ namespace GaiaCore.Gaia
         public Firaks(GaiaGame gg) :base(FactionName.Firaks, gg)
         {
             this.ChineseName = "章鱼人";
-            this.ColorCode = colorList[5];
-            this.ColorMap = colorMapList[5];
+            base.SetColor(5);
 
             m_knowledge -= 1;
             m_ore -= 1;

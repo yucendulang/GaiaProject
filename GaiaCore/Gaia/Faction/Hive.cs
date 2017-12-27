@@ -11,8 +11,7 @@ namespace GaiaCore.Gaia
         public Hive(GaiaGame gg) : base(FactionName.Hive, gg)
         {
             this.ChineseName = "蜂人";
-            this.ColorCode = colorList[1];
-            this.ColorMap = colorMapList[1];
+            base.SetColor(1);
             AllianceList = new List<Tuple<int, int>>();
         }
 

@@ -81,12 +81,10 @@ $(".selectchange").change(function () {
 //执行行动
 $(".actionGp").click(function () {
     //$("#syntax").val("{0}-{1}".format($(this).attr("syntax"), $($(this).attr("valueid")).val()));
-    submitData();
+    //submitData();
+    openQueryWindow($("#syntax").val(), "确认?");
 });
-//只是赋值
-$(".actionGp").click(function () {
-    $("#syntax").val("{0}{1}".format($(this).attr("syntax"), $($(this).attr("valueid")).val()));
-});
+
 
 if (userInfo.isRound) {
     //能量行动
@@ -221,12 +219,30 @@ if (userInfo.isRound) {
         } else {
             value = syntax.format(value);
         }
-        if (actionType === "before") {
-            $("#syntax").val(value + "." + oldcode);
-        } else {
-            $("#syntax").val(oldcode + '.' + value);
+        //是不是执行多次
+        var actionnumber = obj.attr("actionnumber");
+        if (actionnumber!==undefined && actionnumber !== null && actionnumber !== "") {
+            var number = parseInt($(actionnumber).val());
+            if (number > 0) {
+                for (var i = 0; i < number; i++) {
+                    oldcode = $("#syntax").val();
+                    if (actionType === "before") {
+                        $("#syntax").val(value + "." + oldcode);
+                    } else {
+                        $("#syntax").val(oldcode + '.' + value);
 
+                    }   
+                }
+            }
+        } else {
+            if (actionType === "before") {
+                $("#syntax").val(value + "." + oldcode);
+            } else {
+                $("#syntax").val(oldcode + '.' + value);
+
+            }
         }
+
     });
 }
 

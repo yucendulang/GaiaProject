@@ -53,7 +53,8 @@
                 mapcolor: '@Model.FactionList[Model.GameStatus.PlayerIndex].ColorMap',
                 round: @Model.GameStatus.RoundCount,
                 factionName: '@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName',
-                stage:-1,
+                stage: -1,
+                colorIndex:@Model.FactionList[Model.GameStatus.PlayerIndex].colorIndex
             };
             //alert(userInfo.isRound);
     </script>
@@ -65,6 +66,7 @@ else
             isRound: false,
             round: 0,
             stage: -1,
+            userInfo:-1,
         };
     </script>
 }

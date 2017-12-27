@@ -9,7 +9,7 @@ namespace GaiaCore.Gaia
         public HadschHalla(GaiaGame gg) : base(FactionName.HadschHalla, gg)
         {
             this.ChineseName = "圣禽族";
-            this.ColorCode = colorList[1]; this.ColorMap = colorMapList[1];
+            base.SetColor(1);
 
             if (gg != null)
             {

@@ -183,13 +183,11 @@ function createMap(data) {
              
             }
             else {
-                //$("#syntax").val("build " + clickObj.position);
-//                if (userInfo.round === 0) {
-//                    $("#syntax").val("build " + clickObj.position);
-//                }
+                //自己颜色的星球
                 if (clickObj.mapcolor === userInfo.mapcolor) {
-                    openQueryWindow("build " + clickObj.position, "确认进行建造?");
+                    openQueryWindow("build " + clickObj.position, "确认在原生地进行建造?");
                 }
+                //非自己颜色星球
                 else {
                     if (userInfo.stage === 2) {
                         alert("初始建筑必须放在原始星球上面");
@@ -200,7 +198,22 @@ function createMap(data) {
                         alert("不能再空白星球上面建造");
                         return;
                     } else {
-                        $("#syntax").val("build " + clickObj.position);
+                        //如果是绿星
+                        if (clickObj.mapcolor === "#80F080") {
+                            openQueryWindow("build " + clickObj.position, "确认在盖亚星球进行建造?");
+                            //$("#syntax").val("build " + clickObj.position);
+                        } else {
+                            //非自己颜色的星球需要计算转换率
+                            var cindex = cycle.indexOf(clickObj.mapcolor);
+                            cindex = Math.abs(cindex - userInfo.colorIndex);
+                            if (cindex > 3) {
+                                cindex = 7 - cindex;
+                            }
+                            openQueryWindow("build " + clickObj.position, "确认进行建造?<br/>地形转化率为" + cindex);
+
+                            //alert(Math.abs(cindex - userInfo.colorIndex));
+                            //$("#syntax").val("build " + clickObj.position);
+                        }
                     }
                 }
             }
@@ -220,14 +233,39 @@ function createMap(data) {
                 //                if (userInfo.factionName === "Lantida") {
                 if (userInfo.factionName !== "Lantida" && clickObj.typename != undefined && clickObj.typename !=="gaizao") {
                     alert("不能选择已经有建筑的地点");
-                } else {
+                }
+                else if (clickObj.mapcolor === "#D19FE8") {
+                    alert("不能选择紫星");
+                }
+                else {
+                    //黑星
                     if (data.action === "planet") {
                         $("#syntax").val($("#syntax").val() +".planet {0}".format(clickObj.position));
                     } else {
+                        //盖亚改造单元
                         if (clickObj.typename === "gaizao") {
                             $("#syntax").val($("#syntax").val().format(".gaia " + clickObj.position));
                         } else {
-                            $("#syntax").val($("#syntax").val().format(".build " + clickObj.position));
+                            var buildcode = $("#syntax").val().format(".build " + clickObj.position);
+                            //自己颜色星球直接建造
+                            if (clickObj.mapcolor === userInfo.mapcolor) {
+                                openQueryWindow(buildcode, "确认在原生地进行建造?");
+                            } else {
+                                //如果是绿星
+                                if (clickObj.mapcolor === "#80F080") {
+                                    openQueryWindow(buildcode, "确认在盖亚星球进行建造?");
+                                } else {
+                                    //非自己颜色的星球需要计算转换率
+                                    var cindex = cycle.indexOf(clickObj.mapcolor);
+                                    cindex = Math.abs(cindex - userInfo.colorIndex);
+                                    if (cindex > 3) {
+                                        cindex = 7 - cindex;
+                                    }
+                                    openQueryWindow(buildcode, "确认进行建造?<br/>地形转化率为" + cindex);
+
+                                }  
+                            }
+                            //$("#syntax").val();
                         }
                     }
 

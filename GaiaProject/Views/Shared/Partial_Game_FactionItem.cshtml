@@ -45,17 +45,26 @@
                 <button type="button" class="btn btn-default">时常:@Model.GetClockPeriod()</button>
                 @if (@Model is MadAndroid)
                 {
-                    <button type="button" class="btn btn-default">能力是否使用:@((@Model as MadAndroid).IsMadAndroidAbilityUsed) </button>
+                    <button type="button" class="btn btn-default">能力是否使用:
+                        @if  ((@Model as MadAndroid).IsMadAndroidAbilityUsed)
+                        {
+                            <span>使用</span>
+                        }
+                        else
+                        {
+                            <span>未使用</span>
+                        }
+                    </button>
                 }
-                @if (@Model is BalTak)
+                else if (@Model is BalTak)
                 {
                     <button type="button" class="btn btn-default">盖亚区盖亚数量:@((@Model as BalTak).GaiasGaiaArea.Count) </button>
                 }
-                @if (@Model is Taklons)
+                else if (@Model is Taklons)
                 {
                     <button type="button" class="btn btn-default">智慧石所在区域:@((@Model as Taklons).BigStone) </button>
                 }
-                @if (@Model is Hive)
+                else if (@Model is Hive)
                 {
                     <button type="button" class="btn btn-default">主城等级:@((@Model as Hive).GetMainAllianceGrade()) </button>
                 }

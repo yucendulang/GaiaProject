@@ -10,8 +10,7 @@ namespace GaiaCore.Gaia
         public Gleen(GaiaGame gg) : base(FactionName.Gleen, gg)
         {
             this.ChineseName = "格伦星人";
-            this.ColorCode = colorList[3];
-            this.ColorMap = colorMapList[3];
+            base.SetColor(3);
             m_QICs -= 1;
             IsOreReplaceQICSIncome = true;
             if (gg != null)

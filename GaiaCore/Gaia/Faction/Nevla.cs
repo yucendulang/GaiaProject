@@ -10,8 +10,7 @@ namespace GaiaCore.Gaia
         public Nevla(GaiaGame gg) : base(FactionName.Nevla, gg)
         {
             this.ChineseName = "超星人";
-            this.ColorCode = colorList[6];
-            this.ColorMap = colorMapList[6];
+            base.SetColor(6);
             Knowledge -= 1;
             IsStrongBuild = false;
             if (gg != null)

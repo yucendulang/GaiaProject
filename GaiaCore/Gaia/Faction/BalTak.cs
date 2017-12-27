@@ -10,8 +10,7 @@ namespace GaiaCore.Gaia
         public BalTak(GaiaGame gg) : base(FactionName.BalTak, gg)
         {
             this.ChineseName = "炽炎族";
-            this.ColorCode = colorList[2];
-            this.ColorMap = colorMapList[2];
+            base.SetColor(2);
             if (gg != null)
             {
                 IncreaseTech("gaia");

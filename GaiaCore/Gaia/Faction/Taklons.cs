@@ -10,8 +10,7 @@ namespace GaiaCore.Gaia
         public Taklons(GaiaGame gg) : base(FactionName.Taklons, gg)
         {
             this.ChineseName = "利爪族";
-            this.ColorCode = colorList[4];
-            this.ColorMap = colorMapList[4];
+            base.SetColor(4);
             PowerToken1 += 1;
         }
         private int m_BigStone = 1;

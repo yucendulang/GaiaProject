@@ -36,7 +36,9 @@
                         @Html.DropDownList("enumList", new SelectList(Model.ATTList, "name", "desc"), "--请选择高级科技--", new { @class = "btn dropdown-toggle form-control updatettlist", @id = "attList", @syntax = ".+" })
                         @Html.DropDownList("enumList", new SelectList(Model.FactionList[Model.GameStatus.PlayerIndex].GameTileList.FindAll(a => a.typename == "stt"), "name", "desc"), "--请选择被覆盖科技--", new { @class = "btn dropdown-toggle form-control ", @id = "fg_sttList", @syntax = ".+" })
                     </div>
-
+                    <div class="form-inline">
+                        <span id="showSyntax"></span>
+                    </div>
                 </div>
 
             </div>
@@ -86,6 +88,15 @@
         $('#myModal').modal();
         selectTTsyntax = syntax;
     }
+    //显示命令
+    function showSyntax() {
+        var code = getKjTile();
+        if (!code) {
+            return;
+        }
+        code = selectTTsyntax.format(code);
+        $("#showSyntax").text(code);
+    }
 
     $(function () {
         //只能选择一项科技
@@ -104,6 +115,10 @@
             code = selectTTsyntax.format(code);
             $("#syntax").val(code);
             $('#myModal').modal("hide");
+
+            //弹出确认提示
+            //openQueryWindow(code, "确认执行?");
+
         });
         //切换建筑类型
         $("#updateBuildList").change(function () {
@@ -113,8 +128,8 @@
             } else {
                 $("#sttBody").show();
             }
-
         });
+
 
         //选择联邦板块
         $("#queryAltTile").click(function() {
