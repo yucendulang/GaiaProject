@@ -104,7 +104,15 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// </summary>
         public int? UserCount { get; set; }
 
+        /// <summary>
+        /// 裸分
+        /// </summary>
         public int? scoreLuo { get; set; }
+
+        /// <summary>
+        /// 分数差
+        /// </summary>
+        public int? scoreDifference { get; set; }
 
     }
 }

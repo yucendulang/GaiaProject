@@ -234,9 +234,9 @@ function createMap(data) {
                 if (userInfo.factionName !== "Lantida" && clickObj.typename != undefined && clickObj.typename !=="gaizao") {
                     alert("不能选择已经有建筑的地点");
                 }
-                else if (clickObj.mapcolor === "#D19FE8") {
-                    alert("不能选择紫星");
-                }
+//                else if (clickObj.mapcolor === "#D19FE8") {
+//                    alert("不能选择紫星");
+//                }
                 else {
                     //黑星
                     if (data.action === "planet") {

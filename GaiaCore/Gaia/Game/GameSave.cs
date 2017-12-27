@@ -104,6 +104,8 @@ namespace GaiaCore.Gaia.Game
             {
 
             }
+            //最高分
+            int scoreMax=0;
             foreach (Faction faction in factionList)
             {
                 GameFactionModel gameFactionModel = dbContext.GameFactionModel.SingleOrDefault(
@@ -145,7 +147,11 @@ namespace GaiaCore.Gaia.Game
                 gameFactionModel.scoreFst2 = getscore(faction, 1);
                 gameFactionModel.scoreKj = faction.GetTechScoreCount() * 4;
                 gameFactionModel.scoreTotal = faction.Score;
-
+                //记录最高分
+                if (rankindex == 1)
+                {
+                    scoreMax = gameFactionModel.scoreTotal;
+                }
                 //如果是后面的玩家并且与上一名玩家分数相同
                 if (rankindex>1 && gameFactionModel.scoreTotal == factionList[rankindex-2].Score)
                 {
@@ -159,7 +165,8 @@ namespace GaiaCore.Gaia.Game
                 //计算裸分
                 gameFactionModel.scoreLuo = gameFactionModel.scoreTotal - gameFactionModel.scoreFst1 -
                                             gameFactionModel.scoreFst2 - gameFactionModel.scoreKj;
-
+                //计算分差
+                gameFactionModel.scoreDifference = scoreMax - gameFactionModel.scoreTotal;
 
                 if (isAdd)
                 {
