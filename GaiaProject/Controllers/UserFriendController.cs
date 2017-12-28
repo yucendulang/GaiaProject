@@ -49,12 +49,12 @@ namespace GaiaProject.Controllers
                 {
                     model.UserId = user.Id;
                     model.UserName = user.UserName;
-                    var list = dbContext.UserFriend.Where(item => item.UserId == model.UserId && item.UserNameTo == model.UserNameTo).ToList();
+                    var list = dbContext.UserFriend.Where(item => item.UserId == model.UserId && item.UserNameTo == model.UserNameTo && item.Type==model.Type).ToList();
                     //已经存在
                     if (list.Count > 0)
                     {
                         jsonData.info.state = 0;
-                        jsonData.info.message = "已经是好友了";
+                        jsonData.info.message = "无需重复添加";
                     }
                     else
                     {
@@ -92,7 +92,7 @@ namespace GaiaProject.Controllers
                 else
                 {
                    var uf = dbContext.UserFriend.SingleOrDefault(
-                        item => item.UserId == user.Id && item.UserNameTo == model.UserNameTo);
+                        item => item.UserId == user.Id && item.UserNameTo == model.UserNameTo && item.Type == model.Type);
                     if (uf != null)
                     {
                         dbContext.UserFriend.Remove(uf);
@@ -111,9 +111,14 @@ namespace GaiaProject.Controllers
         {
             var user =  _userManager.GetUserAsync(HttpContext.User);
 
-            List<UserFriend> list = dbContext.UserFriend.Where(item => item.UserId == user.Result.Id).ToList();
+            IQueryable<UserFriend> list = this.dbContext.UserFriend.Where(item => item.UserId == user.Result.Id);
             //List<UserFriend> list = dbContext.UserFriend.FindAsync(item => item.UserId == user.Result.Id).ToList();
-            return View(list);
+            FriendInfo friendInfo=new FriendInfo()
+            {
+                WhiteList = list.Where(item => item.Type == 1).ToList(),
+                BlackList = list.Where(item=>item.Type==2).ToList(),
+            };
+            return View(friendInfo);
         }
 
         /// <summary>
@@ -125,5 +130,20 @@ namespace GaiaProject.Controllers
             List<ApplicationUser> list = this.dbContext.Users.Where(item=> (model.UserName == null || item.UserName==model.UserName) && (model.Email==null || item.Email == model.Email)).OrderByDescending(item=>item.groupid).Skip(50*(pageindex-1)).Take(50).ToList();
             return View(list);
         }
+
+        public class FriendInfo
+        {
+            /// <summary>
+            /// 黑名单
+            /// </summary>
+            public List<UserFriend> BlackList;
+            /// <summary>
+            /// 白名单
+            /// </summary>
+            public List<UserFriend> WhiteList;
+
+        }
+
+
     }
 }

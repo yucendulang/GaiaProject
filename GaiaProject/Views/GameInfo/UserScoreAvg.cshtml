@@ -20,8 +20,8 @@
                 <select class="btn dropdown-toggle form-control" id="orderType" name="orderType" style="width: 100px">
                     <option value="">--排序方式--</option>
                     <option value="1">局数</option>
-                    <option value="2">平均分</option>
-                    <option value="3">胜利场次</option>
+                    <option value="2">均分</option>
+                    <option value="3">胜场</option>
                     <option value="4">胜率</option>
                 </select>
 
@@ -39,7 +39,7 @@
         <td>玩家</td>
 
         <td>局数</td>
-        <td>胜利场次</td>
+        <td>胜场</td>
         <td>胜率</td>
         <td>最低分</td>
         <td>最高分</td>
@@ -62,7 +62,7 @@
                 @item.count
             </td>
             <td>@item.numberwin</td>
-            <td>@item.winprobability</td>
+            <td>@item.winprobability %</td>
             <td>@item.scoremin</td>
             <td>@item.scoremax</td>
 

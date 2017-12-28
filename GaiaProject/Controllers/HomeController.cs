@@ -11,6 +11,7 @@ using GaiaProject.Models;
 using GaiaCore.Gaia.User;
 using ManageTool;
 using GaiaDbContext.Models;
+using GaiaDbContext.Models.AccountViewModels;
 using GaiaProject.Data;
 using GaiaDbContext.Models.HomeViewModels;
 
@@ -114,6 +115,7 @@ namespace GaiaProject.Controllers
             {
                 username = this.RandomSortList<string>(username).ToArray();
             }
+            //判断用户不存在
             foreach (var item in username)
             {
                 var user=_userManager.FindByNameAsync(item);
@@ -122,7 +124,29 @@ namespace GaiaProject.Controllers
                     ModelState.AddModelError(string.Empty, item + "用户不存在");
                     return View(model);
                 }
+                
             }
+            //存在屏蔽玩家
+            // 以及是否存在屏蔽用户
+            //IQueryable<UserFriend> friendList = this.dbContext.UserFriend.AsQueryable();
+            int count = username.Length;
+            for (int i = 0; i < count-1 ; i++)
+            {
+                for (int j = i+1 ; j < count; j++)
+                {
+                    var j1 = j;
+                    if (this.dbContext.UserFriend.Any(
+                        friend => (friend.UserName == username[i] && friend.UserNameTo == username[j1] &&
+                                   friend.Type == 2) ||
+                                  (friend.UserNameTo == username[i] && friend.UserName == username[j1] &&
+                                   friend.Type == 2)))
+                    {
+                        ModelState.AddModelError(string.Empty, string.Format("{0}和{1}不能同时存在", username[i], username[j1]));
+                        return View(model);
+                    }
+                }
+            }
+
             //创建
             bool create = GameMgr.CreateNewGame(model.Name, username, out GaiaGame result,model.MapSelction, isTestGame: model.IsTestGame);
             if (create && !model.IsTestGame && username[0]!=username[1])//测试局以及自己对战的局暂时不保留数据

@@ -14,6 +14,13 @@
                 @Html.Partial("Partial_Html_UserCount", this)
 
                 <input type="text" class="form-control" placeholder="玩家ID" id="username" name="username">
+                <select class="btn dropdown-toggle form-control" id="orderType" name="orderType" style="width: 100px">
+                    <option value="">--排序方式--</option>
+                    <option value="1">局数</option>
+                    <option value="2">均分</option>
+                    <option value="3">胜场</option>
+                    <option value="4">胜率</option>
+                </select>
 
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="submit">搜索</button>

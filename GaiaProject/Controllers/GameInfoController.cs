@@ -250,7 +250,7 @@ namespace GaiaProject.Controllers
         /// <param name="usercount"></param>
         /// <param name="username"></param>
         /// <returns></returns>
-        private List<Models.Data.GameInfoController.StatisticsFaction> GetFactionStatistics(IQueryable<GameFactionModel> query,int? usercount, string username)
+        private List<Models.Data.GameInfoController.StatisticsFaction> GetFactionStatistics(IQueryable<GameFactionModel> query,int? usercount, string username,int? orderType=null)
         {
             //IQueryable<GameFactionModel> query;
             if (query == null)
@@ -283,7 +283,29 @@ namespace GaiaProject.Controllers
                     scoremaxuser = g.OrderBy(faction => faction.scoreTotal).ToList()[0].username,
                     scoreavg = g.Sum(faction => faction.scoreTotal) / g.Count(),
 
-                }).OrderByDescending(item => item.count);
+                });
+            if (orderType != null)
+            {
+                switch (orderType)
+                {
+                    case 1:
+                        list = list.OrderByDescending(item => item.count);
+                        break;
+                    case 2:
+                        list = list.OrderByDescending(item => item.scoreavg);
+                        break;
+                    case 3:
+                        list = list.OrderByDescending(item => item.numberwin);
+                        break;
+                    case 4:
+                        list = list.OrderByDescending(item => item.winprobability);
+                        break;
+                }
+            }
+            else
+            {
+                list = list.OrderByDescending(item => item.count);
+            }
             return list.ToList();
         }
         /// <summary>
@@ -291,9 +313,9 @@ namespace GaiaProject.Controllers
         /// </summary>
         /// <returns></returns>
 
-        public IActionResult FactionStatistics(int? usercount,string username)
+        public IActionResult FactionStatistics(int? usercount,string username,int? orderType)
         {
-            var list = this.GetFactionStatistics(null,usercount, username);
+            var list = this.GetFactionStatistics(null,usercount, username, orderType);
             return View(list);
         }
 

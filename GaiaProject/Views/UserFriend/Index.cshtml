@@ -2,7 +2,7 @@
 @using Microsoft.EntityFrameworkCore
 @using GaiaDbContext.Models.AccountViewModels
 
-@model List<UserFriend>
+@model GaiaProject.Controllers.UserFriendController.FriendInfo
 
 @{
     ViewBag.Title = "title";
@@ -10,37 +10,70 @@
 }
 
 
-<ul class="list-group">
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">好友</div>
+
+
+    <!-- List group -->
+    <ul class="list-group">
+
+        @foreach (var item in @Model.WhiteList)
+        {
+            <li class="list-group-item" id="@item.UserNameTo">
+                @{@item.UserNameTo}(@item.Remark)
+                  <a href="/GameInfo?username=@item.UserNameTo">游戏</a>
+                  <a href="/GameInfo/FactionList?username=@item.UserNameTo">种族</a>
+                  <button type="button" class="btn btn-default" onclick="delFriend('@item.UserNameTo',1)">删除好友</button>
+                  </li>
+        }
+                  </ul>
     
-    @foreach (var  item in @Model)
-    {
-        <li class="list-group-item" id="@item.UserNameTo">
-            @{@item.UserNameTo}(@item.Remark)
-              <a href="/GameInfo?username=@item.UserNameTo">游戏</a> 
-            <a  href="/GameInfo/FactionList?username=@item.UserNameTo">种族</a>
-                   <button type="button" class="btn btn-default" onclick="delFriend('@item.UserNameTo')">删除</button>
-                   </li>
-    }
-</ul>
+                  <div class="panel-body">
+
+                  </div>
+</div>
 
 
 
-<div class="row">
-    <div style="width: 700px">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="用户名" id="uf_username">
-            <input type="text" class="form-control" placeholder="备注" id="uf_remark">
+                  <div class="panel panel-default">
+                      <!-- Default panel contents -->
+                      <div class="panel-heading">不同场用户(优先级高于好友)</div>
 
-            <span class="input-group-btn">
-                <button class="btn btn-default" type="button" onclick="addFriend()">添加好友</button>
-            </span>
-        </div><!-- /input-group -->
-    </div><!-- /.col-lg-6 -->
-</div><!-- /.row -->
+
+                      <!-- List group -->
+                      <ul class="list-group">
+
+                          @foreach (var item in @Model.BlackList)
+                          {
+                              <li class="list-group-item" id="@item.UserNameTo">
+                                  @{@item.UserNameTo}(@item.Remark)
+                                    <a href="/GameInfo?username=@item.UserNameTo">游戏</a>
+                                    <a href="/GameInfo/FactionList?username=@item.UserNameTo">种族</a>
+                                    <button type="button" class="btn btn-default" onclick="delFriend('@item.UserNameTo',2)">解除屏蔽</button>
+                                    </li>
+                          }
+                                    </ul>
+    
+
+</div>
+
+
+                                    <div style="width: 800px">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="用户名" id="uf_username">
+                                            <input type="text" class="form-control" placeholder="备注" id="uf_remark">
+
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" type="button" onclick="addFriend(1)">添加好友</button>
+                                                <button class="btn btn-default" type="button" onclick="addFriend(2)">屏蔽用户</button>
+                                            </span>
+                                        </div>
+                                    </div>
 
 <script>
     //添加好友
-    function addFriend() {
+    function addFriend(Type) {
         var value = $("#uf_username").val();
         var remark = $("#uf_remark").val();
         if (value === "") {
@@ -50,7 +83,7 @@
         if (remark === "") {
             remark = value;
         }
-        $.post("/UserFriend/AddFriend", "UserNameTo=" + value + "&Remark=" + remark, function(data) {
+        $.post("/UserFriend/AddFriend", "UserNameTo=" + value + "&Remark=" + remark + "&Type=" + Type, function (data) {
             if (data.info.state === 200) {
                 //alert("添加成功");
                 window.location.reload();
@@ -61,12 +94,12 @@
     }
 
     ///删除
-    function delFriend(name) {
-        $.post("/UserFriend/DelFriend", "UserNameTo=" + name, function(data) {
+    function delFriend(name, Type) {
+        $.post("/UserFriend/DelFriend", "UserNameTo=" + name +"&Type="+Type, function (data) {
             if (data.info.state === 200) {
                 //alert("添加成功");
-                //window.location.reload();
-                $("#" + name).parent().remove();
+                window.location.reload();
+                //$("#" + name).parent().remove();
             } else {
                 alert(data.info.message);
             }

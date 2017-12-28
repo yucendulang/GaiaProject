@@ -23,5 +23,10 @@ namespace GaiaDbContext.Models.AccountViewModels
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLength(50)]
         public string Remark { get; set; }
+
+        /// <summary>
+        /// 好友类型，1=白名单，2=黑名单
+        /// </summary>
+        public int Type { get; set; }
     }
 }
