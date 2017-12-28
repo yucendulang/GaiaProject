@@ -51,6 +51,14 @@ namespace GaiaProject.Controllers
         {
             return View();
         }
+        /// <summary>
+        /// 种族图片
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult FactionImage()
+        {
+            return View();
+        }
 
         public IActionResult Contact()
         {
