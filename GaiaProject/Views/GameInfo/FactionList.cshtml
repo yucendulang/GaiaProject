@@ -1,6 +1,6 @@
 ﻿
 @using GaiaCore.Gaia
-@model List<GaiaDbContext.Models.HomeViewModels.GameFactionModel>
+@model GaiaProject.Controllers.GameInfoController.FactionListInfo
 
 @{
     ViewBag.Title = "种族";
@@ -17,7 +17,7 @@
 
 
                 @Html.DropDownList("FactionName", new SelectList(new List<Faction>() { new Terraner(null), new Lantida(null), new Hive(null), new HadschHalla(null), new BalTak(null), new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null), new MadAndroid(null), new Itar(null), new Nevla(null) }, "FactionName", "ChineseName"),
-"--种族--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList" })
+     "--种族--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList" })
 
 
                 <input type="hidden" value="@type" name="type" />
@@ -58,7 +58,7 @@
     </thead>
     <tbody>
 
-        @foreach (var item in Model)
+        @foreach (var item in Model.ListGameFaction)
         {
             <tr>
                 <td>
@@ -88,3 +88,8 @@
 
     </tbody>
 </table>
+
+
+
+
+@Html.Partial("Partial_Html_FactionStatistics", Model.ListStatisticsFaction)

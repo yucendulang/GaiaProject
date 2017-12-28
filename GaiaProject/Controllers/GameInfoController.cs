@@ -17,6 +17,19 @@ namespace GaiaProject.Controllers
 {
     public partial class GameInfoController : Controller
     {
+        public class FactionListInfo
+        {
+            /// <summary>
+            /// 种族信息
+            /// </summary>
+            public List<GameFactionModel> ListGameFaction;
+            /// <summary>
+            /// 种族统计
+            /// </summary>
+            public List<Models.Data.GameInfoController.StatisticsFaction> ListStatisticsFaction;
+
+        }
+
         private readonly ApplicationDbContext dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
 
@@ -26,12 +39,14 @@ namespace GaiaProject.Controllers
             this._userManager = userManager;
 
         }
+
+        #region 查看和删除游戏
         // GET: /<controller>/
         /// <summary>
         /// 进行的游戏
         /// </summary>
         /// <returns></returns>
-        public IActionResult Index(string username, int? isAdmin, GameInfoModel gameInfoModel, string joinname = null,int? scoremin=null,int pageindex=1)
+        public IActionResult Index(string username, int? isAdmin, GameInfoModel gameInfoModel, string joinname = null, int? scoremin = null, int pageindex = 1)
         {
 
             if (username == null)
@@ -114,7 +129,7 @@ namespace GaiaProject.Controllers
                 : list.Where(item => item.GameStatus == gameInfoModel.GameStatus);
 
             //pageindex = pageindex == 0 ? 1 : pageindex;
-            list = list.OrderByDescending(item=>item.starttime).Skip(30 * (pageindex - 1)).Take(30);
+            list = list.OrderByDescending(item => item.starttime).Skip(30 * (pageindex - 1)).Take(30);
 
             var result = list.ToList();
             return View(result);
@@ -146,6 +161,11 @@ namespace GaiaProject.Controllers
             }
             return new JsonResult(jsonData);
         }
+
+
+
+
+        #endregion
 
 
 
@@ -189,34 +209,66 @@ namespace GaiaProject.Controllers
             {
                 gameFactionModels = gameFactionModels.Where(item => item.UserCount == usercount);
             }
-            if (type != 1)
+            //前30条
+            if (type < 1)
             {
                 gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal).Take(30);
             }
-            //gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal);
-            return View(gameFactionModels.ToList());
-        }
-        /// <summary>
-        /// 种族统计
-        /// </summary>
-        /// <returns></returns>
-
-        public IActionResult FactionStatistics(int? usercount,string username)
-        {
-            IQueryable<GameFactionModel> query;
-            if (!string.IsNullOrEmpty(username))
-            {
-                query = this.dbContext.GameFactionModel.Where(item => item.username == username);
-            }
             else
             {
-                query = this.dbContext.GameFactionModel.AsQueryable();
+                gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal);
             }
-            usercount = usercount ?? 4;
-            if (usercount > 0)
+            //种族统计和平均分
+            List<Models.Data.GameInfoController.StatisticsFaction>
+                list = this.GetFactionStatistics(gameFactionModels,usercount, HttpContext.User.Identity.Name);
+            //全部的平均分
+            Models.Data.GameInfoController.StatisticsFaction allavg = gameFactionModels.GroupBy(item => item.username).Select(
+                g => new Models.Data.GameInfoController.StatisticsFaction()
+                {
+                    ChineseName = "全部",
+                    count = g.Count(),
+                    numberwin = g.Count(faction => faction.rank == 1),
+                    winprobability = g.Count(faction => faction.rank == 1) * 100 / (g.Count()),
+                    scoremin = g.Min(faction => faction.scoreTotal),
+                    scoremax = g.Max(faction => faction.scoreTotal),
+                    scoremaxuser = g.OrderBy(faction => faction.scoreTotal).ToList()[0].username,
+                    scoreavg = g.Sum(faction => faction.scoreTotal) / g.Count(),
+
+                })?.ToList()[0];
+            list.Add(allavg);
+
+            //赋值model
+            FactionListInfo factionListInfo = new FactionListInfo();
+            factionListInfo.ListGameFaction = gameFactionModels.ToList();
+            factionListInfo.ListStatisticsFaction = list;
+            //gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal);
+            return View(factionListInfo);
+        }
+        /// <summary>
+        /// 获取种族统计
+        /// </summary>
+        /// <param name="usercount"></param>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        private List<Models.Data.GameInfoController.StatisticsFaction> GetFactionStatistics(IQueryable<GameFactionModel> query,int? usercount, string username)
+        {
+            //IQueryable<GameFactionModel> query;
+            if (query == null)
             {
-                //query = query.Where(item => this.dbContext.GameInfoModel.Where(game => game.GameStatus == 8 && game.UserCount == usercount).Select(game=>game.Id).Contains(item.gameinfo_id) );
-                query = query.Where(item => item.UserCount == usercount);
+                if (!string.IsNullOrEmpty(username))
+                {
+                    query = this.dbContext.GameFactionModel.Where(item => item.username == username);
+                }
+                else
+                {
+                    query = this.dbContext.GameFactionModel.AsQueryable();
+                }
+                usercount = usercount ?? 4;
+                if (usercount > 0)
+                {
+                    //query = query.Where(item => this.dbContext.GameInfoModel.Where(game => game.GameStatus == 8 && game.UserCount == usercount).Select(game=>game.Id).Contains(item.gameinfo_id) );
+                    query = query.Where(item => item.UserCount == usercount);
+                }
             }
 
             var list = query.GroupBy(item => item.FactionChineseName).Select(
@@ -231,10 +283,18 @@ namespace GaiaProject.Controllers
                     scoremaxuser = g.OrderBy(faction => faction.scoreTotal).ToList()[0].username,
                     scoreavg = g.Sum(faction => faction.scoreTotal) / g.Count(),
 
-                }).OrderByDescending(item=>item.count);
+                }).OrderByDescending(item => item.count);
+            return list.ToList();
+        }
+        /// <summary>
+        /// 种族统计
+        /// </summary>
+        /// <returns></returns>
 
-
-            return View(list.ToList());
+        public IActionResult FactionStatistics(int? usercount,string username)
+        {
+            var list = this.GetFactionStatistics(null,usercount, username);
+            return View(list);
         }
 
         /// <summary>
@@ -298,7 +358,10 @@ namespace GaiaProject.Controllers
             return View(list.ToList());
         }
 
-        public bool FinishGame(GaiaDbContext.Models.HomeViewModels.GameInfoModel gameInfoModel,GaiaGame result)
+        #region 操作内存和数据库游戏
+
+
+        public bool FinishGame(GaiaDbContext.Models.HomeViewModels.GameInfoModel gameInfoModel, GaiaGame result)
         {
             //实际上已经结束，但是数据库没有更新的
             if (result.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
@@ -325,7 +388,7 @@ namespace GaiaProject.Controllers
                 var result = keyValuePair.Value;
 
                 GaiaDbContext.Models.HomeViewModels.GameInfoModel gameInfoModel;
-                var listG = this.dbContext.GameInfoModel.Where(item => item.name == keyValuePair.Key).OrderByDescending(item=>item.starttime).ToList();
+                var listG = this.dbContext.GameInfoModel.Where(item => item.name == keyValuePair.Key).OrderByDescending(item => item.starttime).ToList();
                 if (listG.Count > 0)
                 {
                     gameInfoModel = listG[0];
@@ -433,7 +496,7 @@ namespace GaiaProject.Controllers
             return UpdateFromDb(item => item.GameStatus == 8);
         }
 
-        public string UpdateFromDb(Func<GameInfoModel,bool> func)
+        public string UpdateFromDb(Func<GameInfoModel, bool> func)
         {
             List<GameInfoModel> list = this.dbContext.GameInfoModel.Where(func).ToList();//item => item.GameStatus != 8
             foreach (GameInfoModel gameInfoModel in list)
@@ -477,7 +540,7 @@ namespace GaiaProject.Controllers
         /// </summary>
         /// <returns></returns>
 
-        public  string DeleteGameInvalid()
+        public string DeleteGameInvalid()
         {
             List<GameInfoModel> list = this.dbContext.GameInfoModel.Where(item => item.GameStatus != 8).ToList();//item => item.GameStatus != 8
             foreach (GameInfoModel gameInfoModel in list)
@@ -495,5 +558,8 @@ namespace GaiaProject.Controllers
             }
             return "success";
         }
+
+        #endregion
+
     }
 }
