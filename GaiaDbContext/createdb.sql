@@ -1,17 +1,17 @@
 /*
 Navicat SQL Server Data Transfer
 
-Source Server         : 192.168.31.2MSSQL
-Source Server Version : 130000
-Source Host           : 192.168.31.2\SQLEXPRESS:1433
-Source Database       : GaiaProjectSQL
+Source Server         : gaiaproject2.database.chinacloudapi.cn
+Source Server Version : 120000
+Source Host           : gaiaproject2.database.chinacloudapi.cn:1433
+Source Database       : gaiaproject2
 Source Schema         : dbo
 
 Target Server Type    : SQL Server
-Target Server Version : 130000
+Target Server Version : 120000
 File Encoding         : 65001
 
-Date: 2017-12-15 16:06:27
+Date: 2017-12-28 14:03:28
 */
 
 
@@ -22,11 +22,16 @@ DROP TABLE [dbo].[__EFMigrationsHistory]
 GO
 CREATE TABLE [dbo].[__EFMigrationsHistory] (
 [MigrationId] nvarchar(150) NOT NULL ,
-[ProductVersion] nvarchar(32) NOT NULL 
+[ProductVersion] nvarchar(32) NOT NULL ,
+PRIMARY KEY ([MigrationId])
 )
 
 
 GO
+
+-- ----------------------------
+-- Indexes structure for table __EFMigrationsHistory
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for AspNetRoleClaims
@@ -37,10 +42,18 @@ CREATE TABLE [dbo].[AspNetRoleClaims] (
 [Id] int NOT NULL IDENTITY(1,1) ,
 [ClaimType] nvarchar(MAX) NULL ,
 [ClaimValue] nvarchar(MAX) NULL ,
-[RoleId] nvarchar(450) NOT NULL 
+[RoleId] nvarchar(450) NOT NULL ,
+PRIMARY KEY ([Id])
 )
 
 
+GO
+
+-- ----------------------------
+-- Indexes structure for table AspNetRoleClaims
+-- ----------------------------
+CREATE INDEX [IX_AspNetRoleClaims_RoleId] ON [dbo].[AspNetRoleClaims]
+([RoleId] ASC) 
 GO
 
 -- ----------------------------
@@ -166,13 +179,19 @@ CREATE TABLE [dbo].[GameFactionModel] (
 [scoreTotal] int NOT NULL ,
 [userid] nvarchar(20) NULL ,
 [username] nvarchar(20) NULL ,
-[gameinfo_name] varchar(20) NULL 
+[gameinfo_name] nvarchar(20) NULL ,
+[UserCount] int NULL ,
+[scoreLuo] int NULL ,
+[scoreDifference] int NULL ,
+PRIMARY KEY ([Id])
 )
 
 
 GO
-DBCC CHECKIDENT(N'[dbo].[GameFactionModel]', RESEED, 55)
-GO
+
+-- ----------------------------
+-- Indexes structure for table GameFactionModel
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for GameInfoModel
@@ -192,20 +211,25 @@ CREATE TABLE [dbo].[GameInfoModel] (
 [loginfo] varchar(MAX) NULL ,
 [name] nvarchar(20) NULL ,
 [version] int NOT NULL ,
-[endtime] smalldatetime NULL DEFAULT (getdate()) ,
+[endtime] smalldatetime NULL ,
 [scoreFaction] nvarchar(100) NULL ,
 [IsTestGame] int NULL ,
 [userlist] varchar(50) NULL ,
 [MapSelction] varchar(20) NULL ,
 [starttime] smalldatetime NULL ,
 [username] varchar(20) NULL ,
-[round] int NULL DEFAULT ((0)) 
+[round] int NULL DEFAULT ((0)) ,
+[IsRandomOrder] bit NULL DEFAULT ((1)) ,
+[IsAllowLook] bit NULL DEFAULT ((1)) ,
+PRIMARY KEY ([Id])
 )
 
 
 GO
-DBCC CHECKIDENT(N'[dbo].[GameInfoModel]', RESEED, 79)
-GO
+
+-- ----------------------------
+-- Indexes structure for table GameInfoModel
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for UserFriend
@@ -218,53 +242,9 @@ CREATE TABLE [dbo].[UserFriend] (
 [UserId] nvarchar(50) NULL ,
 [UserIdTo] nvarchar(50) NULL ,
 [UserName] nvarchar(50) NULL ,
-[UserNameTo] nvarchar(50) NULL 
+[UserNameTo] nvarchar(50) NULL ,
+[Type] int NULL DEFAULT ((1)) 
 )
 
 
-GO
-DBCC CHECKIDENT(N'[dbo].[UserFriend]', RESEED, 6)
-GO
-
--- ----------------------------
--- Indexes structure for table __EFMigrationsHistory
--- ----------------------------
-
--- ----------------------------
--- Primary Key structure for table __EFMigrationsHistory
--- ----------------------------
-ALTER TABLE [dbo].[__EFMigrationsHistory] ADD PRIMARY KEY ([MigrationId])
-GO
-
--- ----------------------------
--- Indexes structure for table AspNetRoleClaims
--- ----------------------------
-CREATE INDEX [IX_AspNetRoleClaims_RoleId] ON [dbo].[AspNetRoleClaims]
-([RoleId] ASC) 
-GO
-
--- ----------------------------
--- Primary Key structure for table AspNetRoleClaims
--- ----------------------------
-ALTER TABLE [dbo].[AspNetRoleClaims] ADD PRIMARY KEY ([Id])
-GO
-
--- ----------------------------
--- Indexes structure for table GameFactionModel
--- ----------------------------
-
--- ----------------------------
--- Primary Key structure for table GameFactionModel
--- ----------------------------
-ALTER TABLE [dbo].[GameFactionModel] ADD PRIMARY KEY ([Id])
-GO
-
--- ----------------------------
--- Indexes structure for table GameInfoModel
--- ----------------------------
-
--- ----------------------------
--- Primary Key structure for table GameInfoModel
--- ----------------------------
-ALTER TABLE [dbo].[GameInfoModel] ADD PRIMARY KEY ([Id])
 GO
