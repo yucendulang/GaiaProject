@@ -231,7 +231,7 @@ namespace GaiaProject.Controllers
                     winprobability = g.Count(faction => faction.rank == 1) * 100 / (g.Count()),
                     scoremin = g.Min(faction => faction.scoreTotal),
                     scoremax = g.Max(faction => faction.scoreTotal),
-                    scoremaxuser = g.OrderBy(faction => faction.scoreTotal).ToList()[0].username,
+                    scoremaxuser = g.OrderByDescending(faction => faction.scoreTotal).ToList()[0].username,
                     scoreavg = g.Sum(faction => faction.scoreTotal) / g.Count(),
 
                 })?.ToList()[0];
@@ -280,7 +280,7 @@ namespace GaiaProject.Controllers
                     winprobability = g.Count(faction => faction.rank == 1) * 100 / (g.Count()),
                     scoremin = g.Min(faction => faction.scoreTotal),
                     scoremax = g.Max(faction => faction.scoreTotal),
-                    scoremaxuser = g.OrderBy(faction => faction.scoreTotal).ToList()[0].username,
+                    scoremaxuser = g.OrderByDescending(faction => faction.scoreTotal).ToList()[0].username,
                     scoreavg = g.Sum(faction => faction.scoreTotal) / g.Count(),
 
                 });
@@ -348,7 +348,7 @@ namespace GaiaProject.Controllers
                     winprobability = g.Count(faction => faction.rank == 1) * 100 / (g.Count()),
                     scoremin = g.Min(faction => faction.scoreTotal),
                     scoremax = g.Max(faction => faction.scoreTotal),
-                    scoremaxuser = g.OrderBy(faction => faction.scoreTotal).ToList()[0].username,
+                    scoremaxuser = g.OrderByDescending(faction => faction.scoreTotal).ToList()[0].username,
                     scoreavg = g.Sum(faction => faction.scoreTotal) / g.Count(),
 
                 });

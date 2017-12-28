@@ -900,12 +900,15 @@ function renderColorCycle(ctx) {
 
     var base = 0;
     //玩家回合
-    if (userInfo.isRound) {
-        base = cycle.indexOf(userInfo.mapcolor);
-        if (base < 0) {
-            base = 0;
-        }
+    if (userInfo.colorIndex !== undefined) {
+        base = userInfo.colorIndex;   
     }
+//    if (userInfo.isRound) {
+//        base = cycle.indexOf(userInfo.mapcolor);
+//        if (base < 0) {
+//            base = 0;
+//        }
+//    }
 
     for (var i = 0; i < 7; ++i) {
         var terrain = cycle[(base + i) % 7];

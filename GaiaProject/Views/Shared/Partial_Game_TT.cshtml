@@ -12,6 +12,16 @@
             if (myFaction != null)
             {
                 mySttList = myFaction.GameTileList.Where(item => item.typename == "stt").Select(item=>item.name).ToList();
+
+                <script>
+                    userInfo = {
+                        buildcolor: '@myFaction.ColorCode',
+                        mapcolor: '@myFaction.ColorMap',
+                        factionName: '@myFaction.FactionName',
+                        stage: -1,
+                        colorIndex:@myFaction.colorIndex
+                    };
+                </script>
             }
         }
 
