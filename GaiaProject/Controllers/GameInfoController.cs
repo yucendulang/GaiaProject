@@ -233,6 +233,7 @@ namespace GaiaProject.Controllers
                     scoremax = g.Max(faction => faction.scoreTotal),
                     scoremaxuser = g.OrderByDescending(faction => faction.scoreTotal).ToList()[0].username,
                     scoreavg = g.Sum(faction => faction.scoreTotal) / g.Count(),
+                    OccurrenceRate = 100,
 
                 })?.ToList()[0];
             list.Add(allavg);
@@ -270,6 +271,20 @@ namespace GaiaProject.Controllers
                     query = query.Where(item => item.UserCount == usercount);
                 }
             }
+            //总场次
+            int total = query.Count();
+            //如果不是玩家的出场率
+            if (string.IsNullOrEmpty(username))
+            {
+                if (usercount > 0)
+                {
+                    total = total / (int)usercount;
+                }
+                else
+                {
+                    total = this.dbContext.GameInfoModel.Count(item => item.GameStatus == 8);
+                }
+            }
 
             var list = query.GroupBy(item => item.FactionChineseName).Select(
                 g => new Models.Data.GameInfoController.StatisticsFaction()
@@ -282,7 +297,7 @@ namespace GaiaProject.Controllers
                     scoremax = g.Max(faction => faction.scoreTotal),
                     scoremaxuser = g.OrderByDescending(faction => faction.scoreTotal).ToList()[0].username,
                     scoreavg = g.Sum(faction => faction.scoreTotal) / g.Count(),
-
+                    OccurrenceRate = g.Count()*100 / total,
                 });
             if (orderType != null)
             {

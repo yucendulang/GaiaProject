@@ -8,9 +8,20 @@
 {
     <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">欢迎 @UserManager.GetUserName(User)!</a>
+
+
+            <li class="dropdown">
+                <a href="/Manage/Index" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">欢迎 @UserManager.GetUserName(User)!<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="/Manage/ChangePassword">修改密码</a>
+
+                        <a href="/Manage/ChangeInfo">修改信息</a>
+                        <a href="/UserFriend">查看好友</a>
+                    </li>
+                </ul>
             </li>
+
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">退出</button>
             </li>
