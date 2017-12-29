@@ -38,6 +38,11 @@ namespace GaiaProject.Models.Data
             /// </summary>
             public int numberwin { get; set; }
 
+            /// <summary>
+            /// 出场率
+            /// </summary>
+            public int OccurrenceRate { get; set; }
+
         }
 
     }
