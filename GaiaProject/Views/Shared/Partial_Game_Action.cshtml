@@ -7,46 +7,47 @@
     <div class="panel-body" style="width: 650px">
 
 
+@*        <img src="/images/AC2-4c.png" alt="联邦需要的图片" id="alt_img">*@
 
         <div class="row">
 
 
-                <div class="col-md-4">
-                    <div class="input-group">
-                        <select class="btn dropdown-toggle form-control" id="xsnengliang" name="xsnengliang" syntax="burn {0}"  style="width: 100px">
-                            <option value="">牺牲能量</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                        </select>
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#xsnengliang">前</button>
-                            <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#xsnengliang">后</button>
-                        </span>
-                    </div>
+            <div class="col-md-4">
+                <div class="input-group">
+                    <select class="btn dropdown-toggle form-control" id="xsnengliang" name="xsnengliang" syntax="burn {0}" style="width: 100px">
+                        <option value="">牺牲能量</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                    </select>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#xsnengliang">前</button>
+                        <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#xsnengliang">后</button>
+                    </span>
                 </div>
-                <div class="col-md-8">
-                    <div class="input-group">
-                        <select class="btn dropdown-toggle form-control" id="ksactionnumber" name="ksactionnumber" style="width: 100px">
-                            <option value="">执行次数</option>
-                            <option value="1" selected="selected">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                        </select>
-                        @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActList, "code", "name"), "--快速行动--", new {@class = "btn dropdown-toggle form-control", @id = "ksactionall", @syntax = "convert {0}",@style= "width: 200px" })
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#ksactionall" actionnumber="#ksactionnumber">前</button>
-                            <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#ksactionall" actionnumber="#ksactionnumber">后</button>
-                        </span>
+            </div>
+            <div class="col-md-8">
+                <div class="input-group">
+                    <select class="btn dropdown-toggle form-control" id="ksactionnumber" name="ksactionnumber" style="width: 100px">
+                        <option value="">执行次数</option>
+                        <option value="1" selected="selected">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                    </select>
+                    @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActList, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control", @id = "ksactionall", @syntax = "convert {0}", @style = "width: 200px" })
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#ksactionall" actionnumber="#ksactionnumber">前</button>
+                        <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#ksactionall" actionnumber="#ksactionnumber">后</button>
+                    </span>
 
-                    </div>
                 </div>
+            </div>
         </div>
 
 
@@ -54,7 +55,7 @@
         <div class="row" style="margin-top: 10px;margin-bottom: 10px">
             <div class="btn-group btn-default col-md-12" role="group" aria-label="Large button group" id="">
                 <button type="button" class="btn btn-default" id="createZjAl">选择联邦位置</button>
-                
+
 
                 <button type="button" id="planetMine" class="btn btn-default" style="margin-left: 10px" onclick=''>放置黑星</button>
                 @*$("#syntax").val($("#syntax").val()+".planet F5")*@
@@ -65,7 +66,8 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="input-group">
-                    <select class="btn dropdown-toggle form-control selectchange" id="updatekjaction" name="enumList" syntax="advance "><option value="">--请选择升级科技--</option>
+                    <select class="btn dropdown-toggle form-control selectchange" id="updatekjaction" name="enumList" syntax="advance ">
+                        <option value="">--请选择升级科技--</option>
                         <option value="tf">地形改造</option>
                         <option value="ship">航行</option>
                         <option value="ai">人工智能</option>

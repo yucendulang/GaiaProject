@@ -251,7 +251,7 @@ if (userInfo.isRound) {
 
 
 //弹出确认对话框
-function openQueryWindow(type, title,tishi) {
+function openQueryWindow(type, title,tishi,func) {
     //actType = "action {0}".format(actType);
     //actType = type;
     $("#syntax").val(type);
@@ -267,13 +267,26 @@ function openQueryWindow(type, title,tishi) {
     }
 
     $("#querycfmModel").modal();
+
+
+    //手动输入
+    $("#queryHandinput").click(function() {
+        $("#syntax").focus();
+        if (func != undefined) {
+            func();
+        }
+    });
+    //确认对话框
+    $("#querycfmModelYes").click(function () {
+        //var value = $(this).attr("act");
+        $("#querycfmModel").modal('hide');
+        submitData();
+        if (func != undefined) {
+            func();
+        }
+    });
 }
-//确认对话框
-$("#querycfmModelYes").click(function () {
-    //var value = $(this).attr("act");
-    $("#querycfmModel").modal('hide');
-    submitData();
-});
+
 
 
 //提交命令
