@@ -168,27 +168,35 @@ namespace GaiaProject.Controllers
             MatchInfoModel matchInfoModel = this.dbContext.MatchInfoModel.SingleOrDefault(item => item.Id == id);
             if (matchInfoModel != null)
             {
-                MatchJoinModel matchJoinModel =
-                    this.dbContext.MatchJoinModel.SingleOrDefault(item => item.matchInfo_id == matchInfoModel.Id &&
-                                                                          item.username == HttpContext.User.Identity
-                                                                              .Name);
-                if (matchJoinModel != null)
+                if (matchInfoModel.RegistrationEndTime < DateTime.Now)
                 {
-                    //删除
-                    this.dbContext.MatchJoinModel.Remove(matchJoinModel);
-                    //报名人数-1
-                    matchInfoModel.NumberNow--;
-                    this.dbContext.MatchInfoModel.Update(matchInfoModel);
-
-                    this.dbContext.SaveChanges();
-
-                    jsonData.info.state = 200;
+                    jsonData.info.state = 0;
+                    jsonData.info.message = "报名时间截止";
                 }
                 else
                 {
-                    jsonData.info.state = 0;
-                    jsonData.info.message = "没有报名";
+                    MatchJoinModel matchJoinModel =
+                        this.dbContext.MatchJoinModel.SingleOrDefault(item => item.matchInfo_id == matchInfoModel.Id &&
+                                                                              item.username == HttpContext.User.Identity
+                                                                                  .Name);
+                    if (matchJoinModel != null)
+                    {
+                        //删除
+                        this.dbContext.MatchJoinModel.Remove(matchJoinModel);
+                        //报名人数-1
+                        matchInfoModel.NumberNow--;
+                        this.dbContext.MatchInfoModel.Update(matchInfoModel);
 
+                        this.dbContext.SaveChanges();
+
+                        jsonData.info.state = 200;
+                    }
+                    else
+                    {
+                        jsonData.info.state = 0;
+                        jsonData.info.message = "没有报名";
+
+                    }
                 }
             }
 
