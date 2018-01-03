@@ -80,6 +80,9 @@ function createMap(data) {
             //console.log(list);
             var xy = getEventPosition(e);
             var clickObj = getClickObj(xy.x, xy.y);
+            if (clickObj === undefined) {
+                return;
+            }
             console.log(clickObj);
             if (clickObj.typename !== undefined) {
                 if (!userInfo.isRound) {
@@ -231,6 +234,9 @@ function createMap(data) {
                 //console.log(list);
                 var xy = getEventPosition(e);
                 var clickObj = getClickObj(xy.x, xy.y);
+                if (clickObj === undefined) {
+                    return;
+                }
                 //                if (userInfo.factionName === "Lantida") {
                 if (userInfo.factionName !== "Lantida" && clickObj.typename != undefined && clickObj.typename !=="gaizao") {
                     alert("不能选择已经有建筑的地点");
@@ -319,6 +325,9 @@ function createMap(data) {
             function clickPos(e) {
                 var xy = getEventPosition(e);
                 var clickObj = getClickObj(xy.x, xy.y);
+                if (clickObj === undefined) {
+                    return;
+                }
                 //if (data.type === "al1" && clickObj.typename !== undefined) {
                 //    alert("不能选择已经有建筑的地点");
                 //}
@@ -329,7 +338,17 @@ function createMap(data) {
                     
                 }
                 else {
-                    //
+                    //判断点位是否已经存在
+                    var flag = false;
+                    $("#alPosList button").each(function() {
+                        if ($(this).text() === clickObj.position) {
+                            flag = true;
+                            return true;
+                        }
+                    });
+                    if (flag) {
+                        return;
+                    }
                     //画点标示出来
                     DrawStar(context, clickObj.column, clickObj.row);
 

@@ -249,7 +249,7 @@ if (userInfo.isRound) {
 }
 
 
-
+var windowFunc;
 //弹出确认对话框
 function openQueryWindow(type, title,tishi,func) {
     //actType = "action {0}".format(actType);
@@ -267,26 +267,24 @@ function openQueryWindow(type, title,tishi,func) {
     }
 
     $("#querycfmModel").modal();
-
-
-    //手动输入
-    $("#queryHandinput").click(function() {
-        $("#syntax").focus();
-        if (func != undefined) {
-            func();
-        }
-    });
-    //确认对话框
-    $("#querycfmModelYes").click(function () {
-        //var value = $(this).attr("act");
-        $("#querycfmModel").modal('hide');
-        submitData();
-        if (func != undefined) {
-            func();
-        }
-    });
+    windowFunc = func;
 }
-
+//手动输入
+$("#queryHandinput").click(function () {
+    $("#syntax").focus();
+    if (windowFunc != undefined) {
+        windowFunc();
+    }
+});
+//确认对话框
+$("#querycfmModelYes").click(function () {
+    //var value = $(this).attr("act");
+    $("#querycfmModel").modal('hide');
+    submitData();
+    if (windowFunc != undefined) {
+        windowFunc();
+    }
+});
 
 
 //提交命令
