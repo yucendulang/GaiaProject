@@ -47,5 +47,15 @@ namespace GaiaProject.Data
         /// </summary>
         public DbSet<GameFactionModel> GameFactionModel { get; set; }
 
+        /// <summary>
+        /// 比赛信息
+        /// </summary>
+        public DbSet<MatchInfoModel> MatchInfoModel { get; set; }
+
+        /// <summary>
+        /// 参加比赛
+        /// </summary>
+        public DbSet<MatchJoinModel> MatchJoinModel { get; set; }
+
     }
 }

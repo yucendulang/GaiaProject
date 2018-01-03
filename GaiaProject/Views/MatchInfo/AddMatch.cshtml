@@ -1,0 +1,66 @@
+﻿@model GaiaDbContext.Models.HomeViewModels.MatchInfoModel
+
+@{
+    ViewData["Title"] = "添加比赛";
+}
+
+<h2>@ViewData["Title"].</h2>
+
+<form asp-controller="MatchInfo" asp-action="AddMatch" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Name" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Contents" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Contents" class="form-control" />
+            <span asp-validation-for="Contents" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="RegistrationEndTime" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="RegistrationEndTime" class="form-control" />
+            <span asp-validation-for="RegistrationEndTime" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="StartTime" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="StartTime" class="form-control" />
+            <span asp-validation-for="StartTime" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="EndTime" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="EndTime" class="form-control" />
+            <span asp-validation-for="EndTime" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="NumberMax" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="NumberMax" class="form-control" />
+            <span asp-validation-for="NumberMax" class="text-danger"></span>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-default">确定</button>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
