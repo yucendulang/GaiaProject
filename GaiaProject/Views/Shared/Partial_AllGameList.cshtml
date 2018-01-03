@@ -20,7 +20,7 @@
             <td>等待玩家</td>
             <td>分数</td>
             <td>版本</td>
-            <td>回合玩家</td>
+@*            <td>回合玩家</td>*@
 
         </tr>
     </thead>
@@ -52,7 +52,7 @@
                     <td> @string.Join(",", @item.Value.FactionList.Select(x => x.Score)) </td>
                 }
                 <td>V@(item.Value.version)</td>
-                <td>@string.Join("|", item.Value.FactionList.Except(item.Value.FactionNextTurnList).Select(fac=> fac.UserName))</td>
+@*                <td>@string.Join("|", item.Value.FactionList.Except(item.Value.FactionNextTurnList).Select(fac=> fac.UserName))</td>*@
             </tr>
         }
     </tbody>

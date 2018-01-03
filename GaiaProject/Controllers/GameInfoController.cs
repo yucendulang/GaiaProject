@@ -213,7 +213,7 @@ namespace GaiaProject.Controllers
             {
                 gameFactionModels = gameFactionModels.Where(item => item.UserCount == usercount);
             }
-            List<Models.Data.GameInfoController.StatisticsFaction> list;
+            List<Models.Data.GameInfoController.StatisticsFaction> list= null;
             //前30条
             if (type != 1)
             {
@@ -226,36 +226,35 @@ namespace GaiaProject.Controllers
             //不是高分统计
             if (type != 2)
             {
-                //种族统计和平均分
-                list = this.GetFactionStatistics(gameFactionModels, usercount, HttpContext.User.Identity.Name);
-                //全部的平均分
-                Models.Data.GameInfoController.StatisticsFaction allavg = gameFactionModels
-                    .GroupBy(item => item.username).Select(
-                        g => new Models.Data.GameInfoController.StatisticsFaction()
-                        {
-                            ChineseName = "全部",
-                            count = g.Count(),
-                            numberwin = g.Count(faction => faction.rank == 1),
-                            winprobability = g.Count(faction => faction.rank == 1) * 100 / (g.Count()),
-                            scoremin = g.Min(faction => faction.scoreTotal),
-                            scoremax = g.Max(faction => faction.scoreTotal),
-                            scoremaxuser = g.OrderByDescending(faction => faction.scoreTotal).ToList()[0].username,
-                            scoreavg = g.Sum(faction => faction.scoreTotal) / g.Count(),
-                            OccurrenceRate = 100,
+                if (gameFactionModels.Any())
+                {
+                    //种族统计和平均分
+                    list = this.GetFactionStatistics(gameFactionModels, usercount, HttpContext.User.Identity.Name);
+                    //全部的平均分
+                    Models.Data.GameInfoController.StatisticsFaction allavg = gameFactionModels
+                        .GroupBy(item => item.username).Select(
+                            g => new Models.Data.GameInfoController.StatisticsFaction()
+                            {
+                                ChineseName = "全部",
+                                count = g.Count(),
+                                numberwin = g.Count(faction => faction.rank == 1),
+                                winprobability = g.Count(faction => faction.rank == 1) * 100 / (g.Count()),
+                                scoremin = g.Min(faction => faction.scoreTotal),
+                                scoremax = g.Max(faction => faction.scoreTotal),
+                                scoremaxuser = g.OrderByDescending(faction => faction.scoreTotal).ToList()[0].username,
+                                scoreavg = g.Sum(faction => faction.scoreTotal) / g.Count(),
+                                OccurrenceRate = 100,
 
-                        })?.ToList()[0];
-                list.Add(allavg);
-            }
-            else
-            {
-                list = null;
-            }
+                            })?.ToList()[0];
+                    list.Add(allavg);
+                }
 
+            }
 
             //赋值model
             FactionListInfo factionListInfo = new FactionListInfo();
             factionListInfo.ListGameFaction = gameFactionModels.ToList();
-            factionListInfo.ListStatisticsFaction = list;
+            factionListInfo.ListStatisticsFaction = list??new List<Models.Data.GameInfoController.StatisticsFaction>();
             //gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal);
             return View(factionListInfo);
         }
