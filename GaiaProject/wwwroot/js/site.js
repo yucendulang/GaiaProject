@@ -66,20 +66,23 @@ function getKjTile() {
 function createMap(data) {
     //id, type, syntax,func
     var c = document.getElementById(data.id);
-    var contentx = c.getContext("2d");
+    var context = c.getContext("2d");
     console.log("js start");
-    DrawMap(contentx);
+    DrawMap(context);
     //显示
     if (data.showid !== undefined) {
         $(data.showid).show();
     }
-
+    //点击建造
     if (data.type === undefined || data.type === "build") {
         c.addEventListener('click', function (e) {
 
             //console.log(list);
             var xy = getEventPosition(e);
             var clickObj = getClickObj(xy.x, xy.y);
+            if (clickObj === undefined) {
+                return;
+            }
             console.log(clickObj);
             if (clickObj.typename !== undefined) {
                 if (!userInfo.isRound) {
@@ -223,6 +226,7 @@ function createMap(data) {
             //alert(getEventPosition(e).x+"/"+getEventPosition(e).y);
         }, false);
     }
+    //点击行动，魔力行动，rbt行动，1铲3航行
     else if (data.type === "act") {
         if (isFirstAct === true){//
             isFirstAct = false;
@@ -230,30 +234,34 @@ function createMap(data) {
                 //console.log(list);
                 var xy = getEventPosition(e);
                 var clickObj = getClickObj(xy.x, xy.y);
+                if (clickObj === undefined) {
+                    return;
+                }
                 //                if (userInfo.factionName === "Lantida") {
                 if (userInfo.factionName !== "Lantida" && clickObj.typename != undefined && clickObj.typename !=="gaizao") {
                     alert("不能选择已经有建筑的地点");
                 }
-//                else if (clickObj.mapcolor === "#D19FE8") {
-//                    alert("不能选择紫星");
-//                }
                 else {
+                    function closeWindow() {
+                        $('#myModalCanves').modal('hide');
+                    }
                     //黑星
                     if (data.action === "planet") {
                         $("#syntax").val($("#syntax").val() +".planet {0}".format(clickObj.position));
                     } else {
                         //盖亚改造单元
                         if (clickObj.typename === "gaizao") {
-                            $("#syntax").val($("#syntax").val().format(".gaia " + clickObj.position));
-                        } else {
+                            openQueryWindow($("#syntax").val().format(".gaia " + clickObj.position), "确认进行盖亚?", null, closeWindow);
+                        }
+                        else {
                             var buildcode = $("#syntax").val().format(".build " + clickObj.position);
                             //自己颜色星球直接建造
                             if (clickObj.mapcolor === userInfo.mapcolor) {
-                                openQueryWindow(buildcode, "确认在原生地进行建造?");
+                                openQueryWindow(buildcode, "确认在原生地进行建造?", null, closeWindow);
                             } else {
                                 //如果是绿星
                                 if (clickObj.mapcolor === "#80F080") {
-                                    openQueryWindow(buildcode, "确认在盖亚星球进行建造?");
+                                    openQueryWindow(buildcode, "确认在盖亚星球进行建造?", null, closeWindow);
                                 } else {
                                     //非自己颜色的星球需要计算转换率
                                     var cindex = cycle.indexOf(clickObj.mapcolor);
@@ -261,21 +269,22 @@ function createMap(data) {
                                     if (cindex > 3) {
                                         cindex = 7 - cindex;
                                     }
-                                    openQueryWindow(buildcode, "确认进行建造?<br/>地形转化率为" + cindex);
+                                    openQueryWindow(buildcode, "确认进行建造?<br/>地形转化率为" + cindex, null, closeWindow);
 
                                 }  
                             }
                             //$("#syntax").val();
                         }
                     }
-
-                    $('#myModalCanves').modal('hide');
+                    //隐藏
+                   // $('#myModalCanves').modal('hide');
                 }
 
             }, false);
         }
 
     }
+    //建立联邦
     else if (data.type === "al1" || data.type === "al2" || data.type==="pos") {
         if (isFirstAl === true) {
             isFirstAl = false;
@@ -316,6 +325,9 @@ function createMap(data) {
             function clickPos(e) {
                 var xy = getEventPosition(e);
                 var clickObj = getClickObj(xy.x, xy.y);
+                if (clickObj === undefined) {
+                    return;
+                }
                 //if (data.type === "al1" && clickObj.typename !== undefined) {
                 //    alert("不能选择已经有建筑的地点");
                 //}
@@ -326,6 +338,20 @@ function createMap(data) {
                     
                 }
                 else {
+                    //判断点位是否已经存在
+                    var flag = false;
+                    $("#alPosList button").each(function() {
+                        if ($(this).text() === clickObj.position) {
+                            flag = true;
+                            return true;
+                        }
+                    });
+                    if (flag) {
+                        return;
+                    }
+                    //画点标示出来
+                    DrawStar(context, clickObj.column, clickObj.row);
+
                     //添加位置
                     $("#alPosList").append('<button type="button" class="btn btn-default" onclick="$(this).remove();">' + clickObj.position + '</button>');
                 }
@@ -351,7 +377,11 @@ function DrawMap(ctx) {
 
             if (array[i][j] !== null) {
                 //console.log(i, j, array[i][j].ogTerrain, ConvertIntToColor(array[i][j].ogTerrain), array[i][j].isCenter);
-                DrawOneHex(ctx, j, i, ConvertIntToColor(array[i][j].tfTerrain), array[i][j].isCenter, array[i][j],array);
+                DrawOneHex(ctx, j, i, ConvertIntToColor(array[i][j].tfTerrain), array[i][j].isCenter, array[i][j], array);
+                //设置行列坐标
+                buildingObj.row = i;
+                buildingObj.column = j;
+
                 //console.log(i, j, array[i][j].building);
                 if (array[i][j].building !== null) {
                     //建筑对象
@@ -386,10 +416,10 @@ function DrawMap(ctx) {
                         DrawLantidaStar(ctx,j,i)
                     }
                 }
-                if (array[i][j].satellite !== null) {
+                if (array[i][j].satellite !== null) {//画卫星
                     DrawSatellite(ctx, j, i, array[i][j].satellite, array[i][j].isSpecialSatelliteForHive);
                 }
-                if (array[i][j].isAlliance) {
+                if (array[i][j].isAlliance) {//联邦内建筑
                     DrawStar(ctx, j, i);
                 }
 

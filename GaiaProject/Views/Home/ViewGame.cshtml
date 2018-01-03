@@ -137,10 +137,14 @@ else
                         <div class="modal-body" id="canvasSelectMap">
 
                             <div>
+
                                 <div class="btn-group" role="group" aria-label="..." id="alPosList">
                                 </div>
                                 <div style="display: none" id="allistdiv">
-                                    @Html.DropDownList("enumList", new SelectList(Model.ALTList.GroupBy(a => a.desc).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name) }), "name", "desc"), "--请选择联邦板块--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList", @syntax = "+" })
+                                    <div>
+                                        <span>注:目前没有找到很好的办法删除画的点，所以取消后图标依然在地图上。</span>
+                                    </div>
+                                    @Html.DropDownList("enumList", new SelectList(Model.ALTList.GroupBy(a => a.desc).Select(g => new {count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name)}), "name", "desc"), "--请选择联邦板块--", new {@class = "btn dropdown-toggle form-control", @id = "alSelectList", @syntax = "+"})
                                 </div>
                                 <div id="">
                                     <select class="btn dropdown-toggle form-control" id="mapkjlist" name="enumList" syntax="advance " style="display: none">
@@ -189,7 +193,7 @@ else
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal" onclick='$("#syntax").focus();'>手动输入</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="queryHandinput">手动输入</button>
 
 
                             <a class="btn btn-success" data-dismiss="modal" id="querycfmModelYes">立即执行</a>
@@ -353,17 +357,18 @@ else
 
         <div class="form-inline">
             @*<div class="input-group-btn">*@
-            <a class="btn btn-default" data-toggle="collapse" href="#techDisplay" role="button" style="box-shadow:none">折叠科技</a>
             <div class="input-group">
                 <span class="input-group-addon">命令</span>
                 <input id="syntax" size="50" name="syntax" type="text" class="form-control" aria-label="Text input with multiple buttons">
             </div>
-            <button id="syn" type="button" class="btn btn-primary">保存</button>
+            <button id="syn" type="button" class="btn btn-primary" style="width: 100px">保存</button>
             <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
             @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
             {
                 <input id="test3" name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden" />
             }
+            <a class="btn btn-default" data-toggle="collapse" href="#techDisplay" role="button" style="box-shadow:none">折叠科技</a>
+
         </div>
     }
 

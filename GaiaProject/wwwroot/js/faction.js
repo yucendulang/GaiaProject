@@ -122,14 +122,6 @@ if (userInfo.isRound) {
         createMap({ id: "myCanvasSelect", type: "al2",action:"建筑" });
     });
 
-    //选择卫星位置
-    //$("#createAl").click(function () {
-    //    $("#allistdiv").show();
-
-    //    $("#myModalCanves").modal();
-    //    createMap({ id: "myCanvasSelect", type: "al1", action: "卫星"});
-    //});
-
     //点击回合组推板
     $("#rbt_s_list div").click(function () {
         openQueryWindow(this.id, "确认PASS?");
@@ -182,13 +174,6 @@ if (userInfo.isRound) {
             //蜂人
         else if (id === "HivFalse") {
             selectMapPos("hiv");
-//            $("#myModalCanves").modal();
-//            createMap({
-//                id: "myCanvasSelect", type: "pos", showid: "#mapkjlist", func: function (pos) {
-//                    var value = "action fir.downgrade {0}.advance {1}";
-//                    return value.format(pos, $("#mapkjlist").val());
-//                }
-//            });
         }
 
     });
@@ -244,12 +229,29 @@ if (userInfo.isRound) {
         }
 
     });
+
+    //点击高级板块
+    $("#playerFaction .ATT1False").click(function () {
+            var obj = $(this);
+            openQueryWindow(obj.attr("syntax") + this.id, "确认执行?");
+        }
+    );
+    $("#playerFaction .ATT2False").click(function () {
+            var obj = $(this);
+            openQueryWindow(obj.attr("syntax") + this.id, "确认执行?");
+        }
+    );
+    $("#playerFaction .ATT3False").click(function () {
+            var obj = $(this);
+            openQueryWindow(obj.attr("syntax") + this.id, "确认执行?");
+        }
+    );
 }
 
 
-
+var windowFunc;
 //弹出确认对话框
-function openQueryWindow(type, title,tishi) {
+function openQueryWindow(type, title,tishi,func) {
     //actType = "action {0}".format(actType);
     //actType = type;
     $("#syntax").val(type);
@@ -265,12 +267,23 @@ function openQueryWindow(type, title,tishi) {
     }
 
     $("#querycfmModel").modal();
+    windowFunc = func;
 }
+//手动输入
+$("#queryHandinput").click(function () {
+    $("#syntax").focus();
+    if (windowFunc != undefined) {
+        windowFunc();
+    }
+});
 //确认对话框
 $("#querycfmModelYes").click(function () {
     //var value = $(this).attr("act");
     $("#querycfmModel").modal('hide');
     submitData();
+    if (windowFunc != undefined) {
+        windowFunc();
+    }
 });
 
 

@@ -11,6 +11,7 @@
 }
 @{
     bool isAdmin = UserManager.GetUserAsync(User).Result != null && UserManager.GetUserAsync(User).Result.groupid == 1;
+    string usernmae = UserManager.GetUserAsync(User).Result?.UserName;
     string adminType = this.Context.Request.Query["isAdmin"];
 }
 
@@ -80,7 +81,7 @@
                 <td>@item.username/@item.starttime.ToString("yyyy-MM-dd")/@item.endtime?.ToString("yyyy-MM-dd")</td>
 
                 <td>
-                    @if (isAdmin)
+                    @if (isAdmin || item.username == usernmae)
                     {
                         <button class="btn btn-default del" id="@item.Id">删除</button>
                     }
@@ -100,10 +101,13 @@
     $(".del").click(function () {
         var id = this.id;
         var button = $(this);
-        $.post("/GameInfo/DelGame/" + id, "", function (data) {
-            if (data.info.state === 200) {
-                button.parent().parent().remove();
-            }
-        });
+        if (confirm('删除后不可恢复，是否删除?')) {
+            $.post("/GameInfo/DelGame/" + id, "", function (data) {
+                if (data.info.state === 200) {
+                    button.parent().parent().remove();
+                }
+            });
+        }
+
     })
 </script>
