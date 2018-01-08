@@ -145,7 +145,7 @@
                     @{ int stt6Index = 0;}
                     @for (int i = 0; i < 6; i++)
                     {
-                        if (Model.STT6ListGroup[stt6Index].Index == i)
+                        if (Model.STT6ListGroup.Count > stt6Index && Model.STT6ListGroup[stt6Index].Index == i  )
                         {
                             var item = Model.STT6ListGroup[stt6Index];
                             stt6Index++;
