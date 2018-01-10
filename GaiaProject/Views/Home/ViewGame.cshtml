@@ -46,17 +46,17 @@
 {
 
     <script>
-            //var isRound =@isRound;
-            var userInfo = {
-                isRound: '@isRound' === 'True',
-                buildcolor: '@Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode',
-                mapcolor: '@Model.FactionList[Model.GameStatus.PlayerIndex].ColorMap',
-                round: @Model.GameStatus.RoundCount,
-                factionName: '@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName',
-                stage: -1,
-                colorIndex:@Model.FactionList[Model.GameStatus.PlayerIndex].colorIndex
-            };
-            //alert(userInfo.isRound);
+        //var isRound =@isRound;
+        var userInfo = {
+            isRound: '@isRound' === 'True',
+            buildcolor: '@Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode',
+            mapcolor: '@Model.FactionList[Model.GameStatus.PlayerIndex].ColorMap',
+            round: @Model.GameStatus.RoundCount,
+            factionName: '@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName',
+            stage: -1,
+            colorIndex:@Model.FactionList[Model.GameStatus.PlayerIndex].colorIndex
+        };
+        //alert(userInfo.isRound);
     </script>
 }
 else
@@ -94,7 +94,7 @@ else
                 }
             </style>
             <script>
-                    //$("#gameTopInfo").css("background-color","@Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode");
+                //$("#gameTopInfo").css("background-color","@Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode");
             </script>
         }
 
@@ -155,8 +155,8 @@ else
 
             <p>现在等待 <span class="buildcolor">@Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName</span> 建造初始房子 </p>
             <script>
-                        userInfo.mapcolor = '@Model.FactionList[Model.GameStatus.PlayerIndex].ColorMap';
-                        userInfo.stage = 2;
+                userInfo.mapcolor = '@Model.FactionList[Model.GameStatus.PlayerIndex].ColorMap';
+                userInfo.stage = 2;
             </script>
 
         }
@@ -186,33 +186,40 @@ else
                 <p>人类正常使用Convert命令 一次只能转换一种资源</p>
 
                 @if (isRound)
-    {
-            @if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Itar)
-{
-    <div class="btn-group" role="group" aria-label="...">
-        <button class="btn btn-default" onclick="openSelectTT('{0}')">选择科技版</button>
+                {
+                    @if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Itar)
+                     {
+                         <div class="btn-group" role="group" aria-label="...">
+                             <button class="btn btn-default" onclick="openSelectTT('{0}')">选择科技版</button>
 
-        <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
-    </div>
-    <!-- 模态框（Modal）选择地图 -->
-    @Html.Partial("Partial_Game_SelectPos", Model)//
-}
-else if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Terraner)
-{
+                             <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
+                         </div>
+                         <!-- 模态框（Modal）选择地图 -->
+                         @Html.Partial("Partial_Game_SelectPos", Model)//
+                     }
+                     else if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Terraner)
+                     {
 
-            <div>
-                <span>PG:@Model.FactionList[Model.GameStatus.PlayerIndex].PowerTokenGaia</span>
-                @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTerraner, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert " })
-
+                         <div>
+                             <span>PG:<span id="TerranerPowerToken">@Model.FactionList[Model.GameStatus.PlayerIndex].PowerTokenGaia</span></span>
 
 
-                <button class="btn btn-default" onclick="submitData();">确认</button>
 
-                <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
-            </div>
+                             @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTerraner, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert " })
 
-}
-}
+                             <button class="btn btn-default" onclick="submitData();">确认</button>
+                             
+                             <button class="btn btn-default" onclick="$('#syntax').val('convert '+$('#TerranerPowerToken').text()+'pw'+' to '+$('#TerranerPowerToken').text()+'c');">全部兑换信用点</button>
+
+
+                             <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
+                         </div>
+                         <script>
+                             
+                         </script>
+
+                     }
+                }
 
 
 
@@ -571,14 +578,14 @@ else if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == Faction
     <script type='text/javascript' language='javascript' src='~/js/site.js'></script>
 
     <script>
-                                        var model = @Html.Raw(Json.Serialize(Model));
-                                        //显示全部日志
-                                        $("#showAllLog").click(function() {
-                                            $.get("/home/SyntaxLog/@Html.Raw(Model.GameName)",
-                                                function (data) {
-                                                    $("#SyntaxLogList").html(data.data);
-                                                });
-                                        });
+        var model = @Html.Raw(Json.Serialize(Model));
+        //显示全部日志
+        $("#showAllLog").click(function() {
+            $.get("/home/SyntaxLog/@Html.Raw(Model.GameName)",
+                function (data) {
+                    $("#SyntaxLogList").html(data.data);
+                });
+        });
 
     </script>
     <script type='text/javascript' language='javascript' src='~/js/faction.js'></script>

@@ -28,15 +28,19 @@ namespace GaiaCore.Gaia.Data
 
         };
 
-        //人类
+        //人类盖亚阶段
         public static readonly List<PwInfo> QuickActListTerraner = new List<PwInfo>()
         {
             new PwInfo(){code = "4pw to 1q",name = "4点能量兑换1个量子方块"},
             new PwInfo(){code = "3pw to 1o",name = "3点能量兑换1个矿石"},
             new PwInfo(){code = "4pw to 1k",name = "4点能量兑换1点知识"},
             new PwInfo(){code = "1pw to 1c",name = "1点能量兑换1点信用点"},
+            new PwInfo(){code = "8pw to 2q",name = "8点能量兑换2个量子方块"},
+            new PwInfo(){code = "6pw to 2o",name = "6点能量兑换2个矿石"},
+            new PwInfo(){code = "8pw to 2k",name = "8点能量兑换2点知识"},
 
         };
+
 
         /// <summary>
         /// 超星人
@@ -48,6 +52,7 @@ namespace GaiaCore.Gaia.Data
             new PwInfo(){code = "2pw to 1pwt,1c",name = "2点能量兑换1个能量指示物和1点信用点"},
             new PwInfo(){code = "2pw to 1k",name = "2点能量兑换1点知识"},
             new PwInfo(){code = "1pw to 2c",name = "1点能量兑换2点信用点"},
+            new PwInfo(){code = "3pw to 2o",name = "3点能量兑换2个矿石"},
 
 
         };
