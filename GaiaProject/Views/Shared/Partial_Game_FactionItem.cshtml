@@ -9,15 +9,15 @@
     bool isRound = @Model.GaiaGame.GameStatus.RoundCount > 0 && @Model.GaiaGame.GetCurrentUserName() == User.Identity.Name;
 }
 <script type="text/javascript">
-                $(function () {
-                    var span = '<span style="background-color: @Model.ColorCode">&nbsp;&nbsp;</span>&nbsp;';
-                    $("#tt_l" + @Model.TransformLevel).find("td").eq(1).append(span);
-                    $("#tt_l" + @Model.ShipLevel).find("td").eq(2).append(span);
-                    $("#tt_l" + @Model.AILevel).find("td").eq(3).append(span);
-                    $("#tt_l" + @Model.GaiaLevel).find("td").eq(4).append(span);
-                    $("#tt_l" + @Model.EconomicLevel).find("td").eq(5).append(span);
-                    $("#tt_l" + @Model.ScienceLevel).find("td").eq(6).append(span);
-                });
+    $(function () {
+        var span = '<span style="background-color: @Model.ColorCode">&nbsp;&nbsp;</span>&nbsp;';
+        $("#tt_l" + @Model.TransformLevel).find("td").eq(1).append(span);
+        $("#tt_l" + @Model.ShipLevel).find("td").eq(2).append(span);
+        $("#tt_l" + @Model.AILevel).find("td").eq(3).append(span);
+        $("#tt_l" + @Model.GaiaLevel).find("td").eq(4).append(span);
+        $("#tt_l" + @Model.EconomicLevel).find("td").eq(5).append(span);
+        $("#tt_l" + @Model.ScienceLevel).find("td").eq(6).append(span);
+    });
 
 </script>
 
@@ -210,7 +210,7 @@
         </div>
 
 
-        <div help="回合/特权/科技版">
+        <div help="回合/特权/科技版" class="row">
             @foreach (var it in @Model.GameTileList.OrderBy(a => a.showRank))
             {
                 <div class="col-md-3">
@@ -231,10 +231,10 @@
                             @if (it.CanAction)
                             {
                                 <script>
-                              $("#@Model.FactionName@it.name").click(function() {
-                                  //
-                                  selectMapPos('@it.name');
-                              })
+                                    $("#@Model.FactionName@it.name").click(function() {
+                                        //
+                                        selectMapPos('@it.name');
+                                    })
                                 </script>
                             }
 
@@ -244,8 +244,8 @@
 
                     else if (it.typename == "stt")
                     {
-                        <div class="sttcss    @{@it.GetType().Name}@it.IsUsed" syntax="action " id="@it.GetType().Name">
-                            <span>@it.GetType().Name<br /> @it.desc</span>
+                        <div class="sttcss    @{@it.name}@it.IsUsed" syntax="action " id="@it.name">
+                            <span>@it.name<br /> @it.desc</span>
                         </div>
                     }
                     else if (it.typename == "att")
@@ -289,6 +289,22 @@
             }
 
         </div>
+        <div help="被覆盖的科技" class="row">
 
+            @foreach (var item in @Model.GameTileListCovered)
+            {
+                <div class="col-md-3">
+                    <div class="sttcss    @{@item.name}@item.IsUsed" syntax="action " id="Covered @item.name">
+                                                <p style="z-index: 120; position: absolute; background-color: green">&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                                <span>@item.name<br /> @item.desc</span>
+                                            </div>
+                                            </div>
+
+            }
+        </div>
+
+        
+                                                                                                                                          
+                                                                                                                             
     </div>
 </div>

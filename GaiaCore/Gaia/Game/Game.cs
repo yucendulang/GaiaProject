@@ -214,11 +214,14 @@ namespace GaiaCore.Gaia
             if (faction is Itar)
             {
                 var itar = faction as Itar;
-                //只支持+stt行动
+
+
                 if (!commandList.ToList().TrueForAll(x => GameFreeSyntax.getTechTilesRegex.IsMatch(x)
                 || GameFreeSyntax.ReturnTechTilesRegex.IsMatch(x)
                 || GameFreeSyntax.advTechRegex2.IsMatch(x)
-                || GameFreeSyntax.NoAdvanceTechTrack.IsMatch(x)))
+                || GameFreeSyntax.NoAdvanceTechTrack.IsMatch(x)
+                || GameFreeSyntax.PlanetRegex.IsMatch(x))//放置黑星
+                )
                 {
                     log = "只支持拿板子行动";
                     return false;
@@ -428,7 +431,11 @@ namespace GaiaCore.Gaia
                 { 
                     if(faction.LeechPower(power, factionFrom, isLeech))
                     {
-                        faction.PowerToken1++;
+                        //如果吸收了能力才加token
+                        if (isLeech)
+                        {
+                            faction.PowerToken1++;
+                        }
                         return true;
                     }
                     else
@@ -771,6 +778,7 @@ namespace GaiaCore.Gaia
 
                     Action queue = () =>
                     {
+                        //覆盖的版块，删除板块
                         faction.GameTileListCovered.Add(tile);
                         faction.RemoveGameTiles(tile);
                     };

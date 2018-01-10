@@ -98,6 +98,9 @@ namespace GaiaCore.Gaia
 
         public FactionName FactionName { get; }
         public List<GameTiles> GameTileList { set; get; }
+        /// <summary>
+        /// 被覆盖的板块
+        /// </summary>
         public List<GameTiles> GameTileListCovered { set; get; }
         //八种资源
         protected int m_credit;

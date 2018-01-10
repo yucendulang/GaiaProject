@@ -3,27 +3,47 @@
 
 @{
     List<string> mySttList = null;
+    Faction myFaction;
     if (User != null)
     {
         List<Faction> listFaction = Model.FactionList.Where(item => item.UserName == User.Identity.Name).ToList();
         if (listFaction.Count == 1)
         {
-            Faction myFaction = listFaction[0];
+            myFaction = listFaction[0];
             if (myFaction != null)
             {
-                mySttList = myFaction.GameTileList.Where(item => item.typename == "stt").Select(item=>item.name).ToList();
+                mySttList = myFaction.GameTileList.Where(item => item.typename == "stt").Select(item => item.name).ToList();
 
+                @foreach (var item in myFaction.GameTileListCovered)
+                {
+                    <script>
+                         $(function () {
+                             ////被覆盖科技
+                             $("#@item.name div").prepend('<p style="z-index: 120; position: absolute; background-color:green">&nbsp;&nbsp;&nbsp;&nbsp;</p>');
+                         });
+                    </script>
+                }
+                @foreach (var item in myFaction.GameTileList.Where(item=>item.typename=="att"))
+                 {
+                     <script>
+                         $(function () {
+                             ////高级科技
+                             $("#@item.name div").prepend('<p style="z-index: 120; position: absolute; background-color:green">&nbsp;&nbsp;&nbsp;&nbsp;</p>');
+                         });
+                     </script>
+                 }
                 <script>
-                    userInfo.buildcolor = '@myFaction.ColorCode';
-                    userInfo.mapcolor= '@myFaction.ColorMap';
-                    userInfo.factionName = '@myFaction.FactionName';
-                    userInfo.stage = -1;
-                    userInfo.colorIndex=@myFaction.colorIndex;
-                </script>
-            }
-        }
+                             userInfo.buildcolor = '@myFaction.ColorCode';
+                             userInfo.mapcolor= '@myFaction.ColorMap';
+                             userInfo.factionName = '@myFaction.FactionName';
+                             userInfo.stage = -1;
+                             userInfo.colorIndex =@myFaction.colorIndex;
 
-    }
+                    </script>
+                }
+            }
+
+        }
 }
 
 <div class="row">
@@ -130,11 +150,11 @@
                     {
                         if (item.isPicked)
                         {
-                            <td title="@item.name" align="center"> <div class="attcss attusedcss @{@item.name}Picked"><span>@item.name<br />@item.desc</span></div></td>
+                            <td title="@item.name" align="center" id="@item.name"> <div class="attcss attusedcss @{@item.name}Picked" ><span>@item.name<br />@item.desc</span></div></td>
                         }
                         else
                         {
-                            <td title="@item.name" align="center"> <div class="attcss @{@item.name}False"><span>@item.name<br />@item.desc</span></div></td>
+                            <td title="@item.name" align="center" id="@item.name"> <div class="attcss @{@item.name}False"  ><span>@item.name<br />@item.desc</span></div></td>
                         }
                     }
                 </tr>
@@ -145,18 +165,18 @@
                     @{ int stt6Index = 0;}
                     @for (int i = 0; i < 6; i++)
                     {
-                        if (Model.STT6ListGroup.Count > stt6Index && Model.STT6ListGroup[stt6Index].Index == i  )
+                        if (Model.STT6ListGroup.Count > stt6Index && Model.STT6ListGroup[stt6Index].Index == i)
                         {
                             var item = Model.STT6ListGroup[stt6Index];
                             stt6Index++;
-                            <td title="@item.name" align="center">
- 
+                            <td title="@item.name" align="center" id="@item.name">
+
                                 <div class="sttcss @{@item.name}False">
-                                                         @if (mySttList?.Contains(item.name)==true)
-                                                         {
-                                    <p style="z-index: 120; position: absolute;background-color: red">&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                                                         }
-                                                         <span>@item.name (@item.count) <br/> @item.desc</span>                   
+                                    @if (mySttList?.Contains(item.name) == true)
+                                    {
+                                        <p style="z-index: 120; position: absolute;background-color: red">&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                    }
+                                    <span>@item.name (@item.count) <br /> @item.desc</span>
                                 </div>
                             </td>
                         }
@@ -173,14 +193,14 @@
 
                     @foreach (var item in Model.STT3ListGroup)
                     {
-                        <td colspan="2" title="@item.name" class="" align="center">
+                        <td colspan="2" title="@item.name" class="" align="center" id="@item.name">
                             <div class="sttcss  @{@item.name}False">
-                                                      @if (mySttList?.Contains(item.name)==true)
-                                                      {
-                                                          <p style="z-index: 120; position: absolute;background-color: red">&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                                                      }
-                                                      <span>@item.name (@item.count) <br/> @item.desc</span>
-                                                  </div>
+                                @if (mySttList?.Contains(item.name) == true)
+                                {
+                                    <p style="z-index: 120; position: absolute;background-color: red">&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                }
+                                <span>@item.name (@item.count) <br /> @item.desc</span>
+                            </div>
                         </td>
                     }
                 </tr>

@@ -88,25 +88,21 @@ $(".actionGp").click(function () {
 
 if (userInfo.isRound) {
     //能量行动
-    $("#actBody div").click(function () {
+    $("#actBody div").click(function() {
         var value = this.id.replace(" ", "");
         if ($(this).find("a").css("color") === "rgb(255, 0, 0)") {
             alert("行动已被执行");
-        }
-        else {
+        } else {
 
             if (value === "ACT6" || value === "ACT2") {
                 selectMapPos(value);
-            }
-            else if (value === "ACT8") {
+            } else if (value === "ACT8") {
                 //$('#myModal').modal();
                 openSelectTT("action ACT8.{0}");
-            }
-            else if (value === "ACT9") {
+            } else if (value === "ACT9") {
                 $("#myAltModal").modal();
-            }
-            else {
-                openQueryWindow("action {0}".format(value),"确认执行?",$(this).attr("tishi"));
+            } else {
+                openQueryWindow("action {0}".format(value), "确认执行?", $(this).attr("tishi"));
                 //$("#syntax").val("action {0}".format(value));
             }
         }
@@ -115,47 +111,47 @@ if (userInfo.isRound) {
     });
 
     //选择建筑位置
-    $("#createZjAl").click(function () {
+    $("#createZjAl").click(function() {
         $("#allistdiv").show();
 
         $("#myModalCanves").modal();
-        createMap({ id: "myCanvasSelect", type: "al2",action:"建筑" });
+        createMap({ id: "myCanvasSelect", type: "al2", action: "建筑" });
     });
 
     //点击回合组推板
-    $("#rbt_s_list div").click(function () {
+    $("#rbt_s_list div").click(function() {
         openQueryWindow(this.id, "确认PASS?");
     });
 
     //特殊行动
-    $("#playerFaction .STT1False").click(function () {
+    $("#playerFaction .STT1False").click(function() {
             var obj = $(this);
             openQueryWindow(obj.attr("syntax") + this.id, "确认执行?");
         }
     );
     //AC2=Q
-    $("#playerFaction .AC2False").click(function () {
+    $("#playerFaction .AC2False").click(function() {
             var obj = $(this);
             openQueryWindow(obj.attr("syntax") + this.id, "确认执行?");
         }
     );
     //AC2=4C
-    $("#playerFaction .BalAC2False").click(function () {
+    $("#playerFaction .BalAC2False").click(function() {
             var obj = $(this);
             openQueryWindow(obj.attr("syntax") + this.id, "确认执行?");
         }
     );
 
     //放置黑星
-    $("#planetMine").click(function () {
-        selectMapPos("", "planet {0}","planet");
+    $("#planetMine").click(function() {
+        selectMapPos("", "planet {0}", "planet");
     });
 
     //种族能力
-    $(".MapAction").click(function () {
+    $(".MapAction").click(function() {
         //
         var id = this.id;
-        
+
         //大使星人
         if (id === "AmbFalse") {
             $("#myModalCanves").modal();
@@ -165,13 +161,16 @@ if (userInfo.isRound) {
         else if (id === "FirFalse") {
             $("#myModalCanves").modal();
             createMap({
-                id: "myCanvasSelect", type: "pos", showid: "#mapkjlist", func: function (pos) {
+                id: "myCanvasSelect",
+                type: "pos",
+                showid: "#mapkjlist",
+                func: function(pos) {
                     var value = "action fir.downgrade {0}.advance {1}";
                     return value.format(pos, $("#mapkjlist").val());
                 }
             });
         }
-            //蜂人
+        //蜂人
         else if (id === "HivFalse") {
             selectMapPos("hiv");
         }
@@ -180,7 +179,7 @@ if (userInfo.isRound) {
 
 
     //快速行动插入
-    $(".ksaction").click(function () {
+    $(".ksaction").click(function() {
         var oldcode = $("#syntax").val();
         if (oldcode === "") {
             alert("必须先选择主要行动");
@@ -206,7 +205,7 @@ if (userInfo.isRound) {
         }
         //是不是执行多次
         var actionnumber = obj.attr("actionnumber");
-        if (actionnumber!==undefined && actionnumber !== null && actionnumber !== "") {
+        if (actionnumber !== undefined && actionnumber !== null && actionnumber !== "") {
             var number = parseInt($(actionnumber).val());
             if (number > 0) {
                 for (var i = 0; i < number; i++) {
@@ -216,7 +215,7 @@ if (userInfo.isRound) {
                     } else {
                         $("#syntax").val(oldcode + '.' + value);
 
-                    }   
+                    }
                 }
             }
         } else {
@@ -231,21 +230,26 @@ if (userInfo.isRound) {
     });
 
     //点击高级板块
-    $("#playerFaction .ATT1False").click(function () {
+    $("#playerFaction .ATT1False").click(function() {
             var obj = $(this);
             openQueryWindow(obj.attr("syntax") + this.id, "确认执行?");
         }
     );
-    $("#playerFaction .ATT2False").click(function () {
+    $("#playerFaction .ATT2False").click(function() {
             var obj = $(this);
             openQueryWindow(obj.attr("syntax") + this.id, "确认执行?");
         }
     );
-    $("#playerFaction .ATT3False").click(function () {
+    $("#playerFaction .ATT3False").click(function() {
             var obj = $(this);
             openQueryWindow(obj.attr("syntax") + this.id, "确认执行?");
         }
     );
+} else {
+    //放置黑星
+    $("#planetMine").click(function () {
+        selectMapPos("", "planet {0}", "planet");
+    });
 }
 
 

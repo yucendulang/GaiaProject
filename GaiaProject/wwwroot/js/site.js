@@ -247,7 +247,9 @@ function createMap(data) {
                     }
                     //黑星
                     if (data.action === "planet") {
-                        $("#syntax").val($("#syntax").val() +".planet {0}".format(clickObj.position));
+                        var plant = $("#syntax").val() + ".planet {0}".format(clickObj.position);
+                        //$("#syntax").val();
+                        openQueryWindow(plant, "确认放置黑星?", null, closeWindow);
                     } else {
                         //盖亚改造单元
                         if (clickObj.typename === "gaizao") {

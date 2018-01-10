@@ -11,6 +11,9 @@ using GaiaProject.Models;
 using GaiaProject.Models.ManageViewModels;
 using GaiaProject.Services;
 using GaiaDbContext.Models;
+using GaiaProject.Data;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.EntityFrameworkCore;
 
 namespace GaiaProject.Controllers
 {
@@ -23,8 +26,11 @@ namespace GaiaProject.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly ApplicationDbContext dbContext;
+
 
         public ManageController(
+            ApplicationDbContext dbContext,
           UserManager<ApplicationUser> userManager,
           SignInManager<ApplicationUser> signInManager,
           IOptions<IdentityCookieOptions> identityCookieOptions,
@@ -32,6 +38,7 @@ namespace GaiaProject.Controllers
           ISmsSender smsSender,
           ILoggerFactory loggerFactory)
         {
+            this.dbContext = dbContext;
             _userManager = userManager;
             _signInManager = signInManager;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
@@ -233,11 +240,29 @@ namespace GaiaProject.Controllers
                 {
                     GaiaCore.Gaia.GameMgr.ChangeAllGamesUsername(user.UserName, model.UserName);
                 }
+                //是否变更用户名
+                bool isChangeUserName = user.UserName != model.UserName;
+                //如果是用户名变更了，需要更新其它关系信息
+                if (isChangeUserName)
+                {
+                    //修改游戏创建人
+                    this.dbContext.Database.ExecuteSqlCommand(string.Format("update GameInfoModel set username='{0}' where username='{1}'",model.UserName, user.UserName));
+                    //修改种族结果
+                    this.dbContext.Database.ExecuteSqlCommand(string.Format("update GameFactionModel set username='{0}' where username='{1}'", model.UserName, user.UserName));
+                    //修改好友
+                    this.dbContext.Database.ExecuteSqlCommand(string.Format("update UserFriend set UserName='{0}' where UserName='{1}'", model.UserName, user.UserName));
+                    this.dbContext.Database.ExecuteSqlCommand(string.Format("update UserFriend set UserNameTo='{0}' where UserNameTo='{1}'", model.UserName, user.UserName));
+                    //修改参加比赛
+                    this.dbContext.Database.ExecuteSqlCommand(string.Format("update MatchJoinModel set username='{0}' where username='{1}'", model.UserName, user.UserName));
+
+                    this.dbContext.SaveChanges();
+                }
                 user.UserName = model.UserName;
                 user.Email = model.Email;
                 var result=await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
+
                     await _signInManager.SignOutAsync();
                     return RedirectToAction("Login", "Account");
                 }
