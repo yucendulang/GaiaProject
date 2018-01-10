@@ -83,7 +83,9 @@ function createMap(data) {
             if (clickObj === undefined) {
                 return;
             }
-            console.log(clickObj);
+            //console.log(clickObj);
+            var urlship = "/Ajax/CalShipDistanceNeed/" + userInfo.GameName + "?pos=" + clickObj.position + "&factionName=" + userInfo.factionName;
+
             if (clickObj.typename !== undefined) {
                 if (!userInfo.isRound) {
                     return;
@@ -178,7 +180,10 @@ function createMap(data) {
                     break;
                 case "gaizao":
                     //$("#syntax").val("gaia " + clickObj.position);
-                    openQueryWindow("gaia " + clickObj.position, "确认进行盖亚改造?");
+                    $.post(urlship, "", function (data) {
+                        openQueryWindow("gaia " + clickObj.position, "确认进行盖亚改造?<br/>需要加速Q:" + data.data);
+                    });
+                    //openQueryWindow("gaia " + clickObj.position, "确认进行盖亚改造?");
                     break;
                 default:
                     console.log("不能继续升级");
@@ -188,7 +193,10 @@ function createMap(data) {
             else {
                 //自己颜色的星球
                 if (clickObj.mapcolor === userInfo.mapcolor) {
-                    openQueryWindow("build " + clickObj.position, "确认在原生地进行建造?");
+                    $.post(urlship, "", function (data) {
+                        openQueryWindow("build " + clickObj.position, "确认在原生地进行建造?<br/>需要加速Q:" + data.data);
+                    });
+                    //openQueryWindow("build " + clickObj.position, "确认在原生地进行建造?");
                 }
                 //非自己颜色星球
                 else {
@@ -203,7 +211,11 @@ function createMap(data) {
                     } else {
                         //如果是绿星
                         if (clickObj.mapcolor === "#80F080") {
-                            openQueryWindow("build " + clickObj.position, "确认在盖亚星球进行建造?");
+                            //alert(userInfo.factionName);
+                            $.post(urlship, "", function(data) {
+                                openQueryWindow("build " + clickObj.position, "确认在盖亚星球进行建造?<br/>需要加速Q:" + data.data);
+                            });
+                            
                             //$("#syntax").val("build " + clickObj.position);
                         } else {
                             //非自己颜色的星球需要计算转换率
@@ -212,10 +224,10 @@ function createMap(data) {
                             if (cindex > 3) {
                                 cindex = 7 - cindex;
                             }
-                            openQueryWindow("build " + clickObj.position, "确认进行建造?<br/>地形转化率为" + cindex);
-
-                            //alert(Math.abs(cindex - userInfo.colorIndex));
-                            //$("#syntax").val("build " + clickObj.position);
+                            $.post(urlship, "", function (data) {
+                                openQueryWindow("build " + clickObj.position, "确认进行建造?<br/>需要加速Q:" + data.data + "<br/>地形转化率:" + cindex);
+                            });
+                            //openQueryWindow("build " + clickObj.position, "确认进行建造?<br/>地形转化率为" + cindex);
                         }
                     }
                 }
@@ -227,7 +239,7 @@ function createMap(data) {
         }, false);
     }
     //点击行动，魔力行动，rbt行动，1铲3航行
-    else if (data.type === "act") {
+    else if (data.type === "act" || data.type==="rbt2") {
         if (isFirstAct === true){//
             isFirstAct = false;
             c.addEventListener('click', function (e) {
@@ -237,7 +249,12 @@ function createMap(data) {
                 if (clickObj === undefined) {
                     return;
                 }
-                //                if (userInfo.factionName === "Lantida") {
+
+                var urlship = "/Ajax/CalShipDistanceNeed/" + userInfo.GameName + "?pos=" + clickObj.position + "&factionName=" + userInfo.factionName;
+                if (data.action === "rbt2") {
+                    urlship = urlship + "&tempship=3";
+                }
+
                 if (userInfo.factionName !== "Lantida" && clickObj.typename != undefined && clickObj.typename !=="gaizao") {
                     alert("不能选择已经有建筑的地点");
                 }
@@ -249,21 +266,30 @@ function createMap(data) {
                     if (data.action === "planet") {
                         var plant = $("#syntax").val() + ".planet {0}".format(clickObj.position);
                         //$("#syntax").val();
-                        openQueryWindow(plant, "确认放置黑星?", null, closeWindow);
+                        openQueryWindow(plant, "确认放置黑星?", null, closeWindow, null, function () { $("#myModalCanves").modal("hide") });
                     } else {
                         //盖亚改造单元
                         if (clickObj.typename === "gaizao") {
-                            openQueryWindow($("#syntax").val().format(".gaia " + clickObj.position), "确认进行盖亚?", null, closeWindow);
+                            $.post(urlship, "", function (data) {
+                                openQueryWindow($("#syntax").val().format(".gaia " + clickObj.position), "确认进行盖亚改造?<br/>需要加速Q:" + data.data, null, function () { $("#myModalCanves").modal("hide") });
+                            });
+                            //openQueryWindow($("#syntax").val().format(".gaia " + clickObj.position), "确认进行盖亚?", null, closeWindow);
                         }
                         else {
                             var buildcode = $("#syntax").val().format(".build " + clickObj.position);
                             //自己颜色星球直接建造
                             if (clickObj.mapcolor === userInfo.mapcolor) {
-                                openQueryWindow(buildcode, "确认在原生地进行建造?", null, closeWindow);
+                                $.post(urlship, "", function (data) {
+                                    openQueryWindow(buildcode, "确认在原生地进行建造?<br/>需要加速Q:" + data.data, null, function () { $("#myModalCanves").modal("hide") });
+                                });
+                                //openQueryWindow(buildcode, "确认在原生地进行建造?", null, closeWindow);
                             } else {
                                 //如果是绿星
                                 if (clickObj.mapcolor === "#80F080") {
-                                    openQueryWindow(buildcode, "确认在盖亚星球进行建造?", null, closeWindow);
+                                    $.post(urlship, "", function (data) {
+                                        openQueryWindow(buildcode, "确认在盖亚星球进行建造?<br/>需要加速Q:" + data.data, null, function () { $("#myModalCanves").modal("hide") });
+                                    });
+                                    //openQueryWindow(buildcode, "确认在盖亚星球进行建造?", null, closeWindow);
                                 } else {
                                     //非自己颜色的星球需要计算转换率
                                     var cindex = cycle.indexOf(clickObj.mapcolor);
@@ -271,7 +297,10 @@ function createMap(data) {
                                     if (cindex > 3) {
                                         cindex = 7 - cindex;
                                     }
-                                    openQueryWindow(buildcode, "确认进行建造?<br/>地形转化率为" + cindex, null, closeWindow);
+                                    $.post(urlship, "", function (data) {
+                                        openQueryWindow(buildcode, "确认进行建造?<br/>需要加速Q:" + data.data + "<br/>地形转化率为" + cindex, null, function () { $("#myModalCanves").modal("hide")});
+                                    });
+                                    //openQueryWindow(buildcode, "确认进行建造?<br/>地形转化率为" + cindex, null, closeWindow);
 
                                 }  
                             }

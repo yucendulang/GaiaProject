@@ -62,7 +62,7 @@ function selectMapPos(value, syntax,action) {
         action = "act";
         $("#syntax").val("action {0}".format(value) + " {0}");
     } else {
-        action = "planet";
+        //action = "planet";
     }
     createMap({ id: "myCanvasSelect", type: "act", action: action});
 }

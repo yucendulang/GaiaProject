@@ -54,7 +54,8 @@
             round: @Model.GameStatus.RoundCount,
             factionName: '@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName',
             stage: -1,
-            colorIndex:@Model.FactionList[Model.GameStatus.PlayerIndex].colorIndex
+            colorIndex:@Model.FactionList[Model.GameStatus.PlayerIndex].colorIndex,
+            GameName:'@Model.GameName',
         };
         //alert(userInfo.isRound);
     </script>
@@ -66,7 +67,8 @@ else
             isRound: false,
             round: 0,
             stage: -1,
-            colorIndex:-1,
+            colorIndex: -1,
+            GameName:'@Model.GameName',
         };
     </script>
 }
