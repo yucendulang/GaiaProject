@@ -48,11 +48,11 @@
                     <button type="button" class="btn btn-default">能力是否使用:
                         @if  ((@Model as MadAndroid).IsMadAndroidAbilityUsed)
                         {
-                            <span>使用</span>
+                            <span  style="color:red">使用</span>
                         }
                         else
                         {
-                            <span>未使用</span>
+                            <span style="color:green">未使用</span>
                         }
                     </button>
                 }
@@ -176,13 +176,37 @@
                     <td>Gaia</td>
                 </tr>
                 <tr>
-                    <td>@(8 - @Model.Mines.Count)/8</td>
-                    <td>@(4 - @Model.TradeCenters.Count)/4</td>
-                    <td>@(3 - @Model.ResearchLabs.Count)/3</td>
+                    
+                    @if (Model.Mines.Count == 0)//矿场
+                    {
+                        <td style='color: red'>8/8</td>
+                    }
+                    else
+                    {
+                        <td>@(8 - @Model.Mines.Count)/8</td>
+                    }
+                    @if (Model.TradeCenters.Count == 0)//贸易中心
+                    {
+                        <td style='color: red'>4/4</td>
+                    }
+                    else
+                    {
+                        <td>@(4 - @Model.TradeCenters.Count)/4</td>
+                    }
+                    @if (Model.ResearchLabs.Count == 0)//研究所
+                    {
+                        <td style='color: red'>3/3</td>
+
+                    }
+                    else
+                    {
+                        <td>@(3 - @Model.ResearchLabs.Count)/3</td>
+
+                    }
                     <td>
                         @if (@Model.Academy1 == null)
                         {
-                            <span>1/1</span>
+                            <span style='color: red'>1/1</span>
                         }
                         else
                         {
@@ -191,7 +215,7 @@
                     <td>
                         @if (@Model.Academy2 == null)
                         {
-                            <span>1/1</span>}
+                            <span style='color: red'>1/1</span>}
                         else
                         {
                             <span>0/1</span>}
@@ -199,7 +223,7 @@
                     <td>
                         @if (@Model.StrongHold == null)
                         {
-                            <span>1/1</span>}
+                            <span style='color: red'>1/1</span>}
                         else
                         {
                             <span>0/1</span>}
