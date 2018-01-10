@@ -214,15 +214,7 @@ namespace GaiaProject.Controllers
                 gameFactionModels = gameFactionModels.Where(item => item.UserCount == usercount);
             }
             List<Models.Data.GameInfoController.StatisticsFaction> list= null;
-            //前30条
-            if (type != 1)
-            {
-                gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal).Take(30);
-            }
-            else
-            {
-                gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal);
-            }
+
             //不是高分统计
             if (type != 2)
             {
@@ -249,6 +241,16 @@ namespace GaiaProject.Controllers
                     list.Add(allavg);
                 }
 
+            }
+
+            //前30条
+            if (type != 1)
+            {
+                gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal).Take(30);
+            }
+            else
+            {
+                gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal);
             }
 
             //赋值model
