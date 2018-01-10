@@ -291,7 +291,10 @@ namespace GaiaProject.Controllers
             }
             else if (type == 1)//内存中的游戏
             {
-                return Redirect("/Home/ViewGame/" + gaiaGame.GameName);
+                //var name= Encoding.
+                //return Redirect("/Home/ViewGame/" + gaiaGame.GameName);
+                return View("ViewGame", gaiaGame);
+                //return Redirect("/Home/ViewGame/" + gaiaGame.GameName);
             }
             else
             {
