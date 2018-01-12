@@ -33,9 +33,11 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="input-group">
+                <input type="text" class="form-control" style="width: 100px" placeholder="名称" id="name" name="name">
+
                 <input type="text" class="form-control" style="width: 100px" placeholder="回合" id="round" name="round">
-                <input type="text" class="form-control" style="width: 200px" placeholder="创建人" id="username" name="username">
-                <input type="text" class="form-control" style="width: 200px" placeholder="参与人" id="joinname" name="joinname">
+                <input type="text" class="form-control" style="width: 150px" placeholder="创建人" id="username" name="username">
+                <input type="text" class="form-control" style="width: 150px" placeholder="参与人" id="joinname" name="joinname">
                 @if (adminType == "1")
                 {
                     <input type="text" class="form-control" style="width: 100px" placeholder="最低分" id="scoremin" name="scoremin">

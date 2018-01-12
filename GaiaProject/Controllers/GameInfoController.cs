@@ -97,7 +97,11 @@ namespace GaiaProject.Controllers
                         where score.username == username && game.Id == score.gameinfo_id
                         select game;
                 }
-
+                //名称
+                if (gameInfoModel.name != null)
+                {
+                    list = list.Where(item => item.name == gameInfoModel.name);
+                }
                 //回合
                 if (gameInfoModel.round != null)
                 {

@@ -65,7 +65,14 @@ namespace GaiaCore.Gaia.Game
 
                             //dbContext.SaveChanges();
                             //保存种族信息
-                            SaveFactionToDb(dbContext, gaiaGame, gameinfo);
+                            try
+                            {
+                                SaveFactionToDb(dbContext, gaiaGame, gameinfo);
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
 
 
                             dbContext.SaveChanges();
@@ -106,6 +113,7 @@ namespace GaiaCore.Gaia.Game
             }
             //最高分
             int scoreMax=0;
+            List<GameFactionModel> gameFactionModels = new List<GameFactionModel>(factionList.Count);
             foreach (Faction faction in factionList)
             {
                 GameFactionModel gameFactionModel = dbContext.GameFactionModel.SingleOrDefault(
@@ -155,19 +163,21 @@ namespace GaiaCore.Gaia.Game
                 //如果是后面的玩家并且与上一名玩家分数相同
                 if (rankindex>1 && gameFactionModel.scoreTotal == factionList[rankindex-2].Score)
                 {
-                    gameFactionModel.rank = dbContext.GameFactionModel.SingleOrDefault(
-                        item => item.gameinfo_id == gameInfoModel.Id && item.FactionName == factionList[rankindex - 2].FactionName.ToString()).rank;//排名
+                    gameFactionModel.rank = gameFactionModels[rankindex - 2].rank;
+                    //gameFactionModel.rank = dbContext.GameFactionModel.SingleOrDefault(item => item.gameinfo_id == gameInfoModel.Id && item.FactionName == factionList[rankindex - 2].FactionName.ToString()).rank;//排名
                 }
                 else
                 {
                     gameFactionModel.rank = rankindex;//排名
+                    //faction.
                 }
                 //计算裸分
                 gameFactionModel.scoreLuo = gameFactionModel.scoreTotal - gameFactionModel.scoreFst1 -
                                             gameFactionModel.scoreFst2 - gameFactionModel.scoreKj;
                 //计算分差
                 gameFactionModel.scoreDifference = scoreMax - gameFactionModel.scoreTotal;
-
+                //添加到数组
+                gameFactionModels.Add(gameFactionModel);
                 if (isAdd)
                 {
                     dbContext.GameFactionModel.Add(gameFactionModel);
@@ -181,6 +191,8 @@ namespace GaiaCore.Gaia.Game
                 rankindex++;
                 
             }
+
+            int a = 1;
         }
     }
 }
