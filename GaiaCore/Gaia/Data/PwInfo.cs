@@ -82,7 +82,6 @@ namespace GaiaCore.Gaia.Data
             new PwInfo(){code = "convert 1bs,1pw to 1k",name = "1个智慧石和1点能量兑换1点知识"},
             new PwInfo(){code = "convert 1bs to 1pwt",name = "1个智慧石兑换1个能量指示物"},
 
-
         };
         /// <summary>
         /// 圣禽

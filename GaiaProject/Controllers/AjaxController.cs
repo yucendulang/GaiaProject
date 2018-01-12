@@ -41,8 +41,50 @@ namespace GaiaProject.Controllers
                 //需要的Q
                 int QSHIP = Math.Max((distanceNeed - faction.GetShipDistance + 1) / 2, 0);
 
+                //
+                string message=null;
+                //需要工人
+                int Ore = Faction.m_MineOreCost;
+                int Credit= Faction.m_MineCreditCost;
                 jsonData.info.state = 200;
-                jsonData.data = QSHIP;
+
+                if (gaiaGame.Map.HexArray[row, col] == null)
+                {
+                    message = "出界了兄弟";
+                    jsonData.info.state = 0;
+
+                }
+                else if (gaiaGame.Map.HexArray[row, col].TFTerrain == Terrain.Purple)
+                {
+                    Ore = 0;
+                    Credit = 0;
+                    //message = "不能在紫色星球上建造";
+                }
+//                else if (gaiaGame.Map.HexArray[row, col].TFTerrain == Terrain.Empty)
+//                {
+//                    message = "你必须在星球上进行建造";
+//                }
+                //如果是盖亚星球不计算等级
+                else if (gaiaGame.Map.HexArray[row, col].TFTerrain == Terrain.Green)
+                {
+
+                }
+                else
+                {
+                    //改造等级
+                    int transNumNeed = Math.Min(7 - Math.Abs(gaiaGame.Map.HexArray[row, col].OGTerrain - faction.OGTerrain), Math.Abs(gaiaGame.Map.HexArray[row, col].OGTerrain - faction.OGTerrain));
+                    //需要工人
+                    Ore = Faction.m_MineOreCost + Math.Max((transNumNeed - faction.TerraFormNumber), 0) * faction.GetTransformCost;
+                    //int Credit = Faction.m_MineCreditCost;
+                }
+
+                jsonData.info.message = message;
+                jsonData.data = new
+                {
+                    QSHIP= QSHIP,
+                    Ore= Ore,
+                    Credit= Credit,
+                };
             }
             return new JsonResult(jsonData);
         }

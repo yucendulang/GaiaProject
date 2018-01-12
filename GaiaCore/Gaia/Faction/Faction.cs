@@ -122,8 +122,9 @@ namespace GaiaCore.Gaia
         protected int m_allianceMagicLevel;
 
         protected const int m_MineCount = 8;
-        protected const int m_MineOreCost = 1;
-        protected const int m_MineCreditCost = 2;
+        //需要计算花费
+        public const int m_MineOreCost = 1;
+        public const int m_MineCreditCost = 2;
         //统计用的一些数据
         public TimeSpan ClockPerid;
         //一些不会变的常量

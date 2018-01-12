@@ -81,7 +81,7 @@
                 <td>@item.username/@item.starttime.ToString("yyyy-MM-dd")/@item.endtime?.ToString("yyyy-MM-dd")</td>
 
                 <td>
-                    @if (isAdmin || item.username == usernmae)
+                    @if (isAdmin || (item.username == usernmae && @item.GameStatus!=8))
                     {
                         <button class="btn btn-default del" id="@item.Id">删除</button>
                     }
