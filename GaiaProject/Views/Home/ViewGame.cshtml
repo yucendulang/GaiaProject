@@ -160,6 +160,7 @@ else
                 userInfo.mapcolor = '@Model.FactionList[Model.GameStatus.PlayerIndex].ColorMap';
                 userInfo.stage = 2;
             </script>
+            @Html.Partial("Partial_Game_SelectPos", Model)//
 
         }
         else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.SELECTROUNDBOOSTER)

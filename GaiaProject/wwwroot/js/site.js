@@ -304,7 +304,12 @@ function createMap(data) {
             else {
                 //自己颜色的星球
                 if (clickObj.mapcolor === userInfo.mapcolor) {
-                    getMineCost(urlship, "build " + clickObj.position, "确认进行盖亚改造?", null);
+                    //初始
+                    if (userInfo.stage === 2) {
+                        openQueryWindow("build " + clickObj.position, "确认放置在" + clickObj.position);
+                    } else {
+                        getMineCost(urlship, "build " + clickObj.position, "确认进行盖亚改造?", null);
+                    }
                     //openQueryWindow("build " + clickObj.position, "确认在原生地进行建造?");
                 }
                 //非自己颜色星球

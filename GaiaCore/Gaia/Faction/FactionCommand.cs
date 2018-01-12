@@ -642,6 +642,10 @@ namespace GaiaCore.Gaia
 
         public bool LeechPower(int power, FactionName factionFrom, bool isLeech)
         {
+            if (power == 4)
+            {
+                int p = 4;
+            }
             var index = LeechPowerQueue.FindIndex(x => x.Item1 == power && x.Item2 == factionFrom);
             if (index == -1)
             {
