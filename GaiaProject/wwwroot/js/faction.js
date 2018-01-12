@@ -58,13 +58,14 @@ createMap({ id: "myCanvas", type:"build"});
 function selectMapPos(value, syntax,action) {
     $("#allistdiv").hide();
     $("#myModalCanves").modal();
-    if (action === undefined) {
-        action = "act";
-        $("#syntax").val("action {0}".format(value) + " {0}");
+    if (action === undefined || action === "ACT6" || action === "rbt2" || action ==="rbt1") {
+        //action = "act";
+        syntax = "action {0}".format(value) + " {0}";
+        $("#syntax").val(syntax);
     } else {
         //action = "planet";
     }
-    createMap({ id: "myCanvasSelect", type: "act", action: action});
+    createMap({ id: "myCanvasSelect", type: "act", action: action, syntax: syntax});
 }
 //选择种族，选择回合版,快速行动
 $(".selectchange").change(function () {
@@ -95,7 +96,7 @@ if (userInfo.isRound) {
         } else {
 
             if (value === "ACT6" || value === "ACT2") {
-                selectMapPos(value);
+                selectMapPos(value, null, value);
             } else if (value === "ACT8") {
                 //$('#myModal').modal();
                 openSelectTT("action ACT8.{0}");

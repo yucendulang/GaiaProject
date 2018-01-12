@@ -21,7 +21,7 @@ namespace GaiaProject.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<JsonResult> CalShipDistanceNeed(string id,string pos, string factionName,int tempship)
+        public async Task<JsonResult> CalShipDistanceNeed(string id,string pos, string factionName,int tempship=0,int TerraFormNumber=0)
         {
             GaiaGame gaiaGame = GameMgr.GetGameByName(id);
             Faction faction = gaiaGame.FactionList.Find(x => x.FactionName.ToString() == factionName);
@@ -73,8 +73,8 @@ namespace GaiaProject.Controllers
                 {
                     //改造等级
                     int transNumNeed = Math.Min(7 - Math.Abs(gaiaGame.Map.HexArray[row, col].OGTerrain - faction.OGTerrain), Math.Abs(gaiaGame.Map.HexArray[row, col].OGTerrain - faction.OGTerrain));
-                    //需要工人
-                    Ore = Faction.m_MineOreCost + Math.Max((transNumNeed - faction.TerraFormNumber), 0) * faction.GetTransformCost;
+                    //需要工人 faction.TerraFormNumber：临时铲子
+                    Ore = Faction.m_MineOreCost + Math.Max((transNumNeed - TerraFormNumber), 0) * faction.GetTransformCost;
                     //int Credit = Faction.m_MineCreditCost;
                 }
 
