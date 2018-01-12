@@ -198,6 +198,7 @@ namespace GaiaCore.Gaia
 
         public virtual int PowerIncrease(int i)
         {
+            //判断最大吸收能量
             var ret = Math.Min(PowerToken1*2 + PowerToken2, i);
             if (PowerToken1 > i)
             {
