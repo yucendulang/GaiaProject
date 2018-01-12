@@ -80,12 +80,10 @@ function getMineCost(url, code, tishi, func) {
             }
             if (data.data.qship > 0 || data.data.ore > 1) {
                 $("#queryHandinput").css("float", "right");
-                //$("#querycfmModelYes").css("color", "red");
+                $("#querycfmModelYes").css("color", "red");
             } else {
                 $("#queryHandinput").css("float", "none");
-
-                //$("#queryHandinput").removeClass("float");
-                //$("#querycfmModelYes").css("color", "");
+                $("#querycfmModelYes").css("color", "");
             }
             openQueryWindow(code, tishi + cost, null, func);
         } else {
