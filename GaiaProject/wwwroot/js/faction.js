@@ -58,10 +58,10 @@ createMap({ id: "myCanvas", type:"build"});
 function selectMapPos(value, syntax,action) {
     $("#allistdiv").hide();
     $("#myModalCanves").modal();
-    if (action === undefined || action === "ACT6" || action === "ACT2" || action === "rbt2" || action ==="rbt1") {
+    if (action === undefined || action === "ACT6" || action === "ACT2" || action === "RBT1" || action ==="RBT2") {
         //action = "act";
         syntax = "action {0}".format(value) + " {0}";
-        $("#syntax").val(syntax);
+        //$("#syntax").val(syntax);
     } else {
         //action = "planet";
     }
