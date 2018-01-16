@@ -12,6 +12,19 @@
     <p><a href="/home/NewGame" class="btn btn-primary">创建新游戏</a></p>
     <h2>你的游戏</h2>
 
+    <button type="button" class="btn btn-default settishi" id="close">关闭全部回合提示</button>
+    <button type="button" class="btn btn-default settishi" id="open">启用全部回合提示</button>
+    <script>
+        $(".settishi").click(function() {
+            $.post("/Ajax/SetTishi", "type="+this.id, function(data) {
+                if (data.info.state === 200) {
+                    //alert("成功!");
+                    window.location.reload();
+                }
+            });
+        })
+    </script>
+    
 
     @if (ViewData["GameList"] != null)
     {

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using GaiaCore.Gaia.Game;
+using GaiaDbContext.Models.AccountViewModels;
 using GaiaDbContext.Models.HomeViewModels;
 
 namespace GaiaCore.Gaia
@@ -39,6 +40,17 @@ namespace GaiaCore.Gaia
             RedoStack = new Stack<string>();
             LastMoveTime = DateTime.Now;
             LogEntityList = new List<LogEntity>();
+
+            //用户列表，配置信息
+            this.UserGameModels = new List<UserGameModel>();
+            foreach (string item in username)
+            {
+                this.UserGameModels.Add(new UserGameModel()
+                {
+                    username = item,
+                    isTishi = true,
+                });
+            }
         }
         public bool ProcessSyntax(string user, string syntax, out string log)
         {
@@ -1419,6 +1431,8 @@ namespace GaiaCore.Gaia
         /// <summary>
         /// 游戏名称
         /// </summary>
+
+        [JsonProperty]
         public string GameName { get; set; }
 
         /// <summary>
@@ -1508,6 +1522,13 @@ namespace GaiaCore.Gaia
         public int UserCount { get; private set; }
         public string LastErrorLog { get; private set; }
         public Stack<string> RedoStack { set; get; }
+
+        /// <summary>
+        /// 用户列表
+        /// </summary>
+        [JsonProperty]
+        public List<UserGameModel> UserGameModels { set; get; }
+
 
         public class STTInfo
         {

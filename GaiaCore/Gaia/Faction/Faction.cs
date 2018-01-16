@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using GaiaDbContext.Models.AccountViewModels;
 
 namespace GaiaCore.Gaia
 {
@@ -174,6 +175,11 @@ namespace GaiaCore.Gaia
         /// 地图颜色
         /// </summary>
         public string ColorMap { get; set; }
+
+//        /// <summary>
+//        /// 用户相关信息
+//        /// </summary>
+//        public UserGameModel UserGameModel =new UserGameModel();
         #endregion
 
         #region 临时变量 判断动作完成与否 需要清零

@@ -159,10 +159,10 @@ function getMineCost(url, code, tishi, func) {
                 cost += "花费资源:" + data.data.ore + "o " + data.data.credit + "c";
             }
             if (data.data.qship > 0 || data.data.ore > 1) {
-                $("#queryHandinput").css("float", "right");
+                //$("#queryHandinput").css("float", "right");
                 $("#querycfmModelYes").css("color", "red");
             } else {
-                $("#queryHandinput").css("float", "none");
+                //$("#queryHandinput").css("float", "none");
                 $("#querycfmModelYes").css("color", "");
             }
             openQueryWindow(code, tishi + cost, null, func);

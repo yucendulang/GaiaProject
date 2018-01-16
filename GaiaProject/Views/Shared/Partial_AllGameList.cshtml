@@ -19,7 +19,7 @@
             <td>回合</td>
             <td>等待玩家</td>
             <td>分数</td>
-            <td>版本</td>
+            <td>版本/提示</td>
 @*            <td>回合玩家</td>*@
 
         </tr>
@@ -51,7 +51,7 @@
                 {
                     <td> @string.Join(",", @item.Value.FactionList.Select(x => x.Score)) </td>
                 }
-                <td>V@(item.Value.version)</td>
+                <td>V@(item.Value.version)/@(item.Value.UserGameModels.Find(userGame=> userGame.username== userName).isTishi?"是":"否")</td>
 @*                <td>@string.Join("|", item.Value.FactionList.Except(item.Value.FactionNextTurnList).Select(fac=> fac.UserName))</td>*@
             </tr>
         }

@@ -106,6 +106,41 @@
             {
                 index = 0;
             }
+            else
+            {
+                //游戏未结束
+                if (Model.GameStatus.status != Status.ENDED)
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            备忘
+                        </div>
+                        <div class="panel-body">
+                            <textarea class="form-control" rows="3" name="remark" id="remark" style="width: 100%"></textarea>
+                            回合提示:<input type="checkbox" aria-label="" id="isTishi" name="isTishi" checked="checked">
+                            <button type="button" class="btn btn-default" style="width: 100px" id="saveremark">保存</button>
+                        </div>
+                    </div>
+                    <script>
+                        //alert(userInfo.UserGameModel.isTishi);
+                        if (userInfo.UserGameModel !== undefined) {
+                            $("#isTishi").attr("checked", userInfo.UserGameModel.isTishi);
+                            $("#remark").val(userInfo.UserGameModel.remark);
+                        }
+                        $("#saveremark").click(function () {
+
+                            $.post("/Ajax/SaveRemark/" + "@Html.Raw(Model.GameName)", "remark=" + $("#remark").val() + "&isTishi=" + $("#isTishi").is(':checked'), function(data) {
+                                if (data.info.state === 200) {
+                                    alert("保存成功");
+                                } else {
+                                    alert(data.info.message);
+                                }
+                            });
+                        });
+                    </script>
+                }
+
+            }
         }
 
         @for (int i = 0; i < playerCount; i++)

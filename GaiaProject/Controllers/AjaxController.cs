@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GaiaCore.Gaia;
 using GaiaCore.Util;
+using GaiaDbContext.Models.AccountViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GaiaProject.Controllers
@@ -93,6 +94,64 @@ namespace GaiaProject.Controllers
         {
             row = position.Substring(0, 1).ToCharArray().First() - 'a';
             col = position.Substring(1).ParseToInt(0);
+        }
+
+        /// <summary>
+        /// 保存备忘信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<JsonResult> SaveRemark(string id,string remark,bool isTishi)
+        {
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
+
+            GaiaGame gaiaGame = GameMgr.GetGameByName(id);
+            if (gaiaGame != null)
+            {
+                UserGameModel userGameModel = gaiaGame.UserGameModels.Find(x => x.username.ToString() == HttpContext.User.Identity.Name);
+                //备忘
+                userGameModel.remark = remark;
+                userGameModel.isTishi = isTishi;
+                jsonData.info.state = 200;
+
+            }
+            else
+            {
+                jsonData.info.state = 0;
+                jsonData.info.message = "保存失败";
+
+            }
+
+            return new JsonResult(jsonData);
+        }
+        /// <summary>
+        /// 提示信息设置
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<JsonResult> SetTishi(string type)
+        {
+            var list = GameMgr.GetAllGame(User.Identity.Name);
+            foreach (KeyValuePair<string, GaiaGame> keyValuePair in list)
+            {
+                UserGameModel singleOrDefault = keyValuePair.Value.UserGameModels.Find(item => item.username == User.Identity.Name);
+                if (singleOrDefault != null)
+                {
+                    if (type == "open")
+                    {
+                        singleOrDefault.isTishi = true;
+                    }
+                    else
+                    {
+                        singleOrDefault.isTishi = false;
+                    }
+                }
+
+            }
+
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
+            jsonData.info.state = 200;
+            return new JsonResult(jsonData);
         }
     }
 }

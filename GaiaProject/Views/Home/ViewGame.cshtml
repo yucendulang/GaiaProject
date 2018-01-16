@@ -44,18 +44,19 @@
 
 @if (@Model.GameStatus.RoundCount > 0)
 {
-
+    var faction = @Model.FactionList[Model.GameStatus.PlayerIndex];
     <script>
         //var isRound =@isRound;
         var userInfo = {
             isRound: '@isRound' === 'True',
-            buildcolor: '@Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode',
-            mapcolor: '@Model.FactionList[Model.GameStatus.PlayerIndex].ColorMap',
+            buildcolor: '@faction.ColorCode',
+            mapcolor: '@faction.ColorMap',
             round: @Model.GameStatus.RoundCount,
-            factionName: '@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName',
+            factionName: '@faction.FactionName',
             stage: -1,
-            colorIndex:@Model.FactionList[Model.GameStatus.PlayerIndex].colorIndex,
-            GameName:'@Model.GameName',
+            colorIndex:@faction.colorIndex,
+            GameName: '@Model.GameName',
+            PlayerIndex: @Model.GameStatus.PlayerIndex,
         };
         //alert(userInfo.isRound);
     </script>
@@ -68,9 +69,24 @@ else
             round: 0,
             stage: -1,
             colorIndex: -1,
-            GameName:'@Model.GameName',
+            GameName: '@Model.GameName',
+            PlayerIndex:0
         };
     </script>
+}
+
+@{
+    //备忘信息
+    var UserGameModel = @Model.UserGameModels.Find(item => item.username == User.Identity.Name);
+    if (UserGameModel != null)
+    {
+        <script>
+            userInfo.UserGameModel = {
+                'remark': '@Html.Raw(UserGameModel.remark)',
+                'isTishi': @UserGameModel.isTishi.ToString().ToLower(),
+            };
+        </script>
+    }
 }
 
 @if (isRound)
@@ -251,8 +267,8 @@ else
                             <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
                             <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
                             <input name="leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
-                            <button type="submit" name="isLeech" class="btn btn-default" value="true">是</button>
-                            <button type="submit" name="isLeech" class="btn btn-default" value="false">否</button>
+                            <button type="submit" name="isLeech" class="btn btn-default" value="true" style="width: 100px">是</button>
+                            <button type="submit" name="isLeech" class="btn btn-default" value="false" style="width: 100px">否</button>
                         </form>
                     }
                     else
@@ -263,8 +279,8 @@ else
                             <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
                             <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
                             <input name="leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
-                            <button type="submit" name="isLeech" class="btn btn-default" value="true">是</button>
-                            <button type="submit" name="isLeech" class="btn btn-default" value="false">否</button>
+                            <button type="submit" name="isLeech" class="btn btn-default" value="true" style="width: 100px">是</button>
+                            <button type="submit" name="isLeech" class="btn btn-default" value="false" style="width: 100px">否</button>
                         </form>
                     }
 

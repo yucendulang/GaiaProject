@@ -6,6 +6,7 @@ using System.Text;
 using System.Linq;
 using GaiaCore.Util;
 using System.Net.Http;
+using GaiaDbContext.Models.AccountViewModels;
 
 namespace GaiaCore.Gaia
 {
@@ -17,7 +18,6 @@ namespace GaiaCore.Gaia
         {
             m_dic = new Dictionary<string, GaiaGame>();
         }
-
 
         public static bool CreateNewGame(string name, string[] username, out GaiaGame result, string MapSelection, int seed = 0, bool isTestGame = false)
         {
@@ -123,8 +123,16 @@ namespace GaiaCore.Gaia
                 var result = GetAllGameName(userName).ToList().Find(x =>
                 {
                     var gg = GetGameByName(x);
-                    var isLeech = gg.UserDic.Count > 1 && gg.GameStatus.stage == Stage.ROUNDWAITLEECHPOWER && gg.UserDic.ContainsKey(userName) && gg.UserDic[userName].Exists(y => y.LeechPowerQueue.Count != 0);
-                    return isLeech || (gg.UserDic.Count > 1 && gg.GetCurrentUserName().Equals(userName) && gg.GameStatus.stage != Stage.GAMEEND);
+                    if (!gg.UserGameModels.Find(item => item.username == userName).isTishi)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        var isLeech = gg.UserDic.Count > 1 && gg.GameStatus.stage == Stage.ROUNDWAITLEECHPOWER && gg.UserDic.ContainsKey(userName) && gg.UserDic[userName].Exists(y => y.LeechPowerQueue.Count != 0);
+                        bool flag = isLeech || (gg.UserDic.Count > 1 && gg.GetCurrentUserName().Equals(userName) && gg.GameStatus.stage != Stage.GAMEEND);
+                        return flag;
+                    }
                 });
                 return result;
             }
@@ -133,7 +141,11 @@ namespace GaiaCore.Gaia
         public static bool BackupDictionary()
         {
             JsonSerializerSettings jsetting = new JsonSerializerSettings();
-            jsetting.ContractResolver = new LimitPropsContractResolver(new string[] { "UserActionLog", "Username", "IsTestGame", "LastMoveTime", "version", "GameName" });
+            jsetting.ContractResolver = new LimitPropsContractResolver(new string[]
+            {
+                "GameName",  "UserActionLog", "Username", "IsTestGame", "LastMoveTime", "version",
+                "UserGameModels","username","remark","isTishi"
+            });
             var str = JsonConvert.SerializeObject(m_dic, Formatting.Indented, jsetting);
             var logPath = System.IO.Path.Combine(BackupDataPath, DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt");
             var logWriter = System.IO.File.CreateText(logPath);
@@ -242,6 +254,7 @@ namespace GaiaCore.Gaia
                 System.Diagnostics.Debug.WriteLine(item.Key + ":" + ex.ToString());
             }
             gg.LastMoveTime = item.Value.LastMoveTime;
+            gg.UserGameModels = item.Value.UserGameModels;
             //需要加载到内存
             if (isTodict)
             {

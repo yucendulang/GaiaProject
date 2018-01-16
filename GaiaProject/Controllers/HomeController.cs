@@ -115,6 +115,8 @@ namespace GaiaProject.Controllers
                 return View(model);
 
             }
+
+
             //删除空白玩家
             username = username.Where(x => !string.IsNullOrEmpty(x)).ToArray();
 
@@ -127,12 +129,15 @@ namespace GaiaProject.Controllers
             foreach (var item in username)
             {
                 var user=_userManager.FindByNameAsync(item);
-                if (user.Result==null)
+                if (user.Result == null)
                 {
                     ModelState.AddModelError(string.Empty, item + "用户不存在");
                     return View(model);
                 }
-                
+                else
+                {
+
+                }
             }
             //存在屏蔽玩家
             // 以及是否存在屏蔽用户
@@ -154,6 +159,8 @@ namespace GaiaProject.Controllers
                     }
                 }
             }
+
+
 
             //创建
             bool create = GameMgr.CreateNewGame(model.Name, username, out GaiaGame result,model.MapSelction, isTestGame: model.IsTestGame);
