@@ -109,7 +109,7 @@ namespace GaiaProject.Controllers
                 model.Name = Guid.NewGuid().ToString();
             }
             string[] username = new string[] { model.Player1, model.Player2, model.Player3, model.Player4 };
-            if (this.dbContext.GameInfoModel.Any(item => item.name == model.Name))
+            if (this.dbContext.GameInfoModel.Any(item => item.name == model.Name)||GameMgr.GetGameByName(model.Name)!=null)
             {
                 ModelState.AddModelError(string.Empty,  "游戏名称已经存在");
                 return View(model);
