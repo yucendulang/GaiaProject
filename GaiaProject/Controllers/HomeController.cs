@@ -249,6 +249,11 @@ namespace GaiaProject.Controllers
                 {
                     log = gameInfoModel.loginfo;
                 }
+                else if (!gameInfoModel.IsAllowLook)//不允许查看
+                {
+                    type = 0;
+                    return null;
+                }
                 else
                 {
                     var game = GameMgr.GetGameByName(gameInfoModel.name);
