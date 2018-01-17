@@ -283,7 +283,7 @@ namespace GaiaProject.Controllers
         /// 个人使用的种族信息
         /// </summary>
         /// <returns></returns>
-        public IActionResult FactionList(GameFactionModel gameFactionModel, int? type, int? usercount)
+        public IActionResult FactionList(GameFactionModel gameFactionModel, int? type, int? usercount,int orderType=1)
         {
 
             if (gameFactionModel.username == null)
@@ -348,15 +348,36 @@ namespace GaiaProject.Controllers
                 }
 
             }
-
-            //前30条
-            if (type != 1)
+            if (type == null)
             {
-                gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal).Take(30);
+                //时间
+                if (orderType == 1)
+                {
+                    gameFactionModels = gameFactionModels.OrderByDescending(item => item.Id).Take(30);
+
+                }
+                else if (orderType==2)//总分
+                {
+                    gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal).Take(30);
+
+                }
+                else if (orderType == 3)//裸分
+                {
+                    gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreLuo).Take(30);
+
+                }
             }
             else
             {
-                gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal);
+                //前30条
+                if (type != 1)
+                {
+                    gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal).Take(30);
+                }
+                else
+                {
+                    gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal);
+                }
             }
 
             //赋值model
