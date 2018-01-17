@@ -85,6 +85,10 @@ namespace GaiaDbContext.Models.HomeViewModels
 
         //[Display(Name = "允许观看")]
         public bool IsAllowLook { set; get; }
+        /// <summary>
+        /// 删除状态
+        /// </summary>
+        public int isDelete { get; set; }
 
     }
 }

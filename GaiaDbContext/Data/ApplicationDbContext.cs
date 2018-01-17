@@ -48,6 +48,11 @@ namespace GaiaProject.Data
         public DbSet<GameFactionModel> GameFactionModel { get; set; }
 
         /// <summary>
+        /// 删除游戏请求
+        /// </summary>
+        public DbSet<GameDeleteModel> GameDeleteModel { get; set; }
+
+        /// <summary>
         /// 比赛信息
         /// </summary>
         public DbSet<MatchInfoModel> MatchInfoModel { get; set; }

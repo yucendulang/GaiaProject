@@ -143,9 +143,18 @@ namespace GaiaProject.Controllers
             return View(result);
 
         }
+        /// <summary>
+        /// 申请删除列表
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult ApplyDeleteList()
+        {
+            var result = this.dbContext.GameDeleteModel.Where(item => item.username == User.Identity.Name).ToList();
+            return View(result);
+        }
 
         /// <summary>
-        /// 删除游戏
+        /// 提交删除游戏申请
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -159,15 +168,108 @@ namespace GaiaProject.Controllers
                 GameInfoModel gameInfoModel = this.dbContext.GameInfoModel.SingleOrDefault(item => item.Id == id);
                 if (gameInfoModel != null)
                 {
-                    GameMgr.DeleteOneGame(gameInfoModel.name);
-                    this.dbContext.GameInfoModel.Remove(gameInfoModel);
-                    //删除下面的种族信息
-                    this.dbContext.GameFactionModel.RemoveRange(this.dbContext.GameFactionModel.Where(item => item.gameinfo_id == gameInfoModel.Id).ToList());
+                    GaiaGame gaiaGame = GameMgr.GetGameByName(gameInfoModel.name);
+                    foreach (string username in gaiaGame.Username)
+                    {
+                        //如果不是自己
+                        if (username != user.UserName)
+                        {
+                            this.dbContext.GameDeleteModel.Add(new GameDeleteModel()
+                            {
+                                gameinfo_id = gameInfoModel.Id,
+                                gameinfo_name = gameInfoModel.name,
+                                username = username,
+                                state = 0,
+                            });
+                        }
+                    }
+                    gameInfoModel.isDelete = 1;
                     this.dbContext.SaveChanges();
                     jsonData.info.state = 200;
                 }
             }
             return new JsonResult(jsonData);
+        }
+        /// <summary>
+        /// 同意删除游戏
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+
+        public async Task<JsonResult> AgreeDelGame(int id,int type)
+        {
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
+            GameDeleteModel gameDeleteModel = this.dbContext.GameDeleteModel.SingleOrDefault(
+                item => item.Id == id && item.username == User.Identity.Name);
+            if (gameDeleteModel != null)
+            {
+                GameInfoModel gameInfoModel = this.dbContext.GameInfoModel.SingleOrDefault(item => item.Id == gameDeleteModel.gameinfo_id);
+                //申请删除状态
+                if (gameInfoModel.isDelete == 1)
+                {
+                    {
+                        //同意删除
+                        if (type == 1)
+                        {
+                            //删除同意记录
+                            this.dbContext.GameDeleteModel.Remove(gameDeleteModel);
+                            this.dbContext.SaveChanges();
+                            //如果是最后一个同意的，则删除游戏
+                            if (!this.dbContext.GameDeleteModel.Any(item => item.gameinfo_id == gameDeleteModel.gameinfo_id))
+                            {
+                                this.DeleteDbGame(gameDeleteModel.gameinfo_id);
+                                jsonData.info.message = "全部玩家同意删除，已删除游戏";
+                            }
+                            else
+                            {
+                                jsonData.info.message = "继续等待其他玩家处理删除申请";
+                            }
+                        }
+                        else//不同意删除
+                        {
+                            //移除全部的申请
+                            this.dbContext.GameDeleteModel.RemoveRange(this.dbContext.GameDeleteModel.Where(item => item.gameinfo_id == gameDeleteModel.gameinfo_id));
+                            //申请删除游戏恢复
+                            GameInfoModel infoModel = this.dbContext.GameInfoModel.SingleOrDefault(item => item.Id == gameDeleteModel.gameinfo_id);
+                            if (infoModel != null)
+                            {
+                                infoModel.isDelete = 0;
+                                this.dbContext.GameInfoModel.Update(infoModel);
+                                jsonData.info.message = "游戏已经恢复正常状态";
+                            }
+                        }
+                        this.dbContext.SaveChanges();
+                    }
+                    jsonData.info.state = 200;
+                }
+            }
+
+            return new JsonResult(jsonData);
+        }
+
+        /// <summary>
+        /// 数据库删除游戏
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool  DeleteDbGame(int id)
+        {
+            var user =  _userManager.GetUserAsync(HttpContext.User);
+            if (user != null)
+            {
+                GameInfoModel gameInfoModel = this.dbContext.GameInfoModel.SingleOrDefault(item => item.Id == id);
+                if (gameInfoModel != null)
+                {
+                    GameMgr.DeleteOneGame(gameInfoModel.name);
+                    this.dbContext.GameInfoModel.Remove(gameInfoModel);
+                    //删除下面的种族信息
+                    this.dbContext.GameFactionModel.RemoveRange(this.dbContext.GameFactionModel.Where(item => item.gameinfo_id == gameInfoModel.Id).ToList());
+                    this.dbContext.SaveChanges();
+                    return true;
+                }
+            }
+            return false;
         }
 
 
@@ -176,12 +278,12 @@ namespace GaiaProject.Controllers
         #endregion
 
 
-
+        #region 种族玩家统计
         /// <summary>
         /// 个人使用的种族信息
         /// </summary>
         /// <returns></returns>
-        public IActionResult FactionList(GameFactionModel gameFactionModel,int? type,int? usercount)
+        public IActionResult FactionList(GameFactionModel gameFactionModel, int? type, int? usercount)
         {
 
             if (gameFactionModel.username == null)
@@ -194,7 +296,7 @@ namespace GaiaProject.Controllers
                 gameFactionModels = this.dbContext.GameFactionModel.AsQueryable();
                 if (gameFactionModel.FactionName != null)
                 {
-                    gameFactionModels = gameFactionModels.Where(item => item.FactionName == gameFactionModel.FactionName)                        ;
+                    gameFactionModels = gameFactionModels.Where(item => item.FactionName == gameFactionModel.FactionName);
                 }
             }
             else if (type == 2)//高分
@@ -217,7 +319,7 @@ namespace GaiaProject.Controllers
             {
                 gameFactionModels = gameFactionModels.Where(item => item.UserCount == usercount);
             }
-            List<Models.Data.GameInfoController.StatisticsFaction> list= null;
+            List<Models.Data.GameInfoController.StatisticsFaction> list = null;
 
             //不是高分统计
             if (type != 2)
@@ -260,7 +362,7 @@ namespace GaiaProject.Controllers
             //赋值model
             FactionListInfo factionListInfo = new FactionListInfo();
             factionListInfo.ListGameFaction = gameFactionModels.ToList();
-            factionListInfo.ListStatisticsFaction = list??new List<Models.Data.GameInfoController.StatisticsFaction>();
+            factionListInfo.ListStatisticsFaction = list ?? new List<Models.Data.GameInfoController.StatisticsFaction>();
             //gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal);
             return View(factionListInfo);
         }
@@ -270,7 +372,7 @@ namespace GaiaProject.Controllers
         /// <param name="usercount"></param>
         /// <param name="username"></param>
         /// <returns></returns>
-        private List<Models.Data.GameInfoController.StatisticsFaction> GetFactionStatistics(IQueryable<GameFactionModel> query,int? usercount, string username,int? orderType=null)
+        private List<Models.Data.GameInfoController.StatisticsFaction> GetFactionStatistics(IQueryable<GameFactionModel> query, int? usercount, string username, int? orderType = null)
         {
             //IQueryable<GameFactionModel> query;
             if (query == null)
@@ -316,7 +418,7 @@ namespace GaiaProject.Controllers
                     scoremax = g.Max(faction => faction.scoreTotal),
                     scoremaxuser = g.OrderByDescending(faction => faction.scoreTotal).ToList()[0].username,
                     scoreavg = g.Sum(faction => faction.scoreTotal) / g.Count(),
-                    OccurrenceRate = g.Count()*100 / total,
+                    OccurrenceRate = g.Count() * 100 / total,
                 });
             if (orderType != null)
             {
@@ -347,20 +449,20 @@ namespace GaiaProject.Controllers
         /// </summary>
         /// <returns></returns>
 
-        public IActionResult FactionStatistics(int? usercount,string username,int? orderType)
+        public IActionResult FactionStatistics(int? usercount, string username, int? orderType)
         {
-            var list = this.GetFactionStatistics(null,usercount, username, orderType);
+            var list = this.GetFactionStatistics(null, usercount, username, orderType);
             return View(list);
         }
 
         /// <summary>
         /// 玩家的平均分
         /// </summary>
-        public IActionResult UserScoreAvg(GameFactionModel gameFactionModel,int? orderType,int usercount=4)
+        public IActionResult UserScoreAvg(GameFactionModel gameFactionModel, int? orderType, int usercount = 4)
         {
             IQueryable<GameFactionModel> query;
             //90一下的不纳入统计
-            query = this.dbContext.GameFactionModel.Where(item=>item.scoreTotal>90);
+            query = this.dbContext.GameFactionModel.Where(item => item.scoreTotal > 90);
             //人数
             if (usercount > 0)
             {
@@ -413,6 +515,9 @@ namespace GaiaProject.Controllers
             }
             return View(list.ToList());
         }
+
+        #endregion
+
 
         #region 操作内存和数据库游戏
 

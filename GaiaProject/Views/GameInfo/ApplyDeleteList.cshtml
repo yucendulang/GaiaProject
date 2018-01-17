@@ -1,0 +1,47 @@
+﻿@model System.Collections.Generic.List<GaiaDbContext.Models.HomeViewModels.GameDeleteModel>
+
+@{
+    ViewBag.Title = "申请删除的游戏";
+    Layout = "_Layout";
+}
+
+<table class="table">
+    <thead>
+    <tr>
+        <td>游戏名称</td>
+        <td>操作</td>
+
+
+    </tr>
+    </thead>
+    <tbody>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.gameinfo_name</td>
+
+            <td>
+                <button class="btn btn-default" onclick="Operate(@item.Id,1)">同意</button>
+                <button class="btn btn-default" onclick="Operate(@item.Id,0)">拒绝</button>
+
+            </td>
+        </tr>
+
+    }
+
+    </tbody>
+</table>
+
+<script>
+    //同意
+    function Operate(id,type) {
+        $.post("/GameInfo/AgreeDelGame/" + id, "type="+type, function(data) {
+            if (data.info.state === 200) {
+                alert(data.info.message);
+                window.location.reload();
+            }
+        });
+    }
+
+</script>
