@@ -52,11 +52,10 @@
             </td>
 
             <td>
-                暂未开发
-                @*                @if (isAdmin)*@
-                @*                {*@
-                @*                    <button class="btn btn-default del" id="@item.Id">删除</button>*@
-                @*                }*@
+                @if (isAdmin)
+                {
+                    <button class="btn btn-default" id="" onclick="resetpwd('@item.Id')">重置密码</button>
+                }
             </td>
         </tr>
 
@@ -67,3 +66,13 @@
 
 @Html.Partial("Partial_PageInfo", Model)
 
+<script>
+    function resetpwd(id) {
+        $.post("/UserFriend/ResetPwd/"+id, "", function(data) {
+            //alert(data);
+            if (data.info.state === 200 && data.info.message ==="Succeeded") {
+                alert("密码已经重置为12345678");
+            }
+        });
+    }
+</script>

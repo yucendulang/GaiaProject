@@ -130,6 +130,30 @@ namespace GaiaProject.Controllers
             List<ApplicationUser> list = this.dbContext.Users.Where(item=> (model.UserName == null || item.UserName==model.UserName) && (model.Email==null || item.Email == model.Email)).OrderByDescending(item=>item.groupid).Skip(50*(pageindex-1)).Take(50).ToList();
             return View(list);
         }
+        /// <summary>
+        /// 重置密码
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<JsonResult> ResetPwd(string id)
+        {
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
+
+            var user = this._userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                var result = user.Result;
+                //_userManager.ResetPasswordAsync(result,)
+                var code = await _userManager.GeneratePasswordResetTokenAsync(result);
+
+                var newuser =  await _userManager.ResetPasswordAsync(result, code, "12345678");
+                //int a = 1;
+                jsonData.info.state = 200;
+                jsonData.info.message = newuser.ToString();
+            }
+            return new JsonResult(jsonData);
+        }
 
         public class FriendInfo
         {
