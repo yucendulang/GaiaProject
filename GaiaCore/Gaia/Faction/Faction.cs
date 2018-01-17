@@ -20,6 +20,16 @@ namespace GaiaCore.Gaia
                 gg = new GaiaGame(new string[] { });
                 return;
             }
+            m_powerToken1 = 2;
+            m_powerToken2 = 4;
+            m_powerTokenGaia = 0;
+            m_TransformLevel = 0;
+            m_AILevel = 0;
+            m_EconomicLevel = 0;
+            m_GaiaLevel = 0;
+            m_ScienceLevel = 0;
+
+
             if (gg.IsTestGame)
             {
                 m_credit = 30;
@@ -28,6 +38,10 @@ namespace GaiaCore.Gaia
                 m_QICs = 15;
                 m_powerToken3 = 30;
                 m_ShipLevel = 3;
+
+                this.m_powerToken1 = 0;
+                this.m_powerToken2 = 0;
+
             }
             else
             {
@@ -38,16 +52,6 @@ namespace GaiaCore.Gaia
                 m_powerToken3 = 0;
                 m_ShipLevel = 0;
             }
-
-
-            m_powerToken1 = 2;
-            m_powerToken2 = 4;
-            m_powerTokenGaia = 0;
-            m_TransformLevel = 0;
-            m_AILevel = 0;
-            m_EconomicLevel = 0;
-            m_GaiaLevel = 0;
-            m_ScienceLevel = 0;
 
             Mines = new List<Mine>();
             for (int i = 0; i < GameConstNumber.MineCount; i++)

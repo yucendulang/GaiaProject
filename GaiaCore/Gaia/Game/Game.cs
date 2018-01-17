@@ -417,17 +417,20 @@ namespace GaiaCore.Gaia
             Enum.TryParse(factionFromStr, true, out FactionName factionFrom);
             if (faction is Taklons && faction.StrongHold == null)
             {
-                var pwtfirst= match.Groups[4].Value.Trim();
+                var pwtfirst = match.Groups[4].Value.Trim();
                 if (string.IsNullOrEmpty(pwtfirst))
                 {
                     return false;
                 }
                 if (pwtfirst.Equals("pwt"))
                 {
-                    faction.PowerToken1++;
+                    if (isLeech)//吸收
+                    {
+                        faction.PowerToken1++;
+                    }
                     try
                     {
-                        if(!faction.LeechPower(power, factionFrom, isLeech))
+                        if (!faction.LeechPower(power, factionFrom, isLeech))
                         {
                             faction.PowerToken1--;
                             return false;
@@ -440,8 +443,8 @@ namespace GaiaCore.Gaia
                     }
                 }
                 else
-                { 
-                    if(faction.LeechPower(power, factionFrom, isLeech))
+                {
+                    if (faction.LeechPower(power, factionFrom, isLeech))
                     {
                         //如果吸收了能力才加token
                         if (isLeech)

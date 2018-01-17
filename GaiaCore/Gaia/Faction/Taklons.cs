@@ -61,17 +61,29 @@ namespace GaiaCore.Gaia
 
         public override int PowerIncrease(int i)
         {
-            if (m_powerToken1 >= i)
+            //如果吸收的魔力为0，则不处理
+            if (i == 0)
             {
-                BigStone = 2;
+                
             }
-            else if (m_powerToken1 * 2 + m_powerToken2 >= i)
+            else if (BigStone==3)//如果在区域3也不处理
             {
-                BigStone = 3;
+                
             }
             else
             {
-                BigStone = 3;
+                if (m_powerToken1 >= i)
+                {
+                    BigStone = 2;
+                }
+                else if (m_powerToken1 * 2 + m_powerToken2 >= i)
+                {
+                    BigStone = 3;
+                }
+                else
+                {
+                    BigStone = 3;
+                }
             }
             return base.PowerIncrease(i);
         }
