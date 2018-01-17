@@ -55,7 +55,7 @@
             factionName: '@faction.FactionName',
             stage: -1,
             colorIndex:@faction.colorIndex,
-            GameName: '@Model.GameName',
+            GameName: '@Html.Raw(Model.GameName)',
             PlayerIndex: @Model.GameStatus.PlayerIndex,
         };
         //alert(userInfo.isRound);
