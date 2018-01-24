@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Gaia.Service;
 using Microsoft.AspNetCore.Mvc;
 using GaiaCore.Gaia;
 using GaiaProject.Models.HomeViewModels;
@@ -21,11 +22,13 @@ namespace GaiaProject.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext dbContext;
+        private readonly IEmailSender _emailSender;
 
-        public HomeController(ApplicationDbContext dbContext,UserManager<ApplicationUser> userManager)
+        public HomeController(ApplicationDbContext dbContext,UserManager<ApplicationUser> userManager, IEmailSender emailSender)
         {
-            _userManager = userManager;
+            this._userManager = userManager;
             this.dbContext = dbContext;
+            this._emailSender = emailSender;
         }
         public IActionResult Index()
         {
@@ -394,8 +397,10 @@ namespace GaiaProject.Controllers
                 {
                     syntax = string.Format("{0}:{1}", factionName, syntax);
                 }
+                //游戏结束，发送邮件赋值，
+                GaiaCore.Gaia.Game.GameSave._emailSender = this._emailSender;
+                //执行命令
                 GameMgr.GetGameByName(name).Syntax(syntax, out string log, task.Result.UserName,dbContext:this.dbContext);
-
                 if (!string.IsNullOrEmpty(log))
                 {
                     return "error:" + log;

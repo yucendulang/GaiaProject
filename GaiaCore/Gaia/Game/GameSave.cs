@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Gaia.Service;
+using GaiaDbContext.Models;
 using GaiaDbContext.Models.HomeViewModels;
 using GaiaProject.Data;
 
@@ -9,6 +11,9 @@ namespace GaiaCore.Gaia.Game
 {
     public class GameSave
     {
+
+        public static  IEmailSender _emailSender;
+
         /// <summary>
         /// 保存到数据库
         /// </summary>
@@ -23,6 +28,36 @@ namespace GaiaCore.Gaia.Game
 
             if (flag)
             {
+                //获取游戏
+                var gameinfo = dbContext.GameInfoModel.SingleOrDefault(item => item.name == gaiaGame.GameName);
+                if (gameinfo == null)
+                {
+                    return;
+                }
+
+                string finalScore = string.Join(":",
+                    gaiaGame.FactionList.OrderByDescending(item => item.Score)
+                        .Select(item => string.Format("{0}{1}({2})", item.ChineseName,
+                            item.Score, item.UserName)));
+                string title = $"游戏({gaiaGame.GameName})结束,{finalScore}";
+                string message = "http://gaiaproject3.chinacloudsites.cn/Home/RestoreGame/" + gameinfo.Id.ToString();
+                //向全部玩家发送游戏结束提醒
+                try
+                {
+                    foreach (string s in gaiaGame.Username)
+                    {
+                        ApplicationUser applicationUser = dbContext.Users.SingleOrDefault(user => user.UserName == s);
+                        if (applicationUser != null)
+                        {
+                            _emailSender?.SendEmailAsync(applicationUser.Email, title, message);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+
+                }
+
                 //保存
                 if (ApplicationDbContext.isSaveResult)
                 {
@@ -30,55 +65,41 @@ namespace GaiaCore.Gaia.Game
                     {
                         //保存游戏结束时的信息
                         //先保存游戏信息
-                        var gameinfo = dbContext.GameInfoModel.SingleOrDefault(item => item.name == gaiaGame.GameName);
-
-                        if (gameinfo != null)
+                        if (gameinfo.GameStatus == 8)
                         {
-                            if (gameinfo.GameStatus == 8)
-                            {
-                                return;
-                            }
-
-                            gameinfo.GameStatus = 8; //状态
-                            gameinfo.round = 7;//代表结束
-                            gameinfo.version = gaiaGame.version; //版本
-                            gameinfo.UserCount = gaiaGame.UserCount; //玩家数量
-                            gameinfo.endtime = DateTime.Now; //结束时间
-                            //gameinfo.ATTList = string.Join("|", ATTList.Select(item => item.name));
-                            //gameinfo.FSTList = string.Join("|", FSTList.Select(item => item.GetType().Name));
-                            //gameinfo.RBTList = string.Join("|", RBTList.Select(item => item.name));
-                            //gameinfo.RSTList = string.Join("|", RSTList.Select(item => item.GetType().Name));
-                            //gameinfo.STT3List = string.Join("|",
-                            //    STT3List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
-                            //gameinfo.STT6List = string.Join("|",
-                            //    STT6List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
-                            gameinfo.loginfo = string.Join("|", gaiaGame.LogEntityList.Select(item => item.Syntax)) + "|" +
-                                               gaiaGame.syntax;
-                            gameinfo.scoreFaction =
-                                string.Join(":",
-                                    gaiaGame.FactionList.OrderByDescending(item => item.Score)
-                                        .Select(item => string.Format("{0}{1}({2})", item.ChineseName,
-                                            item.Score, item.UserName))); //最后的得分情况
-
-                            dbContext.GameInfoModel.Update(gameinfo);
-
-
-                            //dbContext.SaveChanges();
-                            //保存种族信息
-                            try
-                            {
-                                SaveFactionToDb(dbContext, gaiaGame, gameinfo);
-                            }
-                            catch (Exception e)
-                            {
-
-                            }
-
-
-                            dbContext.SaveChanges();
+                            return;
                         }
+                        gameinfo.GameStatus = 8; //状态
+                        gameinfo.round = 7;//代表结束
+                        gameinfo.version = gaiaGame.version; //版本
+                        gameinfo.UserCount = gaiaGame.UserCount; //玩家数量
+                        gameinfo.endtime = DateTime.Now; //结束时间
+                        //gameinfo.ATTList = string.Join("|", ATTList.Select(item => item.name));
+                        //gameinfo.FSTList = string.Join("|", FSTList.Select(item => item.GetType().Name));
+                        //gameinfo.RBTList = string.Join("|", RBTList.Select(item => item.name));
+                        //gameinfo.RSTList = string.Join("|", RSTList.Select(item => item.GetType().Name));
+                        //gameinfo.STT3List = string.Join("|",
+                        //    STT3List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
+                        //gameinfo.STT6List = string.Join("|",
+                        //    STT6List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
+                        gameinfo.loginfo = string.Join("|", gaiaGame.LogEntityList.Select(item => item.Syntax)) + "|" +
+                                           gaiaGame.syntax;
+                        gameinfo.scoreFaction = finalScore; //最后的得分情况
+
+                        dbContext.GameInfoModel.Update(gameinfo);
 
 
+                        //dbContext.SaveChanges();
+                        //保存种族信息
+                        try
+                        {
+                            SaveFactionToDb(dbContext, gaiaGame, gameinfo);
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                        dbContext.SaveChanges();
                     }
                     catch (Exception e)
                     {

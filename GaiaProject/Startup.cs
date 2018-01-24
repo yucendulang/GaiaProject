@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using GaiaProject.Models;
-using GaiaProject.Services;
+using Gaia.Service;
 using ManageTool;
 using GaiaProject.Data;
 using GaiaDbContext.Models;

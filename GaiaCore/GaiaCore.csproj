@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Gaia.Service\Gaia.Service.csproj" />
     <ProjectReference Include="..\GaiaDbContext\GaiaDbContext.csproj" />
   </ItemGroup>
 

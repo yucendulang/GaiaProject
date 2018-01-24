@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using GaiaProject.Models;
 using GaiaProject.Models.ManageViewModels;
-using GaiaProject.Services;
+using Gaia.Service;
 using GaiaDbContext.Models;
 using GaiaProject.Data;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;

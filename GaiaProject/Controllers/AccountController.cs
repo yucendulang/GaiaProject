@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using GaiaProject.Models;
 using GaiaProject.Models.AccountViewModels;
-using GaiaProject.Services;
+using Gaia.Service;
 using GaiaDbContext.Models;
 
 namespace GaiaProject.Controllers
