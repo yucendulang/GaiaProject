@@ -28,7 +28,12 @@
 
             <span style="background-color: @Model.ColorCode">@Model.ChineseName @Model.FactionName @Model.UserName</span>
 
-            <a href="/Home/About#@Model.FactionName" style="float: right" target="_blank">种族介绍</a>
+
+            <button type="button" class="btn btn-default" style="float: right" onclick="faction_scoreShow('@Model.GaiaGame.GameName','@Model.FactionName')">得分明细</button>
+            <button type="button" class="btn btn-default" style="float: right" onclick="faction_logShow('@Model.GaiaGame.GameName','@Model.FactionName')">日志明细</button>
+            <button type="button" class="btn btn-default"><a href="/Home/About#@Model.FactionName" style="float: right" target="_blank">种族介绍</a></button>
+
+
         </h3>
     </div>
     <div class="panel-body">

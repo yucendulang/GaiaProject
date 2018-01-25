@@ -493,7 +493,7 @@ namespace GaiaProject.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<JsonResult> SyntaxLog(string id)
+        public async Task<JsonResult> SyntaxLog(string id,string factionName=null,int factionType=0)
         {
 
 
@@ -512,7 +512,17 @@ namespace GaiaProject.Controllers
             }
             if (gg != null)
             {
-                foreach (var item in gg.LogEntityList.OrderByDescending(x => x.Row))
+                List<LogEntity> logList = gg.LogEntityList;
+                if (factionName != null)
+                {
+                    logList = logList.Where(item => item.FactionName.ToString() == factionName).ToList();
+                    //只看分数变化的操作
+                    if (factionType == 1)
+                    {
+                        logList = logList.Where(item => item.ResouceChange?.m_score != 0).ToList();
+                    }
+                }
+                foreach (var item in logList.OrderByDescending(x => x.Row))
                 {
                     stringBuilder.Append(string.Format("<tr><td>{0}</td><td class='text-right'>{1}</td><td>{2}vp</td><td class='text-right'>{3}</td><td>{4}c</td><td class='text-right'>{5}</td><td>{6}o</td><td class='text-right'>{7}</td><td>{8}q</td><td class='text-right'>{9}</td><td>{10}k</td><td class='text-right'>{11}</td><td>{12}/{13}/{14}</td><td>{15}</td>{16}</tr>", item.FactionName ?? null, @item.ResouceChange?.m_score, item.ResouceEnd?.m_score, item.ResouceChange?.m_credit, item.ResouceEnd?.m_credit, item.ResouceChange?.m_ore, item.ResouceEnd?.m_ore, item.ResouceChange?.m_QICs, item.ResouceEnd?.m_QICs, item.ResouceChange?.m_knowledge, item.ResouceEnd?.m_knowledge, item.ResouceChange?.m_powerToken2 + item.ResouceChange?.m_powerToken3 * 2, item.ResouceEnd?.m_powerToken1, item.ResouceEnd?.m_powerToken2, item.ResouceEnd?.m_powerToken3, item.Syntax,
                         singleOrDefault.GameStatus==8?string.Format("<td><a href='/Home/RestoreGame/{1}/?row={0}'>转到</a></td>", item.Row, singleOrDefault?.Id):null)

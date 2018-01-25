@@ -413,3 +413,24 @@ $(document).ready(function () {
 });
 
 
+//
+function faction_getLog(gameName, factionName, factionType) {
+    $.get("/Home/SyntaxLog/" + gameName + "?factionName=" + factionName + "&factionType=" + factionType,
+        function(data) {
+            //alert(data);
+            $("#queryInfoBody").html("<table class='table'><thead data-toggle='collapse' data-target='#demo'><tr><th>种族名</th><th class='text-right'>变化数值</th><th>分数</th><th class='text-right'>变化数值</th><th>信用点</th><th class='text-right'>变化数值</th><th>矿</th><th class='text-right'>变化数值</th><th>QIC</th><th class='text-right'>变化数值</th><th>知识</th><th class='text-right'>变化数值</th><th>能量</th><th>语句</th></tr></thead>" + data.data+"</table>");
+            $("#queryInfoModel").modal();
+        });
+}
+//得分明细
+function faction_scoreShow(gameName,factionName) {
+    //alert(factionName);
+    //openQueryWindow($("#syntax").val(), "确认?");
+    faction_getLog(gameName, factionName, 1);
+}
+//日志明细
+function faction_logShow(gameName,factionName) {
+    //alert(factionName);
+    faction_getLog(gameName, factionName, 0);
+
+}
