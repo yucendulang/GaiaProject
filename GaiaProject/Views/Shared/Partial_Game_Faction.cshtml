@@ -91,6 +91,22 @@
         @Html.Partial("Partial_Game_TT", Model)
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5" id="playerFaction">
+        <div class="panel panel-default">
+            <table class="table">
+                @foreach (var item in Model.LogEntityList.OrderByDescending(x => x.Row).Take(5))
+                {
+                    <tr>
+                        <td>@item.ChineseName</td>
+                        <td>@item.ResouceEnd?.m_score VP</td>
+
+                        <td>@item.Syntax</td>
+                    </tr>
+                }
+
+            </table>
+
+        </div>
+
 
         @if (isRound)//行动区域显示
         {
@@ -111,33 +127,40 @@
                 //游戏未结束
                 if (Model.GameStatus.status != Status.ENDED)
                 {
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            备忘
-                        </div>
-                        <div class="panel-body">
-                            <textarea class="form-control" rows="4" name="remark" id="remark" style="width: 100%"></textarea>
-                            回合提示:<input type="checkbox" aria-label="" id="isTishi" name="isTishi" checked="checked">
-                            <button type="button" class="btn btn-default" style="width: 100px" id="saveremark">保存</button>
-                        </div>
-                    </div>
-                    <script>
-                        //alert(userInfo.UserGameModel.isTishi);
-                        if (userInfo.UserGameModel !== undefined) {
-                            $("#isTishi").attr("checked", userInfo.UserGameModel.isTishi);
-                            $("#remark").val(userInfo.UserGameModel.remark);
-                        }
-                        $("#saveremark").click(function () {
-
-                            $.post("/Ajax/SaveRemark/" + "@Html.Raw(Model.GameName)", "remark=" + $("#remark").val() + "&isTishi=" + $("#isTishi").is(':checked'), function(data) {
-                                if (data.info.state === 200) {
-                                    alert("保存成功");
-                                } else {
-                                    alert(data.info.message);
+                    <div class="row">
+                        <div  class="col-md-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    备忘
+                                </div>
+                                <div class="panel-body">
+                                    <textarea class="form-control" rows="4" name="remark" id="remark" style="width: 100%"></textarea>
+                                    回合提示:<input type="checkbox" aria-label="" id="isTishi" name="isTishi" checked="checked">
+                                    <button type="button" class="btn btn-default" style="width: 100px" id="saveremark">保存</button>
+                                </div>
+                            </div>
+                            <script>
+                                //alert(userInfo.UserGameModel.isTishi);
+                                if (userInfo.UserGameModel !== undefined) {
+                                    $("#isTishi").attr("checked", userInfo.UserGameModel.isTishi);
+                                    $("#remark").val(userInfo.UserGameModel.remark);
                                 }
-                            });
-                        });
-                    </script>
+                                $("#saveremark").click(function () {
+
+                                    $.post("/Ajax/SaveRemark/" + "@Html.Raw(Model.GameName)", "remark=" + $("#remark").val() + "&isTishi=" + $("#isTishi").is(':checked'), function(data) {
+                                        if (data.info.state === 200) {
+                                            alert("保存成功");
+                                        } else {
+                                            alert(data.info.message);
+                                        }
+                                    });
+                                });
+                            </script>
+                        </div>
+
+
+                    </div>
+
                 }
 
             }

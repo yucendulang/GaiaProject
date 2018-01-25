@@ -1,4 +1,5 @@
-﻿@using GaiaDbContext.Models
+﻿@using GaiaCore.Gaia
+@using GaiaDbContext.Models
 
 @model IEnumerable<KeyValuePair<string, GaiaCore.Gaia.GaiaGame>>
 @*
@@ -29,7 +30,8 @@
             var userName = @UserManager.GetUserName(User);}
         @foreach (var item in Model.OrderByDescending(x => x.Value.LastMoveTime))
         {
-            color = item.Value.GetCurrentUserName() == userName ? "#CD950C" : "";
+            color = (item.Value.GetCurrentUserName() == userName || (item.Value.UserDic.Count > 1 && item.Value.GameStatus.stage == Stage.ROUNDWAITLEECHPOWER && item.Value.UserDic.ContainsKey(userName) && item.Value.UserDic[userName].Exists(y => y.LeechPowerQueue.Count != 0))) ? "#CD950C" : "";
+
             <tr style="background: @color">
                 <td><a href="/home/ViewGame/@item.Key">@item.Key</a></td>
                 @if (item.Value.UserDic.ContainsKey(User.Identity.Name))

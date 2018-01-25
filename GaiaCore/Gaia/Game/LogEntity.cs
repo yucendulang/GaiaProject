@@ -10,6 +10,9 @@ namespace GaiaCore.Gaia
         public string Syntax { set; get; }
         public FactionBackup ResouceChange { set; get; }
         public FactionName? FactionName{set;get;}
+
+        public string ChineseName { set; get; }
+
         public FactionBackup ResouceEnd { set; get; }
         public override string ToString()
         {

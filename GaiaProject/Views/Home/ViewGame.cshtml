@@ -556,22 +556,22 @@ else
         <tbody id="SyntaxLogList" class="collapse in">
             @foreach (var item in Model.LogEntityList.OrderByDescending(x => x.Row).Take(20))
             {
-                <tr>
-                    <td>@(item.FactionName ?? null)</td>
-                    <td class="text-right">@item.ResouceChange?.m_score</td>
-                    <td>@(item.ResouceEnd?.m_score)vp</td>
-                    <td class="text-right">@item.ResouceChange?.m_credit</td>
-                    <td>@(item.ResouceEnd?.m_credit)c</td>
-                    <td class="text-right">@item.ResouceChange?.m_ore</td>
-                    <td>@(item.ResouceEnd?.m_ore)o</td>
-                    <td class="text-right">@item.ResouceChange?.m_QICs</td>
-                    <td>@(item.ResouceEnd?.m_QICs)q</td>
-                    <td class="text-right">@item.ResouceChange?.m_knowledge</td>
-                    <td>@(item.ResouceEnd?.m_knowledge)k</td>
-                    <td class="text-right">@(item.ResouceChange?.m_powerToken2 + item.ResouceChange?.m_powerToken3 * 2)</td>
-                    <td>@(item.ResouceEnd?.m_powerToken1)/@(item.ResouceEnd?.m_powerToken2)/@(item.ResouceEnd?.m_powerToken3)</td>
-                    <td>@item.Syntax</td>
-                </tr>
+            <tr>
+                <td>@(item.ChineseName ?? null)</td>
+                <td class="text-right">@item.ResouceChange?.m_score</td>
+                <td>@(item.ResouceEnd?.m_score)vp</td>
+                <td class="text-right">@item.ResouceChange?.m_credit</td>
+                <td>@(item.ResouceEnd?.m_credit)c</td>
+                <td class="text-right">@item.ResouceChange?.m_ore</td>
+                <td>@(item.ResouceEnd?.m_ore)o</td>
+                <td class="text-right">@item.ResouceChange?.m_QICs</td>
+                <td>@(item.ResouceEnd?.m_QICs)q</td>
+                <td class="text-right">@item.ResouceChange?.m_knowledge</td>
+                <td>@(item.ResouceEnd?.m_knowledge)k</td>
+                <td class="text-right">@(item.ResouceChange?.m_powerToken2 + item.ResouceChange?.m_powerToken3 * 2)</td>
+                <td>@(item.ResouceEnd?.m_powerToken1)/@(item.ResouceEnd?.m_powerToken2)/@(item.ResouceEnd?.m_powerToken3)</td>
+                <td>@item.Syntax</td>
+            </tr>
             }
         </tbody>
 

@@ -1208,6 +1208,7 @@ namespace GaiaCore.Gaia
                     LogEntityList.Add(new LogEntity()
                     {
                         FactionName = currentFaction?.FactionName,
+                        ChineseName = currentFaction?.ChineseName,
                         Row = LogEntityList.Count + 1,
                         Syntax = syntax,
                         ResouceChange = turnStart,

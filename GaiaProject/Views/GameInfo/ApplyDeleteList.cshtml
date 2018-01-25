@@ -19,7 +19,7 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td>@item.gameinfo_name</td>
+            <td>@Html.Raw(item.gameinfo_name)</td>
 
             <td>
                 <button class="btn btn-default" onclick="Operate(@item.Id,1)">同意</button>
