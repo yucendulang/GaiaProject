@@ -26,6 +26,8 @@
     </script>
     
 
+
+
     @if (ViewData["GameList"] != null)
     {
         @Html.Partial("Partial_AllGameList", ViewData["GameList"])
@@ -38,7 +40,10 @@
 
     <hr>
     <blockquote>
-        <p>种族介绍与帮助文件已经更新 如果有什么语句不清楚请联系to总进行补充</p>
+        致各位gaia project的愛好者，<br/>
+        感謝大家近來對本站測試期間的積極回饋，現伺服器試用階段已到期，為讓本站長期穩定地持續下去，開始向各位同好募集伺服器運營所需費用。<br/>
+        考慮到伺服器的穩定以及後續調整的便利性，第一階段我們會對外募集3-6個月的費用（視募集情況而定，半年伺服器費用約在1000RMB左右）。有意向支持的朋友可以直接通過郵箱21817698@qq.com或是該郵箱的QQ號直接聯繫瞭解具體途徑。<br/>
+        因本站為愛好者發起，非任何商業性質，故本站承諾所有募集費用僅用於本站伺服器運營，不做他用。
     </blockquote>
     <blockquote>
         <p>四天无人操作的局会被炸掉</p>
@@ -68,6 +73,9 @@
     </ul>
     <h4>12月15日之前以修BUG为主 最近更新如下 最近一次更新时间@(ViewData["ServerStartTime"])</h4>
     <ul>
+        
+        <li>浏览器及时自动刷新，处于测试阶段，可能有BUG，需要浏览器支持WEBSOCKET,如uc,chrome,火狐等</li>
+
         <li>游戏结束发送邮件提醒</li>
         <li>删除游戏需要其他玩家的同意才进行删除</li>
         <li>修复两种利爪智慧石区域错误的BUG</li>
@@ -133,27 +141,11 @@
             <p><a href="/home/RestoreDataFromServerOneGame/112701">恢复单个游戏</a></p>
         </environment>
     }
-    <script>
-        setTimeout('GetNextGame()', 10000); //指定1秒刷新一次
 
-        function GetNextGame() {
-            if ($("#isMyTurn").text().indexOf("True") == -1) {
-                $.post("/home/GetNextGame",
-                    {
-                        name: $("p#username").text()
-                    },
-                    function (data, status) {
-                        console.log(data);
-                        if (data == undefined || data == "") {
-                        } else {
-                            window.location.href = "/home/viewgame/" + data;
-                            alert("你的回合");
-                        }
-                    });
-            }
-            setTimeout('GetNextGame()', 10000);
-        }
-    </script>
+    <script type='text/javascript' language='javascript' src='~/js/nextgame.js'></script>
+
+
+
 }
 else
 {

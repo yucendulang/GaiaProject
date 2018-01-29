@@ -338,27 +338,7 @@ $(document).ready(function () {
     });
 });
 
-setTimeout('GetNextGame()', 10000); //指定1秒刷新一次
 
-function GetNextGame() {
-    if ($("#isMyTurn").val().indexOf("True") == -1) {
-        $.post("/home/GetNextGame",
-            {
-                name: $("input#username").val()
-            },
-            function (data, status) {
-                if (data == undefined || data === "") {
-                    //console.log(data);
-                } else {
-                    //console.log(data);
-                    window.location.href = "/home/viewgame/" + data;
-                    alert("你的回合");
-                }
-
-            });
-    }
-    setTimeout('GetNextGame()', 10000);
-}
 
 
 $(document).ready(function () {

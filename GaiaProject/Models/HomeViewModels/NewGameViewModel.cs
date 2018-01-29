@@ -33,6 +33,9 @@ namespace GaiaProject.Models.HomeViewModels
         [Display(Name = "是否为测试局")]
         public bool IsTestGame { set; get; }
 
+        [Display(Name = "即时刷新(需要浏览器支持websocket)")]
+        public bool IsSocket { set; get; }
+
         [Display(Name = "地图选择")]
         public string MapSelction { set; get; }
     }

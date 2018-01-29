@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +16,9 @@ using Gaia.Service;
 using ManageTool;
 using GaiaProject.Data;
 using GaiaDbContext.Models;
+using GaiaProject.Notice;
+using Microsoft.AspNetCore.Http;
+
 
 namespace GaiaProject
 {
@@ -105,6 +110,16 @@ namespace GaiaProject
 
             app.UseIdentity();
 
+
+            //websocket中间件，需要在mvc之前声明
+            var webSocketOptions = new WebSocketOptions()
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(120),
+                ReceiveBufferSize = 4 * 1024
+            };
+            app.UseWebSockets(webSocketOptions);
+            app.UseMiddleware<NoticeWebSocketMiddleware>();
+
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseMvc(routes =>
@@ -113,6 +128,30 @@ namespace GaiaProject
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+
+
+//            // Configure function 
+//            // 这里主要是监听 WebSocket的请求，然后Invoke Echo 方法进行相关操作。比如，它接受到浏览器发来 WebSocket 的Close 命令了，那么在Echo 方法直接 await webSocket.CloseAsync(result.CloseStatus.Value... 相关操作
+//            app.Use(async (context, next) =>
+//            {
+//                if (context.Request.Path == "/ws")
+//                {
+//                    if (context.WebSockets.IsWebSocketRequest)
+//                    {
+//                        WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+//                        await Echo(context, webSocket);
+//                    }
+//                    else
+//                    {
+//                        context.Response.StatusCode = 400;
+//                    }
+//                }
+//            });
+
         }
+
+
+
     }
 }

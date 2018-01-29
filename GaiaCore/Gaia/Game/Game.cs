@@ -1532,7 +1532,11 @@ namespace GaiaCore.Gaia
         /// </summary>
         [JsonProperty]
         public List<UserGameModel> UserGameModels { set; get; }
-
+        /// <summary>
+        /// 是否即时制
+        /// </summary>
+        [JsonProperty]
+        public bool IsSocket { get; set; }
 
         public class STTInfo
         {

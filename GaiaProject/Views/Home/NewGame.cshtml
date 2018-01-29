@@ -127,6 +127,16 @@
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
+            <div class="checkbox">
+                <label asp-for="IsSocket">
+                    <input asp-for="IsSocket"/>
+                    @Html.DisplayNameFor(m => m.IsSocket)
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
             <label asp-for="MapSelction">
                 <input asp-for="MapSelction" type="radio" value="fix2p" />双人固定
                 <input asp-for="MapSelction" type="radio" value="random2p" />双人随机

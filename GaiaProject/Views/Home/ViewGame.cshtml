@@ -32,10 +32,11 @@
 
 @if (ViewData["row"] != null)
 {
-    int row = (int) ViewData["row"];
+    int row = (int)ViewData["row"];
     <div>
-        
-        @if (row > 1) { <span>@Model.LogEntityList[row - 1].Syntax</span>}
+
+        @if (row > 1)
+        {<span>@Model.LogEntityList[row - 1].Syntax</span>}
         <a href="?row=@(row - 1)">上一步</a>
         <a href="?row=@(row + 1)">下一步</a>
 
@@ -150,13 +151,13 @@ else
         {
             <p>现在等待 @Model.Username[Model.GameStatus.PlayerIndex] 选种族 setup xxx.</p>
 
-            <p>玩家顺序是 @string.Join("|",Model.Username)</p>
+            <p>玩家顺序是 @string.Join("|", Model.Username)</p>
             <div class="btn-group" id="selectfaction" role="group" aria-label="...">
                 @foreach (var
-                 fac in
-                 (new List<Faction>() { new Terraner(null), new Lantida(null), new Hive(null), new HadschHalla(null), new BalTak(null),
-                        new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null),
-                       new MadAndroid(null), new Itar(null), new Nevla(null) }).Where(item=> !Model.FactionList.Select(fa=> fa.ColorCode).Contains(item.ColorCode) ))
+                fac in
+                (new List<Faction>() { new Terraner(null), new Lantida(null), new Hive(null), new HadschHalla(null), new BalTak(null),
+                    new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null),
+                   new MadAndroid(null), new Itar(null), new Nevla(null) }).Where(item => !Model.FactionList.Select(fa => fa.ColorCode).Contains(item.ColorCode)))
                 {
                     <button type="button" class="btn btn-default" style="background-color: @fac.ColorCode" id="@fac.FactionName" syntax="setup ">@fac.ChineseName</button>
 
@@ -207,37 +208,37 @@ else
                 @if (isRound)
                 {
                     @if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Itar)
-                     {
-                         <div class="btn-group" role="group" aria-label="...">
-                             <button class="btn btn-default" onclick="openSelectTT('{0}')">选择科技版</button>
+                    {
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button class="btn btn-default" onclick="openSelectTT('{0}')">选择科技版</button>
 
-                             <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
-                         </div>
-                         <!-- 模态框（Modal）选择地图 -->
-                         @Html.Partial("Partial_Game_SelectPos", Model)//
-                     }
-                     else if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Terraner)
-                     {
+                            <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
+                        </div>
+                        <!-- 模态框（Modal）选择地图 -->
+                        @Html.Partial("Partial_Game_SelectPos", Model)//
+                    }
+                    else if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Terraner)
+                    {
 
-                         <div>
-                             <span>PG:<span id="TerranerPowerToken">@Model.FactionList[Model.GameStatus.PlayerIndex].PowerTokenGaia</span></span>
-
-
-
-                             @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTerraner, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert " })
-
-                             <button class="btn btn-default" onclick="submitData();">确认</button>
-                             
-                             <button class="btn btn-default" onclick="$('#syntax').val('convert '+$('#TerranerPowerToken').text()+'pw'+' to '+$('#TerranerPowerToken').text()+'c');">全部兑换信用点</button>
+                        <div>
+                            <span>PG:<span id="TerranerPowerToken">@Model.FactionList[Model.GameStatus.PlayerIndex].PowerTokenGaia</span></span>
 
 
-                             <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
-                         </div>
-                         <script>
-                             
-                         </script>
 
-                     }
+                            @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTerraner, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert " })
+
+                            <button class="btn btn-default" onclick="submitData();">确认</button>
+
+                            <button class="btn btn-default" onclick="$('#syntax').val('convert '+$('#TerranerPowerToken').text()+'pw'+' to '+$('#TerranerPowerToken').text()+'c');">全部兑换信用点</button>
+
+
+                            <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
+                        </div>
+                        <script>
+
+                        </script>
+
+                    }
                 }
 
 
@@ -340,7 +341,7 @@ else
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>              
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -572,22 +573,22 @@ else
         <tbody id="SyntaxLogList" class="collapse in">
             @foreach (var item in Model.LogEntityList.OrderByDescending(x => x.Row).Take(20))
             {
-            <tr>
-                <td>@(item.ChineseName ?? null)</td>
-                <td class="text-right">@item.ResouceChange?.m_score</td>
-                <td>@(item.ResouceEnd?.m_score)vp</td>
-                <td class="text-right">@item.ResouceChange?.m_credit</td>
-                <td>@(item.ResouceEnd?.m_credit)c</td>
-                <td class="text-right">@item.ResouceChange?.m_ore</td>
-                <td>@(item.ResouceEnd?.m_ore)o</td>
-                <td class="text-right">@item.ResouceChange?.m_QICs</td>
-                <td>@(item.ResouceEnd?.m_QICs)q</td>
-                <td class="text-right">@item.ResouceChange?.m_knowledge</td>
-                <td>@(item.ResouceEnd?.m_knowledge)k</td>
-                <td class="text-right">@(item.ResouceChange?.m_powerToken2 + item.ResouceChange?.m_powerToken3 * 2)</td>
-                <td>@(item.ResouceEnd?.m_powerToken1)/@(item.ResouceEnd?.m_powerToken2)/@(item.ResouceEnd?.m_powerToken3)</td>
-                <td>@item.Syntax</td>
-            </tr>
+                <tr>
+                    <td>@(item.ChineseName ?? null)</td>
+                    <td class="text-right">@item.ResouceChange?.m_score</td>
+                    <td>@(item.ResouceEnd?.m_score)vp</td>
+                    <td class="text-right">@item.ResouceChange?.m_credit</td>
+                    <td>@(item.ResouceEnd?.m_credit)c</td>
+                    <td class="text-right">@item.ResouceChange?.m_ore</td>
+                    <td>@(item.ResouceEnd?.m_ore)o</td>
+                    <td class="text-right">@item.ResouceChange?.m_QICs</td>
+                    <td>@(item.ResouceEnd?.m_QICs)q</td>
+                    <td class="text-right">@item.ResouceChange?.m_knowledge</td>
+                    <td>@(item.ResouceEnd?.m_knowledge)k</td>
+                    <td class="text-right">@(item.ResouceChange?.m_powerToken2 + item.ResouceChange?.m_powerToken3 * 2)</td>
+                    <td>@(item.ResouceEnd?.m_powerToken1)/@(item.ResouceEnd?.m_powerToken2)/@(item.ResouceEnd?.m_powerToken3)</td>
+                    <td>@item.Syntax</td>
+                </tr>
             }
         </tbody>
 
@@ -625,6 +626,15 @@ else
     </script>
     <script type='text/javascript' language='javascript' src='~/js/faction.js'></script>
 
+
+    @if (Model.IsSocket)
+     {
+         <script type='text/javascript' language='javascript' src='~/js/gpsocket.js'></script>
+     }
+     else
+     {
+         <script type='text/javascript' language='javascript' src='~/js/nextgame.js'></script>
+     }
 
 }
 else

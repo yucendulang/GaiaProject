@@ -15,6 +15,7 @@ using GaiaDbContext.Models;
 using GaiaDbContext.Models.AccountViewModels;
 using GaiaProject.Data;
 using GaiaDbContext.Models.HomeViewModels;
+using GaiaProject.Notice;
 
 namespace GaiaProject.Controllers
 {
@@ -166,7 +167,7 @@ namespace GaiaProject.Controllers
 
 
             //创建
-            bool create = GameMgr.CreateNewGame(model.Name, username, out GaiaGame result,model.MapSelction, isTestGame: model.IsTestGame);
+            bool create = GameMgr.CreateNewGame(model.Name, username, out GaiaGame result,model.MapSelction, isTestGame: model.IsTestGame,isSocket:model.IsSocket);
             if (create && !model.IsTestGame && username[0]!=username[1])//测试局以及自己对战的局暂时不保留数据
             {
                 //保存到数据库
@@ -282,6 +283,7 @@ namespace GaiaProject.Controllers
                 GaiaGame gg = GameMgr.GetGameByName(gameInfoModel.name);
                 gg.GameName = gameInfoModel.name;
                 gg.UserActionLog = log?.Replace("|", "\r\n");
+
 
                 gg = GameMgr.RestoreGame(gameInfoModel.name, gg,row);
                 gg.GameName = gameInfoModel.name;
@@ -400,13 +402,16 @@ namespace GaiaProject.Controllers
                 //游戏结束，发送邮件赋值，
                 GaiaCore.Gaia.Game.GameSave._emailSender = this._emailSender;
                 //执行命令
-                GameMgr.GetGameByName(name).Syntax(syntax, out string log, task.Result.UserName,dbContext:this.dbContext);
+                GaiaGame gaiaGame = GameMgr.GetGameByName(name);
+                gaiaGame.Syntax(syntax, out string log, task.Result.UserName,dbContext:this.dbContext);
                 if (!string.IsNullOrEmpty(log))
                 {
                     return "error:" + log;
                 }
                 else
                 {
+                    //如果是即时制游戏，进行通知
+                    NoticeWebSocketMiddleware.GameActive(gaiaGame,HttpContext.User);
                     return "ok";
                 }
             }
