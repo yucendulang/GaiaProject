@@ -459,6 +459,7 @@ namespace GaiaProject.Controllers
         /// <returns></returns>
         public bool UndoOneStep(string id)
         {
+            var u = User.Identity;
             if (!PowerUser.IsPowerUser(User.Identity.Name))
             {
                 return false;

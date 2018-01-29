@@ -16,9 +16,11 @@ namespace GaiaCore.Gaia.User
             "xsssssssch@hotmail.com",
             "toto",
             "totofans",
+            "xiaohuang",
         };
         public static bool IsPowerUser(string username)
         {
+            
             
             var ret=PowerUserList.Contains(username);
             return ret;
