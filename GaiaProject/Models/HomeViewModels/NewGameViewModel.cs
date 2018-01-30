@@ -10,7 +10,7 @@ namespace GaiaProject.Models.HomeViewModels
     {
         [StringLength(10,MinimumLength =3)]
         [Required]
-        [Display(Name = "游戏名称")]
+        [Display(Name = "房间名称")]
         public string Name { set; get; }
         [Required]
         [Display(Name = "玩家1")]

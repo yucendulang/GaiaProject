@@ -5,7 +5,7 @@
 @inject ApplicationDbContext dbContext
 
 @{
-    ViewData["Title"] = "新游戏";
+    ViewData["Title"] = "创建新的房间";
 }
 
 @inject UserManager<ApplicationUser> UserManager
@@ -57,7 +57,6 @@
 </script>
 
 <form asp-controller="Home" asp-action="NewGame" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" id="playForm">
-    <h4>创建新的游戏.</h4>
     <hr />
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">

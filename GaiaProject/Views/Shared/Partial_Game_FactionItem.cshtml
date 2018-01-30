@@ -24,16 +24,15 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">
-            <span class="badge">@Model.Score VP</span>
+            <span class="badge" onclick="faction_scoreShow('@Model.GaiaGame.GameName','@Model.FactionName')">@Model.Score VP</span>
 
-            <span style="background-color: @Model.ColorCode">@Model.ChineseName @Model.FactionName @Model.UserName</span>
+            <span style="background-color: @Model.ColorCode">
+                <span class="color-@Model.FactionName">
+                    <span onclick='window.open("/Home/About#@Model.FactionName");'>@Model.ChineseName @Model.FactionName</span>
+                </span>
 
-
-            <button type="button" class="btn btn-default" style="float: right" onclick="faction_scoreShow('@Model.GaiaGame.GameName','@Model.FactionName')">得分明细</button>
-            <button type="button" class="btn btn-default" style="float: right" onclick="faction_logShow('@Model.GaiaGame.GameName','@Model.FactionName')">日志明细</button>
-            <button type="button" class="btn btn-default"><a href="/Home/About#@Model.FactionName" style="float: right" target="_blank">种族介绍</a></button>
-
-
+            </span>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span onclick="faction_logShow('@Model.GaiaGame.GameName','@Model.FactionName')">@Model.UserName</span>
         </h3>
     </div>
     <div class="panel-body">

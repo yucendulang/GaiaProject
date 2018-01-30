@@ -159,7 +159,7 @@ else
                     new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null),
                    new MadAndroid(null), new Itar(null), new Nevla(null) }).Where(item => !Model.FactionList.Select(fa => fa.ColorCode).Contains(item.ColorCode)))
                 {
-                    <button type="button" class="btn btn-default" style="background-color: @fac.ColorCode" id="@fac.FactionName" syntax="setup ">@fac.ChineseName</button>
+                    <button type="button" class="btn btn-default color-@fac.FactionName" style="background-color: @fac.ColorCode" id="@fac.FactionName" syntax="setup ">@fac.ChineseName</button>
 
                 }
                 <script>
