@@ -16,6 +16,7 @@ using GaiaDbContext.Models.AccountViewModels;
 using GaiaProject.Data;
 using GaiaDbContext.Models.HomeViewModels;
 using GaiaProject.Notice;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace GaiaProject.Controllers
 {
@@ -24,12 +25,15 @@ namespace GaiaProject.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext dbContext;
         private readonly IEmailSender _emailSender;
+        public IMemoryCache cache;
+        public const string IndexName = "IndexName";
 
-        public HomeController(ApplicationDbContext dbContext,UserManager<ApplicationUser> userManager, IEmailSender emailSender)
+        public HomeController(ApplicationDbContext dbContext,UserManager<ApplicationUser> userManager, IEmailSender emailSender, IMemoryCache cache)
         {
             this._userManager = userManager;
             this.dbContext = dbContext;
             this._emailSender = emailSender;
+            this.cache = cache;
         }
         public IActionResult Index()
         {
@@ -47,6 +51,16 @@ namespace GaiaProject.Controllers
             //ViewData["Message"] = @"yucenyucen@126.com";
             //ViewData["GameList"] = GameMgr.GetAllGame(@"yucenyucen@126.com");
 #endif
+            //获取首页声明
+            string remark;
+            this.cache.TryGetValue(IndexName, out remark);
+            if (string.IsNullOrEmpty(remark))
+            {
+                remark = this.dbContext.NewsInfoModel.SingleOrDefault(item => item.Id == 1)?.contents;
+                this.cache.Set(IndexName, remark);
+            }
+
+            ViewBag.Cache = remark;
 
             return View();
         }
