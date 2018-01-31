@@ -411,7 +411,10 @@ namespace GaiaProject.Controllers
                 else
                 {
                     //如果是即时制游戏，进行通知
-                    NoticeWebSocketMiddleware.GameActive(gaiaGame,HttpContext.User);
+                    if (gaiaGame.IsSocket)
+                    {
+                        NoticeWebSocketMiddleware.GameActive(gaiaGame, HttpContext.User);
+                    }
                     return "ok";
                 }
             }
@@ -438,7 +441,13 @@ namespace GaiaProject.Controllers
                 var pwFirst = isPwFirst.GetValueOrDefault() ? "pw" : "pwt";
                 syntax = syntax + " " + pwFirst;
             }
-            GameMgr.GetGameByName(name).Syntax(syntax, out string log,dbContext:this.dbContext);
+            GaiaGame gaiaGame = GameMgr.GetGameByName(name);
+            gaiaGame.Syntax(syntax, out string log,dbContext:this.dbContext);
+            //如果是即时制游戏，进行通知
+            if (gaiaGame.IsSocket)
+            {
+                NoticeWebSocketMiddleware.GameActive(gaiaGame, HttpContext.User);
+            }
             return Redirect("/home/viewgame/" + System.Net.WebUtility.UrlEncode(name));
         }
 

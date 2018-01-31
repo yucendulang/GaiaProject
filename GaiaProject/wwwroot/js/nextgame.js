@@ -1,7 +1,8 @@
 ﻿setTimeout('GetNextGame()', 10000); //指定1秒刷新一次
 
 function GetNextGame() {
-    if ($("#isMyTurn").val().indexOf("True") === -1) {
+    var obj = $("#isMyTurn");
+    if (obj.length===0 || obj.val().indexOf("True") === -1) {
         $.post("/home/GetNextGame",
             {
                 name: $("input#username").val()
