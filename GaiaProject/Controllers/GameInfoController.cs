@@ -271,8 +271,18 @@ namespace GaiaProject.Controllers
             }
             return false;
         }
+        [HttpPost]
+        public async Task<JsonResult> DeleteDbGame(int id,bool isdel=false)
+        {
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
 
-
+            bool flag = DeleteDbGame(id);
+            if (flag)
+            {
+                jsonData.info.state = 200;
+            }
+            return new JsonResult(jsonData);
+        }
 
 
         #endregion

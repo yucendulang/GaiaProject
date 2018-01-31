@@ -1,9 +1,23 @@
 ﻿@model List<GaiaDbContext.Models.HomeViewModels.MatchInfoModel>
 
 @{
-    ViewBag.Title = "比赛列表";
-    Layout = "_Layout";
+    string adminType = this.Context.Request.Query["isAdmin"];
 }
+
+@{
+    ViewBag.Title = "比赛列表";
+
+    if (adminType=="1")
+    {
+        Layout = "_LayoutAdmin";
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
+
+}
+
 <script src="/js/angular.min.js"></script>
 
 

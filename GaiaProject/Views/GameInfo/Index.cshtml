@@ -5,15 +5,25 @@
 @inject UserManager<ApplicationUser> UserManager
 
 @model List<GaiaDbContext.Models.HomeViewModels.GameInfoModel>
-@{
-    //ViewBag.Title = "结束游戏";
-    Layout = "_Layout";
-}
+
 @{
     bool isAdmin = UserManager.GetUserAsync(User).Result != null && UserManager.GetUserAsync(User).Result.groupid == 1;
     string usernmae = UserManager.GetUserAsync(User).Result?.UserName;
     string adminType = this.Context.Request.Query["isAdmin"];
 }
+
+@{
+    //ViewBag.Title = "结束游戏";
+    if (isAdmin)
+    {
+        Layout = "_LayoutAdmin";
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
+}
+
 
 
 
@@ -95,7 +105,11 @@
                                     {
                                         <span>已申请删除</span>
                                     }
-                                    else if (isAdmin || (item.username == usernmae && @item.GameStatus != 8))
+                                    else if (isAdmin)
+                                    {
+                                        <button class="btn btn-default delDbGame" id="@item.Id">直接删除</button>
+                                    }
+                                    else if ((item.username == usernmae && @item.GameStatus != 8))
                                     {
                                         <button class="btn btn-default del" id="@item.Id">申请删除</button>
                                     }
@@ -135,6 +149,20 @@
                     if (data.info.state === 200) {
                         //button.parent().parent().remove();
                         alert("已经提交申请,其他玩家全部同意后方可删除!");
+                        window.location.reload();
+                    }
+                });
+        }
+
+    });
+    $(".delDbGame").click(function() {
+        var id = this.id;
+        var button = $(this);
+        if (confirm('确认删除游戏?')) {
+            $.post("/GameInfo/DeleteDbGame/" + id,
+                "",
+                function(data) {
+                    if (data.info.state === 200) {
                         window.location.reload();
                     }
                 });
