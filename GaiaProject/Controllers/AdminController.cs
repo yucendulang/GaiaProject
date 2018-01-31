@@ -5,16 +5,19 @@ using System.Threading.Tasks;
 using GaiaDbContext.Models.SystemModels;
 using GaiaProject.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace GaiaProject.Controllers
 {
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext dbContext;
+        private IMemoryCache cache;
 
-        public AdminController(ApplicationDbContext dbContext)
+        public AdminController(ApplicationDbContext dbContext, IMemoryCache cache)
         {
             this.dbContext = dbContext;
+            this.cache = cache;
         }
 
         public IActionResult Index()
@@ -48,6 +51,11 @@ namespace GaiaProject.Controllers
             }
             return View(newModel);
         }
+        /// <summary>
+        /// 提交更新
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult NewsUpdate(NewsInfoModel model)
         {
@@ -84,6 +92,12 @@ namespace GaiaProject.Controllers
             return View(newModel);
         }
 
+
+        public IActionResult NewsIndexUpdate()
+        {
+            this.cache.Remove(HomeController.IndexName);
+            return Redirect("/Admin/NewsIndex");
+        }
         #endregion
 
 

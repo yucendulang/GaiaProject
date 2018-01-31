@@ -90,6 +90,9 @@ namespace GaiaProject
             //第一个参数为配置文件路径，默认为项目目录下config.json
             //第二个参数为是否缓存配置文件，默认false
             services.AddUEditorService();
+            //缓存系统
+            services.AddMemoryCache();
+
             services.AddMvc();
         }
 

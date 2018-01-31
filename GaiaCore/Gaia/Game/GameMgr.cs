@@ -200,7 +200,8 @@ namespace GaiaCore.Gaia
         private static GaiaGame RestoreGameWithActionLog(KeyValuePair<string, GaiaGame> item, Func<string, bool> DebugInvoke = null,bool isTodict=true,int? row=null)
         {
             var gg = new GaiaGame(item.Value.Username,item.Value.GameName);
-            gg.IsTestGame = item.Value.IsTestGame;
+            gg.IsTestGame = item.Value.IsTestGame;//测试
+            gg.IsSocket = item.Value.IsSocket;//即使制度
             if (item.Value.version == 0)
             {
                 gg.version = 1;
