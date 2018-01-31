@@ -42,12 +42,12 @@
     });
     //大使星人
     $(".color-Ambas").css({
-        color: "#000000",
+        color: "#ffffff",
         backgroundColor: "#8b3a0e"
     });
     //利爪族
     $(".color-Taklons").css({
-        color: "#000000",
+        color: "#ffffff",
         backgroundColor: "#8b3a0e"
     });
     //章鱼人
@@ -62,12 +62,12 @@
     });
     //伊塔星人
     $(".color-Itar").css({
-        color: "#ffffff",
+        color: "#000000",
         backgroundColor: "#ebfafb"
     });
     //超星人
     $(".color-Nevla").css({
-        color: "#ffffff",
+        color: "#000000",
         backgroundColor: "#ebfafb"
     });
 
