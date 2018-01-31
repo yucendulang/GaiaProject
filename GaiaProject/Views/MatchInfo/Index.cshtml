@@ -7,43 +7,58 @@
 <script src="/js/angular.min.js"></script>
 
 
-
-
 <div ng-app="myApp" ng-controller="myCtrl">
     
-    <a href="/MatchInfo/AddMatch">添加比赛</a>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="header">
+                    <a href="/MatchInfo/AddMatch">添加比赛</a>
+
+                </div>
+                <div class="card">
+                    <div class="content table-responsive table-full-width">
+                        <table class="table table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <td>标题</td>
+                                <td>报名人数</td>
+                                <td>报名截止时间</td>
+                                <td>开始时间</td>
+                                <td>结束时间</td>
+                                <td>操作</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td><a ng-click="showMatchInfo(@item.Id);">@item.Name</a></td>
+                                    <td>@item.NumberNow/@item.NumberMax</td>
+                                    <td>@item.RegistrationEndTime</td>
+                                    <td>@item.StartTime</td>
+                                    <td>@item.EndTime</td>
+                                    <td>
+                                        <button ng-click="delMatch(@item.Id)">删除</button>
+                                    </td>
+                                </tr>
+
+                            }
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
 
 
-    <table class="table">
-        <thead>
-        <tr>
-            <td>标题</td>
-            <td>报名人数</td>
-            <td>报名截止时间</td>
-            <td>开始时间</td>
-            <td>结束时间</td>
-            <td>操作</td>
-        </tr>
-        </thead>
-        <tbody>
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td><a ng-click="showMatchInfo(@item.Id);">@item.Name</a></td>
-                <td>@item.NumberNow/@item.NumberMax</td>
-                <td>@item.RegistrationEndTime</td>
-                <td>@item.StartTime</td>
-                <td>@item.EndTime</td>
-                <td>
-                    <button ng-click="delMatch(@item.Id)">删除</button>
-                </td>
-            </tr>
 
-        }
+        </div>
+    </div>
 
-        </tbody>
-    </table>
 
 
     <div class="modal fade" id="matchInfoModal" tabindex="-1" role="dialog" aria-labelledby="myMatchModalLabel" aria-hidden="true">
@@ -117,31 +132,31 @@
 <script>
     var app = angular.module('myApp', []);
 
-    app.controller('myCtrl', function ($scope,$http) {
+    app.controller('myCtrl', function ($scope, $http) {
 
-        $scope.showMatchInfo = function(id) {
+        $scope.showMatchInfo = function (id) {
             $http.post("/MatchInfo/ShowInfo/" + id, "{}")
-                .then(function(success) {
-                        $scope.matchData = success.data.data;
-                        $("#matchInfoModal").modal();
-                    },
-                    function(error) {
+                .then(function (success) {
+                    $scope.matchData = success.data.data;
+                    $("#matchInfoModal").modal();
+                },
+                function (error) {
 
-                    });
+                });
         };
-        $scope.delMatch = function(id) {
+        $scope.delMatch = function (id) {
             $http.post("/MatchInfo/DelMatch/" + id, "{}")
-                .then(function(success) {
-                        window.location.reload();
-                    },
-                    function(error) {
+                .then(function (success) {
+                    window.location.reload();
+                },
+                function (error) {
 
-                    });
+                });
         };
 
-        $scope.joinMatch = function() {
+        $scope.joinMatch = function () {
             $http.post("/MatchInfo/JoinMatch/" + $scope.matchData.matchInfoModel.id, "{}")
-                .then(function(success) {
+                .then(function (success) {
                     if (success.data.info.state === 200) {
                         alert("报名成功");
                         $("#matchInfoModal").modal("hide");
@@ -151,16 +166,16 @@
                         alert(success.data.info.message);
                     }
                 },
-                    function(error) {
+                function (error) {
 
-                    });
+                });
         };
 
-        $scope.exitMatch = function() {
+        $scope.exitMatch = function () {
             $http.post("/MatchInfo/ExitMatch/" + $scope.matchData.matchInfoModel.id, "{}")
-                .then(function(success) {
-                        //$scope.matchData = success.data.data;
-                        //$("#matchInfoModal").modal();
+                .then(function (success) {
+                    //$scope.matchData = success.data.data;
+                    //$("#matchInfoModal").modal();
                     if (success.data.info.state === 200) {
                         alert("取消成功");
                         $("#matchInfoModal").modal("hide");
@@ -169,10 +184,10 @@
                     } else {
                         alert(success.data.info.message);
                     }
-                    },
-                    function(error) {
+                },
+                function (error) {
 
-                    });
+                });
         };
 
     });

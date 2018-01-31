@@ -15,89 +15,110 @@
     string adminType = this.Context.Request.Query["isAdmin"];
 }
 
-@if (isAdmin)
-{
-    <div>
-        <span>菜单仅管理员可见</span>
-        <a href="/GameInfo/UpdatenFinishFromDb">检测游戏结束但没有种族信息的</a>
-        <a href="/GameInfo/UpdatenNoFromDb">检测游戏应该结束但没有更新的</a>
-
-        <a href="/GameInfo/DeleteGameInvalid">删除未结束但内存没有的游戏</a>
-        <a href="/GameInfo/UpdateGame">将内存的游戏重新保存到数据库</a>
-    </div>
-
-}
 
 
-<form>
+
+
+
+<div class="container-fluid">
     <div class="row">
-        <div class="col-lg-8">
-            <div class="input-group">
-                <input type="text" class="form-control" style="width: 100px" placeholder="名称" id="name" name="name">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    @if (isAdmin)
+                    {
+                        <div>
+                            <span>菜单仅管理员可见</span>
+                            <a href="/GameInfo/UpdatenFinishFromDb">检测游戏结束但没有种族信息的</a>
+                            <a href="/GameInfo/UpdatenNoFromDb">检测游戏应该结束但没有更新的</a>
 
-                <input type="text" class="form-control" style="width: 100px" placeholder="回合" id="round" name="round">
-                <input type="text" class="form-control" style="width: 150px" placeholder="创建人" id="username" name="username">
-                <input type="text" class="form-control" style="width: 150px" placeholder="参与人" id="joinname" name="joinname">
-                @if (adminType == "1")
-                {
-                    <input type="text" class="form-control" style="width: 100px" placeholder="最低分" id="scoremin" name="scoremin">
-                }
-                <input type="hidden" class="form-control" value="@adminType" placeholder="管理员" id="isAdmin" name="isAdmin">
+                            <a href="/GameInfo/DeleteGameInvalid">删除未结束但内存没有的游戏</a>
+                            <a href="/GameInfo/UpdateGame">将内存的游戏重新保存到数据库</a>
+                        </div>
 
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit">搜索</button>
-                </span>
+                    }
+                    <form>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" style="width: 100px" placeholder="名称" id="name" name="name">
+
+                                    <input type="text" class="form-control" style="width: 100px" placeholder="回合" id="round" name="round">
+                                    <input type="text" class="form-control" style="width: 150px" placeholder="创建人" id="username" name="username">
+                                    <input type="text" class="form-control" style="width: 150px" placeholder="参与人" id="joinname" name="joinname">
+                                    @if (adminType == "1")
+                                    {
+                                        <input type="text" class="form-control" style="width: 100px" placeholder="最低分" id="scoremin" name="scoremin">
+                                    }
+                                    <input type="hidden" class="form-control" value="@adminType" placeholder="管理员" id="isAdmin" name="isAdmin">
+
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">搜索</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="content table-responsive table-full-width">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <td>游戏名称</td>
+                            <td>人数</td>
+                            @*<td>FSTList</td>*@
+                            <td>得分</td>
+                            <td>回合</td>
+
+                            <td>创建人/创建时间/结束时间</td>
+
+                            <td>操作</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="/Home/RestoreGame/@item.Id">@item.name</a>
+                                </td>
+                                <td>@item.UserCount</td>
+                                @*<td>@item.FSTList</td>*@
+
+                                <td>@item.scoreFaction</td>
+                                <td>@item.round</td>
+
+                                <td>@item.username/@item.starttime.ToString("yyyy-MM-dd")/@item.endtime?.ToString("yyyy-MM-dd")</td>
+
+                                <td>
+                                    @if (@item.isDelete == 1)
+                                    {
+                                        <span>已申请删除</span>
+                                    }
+                                    else if (isAdmin || (item.username == usernmae && @item.GameStatus != 8))
+                                    {
+                                        <button class="btn btn-default del" id="@item.Id">申请删除</button>
+                                    }
+                                </td>
+                            </tr>
+
+                        }
+
+                        </tbody>
+                    </table>
+
+                </div>
             </div>
         </div>
+
+
+
+
     </div>
-</form>
+</div>
 
 
-<table class="table">
-    <thead>
-        <tr>
-            <td>游戏名称</td>
-            <td>人数</td>
-            @*<td>FSTList</td>*@
-            <td>得分</td>
-            <td>回合</td>
 
-            <td>创建人/创建时间/结束时间</td>
-
-            <td></td>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    <a href="/Home/RestoreGame/@item.Id">@item.name</a>
-                </td>
-                <td>@item.UserCount</td>
-                @*<td>@item.FSTList</td>*@
-
-                <td>@item.scoreFaction</td>
-                <td>@item.round</td>
-
-                <td>@item.username/@item.starttime.ToString("yyyy-MM-dd")/@item.endtime?.ToString("yyyy-MM-dd")</td>
-
-                <td>
-                    @if (@item.isDelete == 1)
-                    {
-                        <span>已申请删除</span>
-                    }
-                    else if (isAdmin || (item.username == usernmae && @item.GameStatus != 8))
-                    {
-                        <button class="btn btn-default del" id="@item.Id">申请删除</button>
-                    }
-                </td>
-            </tr>
-
-        }
-
-    </tbody>
-</table>
 
 
 @Html.Partial("Partial_PageInfo", Model)
