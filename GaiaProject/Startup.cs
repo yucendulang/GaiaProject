@@ -18,6 +18,7 @@ using GaiaProject.Data;
 using GaiaDbContext.Models;
 using GaiaProject.Notice;
 using Microsoft.AspNetCore.Http;
+using UEditorNetCore;
 
 
 namespace GaiaProject
@@ -85,6 +86,11 @@ namespace GaiaProject
                 options.Password.RequireLowercase = false;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(3650);
             });
+
+            //第一个参数为配置文件路径，默认为项目目录下config.json
+            //第二个参数为是否缓存配置文件，默认false
+            services.AddUEditorService();
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

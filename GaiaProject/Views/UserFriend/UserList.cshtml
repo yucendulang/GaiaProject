@@ -3,66 +3,85 @@
 @inject UserManager<ApplicationUser> UserManager
 @{
     ViewBag.Title = "用户列表";
-    Layout = "_Layout";
+    Layout = "_LayoutAdmin";
 }
 
-<h2>用户列表</h2>
 
-<form>
+<div class="container-fluid">
     <div class="row">
-        <div class="col-lg-8">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="用户名" id="UserName" name="UserName">
-                <input type="text" class="form-control" placeholder="邮箱" id="Email" name="Email">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit">搜索</button>
-                </span>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h4 class="title">用户列表</h4>
+                   
+                    <form>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="用户名" id="UserName" name="UserName" style="width: 200px">
+                                    <input type="text" class="form-control" placeholder="邮箱" id="Email" name="Email" style="width: 200px">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">搜索</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="content table-responsive table-full-width">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <td>用户名</td>
+                            <td>邮箱</td>
+                            <td>用户组</td>
+                            <td>编辑</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @{ bool isAdmin = UserManager.GetUserAsync(User).Result != null && UserManager.GetUserAsync(User).Result.groupid == 1;}
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="/GameInfo?username=@item.UserName">@item.UserName</a>
+                                </td>
+                                <td>@item.Email</td>
+                                <td>
+                                    @if (@item.groupid == 1)
+                                    {
+                                        <span>管理员</span>
+                                    }
+                                    else
+                                    {
+                                        <span>会员</span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (isAdmin)
+                                    {
+                                        <button class="btn btn-default" id="" onclick="resetpwd('@item.Id')">重置密码</button>
+                                    }
+                                </td>
+                            </tr>
+
+                        }
+                        
+                        </tbody>
+                    </table>
+
+                </div>
             </div>
         </div>
+
+
+
+
     </div>
-</form>
+</div>
 
-<table class="table">
-    <thead>
-    <tr>
-        <td>用户名</td>
-        <td>邮箱</td>
-        <td>用户组</td>
-        <td>编辑</td>
-    </tr>
-    </thead>
-    <tbody>
-    @{ bool isAdmin = UserManager.GetUserAsync(User).Result != null && UserManager.GetUserAsync(User).Result.groupid == 1;}
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                <a href="/GameInfo?username=@item.UserName">@item.UserName</a>
-            </td>
-            <td>@item.Email</td>
-            <td>
-                @if (@item.groupid == 1)
-                {
-                    <span>管理员</span>
-                }
-                else
-                {
-                    <span>会员</span>
-                }
-            </td>
 
-            <td>
-                @if (isAdmin)
-                {
-                    <button class="btn btn-default" id="" onclick="resetpwd('@item.Id')">重置密码</button>
-                }
-            </td>
-        </tr>
-
-    }
-
-    </tbody>
-</table>
 
 @Html.Partial("Partial_PageInfo", Model)
 

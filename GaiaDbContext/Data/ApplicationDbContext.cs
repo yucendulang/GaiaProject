@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using GaiaDbContext.Models.AccountViewModels;
 using GaiaDbContext.Models.HomeViewModels;
 using GaiaDbContext.Models;
+using GaiaDbContext.Models.SystemModels;
 
 namespace GaiaProject.Data
 {
@@ -62,5 +63,10 @@ namespace GaiaProject.Data
         /// </summary>
         public DbSet<MatchJoinModel> MatchJoinModel { get; set; }
 
+
+        /// <summary>
+        /// 新闻
+        /// </summary>
+        public DbSet<NewsInfoModel> NewsInfoModel { get; set; }
     }
 }
