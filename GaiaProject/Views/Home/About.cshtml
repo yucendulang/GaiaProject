@@ -489,7 +489,7 @@
 
             @foreach (var fac in (new List<Faction>() { new Terraner(null), new Lantida(null), new Hive(null), new HadschHalla(null), new BalTak(null), new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null), new MadAndroid(null), new Itar(null), new Nevla(null) }))
             {
-                <button type="button" class="btn btn-default" style="background-color: @fac.ColorCode" divid="@fac.FactionName" id="@fac.FactionName" onclick="goDiv('@fac.FactionName')">
+                <button type="button" class="btn btn-default color-@fac.FactionName" divid="@fac.FactionName" id="@fac.FactionName" onclick="goDiv('@fac.FactionName')">
                     @fac.ChineseName
                 </button>
             }
