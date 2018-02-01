@@ -422,6 +422,10 @@ namespace GaiaProject.Controllers
                 GaiaCore.Gaia.Game.GameSave._emailSender = this._emailSender;
                 //执行命令
                 GaiaGame gaiaGame = GameMgr.GetGameByName(name);
+                try
+                {
+                    GameMgr.WriteUserActionLog(syntax, task.Result.UserName);
+                }catch{}
                 gaiaGame.Syntax(syntax, out string log, task.Result.UserName,dbContext:this.dbContext);
                 if (!string.IsNullOrEmpty(log))
                 {
@@ -451,6 +455,9 @@ namespace GaiaProject.Controllers
             {
                 return Redirect("/home/serverdown");
             }
+            var task = _userManager.GetUserAsync(HttpContext.User);
+            Task[] taskarray = new Task[] { task };
+            Task.WaitAll(taskarray, millisecondsTimeout: 1000);
             var faction = GameMgr.GetGameByName(name).FactionList.Find(x => x.FactionName.ToString().Equals(name));
             var leech = isLeech ? "leech" : "decline";
 
@@ -461,6 +468,11 @@ namespace GaiaProject.Controllers
                 syntax = syntax + " " + pwFirst;
             }
             GaiaGame gaiaGame = GameMgr.GetGameByName(name);
+            try
+            {
+                GameMgr.WriteUserActionLog(syntax, task.Result.UserName);
+            }
+            catch { }
             gaiaGame.Syntax(syntax, out string log,dbContext:this.dbContext);
             //如果是即时制游戏，进行通知
             if (gaiaGame.IsSocket)

@@ -155,6 +155,13 @@ namespace GaiaCore.Gaia
             return true;
         }
 
+        public static void WriteUserActionLog(string syntax,string username)
+        {
+            var str = string.Format("{0}/{1}/{2}\r\n", DateTime.Now.ToString(),username,syntax);
+            var logPath = System.IO.Path.Combine(UserActionLogDataPath, DateTime.Now.ToString("yyyyMMddHH") + ".txt");
+            File.AppendAllText(logPath,str);
+        }
+
         public static IEnumerable<string> RestoreDictionary(string filename)
         {
             string logReader = GetLastestBackupData(filename);
@@ -397,6 +404,18 @@ namespace GaiaCore.Gaia
                     Directory.CreateDirectory("backupdata");
                 }
                 return System.IO.Path.Combine(Directory.GetCurrentDirectory(), "backupdata");
+            }
+        }
+
+        private static string UserActionLogDataPath
+        {
+            get
+            {
+                if (!Directory.Exists("UserActionLogData"))
+                {
+                    Directory.CreateDirectory("UserActionLogData");
+                }
+                return System.IO.Path.Combine(Directory.GetCurrentDirectory(), "UserActionLogData");
             }
         }
 
