@@ -55,5 +55,10 @@ namespace GaiaDbContext.Models.SystemModels
         /// 添加时间
         /// </summary>
         public DateTime? AddTime { get; set; }
+
+        /// <summary>
+        /// 排序
+        /// </summary>
+        public int Rank { get; set; }
     }
 }

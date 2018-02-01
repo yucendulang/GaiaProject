@@ -37,8 +37,14 @@
         <label class="col-md-2 control-label" for="type">类型</label>
 
         <div class="col-md-10">
-            <input asp-for="type" class="form-control" />
-            <span asp-validation-for="type" class="text-danger"></span>
+
+            <select class="btn dropdown-toggle form-control" id="type" name="type" style="width: 100px">
+                <option value="">--类型--</option>
+                <option value="1">首页</option>
+                <option value="2">帮助</option>
+                <option value="3">新闻</option>
+            </select>
+            
         </div>
     </div>
     <div class="form-group">
@@ -49,6 +55,16 @@
             <span asp-validation-for="state" class="text-danger"></span>
         </div>
     </div>
+    
+    <div class="form-group">
+        <label class="col-md-2 control-label" for="state">排序（显示顺序从小到大）</label>
+
+        <div class="col-md-10">
+            <input asp-for="Rank" class="form-control" />
+            <span asp-validation-for="Rank" class="text-danger"></span>
+        </div>
+    </div>
+
     <div class="form-group">
         <label class="col-md-2 control-label" for="contents">内容</label>
 
@@ -76,14 +92,14 @@
 
 </script>
 
-<div>
-    <script>
-        //@Model.contents
-    </script>
-</div>
+
 @if (Model!=null && !string.IsNullOrEmpty(Model.contents))
 {
     <script>
+        $(function() {
+            $("#type").val(@Model.type);
+        });
+
         ue.ready(function () {//编辑器初始化完成再赋值
             {
 

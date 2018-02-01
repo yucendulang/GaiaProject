@@ -32,7 +32,20 @@
                             <tr>
                                 <td>@item.Id</td>
                                 <td>@item.name</td>
-                                <td>@item.type</td>
+                                <td>
+                                    @switch (@item.type)
+                                        {
+                                            case 1:
+                                                <span>首页</span>
+                                                break;
+                                            case 2:
+                                                <span>帮助</span>
+                                                break;
+                                            case 3:
+                                                <span>新闻</span>
+                                                break;
+                                        }
+                                </td>
                                 <td>@item.AddTime</td>
                                 <td>@item.state</td>
                                 <td>
@@ -42,7 +55,8 @@
                             </tr>
                         }
 
-                        
+
+
                         </tbody>
                     </table>
 

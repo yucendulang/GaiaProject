@@ -75,6 +75,7 @@ namespace GaiaProject.Controllers
             newModel.contents = model.contents;
             newModel.type = model.type;
             newModel.state = model.state;
+            newModel.Rank = model.Rank;
             //newModel.name = model.name;
 
 

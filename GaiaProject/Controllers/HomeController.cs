@@ -15,6 +15,7 @@ using GaiaDbContext.Models;
 using GaiaDbContext.Models.AccountViewModels;
 using GaiaProject.Data;
 using GaiaDbContext.Models.HomeViewModels;
+using GaiaDbContext.Models.SystemModels;
 using GaiaProject.Notice;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -77,10 +78,14 @@ namespace GaiaProject.Controllers
         {
             return View();
         }
-
+        /// <summary>
+        /// 帮助页面
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Contact()
         {
-            return View();
+            IQueryable<NewsInfoModel> newsInfoModels = this.dbContext.NewsInfoModel.Where(item => item.type == 2);
+            return View(newsInfoModels.ToList());
         }
 
         public IActionResult Error()
