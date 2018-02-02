@@ -1,0 +1,24 @@
+2018/2/2 14:16:41/totofans/setup Gleen
+2018/2/2 14:17:19/totofans/setup Ambas
+2018/2/2 14:17:24/totofans/Gleen:build F11
+2018/2/2 14:17:29/totofans/Ambas:build G12
+2018/2/2 14:17:31/totofans/Ambas:build J4
+2018/2/2 14:17:33/totofans/Gleen:build I7
+2018/2/2 14:17:36/totofans/Ambas:+RBT3
+2018/2/2 14:17:37/totofans/Gleen:+RBT7
+2018/2/2 14:32:02/test1/setup Gleen
+2018/2/2 14:32:07/totofans/setup Ambas
+2018/2/2 14:32:11/test1/Gleen:build F10
+2018/2/2 14:32:14/totofans/Ambas:build J3
+2018/2/2 14:32:18/totofans/Ambas:build F3
+2018/2/2 14:32:30/test1/Gleen:build I7
+2018/2/2 14:32:56/totofans/Ambas:+RBT8
+2018/2/2 14:33:08/test1/Gleen:+RBT9
+2018/2/2 14:40:59/test1/Gleen:advance ship
+2018/2/2 14:41:09/totofans/Ambas:advance ship
+2018/2/2 14:41:28/test1/Gleen:build D9
+2018/2/2 14:42:37/totofans/Ambas:build D4
+2018/2/2 14:48:14/test1/Gleen:build D9
+2018/2/2 14:48:23/test1/Gleen:advance ship
+2018/2/2 14:49:50/test1/Gleen:advance ship
+2018/2/2 14:51:26/test1/Gleen:advance ship
