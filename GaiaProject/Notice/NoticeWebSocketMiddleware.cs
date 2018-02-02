@@ -37,7 +37,7 @@ namespace GaiaProject.Notice
     {
         //private static ConcurrentDictionary<string, WebSocket> _sockets = new ConcurrentDictionary<string, WebSocket>();
 
-        private static ConcurrentDictionary<string, ConcurrentDictionary<string,WebSocket>> gameList;
+        public static ConcurrentDictionary<string, ConcurrentDictionary<string,WebSocket>> gameList;
 
         static NoticeWebSocketMiddleware()
         {
@@ -141,7 +141,7 @@ namespace GaiaProject.Notice
         /// <param name="user"></param>
         public static async void GameActive(GaiaGame gaiaGame, ClaimsPrincipal user)
         {
-
+            WebSocket socket;
             try
             {
                 string gameName = gaiaGame.GameName;
@@ -156,14 +156,23 @@ namespace GaiaProject.Notice
                         //不是当前用户，发送提醒
                         if (socketInfoKey != user.Identity.Name)
                         {
-                            WebSocket socket = socketInfo[socketInfoKey];
-                            if (socket.State != WebSocketState.Open)
+                            //发送信息
+                            try
                             {
-                                continue;
+                                socket = socketInfo[socketInfoKey];
+                                if (socket.State != WebSocketState.Open)
+                                {
+                                    continue;
+                                }
+                                //socket.CloseAsync(WebSocketCloseStatus.Empty, "", cancellationToken: new CancellationToken());
+                                //socket = new WebSocket();
+                                await SendStringAsync(socket, "200");
                             }
-                            //socket.CloseAsync(WebSocketCloseStatus.Empty, "", cancellationToken: new CancellationToken());
-                            //socket = new WebSocket();
-                            await SendStringAsync(socket, "200");
+                            //发送失败，删除链接
+                            catch (Exception e)
+                            {
+                                socketInfo.TryRemove(socketInfoKey, out WebSocket s1);
+                            }
                         }
                     }
                 }
