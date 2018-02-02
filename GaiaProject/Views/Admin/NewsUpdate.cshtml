@@ -1,4 +1,6 @@
-﻿@model GaiaDbContext.Models.SystemModels.NewsInfoModel
+﻿@using System
+@using System.Text
+@model GaiaDbContext.Models.SystemModels.NewsInfoModel
 
 @{
     ViewBag.Title = "title";
@@ -15,7 +17,7 @@
 
 
 <a href="/Admin/NewsIndex">返回列表</a>
-<form asp-controller="Admin" asp-action="NewsUpdate" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+<form asp-controller="Admin" asp-action="NewsUpdate" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" id="formdata">
     <h4>编辑新闻.</h4>
     <hr />
 
@@ -90,7 +92,15 @@
     var ue = UE.getEditor('contents');
 
 
+    $(function() {
+        $('#formdata').submit(function() {
+            //editor = UE.getEditor('content');
+            if (ue.queryCommandState('source') === 1) ue.execCommand('source');
+        });
+    });
+
 </script>
+
 
 
 @if (Model!=null && !string.IsNullOrEmpty(Model.contents))
@@ -103,7 +113,7 @@
         ue.ready(function () {//编辑器初始化完成再赋值
             {
 
-                ue.setContent('@Html.Raw(Model.contents.Replace("\r","").Replace("\n",""))');  //赋值给UEditor
+                ue.setContent('@(Model.contents.Replace("\r","").Replace("\n",""))');  //赋值给UEditor
             }
         });
     </script>
