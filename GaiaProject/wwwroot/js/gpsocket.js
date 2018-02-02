@@ -24,14 +24,6 @@ if (!!window.WebSocket && window.WebSocket.prototype.send) {
     }
     connectSocket();
 
-//    for (var i = 0; i < 1; i++) {
-//        connectSocket();
-//        if (!gp_socket || gp_socket.readyState !== WebSocket.OPEN) {
-//            //alert("socket not connected");
-//        }
-//        //gp_socket.close(1000, "Closing from client");
-//    }
-    
 }
 else {
     alert("你的浏览器不支持及时自动刷新!");

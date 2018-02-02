@@ -85,6 +85,7 @@ else
             userInfo.UserGameModel = {
                 'remark': '@Html.Raw(UserGameModel.remark)',
                 'isTishi': @UserGameModel.isTishi.ToString().ToLower(),
+                'isSocket':@UserGameModel.isSocket.ToString().ToLower(),
             };
         </script>
     }
@@ -102,6 +103,9 @@ else
 
 @if (SignInManager.IsSignedIn(User))
 {
+    <div id="gameOtherInfo" style="color: red;font-size: 20px">
+@*        <a href="/" target="_blank">游戏1</a>到你的回合*@
+    </div>
 
     <div id="gameTopInfo" style="font-size:20px">
         @if (@Model.FactionList.Count > @Model.GameStatus.PlayerIndex)
@@ -308,6 +312,8 @@ else
 
 
     </div>
+
+
 
     @if (User.Identity.Name.Equals(Model.GetCurrentUserName()))
     {
@@ -622,7 +628,7 @@ else
                     $("#SyntaxLogList").html(data.data);
                 });
         });
-
+        var IsSocket=@Model.IsSocket.ToString().ToLower();
     </script>
     <script type='text/javascript' language='javascript' src='~/js/faction.js'></script>
 
@@ -633,8 +639,9 @@ else
      }
      else
      {
-         <script type='text/javascript' language='javascript' src='~/js/nextgame.js'></script>
+
      }
+     <script type='text/javascript' language='javascript' src='~/js/nextgame.js'></script>
 
 }
 else

@@ -1,0 +1,9 @@
+﻿@using GaiaDbContext.Models.SystemModels
+@model GaiaDbContext.Models.SystemModels.NewsInfoModel
+
+@{
+    ViewBag.Title = "盖亚计划";
+    Layout = "_Layout";
+}
+
+@Html.Raw(Model?.contents)

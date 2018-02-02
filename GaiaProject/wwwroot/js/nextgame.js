@@ -1,4 +1,11 @@
-﻿setTimeout('GetNextGame()', 10000); //指定1秒刷新一次
+﻿var timeJiange = 10000;
+if (typeof (IsSocket) === 'undefined') {
+    IsSocket = false;
+}
+if (IsSocket) {
+    timeJiange = 10000*6;//1分钟
+}
+setTimeout('GetNextGame()', timeJiange); //指定10秒刷新一次
 
 function GetNextGame() {
     var obj = $("#isMyTurn");
@@ -12,32 +19,16 @@ function GetNextGame() {
                     //console.log(data);
                 } else {
                     //console.log(data);
-                    window.location.href = "/home/viewgame/" + data;
-                    alert("你的回合");
+                    if (IsSocket) {
+                        $("#gameOtherInfo").html('<a href="/home/viewgame/' + data + '" target="_blank">游戏' + data +'</a>到你的回合');
+                    } else {
+                        window.location.href = "/home/viewgame/" + data;
+                        alert("你的回合");
+                    }
                 }
 
             });
     }
-    setTimeout('GetNextGame()', 10000);
+    setTimeout('GetNextGame()', timeJiange);
 }
 
-
-//setTimeout('GetNextGame()', 10000); //指定1秒刷新一次
-//
-//function GetNextGame() {
-//    if ($("#isMyTurn").text().indexOf("True") == -1) {
-//        $.post("/home/GetNextGame",
-//            {
-//                name: $("p#username").text()
-//            },
-//            function (data, status) {
-//                console.log(data);
-//                if (data == undefined || data == "") {
-//                } else {
-//                    window.location.href = "/home/viewgame/" + data;
-//                    alert("你的回合");
-//                }
-//            });
-//    }
-//    setTimeout('GetNextGame()', 10000);
-//}

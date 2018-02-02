@@ -27,17 +27,24 @@ namespace GaiaProject.Controllers
         private readonly ApplicationDbContext dbContext;
         private readonly IEmailSender _emailSender;
         public IMemoryCache cache;
+        private readonly SignInManager<ApplicationUser> signInManager;
         public const string IndexName = "IndexName";
 
-        public HomeController(ApplicationDbContext dbContext,UserManager<ApplicationUser> userManager, IEmailSender emailSender, IMemoryCache cache)
+        public HomeController(ApplicationDbContext dbContext,UserManager<ApplicationUser> userManager, IEmailSender emailSender, IMemoryCache cache, SignInManager<ApplicationUser> signInManager)
         {
             this._userManager = userManager;
             this.dbContext = dbContext;
             this._emailSender = emailSender;
             this.cache = cache;
+            this.signInManager = signInManager;
         }
         public IActionResult Index()
         {
+
+            if (!signInManager.IsSignedIn(User))
+            {
+                return Redirect("/News/ShowInfo/3");
+            }
 
             var task = _userManager.GetUserAsync(HttpContext.User);
             Task[] taskarray = new Task[] { task };
@@ -84,7 +91,7 @@ namespace GaiaProject.Controllers
         /// <returns></returns>
         public IActionResult Contact()
         {
-            IQueryable<NewsInfoModel> newsInfoModels = this.dbContext.NewsInfoModel.Where(item => item.type == 2);
+            IQueryable<NewsInfoModel> newsInfoModels = this.dbContext.NewsInfoModel.Where(item => item.type == 2).OrderBy(item=>item.Rank);
             return View(newsInfoModels.ToList());
         }
 
@@ -251,6 +258,7 @@ namespace GaiaProject.Controllers
             {
                 return Redirect("/home/index");
             }
+
             ViewData["gameid"] = id;
             return View(gg);
         }

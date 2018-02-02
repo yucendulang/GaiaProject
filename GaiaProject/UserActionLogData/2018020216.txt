@@ -1,0 +1,11 @@
+2018/2/2 16:10:23/test1/setup Gleen
+2018/2/2 16:16:44/totofans/setup Hive
+2018/2/2 16:17:22/test1/Gleen:advance ship
+2018/2/2 16:18:48/totofans/Ambas:advance ship
+2018/2/2 16:18:54/test1/Gleen:build D9
+2018/2/2 16:21:50/test1/Gleen:build G4
+2018/2/2 16:21:52/test1/Gleen:build I7
+2018/2/2 16:24:29/totofans/Ambas:build D4
+2018/2/2 16:25:02/test1/Gleen:build I5
+2018/2/2 16:25:20/totofans/Hive:build E5
+2018/2/2 16:25:23/totofans/Hive:+RBT5

@@ -126,7 +126,11 @@ namespace GaiaProject.Notice
         {
             var buffer = Encoding.UTF8.GetBytes(data);
             var segment = new ArraySegment<byte>(buffer);
-            return socket.SendAsync(segment, WebSocketMessageType.Text, true, ct);
+            if (socket.State == WebSocketState.Open)
+            {
+                return socket.SendAsync(segment, WebSocketMessageType.Text, true, ct);
+            }
+            return null;
         }
 
 
@@ -137,32 +141,32 @@ namespace GaiaProject.Notice
         /// <param name="user"></param>
         public static async void GameActive(GaiaGame gaiaGame, ClaimsPrincipal user)
         {
-            string gameName = gaiaGame.GameName;
-            //gameName = "test";
-            //包含游戏
-            if (gameList.ContainsKey(gameName))
-            {
-                ConcurrentDictionary<string, WebSocket> socketInfo = gameList[gameName];
-                //遍历用户
-                foreach (string socketInfoKey in socketInfo.Keys)
-                {
-                    //不是当前用户，发送提醒
-                    if (socketInfoKey != user.Identity.Name)
-                    {
-                        WebSocket socket = socketInfo[socketInfoKey];
-                        if (socket.State != WebSocketState.Open)
-                        {
-                            continue;
-                        }
-                        socket.CloseAsync(WebSocketCloseStatus.Empty, "", cancellationToken: new CancellationToken());
-                        //socket = new WebSocket();
-                        await SendStringAsync(socket, "200");
-                    }
-                }
-            }
+
             try
             {
-
+                string gameName = gaiaGame.GameName;
+                //gameName = "test";
+                //包含游戏
+                if (gameList.ContainsKey(gameName))
+                {
+                    ConcurrentDictionary<string, WebSocket> socketInfo = gameList[gameName];
+                    //遍历用户
+                    foreach (string socketInfoKey in socketInfo.Keys)
+                    {
+                        //不是当前用户，发送提醒
+                        if (socketInfoKey != user.Identity.Name)
+                        {
+                            WebSocket socket = socketInfo[socketInfoKey];
+                            if (socket.State != WebSocketState.Open)
+                            {
+                                continue;
+                            }
+                            //socket.CloseAsync(WebSocketCloseStatus.Empty, "", cancellationToken: new CancellationToken());
+                            //socket = new WebSocket();
+                            await SendStringAsync(socket, "200");
+                        }
+                    }
+                }
             }
             catch (Exception e)
             {

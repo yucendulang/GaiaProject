@@ -27,5 +27,11 @@ namespace GaiaDbContext.Models.AccountViewModels
         /// </summary>
         [JsonProperty]
         public bool isTishi { get; set; }
+        /// <summary>
+        /// 自动刷新
+        /// </summary>
+        [JsonProperty]
+
+        public bool isSocket { get; set; }
     }
 }
