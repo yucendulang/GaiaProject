@@ -432,7 +432,7 @@ namespace GaiaProject.Controllers
                 GaiaGame gaiaGame = GameMgr.GetGameByName(name);
                 try
                 {
-                    GameMgr.WriteUserActionLog(syntax, task.Result.UserName);
+                    //GameMgr.WriteUserActionLog(syntax, task.Result.UserName);
                 }catch{}
                 gaiaGame.Syntax(syntax, out string log, task.Result.UserName,dbContext:this.dbContext);
                 if (!string.IsNullOrEmpty(log))
@@ -478,7 +478,7 @@ namespace GaiaProject.Controllers
             GaiaGame gaiaGame = GameMgr.GetGameByName(name);
             try
             {
-                GameMgr.WriteUserActionLog(syntax, task.Result.UserName);
+                //GameMgr.WriteUserActionLog(syntax, task.Result.UserName);
             }
             catch { }
             gaiaGame.Syntax(syntax, out string log,dbContext:this.dbContext);
