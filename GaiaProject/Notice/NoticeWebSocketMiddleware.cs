@@ -171,7 +171,14 @@ namespace GaiaProject.Notice
                             //发送失败，删除链接
                             catch (Exception e)
                             {
-                                socketInfo.TryRemove(socketInfoKey, out WebSocket s1);
+                                try
+                                {
+                                    socketInfo.TryRemove(socketInfoKey, out WebSocket s1);
+                                }
+                                catch (Exception exception)
+                                {
+
+                                }
                             }
                         }
                     }
