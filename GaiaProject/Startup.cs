@@ -121,13 +121,13 @@ namespace GaiaProject
 
 
             //websocket中间件，需要在mvc之前声明
-//            var webSocketOptions = new WebSocketOptions()
-//            {
-//                KeepAliveInterval = TimeSpan.FromSeconds(120),
-//                ReceiveBufferSize = 4 * 1024
-//            };
-//            app.UseWebSockets(webSocketOptions);
-//            app.UseMiddleware<NoticeWebSocketMiddleware>();
+            var webSocketOptions = new WebSocketOptions()
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(120),
+                ReceiveBufferSize = 4 * 1024
+            };
+            app.UseWebSockets(webSocketOptions);
+            app.UseMiddleware<NoticeWebSocketMiddleware>();
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 

@@ -629,14 +629,14 @@ else
                 });
         });
         var IsSocket =@Model.IsSocket.ToString().ToLower();
-        IsSocket = false;
+        //IsSocket = false;
     </script>
     <script type='text/javascript' language='javascript' src='~/js/faction.js'></script>
 
 
     @if (Model.IsSocket)
      {
-         <script type='text/javascript' language='javascript' src='~/js/nextgame.js'></script>
+         <script type='text/javascript' language='javascript' src='~/js/gpsocket.js'></script>
      }
      else
      {
