@@ -83,30 +83,10 @@ namespace GaiaProject.Notice
             //将socket添加到里面，则添加
             socketList.TryAdd(context.User.Identity.Name, currentSocket);
 
-            while (true)
-            {
-                if (ct.IsCancellationRequested)
-                {
-                    break;
-                }
 
-                if (currentSocket.State != WebSocketState.Open)
-                {
-                    break;
-                }
+            //执行监听  
+            await EchoLoop(currentSocket);
 
-                continue;
-
-                //                foreach (var socket in socketList)
-                //                {
-                //                    if (socket.Value.State != WebSocketState.Open)
-                //                    {
-                //                        continue;
-                //                    }
-                //
-                //                    await SendStringAsync(socket.Value, response, ct);
-                //                }
-            }
             //从socket删除
             WebSocket dummy;
             socketList.TryRemove(context.User.Identity.Name, out dummy);
@@ -119,6 +99,25 @@ namespace GaiaProject.Notice
 
             await currentSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", ct);
             currentSocket.Dispose();
+        }
+
+
+        /// <summary>  
+        /// 响应处理  
+        /// </summary>  
+        /// <returns></returns>  
+        async Task EchoLoop(WebSocket currentSocket)
+        {
+            var buffer = new byte[1024];
+            var seg = new ArraySegment<byte>(buffer);
+            while (currentSocket.State == WebSocketState.Open)
+            {
+                var incoming = await currentSocket.ReceiveAsync(seg, CancellationToken.None);
+
+                byte[] backInfo = System.Text.Encoding.UTF8.GetBytes("200");
+                var outgoing = new ArraySegment<byte>(backInfo, 0, incoming.Count);
+                await currentSocket.SendAsync(outgoing, WebSocketMessageType.Text, true, CancellationToken.None);
+            }
         }
 
 

@@ -628,7 +628,7 @@ else
                     $("#SyntaxLogList").html(data.data);
                 });
         });
-        var IsSocket =@Model.IsSocket.ToString().ToLower();
+        var IsSocket =@Model.IsSocket.ToString().ToLower() && !!window.WebSocket && window.WebSocket.prototype.send;
         //IsSocket = false;
     </script>
     <script type='text/javascript' language='javascript' src='~/js/faction.js'></script>
@@ -640,9 +640,9 @@ else
      }
      else
      {
+         <script type='text/javascript' language='javascript' src='~/js/nextgame.js'></script>
 
      }
-     <script type='text/javascript' language='javascript' src='~/js/nextgame.js'></script>
 
 }
 else
