@@ -40,7 +40,7 @@ namespace GaiaCore.Gaia.Game
                         .Select(item => string.Format("{0}{1}({2})", item.ChineseName,
                             item.Score, item.UserName)));
                 string title = $"游戏({gaiaGame.GameName})结束,{finalScore}";
-                string message = "http://gaiaproject3.chinacloudsites.cn/Home/RestoreGame/" + gameinfo.Id.ToString();
+                string message = "http://211.149.159.203/Home/RestoreGame/" + gameinfo.Id.ToString();
                 //向全部玩家发送游戏结束提醒
                 try
                 {
