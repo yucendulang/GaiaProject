@@ -1,0 +1,87 @@
+﻿@model System.Collections.Generic.List<GaiaDbContext.Models.SystemModels.DonateRecordModel>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_LayoutAdmin";
+}
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2><i class="fa fa-table red"></i><span class="break"></span><strong></strong></h2>
+        <a href="/Admin/DonateUpdate">添加</a>
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>捐赠人</th>
+                <th>捐赠方式</th>
+                <th>捐赠时间</th>
+                <th>捐赠金额</th>
+                <th>收款人</th>
+                <th>操作</th>
+            </tr></thead> 
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>@item.donateuser</td>
+
+                    <td>@item.donatetype</td>
+                    <td>@item.donatetime</td>
+
+
+                    <td>
+                        @item.donateprice
+                    </td>
+                    <td>
+                        @item.chequeuser
+                    </td>
+                    <td>
+                        <a class="btn btn-info" href="/Admin/DonateUpdate/@item.id">
+                            <i class="fa fa-edit "></i>                                            
+                        </a>
+                        
+                        <a class="btn btn-danger" href="#" onclick="admin_deldata(@item.id,'donate')">
+                            <i class="fa fa-trash-o "></i> 
+
+                        </a>
+
+                    </td>
+                </tr>
+            }
+
+
+
+            </tbody>
+        </table>  
+        @*        <ul class="pagination">*@
+        @*            <li><a href="table.html#">Prev</a></li>*@
+        @*            <li class="active">*@
+        @*                <a href="table.html#">1</a>*@
+        @*            </li>*@
+        @*            <li><a href="table.html#">2</a></li>*@
+        @*            <li><a href="table.html#">3</a></li>*@
+        @*            <li><a href="table.html#">4</a></li>*@
+        @*            <li><a href="table.html#">5</a></li>*@
+        @*            <li><a href="table.html#">Next</a></li>*@
+        @*        </ul>     *@
+    </div>
+</div>
+
+<script>
+
+    function admin_deldata(id, type) {
+        if (confirm('确认删除?')) {
+            $.post("/Admin/DelData/"+id,
+                "type="+type,
+                function(data) {
+                    if (data.info.state === 200) {
+                        window.location.reload();
+                    }
+                });   
+        }
+    }
+</script>

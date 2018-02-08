@@ -102,5 +102,95 @@ namespace GaiaProject.Controllers
         #endregion
 
 
+
+        #region 众凑
+        /// <summary>
+        /// 列表
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult DonateIndex()
+        {
+            List<DonateRecordModel> donateRecordModels = this.dbContext.DonateRecordModel.ToList();
+            return View(donateRecordModels);
+        }
+        /// <summary>
+        /// 添加
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpGet]       
+        public IActionResult DonateUpdate(int? id)
+        {
+            DonateRecordModel model = null;
+            if (id > 0)
+            {
+                model = this.dbContext.DonateRecordModel.SingleOrDefault(item => item.id == id);
+            }
+            //List<DonateRecordModel> donateRecordModels = this.dbContext.DonateRecordModel.ToList();
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult DonateUpdate(DonateRecordModel model)
+        {
+            DonateRecordModel newModel;
+            //编辑
+            if (model.id > 0)
+            {
+                newModel = this.dbContext.DonateRecordModel.SingleOrDefault(item => item.id == model.id);
+            }
+            else//添加
+            {
+                newModel = new DonateRecordModel();
+                newModel.addtime = DateTime.Now;
+            }
+            //赋值
+            newModel.donateuser = model.donateuser;
+            newModel.donateprice = model.donateprice;
+            newModel.donatetime = model.donatetime;
+            newModel.donatetype = model.donatetype;
+            newModel.chequeuser = model.chequeuser;
+            newModel.newid = model.newid;
+            //newModel.name = model.name;
+            //保存
+            if (model.id > 0)
+            {
+                this.dbContext.DonateRecordModel.Update(newModel);
+            }
+            else
+            {
+                this.dbContext.DonateRecordModel.Add(newModel);
+            }
+            this.dbContext.SaveChanges();
+            return Redirect("/Admin/DonateIndex");
+        }
+        #endregion
+
+        /// <summary>
+        /// 删除塑胶
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<JsonResult> DelData(int id,string type)
+        {
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
+
+            jsonData.info.state = 200;
+            switch (type)
+            {
+                case "donate":
+                    var donateRecordModel = this.dbContext.DonateRecordModel.SingleOrDefault(item => item.id == id);
+                    if (donateRecordModel != null)
+                    {
+                        this.dbContext.DonateRecordModel.Remove(donateRecordModel);
+                        this.dbContext.SaveChanges();
+                    }
+                    break;
+            }
+            return new JsonResult(jsonData);
+
+        }
+
     }
 }
