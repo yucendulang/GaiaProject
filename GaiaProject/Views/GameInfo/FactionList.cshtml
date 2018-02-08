@@ -6,20 +6,25 @@
     ViewBag.Title = "种族";
     Layout = "_Layout";
     string type = this.Context.Request.Query["type"];
+    string username = this.Context.Request.Query["username"];
+
 }
 
 <form>
     <div class="row">
         <div class="col-lg-8">
             <div class="input-group">
+                
+                <input type="hidden" value="@username" name="username" />
+
 
                 @Html.Partial("Partial_Html_UserCount", this)
 
 
                 @Html.DropDownList("FactionName", new SelectList(new List<Faction>() { new Terraner(null), new Lantida(null), new Hive(null), new HadschHalla(null), new BalTak(null), new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null), new MadAndroid(null), new Itar(null), new Nevla(null) }, "FactionName", "ChineseName"),
-          "--种族--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList" })
-                
-                
+               "--种族--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList" })
+
+
                 @if (string.IsNullOrEmpty(type))
                 {
                     <select class="btn dropdown-toggle form-control" id="orderType" name="orderType" style="width: 100px">
@@ -27,7 +32,7 @@
                         <option value="1">结束时间</option>
                         <option value="2">总分</option>
                         <option value="3">裸分</option>
-                    </select>                    
+                    </select>
                 }
 
 
@@ -101,7 +106,7 @@
 </table>
 
 
-
+@Html.Partial("Partial_PageInfo", Model)
 
 @if (type != "2")
 {

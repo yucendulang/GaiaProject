@@ -293,9 +293,9 @@ namespace GaiaProject.Controllers
         /// 个人使用的种族信息
         /// </summary>
         /// <returns></returns>
-        public IActionResult FactionList(GameFactionModel gameFactionModel, int? type, int? usercount,int orderType=1)
+        public IActionResult FactionList(GameFactionModel gameFactionModel, int? type, int? usercount,int orderType=1, int pageindex = 1)
         {
-
+            //gameFactionModel.UserCount
             if (gameFactionModel.username == null)
             {
                 gameFactionModel.username = HttpContext.User.Identity.Name;
@@ -304,25 +304,23 @@ namespace GaiaProject.Controllers
             if (type == 1)//全部
             {
                 gameFactionModels = this.dbContext.GameFactionModel.AsQueryable();
-                if (gameFactionModel.FactionName != null)
-                {
-                    gameFactionModels = gameFactionModels.Where(item => item.FactionName == gameFactionModel.FactionName);
-                }
+
             }
             else if (type == 2)//高分
             {
                 gameFactionModels = this.dbContext.GameFactionModel.AsQueryable();
-                if (gameFactionModel.FactionName != null)
-                {
-                    gameFactionModels = gameFactionModels.Where(item => item.FactionName == gameFactionModel.FactionName);
-                }
-
-
             }
             else//自己的
             {
                 gameFactionModels = this.dbContext.GameFactionModel.Where(item => item.username == gameFactionModel.username);
             }
+
+            //种族
+            if (gameFactionModel.FactionName != null)
+            {
+                gameFactionModels = gameFactionModels.Where(item => item.FactionName == gameFactionModel.FactionName);
+            }
+
             //人数
             usercount = usercount ?? 4;
             if (usercount > 0)
@@ -358,22 +356,26 @@ namespace GaiaProject.Controllers
                 }
 
             }
+
+            //list = list.OrderByDescending(item => item.starttime).Skip(30 * (pageindex - 1)).Take(30);
+
+
             if (type == null)
             {
                 //时间
                 if (orderType == 1)
                 {
-                    gameFactionModels = gameFactionModels.OrderByDescending(item => item.Id).Take(30);
+                    gameFactionModels = gameFactionModels.OrderByDescending(item => item.Id).Skip(30 * (pageindex - 1)).Take(30);
 
                 }
                 else if (orderType==2)//总分
                 {
-                    gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal).Take(30);
+                    gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal).Skip(30 * (pageindex - 1)).Take(30);
 
                 }
                 else if (orderType == 3)//裸分
                 {
-                    gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreLuo).Take(30);
+                    gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreLuo).Skip(30 * (pageindex - 1)).Take(30);
 
                 }
             }
@@ -382,7 +384,7 @@ namespace GaiaProject.Controllers
                 //前30条
                 if (type != 1)
                 {
-                    gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal).Take(30);
+                    gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal).Skip(30 * (pageindex - 1)).Take(30);
                 }
                 else
                 {
