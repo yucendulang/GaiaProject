@@ -25,23 +25,21 @@
 }
 
 
-
-
-
-<div class="card">
-    <div class="header">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2><i class="fa fa-table red"></i><span class="break"></span><strong></strong></h2>
         @if (isAdmin)
-        {
-            <div>
-                <span>菜单仅管理员可见</span>
-                <a href="/GameInfo/UpdatenFinishFromDb">检测游戏结束但没有种族信息的</a>
-                <a href="/GameInfo/UpdatenNoFromDb">检测游戏应该结束但没有更新的</a>
+    {
+        <div>
+            <span>菜单仅管理员可见</span>
+            <a href="/GameInfo/UpdatenFinishFromDb">检测游戏结束但没有种族信息的</a>
+            <a href="/GameInfo/UpdatenNoFromDb">检测游戏应该结束但没有更新的</a>
 
-                <a href="/GameInfo/DeleteGameInvalid">删除未结束但内存没有的游戏</a>
-                <a href="/GameInfo/UpdateGame">将内存的游戏重新保存到数据库</a>
-            </div>
+            <a href="/GameInfo/DeleteGameInvalid">删除未结束但内存没有的游戏</a>
+            <a href="/GameInfo/UpdateGame">将内存的游戏重新保存到数据库</a>
+        </div>
 
-        }
+}
         <form>
             <div class="row">
                 <div class="col-lg-8">
@@ -52,9 +50,9 @@
                         <input type="text" class="form-control" style="width: 150px" placeholder="创建人" id="username" name="username">
                         <input type="text" class="form-control" style="width: 150px" placeholder="参与人" id="joinname" name="joinname">
                         @if (adminType == "1")
-                        {
-                            <input type="text" class="form-control" style="width: 100px" placeholder="最低分" id="scoremin" name="scoremin">
-                        }
+                    {
+                        <input type="text" class="form-control" style="width: 100px" placeholder="最低分" id="scoremin" name="scoremin">
+                }
                         <input type="hidden" class="form-control" value="@adminType" placeholder="管理员" id="isAdmin" name="isAdmin">
 
                         <span class="input-group-btn">
@@ -65,8 +63,8 @@
             </div>
         </form>
     </div>
-    <div class="">
-        <table class="table table-hover table-striped">
+    <div class="panel-body">
+        <table class="table table-striped">
             <thead>
             <tr>
                 <td>游戏名称</td>
@@ -115,9 +113,11 @@
 
             </tbody>
         </table>
-
     </div>
 </div>
+
+
+
 
 
 

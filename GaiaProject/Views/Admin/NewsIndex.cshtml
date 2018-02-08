@@ -6,71 +6,80 @@
     Layout = "_LayoutAdmin";
 }
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="header">
-                    <h4 class="title">新闻列表</h4>
-                    <a href="/Admin/NewsUpdate">添加新闻</a>
-                    <a href="/Admin/NewsIndexUpdate">重置首页信息</a>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2><i class="fa fa-table red"></i><span class="break"></span><strong></strong></h2>
+        <a href="/Admin/NewsUpdate">添加新闻</a>
+        <a href="/Admin/NewsIndexUpdate">重置首页信息</a>
                     
-                    <span>暂时请不要编辑帮助信息，会导致页面错乱</span>
-                    @*                    <p class="category">Here is a subtitle for this table</p>*@
-                </div>
-                <div class="content table-responsive table-full-width">
-                    <table class="table table-hover table-striped">
-                        <thead>
-                        <tr><th>ID</th>
-                            <th>标题</th>
-                            <th>类型</th>
-                            <th>发布时间</th>
-                            <th>状态</th>
-                            <th>操作</th>
-                        </tr></thead>
-                        <tbody>
-                        @foreach (var item in Model)
+        <span>暂时请不要编辑帮助信息，会导致页面错乱</span>
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped">
+            <thead>
+            <tr><th>ID</th>
+                <th>标题</th>
+                <th>类型</th>
+                <th>发布时间</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr></thead> 
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.name</td>
+                    <td>
+                        @switch (@item.type)
                         {
-                            <tr>
-                                <td>@item.Id</td>
-                                <td>@item.name</td>
-                                <td>
-                                    @switch (@item.type)
-                                        {
-                                            case 1:
-                                                <span>首页</span>
-                                                break;
-                                            case 2:
-                                                <span>帮助</span>
-                                                break;
-                                            case 3:
-                                                <span>新手引导</span>
-                                                break;
-                                            case 4:
-                                                <span>新闻</span>
-                                                break;
-                                        }
-                                </td>
-                                <td>@item.AddTime</td>
-                                <td>@item.state</td>
-                                <td>
-                                    <a href="/Admin/NewsUpdate/@item.Id">编辑</a>
-                                </td>
-
-                            </tr>
+                            case 1:
+                                <span>首页</span>
+                                break;
+                            case 2:
+                                <span>帮助</span>
+                                break;
+                            case 3:
+                                <span>新手引导</span>
+                                break;
+                            case 4:
+                                <span>新闻</span>
+                                break;
                         }
+                    </td>
+                    <td>@item.AddTime</td>
+                    <td>@item.state</td>
+
+
+                    <td>
+
+                        <a class="btn btn-info" href="/Admin/NewsUpdate/@item.Id">
+                            <i class="fa fa-edit "></i>                                            
+                        </a>
+                        <a class="btn btn-danger" href="/Admin/NewsUpdate/@item.Id">
+                            <i class="fa fa-trash-o "></i> 
+
+                        </a>
+                    </td>
+                </tr>
+            }
 
 
 
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
-        </div>
-
-
-
-
+            </tbody>
+        </table>  
+@*        <ul class="pagination">*@
+@*            <li><a href="table.html#">Prev</a></li>*@
+@*            <li class="active">*@
+@*                <a href="table.html#">1</a>*@
+@*            </li>*@
+@*            <li><a href="table.html#">2</a></li>*@
+@*            <li><a href="table.html#">3</a></li>*@
+@*            <li><a href="table.html#">4</a></li>*@
+@*            <li><a href="table.html#">5</a></li>*@
+@*            <li><a href="table.html#">Next</a></li>*@
+@*        </ul>     *@
     </div>
 </div>
+

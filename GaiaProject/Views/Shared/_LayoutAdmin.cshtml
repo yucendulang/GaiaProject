@@ -1,242 +1,204 @@
-﻿
-<!doctype html>
-<html>
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/png" href="/assets/img/favicon.ico">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8">
+    <meta name="author" content="order by dede58.com"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>盖亚计划 - 后台管理</title>		
+		
+    <!-- Import google fonts - Heading first/ text second -->
+@*    <link rel='stylesheet' type='text/css' href='http://fonts.useso.com/css?family=Open+Sans:400,700|Droid+Sans:400,700' />*@
 
-    <title>盖亚计划后台管理中心</title>
+    <!-- Favicon and touch icons -->
+    <link rel="shortcut icon" href="/lib/proton/ico/favicon.ico" type="image/x-icon" />
 
-    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
-    <meta name="viewport" content="width=device-width" />
+    <!-- Css files -->
+    <link href="/lib/proton/css/bootstrap.min.css" rel="stylesheet">		
+    <link href="/lib/proton/css/jquery.mmenu.css" rel="stylesheet">		
+    <link href="/lib/proton/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/lib/proton/plugins/jquery-ui/css/jquery-ui-1.10.4.min.css" rel="stylesheet">
+    <link href="/lib/proton/css/style.min.css" rel="stylesheet">
+    <link href="/lib/proton/css/add-ons.min.css" rel="stylesheet">
 
-
-    <!-- Bootstrap core CSS     -->
-    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
-
-    <!-- Animation library for notifications   -->
-    <link href="/assets/css/animate.min.css" rel="stylesheet"/>
-
-    <!--  Light Bootstrap Table core CSS    -->
-    <link href="/assets/css/light-bootstrap-dashboard.css?v=1.4.0" rel="stylesheet"/>
-
-
-    <!--  CSS for Demo Purpose, don't include it in your project     -->
-    <link href="/assets/css/demo.css" rel="stylesheet" />
-
-
-    <!--     Fonts and icons     -->
-@*    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">*@
-@*    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>*@
-    @*    <link href="/assets/css/pe-icon-7-stroke.css" rel="stylesheet" />*@
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     
-    
-    
-    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
-            asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-            asp-fallback-test="window.jQuery"
-            crossorigin="anonymous"
-            integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
-    </script>
+    <!-- start: JavaScript-->
 
-    <!--   Core JS Files   -->
-    @*<script src="/assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>*@
-    <script src="/assets/js/bootstrap.min.js" type="text/javascript"></script>
 
-    <!--  Charts Plugin -->
-    <script src="/assets/js/chartist.min.js"></script>
+        <script src="/lib/proton/js/jquery-2.1.1.min.js"></script>
 
-    <!--  Notifications Plugin    -->
-    <script src="/assets/js/bootstrap-notify.js"></script>
+    <script src="/lib/proton/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/lib/proton/js/bootstrap.min.js"></script>	
+	
+	
+    <!-- page scripts -->
+    <script src="/lib/proton/plugins/jquery-ui/js/jquery-ui-1.10.4.min.js"></script>
+    <script src="/lib/proton/plugins/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="/lib/proton/plugins/datatables/js/dataTables.bootstrap.min.js"></script>
+	
+    <!-- theme scripts -->
+    <script src="/lib/proton/js/SmoothScroll.js"></script>
+    <script src="/lib/proton/js/jquery.mmenu.min.js"></script>
+    <script src="/lib/proton/js/core.min.js"></script>
+	
+    <!-- inline scripts related to this page -->
 
-    <!--  Google Maps Plugin    -->
-    @*<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>*@
-
-    <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
-    <script src="/assets/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
-
-    <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
-    <script src="/assets/js/demo.js"></script>
-
+	
+    <!-- end: JavaScript-->
 </head>
+
 <body>
-
-<div class="wrapper">
-<div class="sidebar" data-color="purple" data-image="/assets/img/sidebar-5.jpg">
-
-    <!--   you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple" -->
-
-
-    <div class="sidebar-wrapper">
-        <div class="logo">
-            <a href="/Admin/NewsIndex" class="simple-text">
-                后台管理中心
-            </a>
-            <a href="/"  class="simple-text">返回首页</a>
-        </div>
-
-        <ul class="nav">
-            <li>
-@*                class="active"*@
-                <a href="/Admin/NewsIndex">
-                    <i class="pe-7s-graph"></i>
-                    <p>新闻管理</p>
-                </a>
-            </li>
-            <li>
-                <a href="/UserFriend/UserList">
-                    <i class="pe-7s-user"></i>
-                    <p>用户管理</p>
-                </a>
-            </li>
-@*            <li>*@
-@*                <a href="/Admin/NewsIndex">*@
-@*                    <i class="pe-7s-note2"></i>*@
-@*                    <p>服务器状态</p>*@
-@*                </a>*@
-@*            </li>*@
-            <li>
-                <a href="/MatchInfo?isAdmin=1">
-                    <i class="pe-7s-news-paper"></i>
-                    <p>比赛管理</p>
-                </a>
-            </li>
-            <li>
-                <a href="/GameInfo/Index?isAdmin=1">
-                    <i class="pe-7s-science"></i>
-                    <p>游戏管理</p>
-                </a>
-            </li>
+<!-- start: Header -->
+<div class="navbar" role="navigation">
+	
+    <div class="container-fluid">		
+			
+        <ul class="nav navbar-nav navbar-actions navbar-left">
+            <li class="visible-md visible-lg"><a href="#" id="main-menu-toggle"><i class="fa fa-th-large"></i></a></li>
+            <li class="visible-xs visible-sm"><a href="#" id="sidebar-menu"><i class="fa fa-navicon"></i></a></li>			
         </ul>
+@*			*@
+@*        <form class="navbar-form navbar-left">*@
+@*            <button type="submit" class="fa fa-search"></button>*@
+@*            <input type="text" class="form-control" placeholder="Search..."></a>*@
+@*        </form>*@
+			
+        <ul class="nav navbar-nav navbar-right">
+
+            <li class="dropdown visible-md visible-lg">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img class="user-avatar" src="/lib/proton/img/avatar.jpg" alt="user-mail">@User.Identity.Name</a>
+            </li>
+@*            <li><a href="index.html"><i class="fa fa-power-off"></i></a></li>*@
+        </ul>
+			
     </div>
+		
 </div>
-
-<div class="main-panel">
-<nav class="navbar navbar-default navbar-fixed">
-    <div class="container-fluid">
-@*        <div class="navbar-header">*@
-@*            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">*@
-@*                <span class="sr-only">Toggle navigation</span>*@
-@*                <span class="icon-bar"></span>*@
-@*                <span class="icon-bar"></span>*@
-@*                <span class="icon-bar"></span>*@
-@*            </button>*@
-@*            <a class="navbar-brand" href="#">Table List</a>*@
-@*        </div>*@
-        <div class="collapse navbar-collapse">
-@*            <ul class="nav navbar-nav navbar-left">*@
-@*                <li>*@
-@*                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">*@
-@*                        <i class="fa fa-dashboard"></i>*@
-@*                        <p class="hidden-lg hidden-md">Dashboard</p>*@
-@*                    </a>*@
-@*                </li>*@
-@*$1$                <li class="dropdown">#1#*@
-@*$1$                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">#1#*@
-@*$1$                        <i class="fa fa-globe"></i>#1#*@
-@*$1$                        <b class="caret hidden-sm hidden-xs"></b>#1#*@
-@*$1$                        <span class="notification hidden-sm hidden-xs">5</span>#1#*@
-@*$1$                        <p class="hidden-lg hidden-md">#1#*@
-@*$1$                            5 Notifications#1#*@
-@*$1$                            <b class="caret"></b>#1#*@
-@*$1$                        </p>#1#*@
-@*$1$                    </a>#1#*@
-@*$1$                    <ul class="dropdown-menu">#1#*@
-@*$1$                        <li><a href="#">Notification 1</a></li>#1#*@
-@*$1$                        <li><a href="#">Notification 2</a></li>#1#*@
-@*$1$                        <li><a href="#">Notification 3</a></li>#1#*@
-@*$1$                        <li><a href="#">Notification 4</a></li>#1#*@
-@*$1$                        <li><a href="#">Another notification</a></li>#1#*@
-@*$1$                    </ul>#1#*@
-@*$1$                </li>#1#*@
-@*                <li>*@
-@*                    <a href="">*@
-@*                        <i class="fa fa-search"></i>*@
-@*                        <p class="hidden-lg hidden-md">Search</p>*@
-@*                    </a>*@
-@*                </li>*@
-@*            </ul>*@
-
-            <ul class="nav navbar-nav navbar-right">
-@*                <li>*@
-@*                    <a href="">*@
-@*                        <p>Account</p>*@
-@*                    </a>*@
-@*                </li>*@
-@*                <li class="dropdown">*@
-@*                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">*@
-@*                        <p>*@
-@*                            Dropdown*@
-@*                            <b class="caret"></b>*@
-@*                        </p>*@
-@**@
-@*                    </a>*@
-@*                    <ul class="dropdown-menu">*@
-@*                        <li><a href="#">Action</a></li>*@
-@*                        <li><a href="#">Another action</a></li>*@
-@*                        <li><a href="#">Something</a></li>*@
-@*                        <li><a href="#">Another action</a></li>*@
-@*                        <li><a href="#">Something</a></li>*@
-@*                        <li class="divider"></li>*@
-@*                        <li><a href="#">Separated link</a></li>*@
-@*                    </ul>*@
-@*                </li>*@
+<!-- end: Header -->
+	
+<div class="container-fluid content">
+	
+<div class="row">
+				
+<!-- start: Main Menu -->
+<div class="sidebar ">
+								
+    <div class="sidebar-collapse">
+        <div class="sidebar-header t-center">
+            <span><img class="text-logo" src="/lib/proton/img/logo1.png"><i class="fa fa-space-shuttle fa-3x blue"></i></span>
+        </div>										
+        <div class="sidebar-menu">						
+            <ul class="nav nav-sidebar">
+                <li><a href="/Admin/NewsIndex"><i class="fa fa-laptop"></i><span class="text">新闻管理</span></a></li>
                 <li>
-                    <a href="#">
-                        <p>退出</p>
-                    </a>
+                    <a href="/UserFriend/UserList"><i class="fa fa-file-text"></i><span class="text"> 用户管理</span> </a>	
                 </li>
-                <li class="separator hidden-lg hidden-md"></li>
+                <li>
+                    <a href="/MatchInfo?isAdmin=1"><i class="fa fa-list-alt"></i><span class="text"> 比赛管理</span> </a>
+                </li>
+                <li><a href="/GameInfo/Index?isAdmin=1"><i class="fa fa-table"></i><span class="text"> 游戏管理</span></a></li>
             </ul>
+        </div>					
+    </div>
+    <div class="sidebar-footer">					
+					
+        <div class="sidebar-brand">
+            盖亚计划
         </div>
-    </div>
-</nav>
+					
+@*        <ul class="sidebar-terms">*@
+@*            <li><a href="index.html#">Terms</a></li>*@
+@*            <li><a href="index.html#">Privacy</a></li>*@
+@*            <li><a href="index.html#">Help</a></li>*@
+@*            <li><a href="index.html#">About</a></li>*@
+@*        </ul>*@
+					
+        <div class="copyright text-center">
+            <small>后台管理 <i class="fa fa-coffee"></i>  <a href="/" title="盖亚计划" target="_blank">盖亚计划</a></small>
+        </div>					
+    </div>	
+				
+</div>
+<!-- end: Main Menu -->
+						
+<!-- start: Content -->
+<div class="main sidebar-minified">
 
-<div class="content">
     @RenderBody()
-</div>
-
-<footer class="footer">
-    <div class="container-fluid">
-@*        <nav class="pull-left">*@
-@*            <ul>*@
-@*                <li>*@
-@*                    <a href="#">*@
-@*                        Home*@
-@*                    </a>*@
-@*                </li>*@
-@*                <li>*@
-@*                    <a href="#">*@
-@*                        Company*@
-@*                    </a>*@
-@*                </li>*@
-@*                <li>*@
-@*                    <a href="#">*@
-@*                        Portfolio*@
-@*                    </a>*@
-@*                </li>*@
-@*                <li>*@
-@*                    <a href="#">*@
-@*                        Blog*@
-@*                    </a>*@
-@*                </li>*@
-@*            </ul>*@
-@*        </nav>*@
-        <p class="copyright pull-right">
-            &copy; <script>document.write(new Date().getFullYear())</script> <a href="/">盖亚计划</a>, 后台管理系统
-        </p>
-    </div>
-</footer>
-
 
 </div>
-</div>
+<!-- end: Content -->
+<br><br><br>		
 
+		
+		
+@*<div id="usage">*@
+@*    <ul>*@
+@*        <li>*@
+@*            <div class="title">Memory</div>*@
+@*            <div class="bar">*@
+@*                <div class="progress">*@
+@*                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%"></div>*@
+@*                </div>*@
+@*            </div>			*@
+@*            <div class="desc">4GB of 8GB</div>*@
+@*        </li>*@
+@*        <li>*@
+@*            <div class="title">HDD</div>*@
+@*            <div class="bar">*@
+@*                <div class="progress">*@
+@*                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 25%"></div>*@
+@*                </div>*@
+@*            </div>			*@
+@*            <div class="desc">250GB of 1TB</div>*@
+@*        </li>*@
+@*        <li>*@
+@*            <div class="title">SSD</div>*@
+@*            <div class="bar">*@
+@*                <div class="progress">*@
+@*                    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%"></div>*@
+@*                </div>*@
+@*            </div>			*@
+@*            <div class="desc">700GB of 1TB</div>*@
+@*        </li>*@
+@*        <li>*@
+@*            <div class="title">Bandwidth</div>*@
+@*            <div class="bar">*@
+@*                <div class="progress">*@
+@*                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%"></div>*@
+@*                </div>*@
+@*            </div>			*@
+@*            <div class="desc">90TB of 100TB</div>*@
+@*        </li>				*@
+@*    </ul>	*@
+@*</div>			*@
+		
+</div><!--/container-->
+		
+	
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <p>Here settings can be configured...</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+	
+<div class="clearfix"></div>
+	
+		
 
+</div>	
 </body>
-
-
-
-
 </html>
