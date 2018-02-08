@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 //using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -94,6 +96,9 @@ namespace GaiaProject
             services.AddMemoryCache();
 
             services.AddMvc();
+
+            //解决输出中文问题https://q.cnblogs.com/q/86078/
+            services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.All));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
