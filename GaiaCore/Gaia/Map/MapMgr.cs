@@ -251,14 +251,14 @@ namespace GaiaCore.Gaia
         public Map Get2PRandomMap(Random random)
         {
             var result = new Map();
-            result.AddSpaceSector(6, 7, ssl[2], random);
+            //result.AddSpaceSector(6, 7, ssl[2], random);
             var randomList = new List<SpaceSector>()
             {
-                ssl[0],ssl[1],ssl[3],ssl[10],ssl[11],ssl[12]
+                ssl[0],ssl[1],ssl[2],ssl[3],ssl[10],ssl[11],ssl[12]
             };
             var centerTuple = new List<Tuple<int, int>>()
             {
-                { 2,5},{6,2},{10,4 },{ 3,10},{7,12},{ 10,9}
+                { 2,5},{6,2},{6,7},{10,4 },{ 3,10},{7,12},{ 10,9}
             };
 
             centerTuple.ForEach(x =>
@@ -273,14 +273,14 @@ namespace GaiaCore.Gaia
         public Map Get3PRandomMap(Random random)
         {
             var result = new Map();
-            result.AddSpaceSector(6, 7, ssl[2], random);
+            //result.AddSpaceSector(6, 7, ssl[2], random);
             var randomList = new List<SpaceSector>()
             {
-                ssl[0],ssl[1],ssl[3],ssl[4],ssl[5],ssl[6]
+                ssl[0],ssl[1],ssl[2],ssl[3],ssl[4],ssl[5],ssl[6]
             };
             var centerTuple = new List<Tuple<int, int>>()
             {
-                { 2,5},{6,2},{10,4 },{ 3,10},{7,12},{ 10,9}
+                { 2,5},{6,2},{6,7},{10,4 },{ 3,10},{7,12},{ 10,9}
             };
 
             centerTuple.ForEach(x =>

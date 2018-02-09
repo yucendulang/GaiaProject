@@ -1311,10 +1311,14 @@ namespace GaiaCore.Gaia
         {
             Seed = i == 0 ? RandomInstance.Next(int.MaxValue) : i;
             var random = new Random(Seed);
-            if (MapSelection == MapSelection.random4p)
+            if (MapSelection == MapSelection.random4pall)
             {
                 Map = new MapMgr().Get4PAllRandomMap(random);
                 //Map = new MapMgr().Get4PRandomMap(random);
+            }
+            else if (MapSelection == MapSelection.random4p)
+            {
+                Map = new MapMgr().Get4PRandomMap(random);
             }
             else if (MapSelection == MapSelection.fix2p)
             {
