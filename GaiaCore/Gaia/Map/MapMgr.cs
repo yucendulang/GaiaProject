@@ -190,9 +190,42 @@ namespace GaiaCore.Gaia
 
             return result;
         }
+        /// <summary>
+        /// 4人完全随机
+        /// </summary>
+        /// <param name="random"></param>
+        /// <returns></returns>
+        public Map Get4PAllRandomMap(Random random)
+        {
+            var result = new Map();
+
+            //0，1，2，3固定
+
+            var randomList = new List<SpaceSector>()
+            {
+                ssl[0],ssl[1],ssl[2],ssl[3],ssl[4],ssl[5],ssl[6],ssl[7],ssl[8],ssl[9]
+            };
+
+
+            this.centerTuple_4p.ForEach(x =>
+            {
+                var index = random.Next(randomList.Count);
+                result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random), random);
+                randomList.RemoveAt(index);
+            });
+
+            return result;
+        }
+
+        /// <summary>
+        /// 1，2，3，4号固定
+        /// </summary>
+        /// <param name="random"></param>
+        /// <returns></returns>
         public Map Get4PRandomMap(Random random)
         {
             var result = new Map();
+            //0，1，2，3固定
             result.AddSpaceSector(3, 10, ssl[0], random);
             result.AddSpaceSector(6, 7, ssl[1], random);
             result.AddSpaceSector(7, 12, ssl[2], random);
@@ -294,21 +327,25 @@ namespace GaiaCore.Gaia
             }
             return result;
         }
-
+        /// <summary>
+        /// 4人地图中心点坐标
+        /// </summary>
+        List<Tuple<int, int>> centerTuple_4p = new List<Tuple<int, int>>()
+        {
+            { 2,5},{ 3,10},{ 3,15},{6,2},{6,7},{7,12},{ 7,17},{10,4 },{ 10,9},{11,14 }
+        };
         public Map Get4PFixedMap()
         {
-            var centerTuple = new List<Tuple<int, int>>()
-            {
-                { 2,5},{ 3,10},{ 3,15},{6,2},{6,7},{7,12},{ 7,17},{10,4 },{ 10,9},{11,14 }
-            };
+
+            //固定板块，1-10号
             var sslList = new List<int>()
             {
                 9,0,4,8,1,2,5,7,3,6
             };
             var result = new Map();
-            foreach (var item in centerTuple)
+            foreach (var item in this.centerTuple_4p)
             {
-                result.AddSpaceSector(item.Item1, item.Item2, ssl[sslList[centerTuple.IndexOf(item)]], null);
+                result.AddSpaceSector(item.Item1, item.Item2, ssl[sslList[this.centerTuple_4p.IndexOf(item)]], null);
             }
             return result;
         }
@@ -452,8 +489,8 @@ namespace GaiaCore.Gaia
         /// <summary>
         /// 根据中心点算出要操作的Hex块
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="x">2，3</param>
+        /// <param name="y">5，10</param>
         /// <returns></returns>
         private static List<Tuple<int, int>> GetHexList(int x, int y)
         {
