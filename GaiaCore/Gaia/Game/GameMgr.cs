@@ -19,7 +19,7 @@ namespace GaiaCore.Gaia
             m_dic = new Dictionary<string, GaiaGame>();
         }
 
-        public static bool CreateNewGame(string name, string[] username, out GaiaGame result, string MapSelection, int seed = 0, bool isTestGame = false,bool isSocket = false,bool IsRotatoMap = false)
+        public static bool CreateNewGame(string name, string[] username, out GaiaGame result, string MapSelection, int seed = 0, bool isTestGame = false,bool isSocket = false,bool IsRotatoMap = false,int version=3)
         {
             if (m_dic.ContainsKey(name))
             {
@@ -34,6 +34,7 @@ namespace GaiaCore.Gaia
                 result.GameName = name;//游戏名称
                 result.IsSocket = isSocket;//即时制
                 result.IsRotatoMap = IsRotatoMap;//旋转地图
+                result.version = version;
                 //开局的两条命令
                 result.Syntax(GameSyntax.setupmap + " " + MapSelection, out string log);
                 result.Syntax(GameSyntax.setupGame + seed, out log);

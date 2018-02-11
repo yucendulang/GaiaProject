@@ -54,13 +54,13 @@ namespace GaiaCore.Gaia
         }
         public bool ProcessSyntax(string user, string syntax, out string log)
         {
-            ///此处为打版本标记之处
-            if (version == 0)
-            {
-                //version = 2;
-                //地图变更，版本改为3
-                version = 3;
-            }
+            /////此处为打版本标记之处
+            //if (version == 0)
+            //{
+            //    //version = 2;
+            //    //地图变更，版本改为3
+            //    version = 3;
+            //}
             log = string.Empty;
             syntax = syntax.ToLower();
             bool ret;
