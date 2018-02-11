@@ -156,6 +156,6 @@ namespace GaiaCore.Gaia
         ROUNDWAITLEECHPOWER,
         ROUNDGAIAPHASE,
         GAMEEND,
-        MAPROTATE,
+        MAPROTATE,//旋转地图
     }
 }
