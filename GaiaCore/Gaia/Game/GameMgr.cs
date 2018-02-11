@@ -147,7 +147,7 @@ namespace GaiaCore.Gaia
             jsetting.ContractResolver = new LimitPropsContractResolver(new string[]
             {
                 "GameName",  "UserActionLog", "Username", "IsTestGame", "LastMoveTime", "version",
-                "UserGameModels","username","remark","isTishi","IsSocket"
+                "UserGameModels","username","remark","isTishi","IsSocket","IsRotatoMap"
             });
             var str = JsonConvert.SerializeObject(m_dic, Formatting.Indented, jsetting);
             var logPath = System.IO.Path.Combine(BackupDataPath, DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt");
@@ -211,6 +211,7 @@ namespace GaiaCore.Gaia
             var gg = new GaiaGame(item.Value.Username,item.Value.GameName);
             gg.IsTestGame = item.Value.IsTestGame;//测试
             gg.IsSocket = item.Value.IsSocket;//即使制度
+            gg.IsRotatoMap = item.Value.IsRotatoMap;//旋转地图
             if (item.Value.version == 0)
             {
                 gg.version = 1;
