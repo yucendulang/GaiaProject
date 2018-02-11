@@ -147,6 +147,16 @@ namespace GaiaCore.Gaia
         {
             log = string.Empty;
             var str = rFKind + rFKind2 + rTKind;
+            //如果智慧石在三区，但是没有使用智慧石转换
+            if (this.BigStone == 3 && !str.Contains("bs") && rFNum>2)
+            {
+                str = "bs" + str;
+                log = "智慧石在3区，请使用bs语句转换资源";
+                return false;
+                //能量-3
+                //rFNum = rFNum - rTNum*3;
+
+            }
             switch (str)
             {
                 case "bso":
