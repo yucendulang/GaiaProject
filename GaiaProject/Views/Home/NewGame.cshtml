@@ -10,162 +10,167 @@
 
 @inject UserManager<ApplicationUser> UserManager
 
-<h2>@ViewData["Title"].</h2>
-@if (Startup.isEnableFriend)
-{
-    var fList = dbContext.UserFriend.Where(item => item.UserName == User.Identity.Name).ToList();
-    if (fList.Count > 0)
+
+<div class="panel panel-default">
+
+    <div class="panel-heading">@ViewData["Title"].</div>
+
+    @if (Startup.isEnableFriend)
     {
-        <span>选择好友:</span>
-        <div class="btn-group" role="group" aria-label="..." id="userList">
-            @foreach (var user in dbContext.UserFriend.Where(item => item.UserName == User.Identity.Name))
-            {
-                <button type="button" class="btn btn-default" id="@user.UserNameTo">@{@user.UserNameTo}(@user.Remark)</button>
-            }
-        </div>
+        var fList = dbContext.UserFriend.Where(item => item.UserName == User.Identity.Name).ToList();
+        if (fList.Count > 0)
+        {
+            <span>选择好友:</span>
+            <div class="btn-group" role="group" aria-label="..." id="userList">
+                @foreach (var user in dbContext.UserFriend.Where(item => item.UserName == User.Identity.Name))
+                {
+                    <button type="button" class="btn btn-default" id="@user.UserNameTo">@{@user.UserNameTo}(@user.Remark)</button>
+                }
+            </div>
+        }
     }
-}
 
 
-<script>
-    //var inputList = $("#playForm input[type='email']");
-    $("#userList button").click(function () {
-        var user = this.id;
-        var isHas = false;
-        //alert($("#playForm input[type='email']").length);
-        $("#playForm .player").each(function () {
-            var value = $(this).val();
-            if (value === user) {
-                $(this).val("");
-                isHas = true;
-                return false;
-            }
-            else {
-
-            }
-        });
-        if (!isHas) {
+    <script>
+        //var inputList = $("#playForm input[type='email']");
+        $("#userList button").click(function () {
+            var user = this.id;
+            var isHas = false;
+            //alert($("#playForm input[type='email']").length);
             $("#playForm .player").each(function () {
                 var value = $(this).val();
-                if (value === "") {
-                    $(this).val(user);
+                if (value === user) {
+                    $(this).val("");
+                    isHas = true;
                     return false;
                 }
+                else {
+
+                }
             });
-        }
-    })
-</script>
+            if (!isHas) {
+                $("#playForm .player").each(function () {
+                    var value = $(this).val();
+                    if (value === "") {
+                        $(this).val(user);
+                        return false;
+                    }
+                });
+            }
+        })
+    </script>
 
-<form asp-controller="Home" asp-action="NewGame" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" id="playForm">
-    <hr />
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="Name" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Name" class="form-control" value="" />
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="Player1" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Player1" class="form-control player" value="@ViewData["Message"]" />
-            <span asp-validation-for="Player1" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="Player2" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Player2" class="form-control player" />
-            <span asp-validation-for="Player2" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="Player3" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Player3" class="form-control player" />
-            <span asp-validation-for="Player3" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="Player4" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Player4" class="form-control player" />
-            <span asp-validation-for="Player4" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <div class="checkbox">
-                <label asp-for="IsTestGame">
-                    <input asp-for="IsTestGame" />
-                    @Html.DisplayNameFor(m => m.IsTestGame)
-                </label>
+    <form asp-controller="Home" asp-action="NewGame" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" id="playForm">
+        
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" value="" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
         </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <div class="checkbox">
-                <label asp-for="IsRandomOrder">
-                    <input asp-for="IsRandomOrder" checked="checked"/>
-                    @Html.DisplayNameFor(m => m.IsRandomOrder)
-                </label>
+        <div class="form-group">
+            <label asp-for="Player1" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Player1" class="form-control player" value="@ViewData["Message"]" />
+                <span asp-validation-for="Player1" class="text-danger"></span>
             </div>
         </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <div class="checkbox">
-                <label asp-for="IsAllowLook">
-                    <input asp-for="IsAllowLook" checked="checked"/>
-                    @Html.DisplayNameFor(m => m.IsAllowLook)
-                </label>
+        <div class="form-group">
+            <label asp-for="Player2" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Player2" class="form-control player" />
+                <span asp-validation-for="Player2" class="text-danger"></span>
             </div>
         </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <div class="checkbox">
-                <label asp-for="IsSocket">
-                    <input asp-for="IsSocket"/>
-                    @Html.DisplayNameFor(m => m.IsSocket)
-                </label>
+        <div class="form-group">
+            <label asp-for="Player3" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Player3" class="form-control player" />
+                <span asp-validation-for="Player3" class="text-danger"></span>
             </div>
         </div>
-    </div>
+        <div class="form-group">
+            <label asp-for="Player4" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Player4" class="form-control player" />
+                <span asp-validation-for="Player4" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <label asp-for="IsTestGame">
+                        <input asp-for="IsTestGame" />
+                        @Html.DisplayNameFor(m => m.IsTestGame)
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <label asp-for="IsRandomOrder">
+                        <input asp-for="IsRandomOrder" checked="checked" />
+                        @Html.DisplayNameFor(m => m.IsRandomOrder)
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <label asp-for="IsAllowLook">
+                        <input asp-for="IsAllowLook" checked="checked" />
+                        @Html.DisplayNameFor(m => m.IsAllowLook)
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <label asp-for="IsSocket">
+                        <input asp-for="IsSocket" />
+                        @Html.DisplayNameFor(m => m.IsSocket)
+                    </label>
+                </div>
+            </div>
+        </div>
 
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <div class="checkbox">
-                <label asp-for="IsRotatoMap">
-                    <input asp-for="IsRotatoMap"/>
-                    @Html.DisplayNameFor(m => m.IsRotatoMap)
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <label asp-for="IsRotatoMap">
+                        <input asp-for="IsRotatoMap" />
+                        @Html.DisplayNameFor(m => m.IsRotatoMap)
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label asp-for="MapSelction">
+                    <input asp-for="MapSelction" type="radio" value="fix2p" />双人固定
+                    <input asp-for="MapSelction" type="radio" value="random2p" />双人随机
+                    <input asp-for="MapSelction" type="radio" value="fix3p" />双人变体固定
+                    <input asp-for="MapSelction" type="radio" value="random3p" />双人变体随机
+                    <input asp-for="MapSelction" type="radio" value="fix4p" />四人固定
+                    <input asp-for="MapSelction" type="radio" value="random4p" />四人部分随机
+                    <input asp-for="MapSelction" type="radio" value="randomall4p" checked="checked" />四人完全随机
                 </label>
             </div>
         </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <label asp-for="MapSelction">
-                <input asp-for="MapSelction" type="radio" value="fix2p" />双人固定
-                <input asp-for="MapSelction" type="radio" value="random2p" />双人随机
-                <input asp-for="MapSelction" type="radio" value="fix3p" />双人变体固定
-                <input asp-for="MapSelction" type="radio" value="random3p" />双人变体随机
-                <input asp-for="MapSelction" type="radio" value="fix4p" />四人固定
-                <input asp-for="MapSelction" type="radio" value="random4p" />四人部分随机
-                <input asp-for="MapSelction" type="radio" value="randomall4p" checked="checked" />四人完全随机
-            </label>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-default">创建</button>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <button type="submit" class="btn btn-default">创建</button>
-        </div>
-    </div>
-</form>
+    </form>
 
+</div>
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
