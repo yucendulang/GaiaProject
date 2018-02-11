@@ -1179,7 +1179,7 @@ namespace GaiaCore.Gaia
                 var seed = syntax.Substring(GameSyntax.setupGame.Length).ParseToInt(0);
                 GameStart(syntax, seed);
                 //如果需要旋转地图，
-                if (this.IsRotatoMap)
+                if (this.IsRotatoMap && (this.MapSelection==MapSelection.random2p|| this.MapSelection == MapSelection.random3p|| this.MapSelection == MapSelection.random4p|| this.MapSelection == MapSelection.randomall4p))
                 {
                     ChangeGameStatus(Stage.MAPROTATE);
                 }
