@@ -254,24 +254,50 @@ namespace GaiaCore.Gaia
 
         public Map Get2PRandomMap(Random random)
         {
-            var result = new Map();
-            //result.AddSpaceSector(6, 7, ssl[2], random);
-            var randomList = new List<SpaceSector>()
+            //旧版本固定
+            if (gaiaGame.version < 3)
             {
-                ssl[0],ssl[1],ssl[2],ssl[3],ssl[10],ssl[11],ssl[12]
-            };
-            var centerTuple = new List<Tuple<int, int>>()
-            {
-                { 2,5},{6,2},{6,7},{10,4 },{ 3,10},{7,12},{ 10,9}
-            };
+                var result = new Map();
+                result.AddSpaceSector(6, 7, ssl[2], random, gaiaGame.version);
+                var randomList = new List<SpaceSector>()
+                {
+                    ssl[0],ssl[1],ssl[3],ssl[10],ssl[11],ssl[12]
+                };
+                var centerTuple = new List<Tuple<int, int>>()
+                {
+                    { 2,5},{6,2},{10,4 },{ 3,10},{7,12},{ 10,9}
+                };
 
-            centerTuple.ForEach(x =>
+                centerTuple.ForEach(x =>
+                {
+                    var index = random.Next(randomList.Count);
+                    result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random,gaiaGame.version), random, gaiaGame.version);
+                    randomList.RemoveAt(index);
+                });
+                return result;
+            }
+            else
             {
-                var index = random.Next(randomList.Count);
-                result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random, gaiaGame.version), random, this.gaiaGame.version);
-                randomList.RemoveAt(index);
-            });
-            return result;
+                var result = new Map();
+                //result.AddSpaceSector(6, 7, ssl[2], random);
+                var randomList = new List<SpaceSector>()
+                {
+                    ssl[0],ssl[1],ssl[2],ssl[3],ssl[10],ssl[11],ssl[12]
+                };
+                var centerTuple = new List<Tuple<int, int>>()
+                {
+                    { 2,5},{6,2},{6,7},{10,4 },{ 3,10},{7,12},{ 10,9}
+                };
+
+                centerTuple.ForEach(x =>
+                {
+                    var index = random.Next(randomList.Count);
+                    result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random, gaiaGame.version), random, this.gaiaGame.version);
+                    randomList.RemoveAt(index);
+                });
+                return result;
+            }
+
         }
 
         public Map Get3PRandomMap(Random random)
