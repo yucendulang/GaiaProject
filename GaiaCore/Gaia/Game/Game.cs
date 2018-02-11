@@ -64,8 +64,12 @@ namespace GaiaCore.Gaia
             bool ret;
             switch (GameStatus.stage)
             {
+                //地图阶段
                 case Stage.RANDOMSETUP:
                     return ProcessSyntaxRandomSetup(syntax, ref log);
+                    //旋转地图
+                case Stage.MAPROTATE:
+                    return ProcessSyntaxMapRotate(syntax, ref log);
                 case Stage.FACTIONSELECTION:
                     return ProcessSyntaxFactionSelect(user, syntax, ref log);
                 case Stage.INITIALMINES:
@@ -1161,7 +1165,12 @@ namespace GaiaCore.Gaia
             }
             return false;
         }
-
+        /// <summary>
+        /// 随机生产地图
+        /// </summary>
+        /// <param name="syntax"></param>
+        /// <param name="log"></param>
+        /// <returns></returns>
         private bool ProcessSyntaxRandomSetup(string syntax, ref string log)
         {
             log = string.Empty;
@@ -1169,7 +1178,15 @@ namespace GaiaCore.Gaia
             {
                 var seed = syntax.Substring(GameSyntax.setupGame.Length).ParseToInt(0);
                 GameStart(syntax, seed);
-                ChangeGameStatus(Stage.FACTIONSELECTION);
+                //如果需要旋转地图，
+                if (this.IsRotatoMap)
+                {
+                    ChangeGameStatus(Stage.MAPROTATE);
+                }
+                else//直接进入旋转种族
+                {
+                    ChangeGameStatus(Stage.FACTIONSELECTION);
+                }
                 return true;
             }else if (GameSyntax.setupMapRegex.IsMatch(syntax))
             {
@@ -1178,8 +1195,49 @@ namespace GaiaCore.Gaia
                 MapSelection = (MapSelection)Enum.Parse(typeof(MapSelection), str, true);
                 return true;
             }
+
             return false;
         }
+        /// <summary>
+        /// 旋转地图
+        /// </summary>
+        /// <param name="syntax"></param>
+        /// <param name="log"></param>
+        /// <returns></returns>
+        private bool ProcessSyntaxMapRotate(string syntax, ref string log)
+        {
+            log = string.Empty;
+            //结束旋转
+            if (GameSpecialSyntax.PassRegex.IsMatch(syntax))
+            {
+                ChangeGameStatus(Stage.FACTIONSELECTION);
+                return true;
+            }
+            //旋转
+            else if (GameSyntax.setupMapRotateRegex.IsMatch(syntax))
+            {
+                var match = GameSyntax.setupMapRotateRegex.Match(syntax);
+                //星域 方向 步数
+                var str = match.Groups[1].Value;
+                var fx = match.Groups[2].Value;
+                var bs= Int32.Parse(match.Groups[3].Value);
+                SpaceSector spaceSector = this.Map.ListSpaceSector.SingleOrDefault(item => item.Name == str);
+                int x = spaceSector.CenterA;
+                int y = spaceSector.CenterB;
+                SpaceSector newSector= spaceSector;
+                for (int i = 0; i < bs; i++)
+                {
+                    newSector = newSector?.Rotate(fx == "1");
+                }
+                if (newSector != null) this.Map.AddSpaceSector(x, y, newSector, null);
+//                var seed = syntax.Substring(GameSyntax.setupGame.Length).ParseToInt(0);
+//                GameStart(syntax, seed);
+//                ChangeGameStatus(Stage.ROUNDSTART);
+                return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// 数据库操作
         /// </summary>
@@ -1311,7 +1369,7 @@ namespace GaiaCore.Gaia
         {
             Seed = i == 0 ? RandomInstance.Next(int.MaxValue) : i;
             var random = new Random(Seed);
-            if (MapSelection == MapSelection.random4pall)
+            if (MapSelection == MapSelection.randomall4p)
             {
                 Map = new MapMgr().Get4PAllRandomMap(random);
                 //Map = new MapMgr().Get4PRandomMap(random);
@@ -1415,7 +1473,12 @@ namespace GaiaCore.Gaia
 
         public string GetCurrentUserName()
         {
-            if (GameStatus.stage == Stage.FACTIONSELECTION)
+            //旋转地图
+            if (GameStatus.stage == Stage.MAPROTATE)
+            {
+                return this.Username[this.UserCount - 1];
+            }
+            else if (GameStatus.stage == Stage.FACTIONSELECTION)
             {
                 return Username[GameStatus.PlayerIndex];
             }
@@ -1542,6 +1605,11 @@ namespace GaiaCore.Gaia
         /// </summary>
         [JsonProperty]
         public bool IsSocket { get; set; }
+        /// <summary>
+        /// 旋转地图
+        /// </summary>
+        [JsonProperty]
+        public bool IsRotatoMap { get; set; }
 
         public class STTInfo
         {

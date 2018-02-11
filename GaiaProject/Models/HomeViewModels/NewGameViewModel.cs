@@ -38,6 +38,9 @@ namespace GaiaProject.Models.HomeViewModels
 
         [Display(Name = "地图选择")]
         public string MapSelction { set; get; }
+
+        [Display(Name = "旋转地图(随机模式下尾家旋转)")]
+        public bool IsRotatoMap { get; set; }
     }
 
 }

@@ -193,7 +193,7 @@ namespace GaiaProject.Controllers
 
 
             //创建
-            bool create = GameMgr.CreateNewGame(model.Name, username, out GaiaGame result,model.MapSelction, isTestGame: model.IsTestGame,isSocket:model.IsSocket);
+            bool create = GameMgr.CreateNewGame(model.Name, username, out GaiaGame result,model.MapSelction, isTestGame: model.IsTestGame,isSocket:model.IsSocket,IsRotatoMap:model.IsRotatoMap);
             if (create && !model.IsTestGame && username[0]!=username[1])//测试局以及自己对战的局暂时不保留数据
             {
                 //保存到数据库
@@ -212,6 +212,7 @@ namespace GaiaProject.Controllers
 
                         IsAllowLook = model.IsAllowLook,
                         IsRandomOrder = model.IsRandomOrder,
+                        IsRotatoMap = model.IsRotatoMap,
                     };
                 //配置信息
                 gameInfoModel.ATTList = string.Join("|", result.ATTList.Select(item => item.name));
@@ -306,7 +307,7 @@ namespace GaiaProject.Controllers
                     //log = game.UserActionLog;
                 }
 
-                GameMgr.CreateNewGame(gameInfoModel.name, gameInfoModel.userlist.Split('|'), out GaiaGame result, gameInfoModel.MapSelction, isTestGame: gameInfoModel.IsTestGame == 1 ? true : false);
+                GameMgr.CreateNewGame(gameInfoModel.name, gameInfoModel.userlist.Split('|'), out GaiaGame result, gameInfoModel.MapSelction, isTestGame: gameInfoModel.IsTestGame == 1 ? true : false,IsRotatoMap:gameInfoModel.IsRotatoMap);
                 GaiaGame gg = GameMgr.GetGameByName(gameInfoModel.name);
                 gg.GameName = gameInfoModel.name;
                 gg.UserActionLog = log?.Replace("|", "\r\n");

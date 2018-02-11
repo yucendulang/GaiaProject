@@ -12,6 +12,6 @@ namespace GaiaCore.Gaia
         random3p,
         fix4p,
         random4p,
-        random4pall
+        randomall4p
     }
 }

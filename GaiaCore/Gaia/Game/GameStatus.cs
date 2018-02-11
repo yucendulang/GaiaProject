@@ -155,6 +155,7 @@ namespace GaiaCore.Gaia
         ROUNDSTART,
         ROUNDWAITLEECHPOWER,
         ROUNDGAIAPHASE,
-        GAMEEND
+        GAMEEND,
+        MAPROTATE,
     }
 }

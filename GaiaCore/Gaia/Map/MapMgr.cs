@@ -184,7 +184,7 @@ namespace GaiaCore.Gaia
             var result = hexList.Select(x => new SpaceSector(x)).ToList();
             for (int i = 0; i < result.Count; i++)
             {
-                result[i].Name = i.ToString("D2");
+                result[i].Name = (i+1).ToString("D2");
                 result[i].TerranHexArray.ForEach(x => x.SpaceSectorName = result[i].Name);
             }
 
@@ -205,15 +205,17 @@ namespace GaiaCore.Gaia
             {
                 ssl[0],ssl[1],ssl[2],ssl[3],ssl[4],ssl[5],ssl[6],ssl[7],ssl[8],ssl[9]
             };
-
-
             this.centerTuple_4p.ForEach(x =>
             {
                 var index = random.Next(randomList.Count);
-                result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random), random);
+                SpaceSector spaceSector = randomList[index].RandomRotato(random);
+                result.AddSpaceSector(x.Item1, x.Item2, spaceSector, random);
+                //测试旋转
+                //spaceSector = spaceSector.Rotate();
+                //result.AddSpaceSector(x.Item1, x.Item2, spaceSector, null);
                 randomList.RemoveAt(index);
-            });
 
+            });
             return result;
         }
 
@@ -393,8 +395,22 @@ namespace GaiaCore.Gaia
             }
             return list;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        public List<SpaceSector> ListSpaceSector=new List<SpaceSector>();
+
         public void AddSpaceSector(int x, int y, SpaceSector ss, Random random)
         {
+            //如果存在则删除，
+            if (ListSpaceSector.Exists(item => item.Name == ss.Name))
+            {
+                ListSpaceSector.Remove(ListSpaceSector.SingleOrDefault(item => item.Name == ss.Name));
+            }
+            //添加
+            ss.CenterA = x;
+            ss.CenterB = y;
+            ListSpaceSector.Add(ss);
 
             List<Tuple<int, int>> hexList = GetHexList(x, y);
             for (int j = 0; j < ss.TerranHexArray.Count; j++)
@@ -403,6 +419,7 @@ namespace GaiaCore.Gaia
             }
             if (random != null)
             {
+                //手动旋转，不需要检测颜色相邻
                 if (!ValidateMap(hexList))
                 {
                     //System.Diagnostics.Debug.WriteLine("发现不合法");

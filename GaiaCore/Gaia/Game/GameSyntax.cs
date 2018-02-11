@@ -16,7 +16,15 @@ namespace GaiaCore.Gaia
         public const string setupGame = "setupgame seed";
         public static Regex setupGameRegex = new Regex(setupGame + "[0-9]+");
         public const string setupmap = "setupmap";
-        public static Regex setupMapRegex = new Regex(setupmap+" (fix2p|random2p|fix3p|random3p|fix4p|random4p)");
+        public static Regex setupMapRegex = new Regex(setupmap+ " (fix2p|random2p|fix3p|random3p|fix4p|random4p|randomall4p)");
+
+        /// <summary>
+        /// 旋转地图
+        /// </summary>
+        public const string setupMapRotate = "setupmaprotate";
+        //星域 方向 步数 
+        public static Regex setupMapRotateRegex = new Regex(setupMapRotate + " ([0-9]+) ([1-2]) ([1-9])");
+
         /// <summary>
         /// Faction selection
         /// </summary>

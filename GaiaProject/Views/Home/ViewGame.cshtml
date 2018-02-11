@@ -250,6 +250,44 @@ else
 
             </div>
         }
+        //旋转地图
+        else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.MAPROTATE)
+        {
+            <div>
+
+                <p>等待玩家 @Model.GetCurrentUserName() 旋转地图</p>
+
+                @if (User.Identity.Name.Equals(Model.GetCurrentUserName()))
+                {
+                    @Html.DropDownList("sclist", new SelectList(Model.Map.ListSpaceSector.OrderBy(item => Int32.Parse(item.Name)), "Name", "Name"), "--星域板块--", new { @class = "btn dropdown-toggle form-control", @id = "rotatesc", @syntax = "" })
+
+                    <select class="btn dropdown-toggle form-control" id="rotatefx" name="rotatefx" style="width: 100px">
+                        <option value="1">顺时针</option>
+                        <option value="2">逆时针</option>
+                    </select>
+
+                    <select class="btn dropdown-toggle form-control" id="rotatebs" name="rotatebs" style="width: 100px">
+                        <option value="1">--旋转步数--</option>
+                        <option value="1" selected="selected">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <button class="btn btn-default" id="rotatebtn">确定旋转</button>
+
+                    <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">结束旋转</button>
+
+                    <script>
+                        $("#rotatebtn").click(function () {
+                            $('#syntax').val('setupmaprotate {0} {1} {2}'.format($('#rotatesc').val(), $('#rotatefx').val(), $('#rotatebs').val()));
+                            submitData();
+                        });
+                    </script>
+                }
+
+            </div>
+        }
 
         @if (Model.UserDic.ContainsKey(User.Identity.Name))
 
@@ -315,6 +353,8 @@ else
 
 
 
+
+
     @if (User.Identity.Name.Equals(Model.GetCurrentUserName()))
     {
 
@@ -326,7 +366,7 @@ else
             </div>
             <button id="syn" type="button" class="btn btn-primary" style="width: 100px">保存</button>
             <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
-            @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES)
+            @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES && Model.FactionList.Count>0)
             {
                 <input id="test3" name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden" />
             }
@@ -359,190 +399,193 @@ else
 
 
 
+    if (@Model.GameStatus.stage != Stage.MAPROTATE)
+     {
+         <div class="row">
 
-    <div class="row">
-
-        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-1">
-            <div class="row">
-                <div>
-                    <div class="panel panel-default">
-                        <!-- Default panel contents -->
-                        <div class="panel-heading">回合助推板</div>
-                        <div class="panel-body" id="rbt_s_list">
-
-
-
-                            @foreach (var item in Model.RBTList)
-                            {
-                                <div class="rbtcss @item.name" style="" id="pass @item.name"><span>@item.name<br /> @item.desc.Split(',')[0]<br /> @item.desc.Split(',')[1]</span></div>
-                                <br />
-
-                            }
-                        </div>
-
-                    </div>
-
-
-                </div>
-
-            </div>
-            <div class="row">
-                <div>
+             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-1">
+                 <div class="row">
+                     <div>
+                         <div class="panel panel-default">
+                             <!-- Default panel contents -->
+                             <div class="panel-heading">回合助推板</div>
+                             <div class="panel-body" id="rbt_s_list">
 
 
 
+                                 @foreach (var item in Model.RBTList)
+                                 {
+                                     <div class="rbtcss @item.name" style="" id="pass @item.name"><span>@item.name<br /> @item.desc.Split(',')[0]<br /> @item.desc.Split(',')[1]</span></div>
+                                     <br />
+
+                                 }
+                             </div>
+
+                         </div>
 
 
-                </div>
-            </div>
-        </div>
+                     </div>
 
-
-        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-2">
-
-            <div class="panel panel-default">
-                <!-- Default panel contents -->
-                <div class="panel-heading">联邦板块</div>
-                <div class="panel-body">
-                    <div>
-                        @foreach (var item in Model.ALTList.GroupBy(a => a.desc).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name) }))
-                        {
-                            if (@item.name == "ALT6")
-                            {
-                                <div style="" title="@item.desc" class="col-md-6 altcss altusedcss">
-                                    @item.name (@item.count)<br /> @item.desc
-                                </div>
-                            }
-                            else
-                            {
-                                <div style="" title="@item.desc" class="col-md-6 altcss">
-                                    @item.name (@item.count)<br /> @item.desc
-                                </div>
-                            }
-                        }
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-5">
-
-            <div class="panel panel-default">
-                <div class="panel-heading">终局计分板</div>
-                <div class="panel-body">
-
-
-
-                    <table class="table">
-                        <tr>
-                            <td></td>
-                            @foreach (var item in Model.FactionList)
-                            {
-
-                                <td>
-                                    <span style="background-color: @item.ColorCode">@item.ChineseName</span>
-
-                                </td>
-                            }
-                            @if (Model.FactionList.Count == 2)
-                            {
-                                <td>
-                                    虚拟玩家
-                                </td>
-                            }
-                        </tr>
-                        @foreach (var item in Model.FSTList)
-                        {
-                            <tr>
-                                <td>
-                                    @item.GetType().Name @item.desc (数量/分数)
-                                </td>
-                                @{ Model.FactionList.ForEach(x => x.FinalEndScore = 0);
-                                    item.InvokeGameTileAction(Model.FactionList); }
-                                @foreach (var fac in Model.FactionList)
-                                {
-                                    <td>@item.TargetNumber(fac)/@(fac.FinalEndScore)VP</td>
-                                }
-                                @if (Model.FactionList.Count == 2)
-                                {
-                                    <td>
-                                        @(item.TargetNumber(new VirtualPlayerFaction(FactionName.Ambas, null)))@*/@(36 - Model.FactionList.Sum(x=>x.FinalEndScore))VP*@
-                                    </td>
-                                }
-                            </tr>
-                        }
-                        <tr>
-                            <td>
-                                科技总分
-                            </td>
-                            @foreach (var fac in Model.FactionList)
-                            {
-                                <td>@(fac.GetTechScoreCount() * 4)VP</td>
-                            }
-                            @if (Model.FactionList.Count == 2)
-                            {
-                                <td></td>
-                            }
-                        </tr>
-                        <tr>
-                            <td>
-                                资源总分
-                            </td>
-                            @foreach (var fac in Model.FactionList)
-                            {
-                                <td>@(fac.GetResouceScore())VP</td>
-                            }
-                            @if (Model.FactionList.Count == 2)
-                            {
-                                <td></td>
-                            }
-                        </tr>
-                        <tr>
-                            <td>
-                                回合结束计分
-                            </td>
-                            @foreach (var fac in Model.FactionList)
-                            {
-                                <td>@(fac.GameTileList.Sum(y => y.GetTurnEndScore(fac)))VP</td>
-                            }
-                            @if (Model.FactionList.Count == 2)
-                            {
-                                <td></td>
-                            }
-                        </tr>
-                        <tr>
-                            <td>
-                                结局总计分
-                            </td>
-                            @{ Model.FactionList.ForEach(x => x.FinalEndScore = 0);
-                                Model.FSTList.ForEach(x => x.InvokeGameTileAction(Model.FactionList)); }
-                            @foreach (var fac in Model.FactionList)
-                            {
-                                <td>@(fac.GetFinalEndScorePreview())VP</td>
-                            }
-                            @if (Model.FactionList.Count == 2)
-                            {
-                                <td></td>
-                            }
-                        </tr>
-
-                    </table>
-                </div>
-
-
-
-            </div>
-        </div>
+                 </div>
+                 <div class="row">
+                     <div>
 
 
 
 
 
+                     </div>
+                 </div>
+             </div>
 
-    </div>
 
-    @if (UserManager.GetUserAsync(User).Result != null && UserManager.GetUserAsync(User).Result.groupid == 1)
+             <div class="col-xs-3 col-sm-3 col-md-3 col-lg-2">
+
+                 <div class="panel panel-default">
+                     <!-- Default panel contents -->
+                     <div class="panel-heading">联邦板块</div>
+                     <div class="panel-body">
+                         <div>
+                             @foreach (var item in Model.ALTList.GroupBy(a => a.desc).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name) }))
+                             {
+                                 if (@item.name == "ALT6")
+                                 {
+                                     <div style="" title="@item.desc" class="col-md-6 altcss altusedcss">
+                                         @item.name (@item.count)<br /> @item.desc
+                                     </div>
+                                 }
+                                 else
+                                 {
+                                     <div style="" title="@item.desc" class="col-md-6 altcss">
+                                         @item.name (@item.count)<br /> @item.desc
+                                     </div>
+                                 }
+                             }
+                         </div>
+                     </div>
+                 </div>
+
+             </div>
+
+             <div class="col-xs-7 col-sm-7 col-md-7 col-lg-5">
+
+                 <div class="panel panel-default">
+                     <div class="panel-heading">终局计分板</div>
+                     <div class="panel-body">
+
+
+
+                         <table class="table">
+                             <tr>
+                                 <td></td>
+                                 @foreach (var item in Model.FactionList)
+                                 {
+
+                                     <td>
+                                         <span style="background-color: @item.ColorCode">@item.ChineseName</span>
+
+                                     </td>
+                                 }
+                                 @if (Model.FactionList.Count == 2)
+                                 {
+                                     <td>
+                                         虚拟玩家
+                                     </td>
+                                 }
+                             </tr>
+                             @foreach (var item in Model.FSTList)
+                             {
+                                 <tr>
+                                     <td>
+                                         @item.GetType().Name @item.desc (数量/分数)
+                                     </td>
+                                     @{ Model.FactionList.ForEach(x => x.FinalEndScore = 0);
+                                         item.InvokeGameTileAction(Model.FactionList); }
+                                     @foreach (var fac in Model.FactionList)
+                                     {
+                                         <td>@item.TargetNumber(fac)/@(fac.FinalEndScore)VP</td>
+                                     }
+                                     @if (Model.FactionList.Count == 2)
+                                     {
+                                         <td>
+                                             @(item.TargetNumber(new VirtualPlayerFaction(FactionName.Ambas, null)))@*/@(36 - Model.FactionList.Sum(x=>x.FinalEndScore))VP*@
+                                         </td>
+                                     }
+                                 </tr>
+                             }
+                             <tr>
+                                 <td>
+                                     科技总分
+                                 </td>
+                                 @foreach (var fac in Model.FactionList)
+                                 {
+                                     <td>@(fac.GetTechScoreCount() * 4)VP</td>
+                                 }
+                                 @if (Model.FactionList.Count == 2)
+                                 {
+                                     <td></td>
+                                 }
+                             </tr>
+                             <tr>
+                                 <td>
+                                     资源总分
+                                 </td>
+                                 @foreach (var fac in Model.FactionList)
+                                 {
+                                     <td>@(fac.GetResouceScore())VP</td>
+                                 }
+                                 @if (Model.FactionList.Count == 2)
+                                 {
+                                     <td></td>
+                                 }
+                             </tr>
+                             <tr>
+                                 <td>
+                                     回合结束计分
+                                 </td>
+                                 @foreach (var fac in Model.FactionList)
+                                 {
+                                     <td>@(fac.GameTileList.Sum(y => y.GetTurnEndScore(fac)))VP</td>
+                                 }
+                                 @if (Model.FactionList.Count == 2)
+                                 {
+                                     <td></td>
+                                 }
+                             </tr>
+                             <tr>
+                                 <td>
+                                     结局总计分
+                                 </td>
+                                 @{ Model.FactionList.ForEach(x => x.FinalEndScore = 0);
+                                     Model.FSTList.ForEach(x => x.InvokeGameTileAction(Model.FactionList)); }
+                                 @foreach (var fac in Model.FactionList)
+                                 {
+                                     <td>@(fac.GetFinalEndScorePreview())VP</td>
+                                 }
+                                 @if (Model.FactionList.Count == 2)
+                                 {
+                                     <td></td>
+                                 }
+                             </tr>
+
+                         </table>
+                     </div>
+
+
+
+                 </div>
+             </div>
+
+
+
+
+
+
+         </div>
+     }
+
+
+    if (UserManager.GetUserAsync(User).Result != null && UserManager.GetUserAsync(User).Result.groupid == 1)
     {
         <div class="input-group-btn">
             <button id="undo" type="button" class="btn btn-default">undo</button>

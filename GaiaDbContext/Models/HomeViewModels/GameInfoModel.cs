@@ -90,5 +90,9 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// </summary>
         public int isDelete { get; set; }
 
+        /// <summary>
+        /// 是否旋转地图
+        /// </summary>
+        public bool IsRotatoMap { get; set; }
     }
 }
