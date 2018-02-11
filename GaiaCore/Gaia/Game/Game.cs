@@ -57,7 +57,9 @@ namespace GaiaCore.Gaia
             ///此处为打版本标记之处
             if (version == 0)
             {
-                version = 2;
+                //version = 2;
+                //地图变更，版本改为3
+                version = 3;
             }
             log = string.Empty;
             syntax = syntax.ToLower();
@@ -1227,9 +1229,9 @@ namespace GaiaCore.Gaia
                 SpaceSector newSector= spaceSector;
                 for (int i = 0; i < bs; i++)
                 {
-                    newSector = newSector?.Rotate(fx == "1");
+                    newSector = newSector?.Rotate(isClockwise:fx == "1",version:this.version);
                 }
-                if (newSector != null) this.Map.AddSpaceSector(x, y, newSector, null);
+                if (newSector != null) this.Map.AddSpaceSector(x, y, newSector, null,this.version);
 //                var seed = syntax.Substring(GameSyntax.setupGame.Length).ParseToInt(0);
 //                GameStart(syntax, seed);
 //                ChangeGameStatus(Stage.ROUNDSTART);
@@ -1369,38 +1371,40 @@ namespace GaiaCore.Gaia
         {
             Seed = i == 0 ? RandomInstance.Next(int.MaxValue) : i;
             var random = new Random(Seed);
+            //实例化地图
+            MapMgr mapMgr=new MapMgr(this);
             if (MapSelection == MapSelection.randomall4p)
             {
-                Map = new MapMgr().Get4PAllRandomMap(random);
-                //Map = new MapMgr().Get4PRandomMap(random);
+                Map = mapMgr.Get4PAllRandomMap(random);
+                //Map = mapMgr.Get4PRandomMap(random);
             }
             else if (MapSelection == MapSelection.random4p)
             {
-                Map = new MapMgr().Get4PRandomMap(random);
+                Map = mapMgr.Get4PRandomMap(random);
             }
             else if (MapSelection == MapSelection.fix2p)
             {
-                Map = new MapMgr().Get2PFixedMap();
+                Map = mapMgr.Get2PFixedMap();
             }
             else if (MapSelection == MapSelection.random2p)
             {
-                Map = new MapMgr().Get2PRandomMap(random);
+                Map = mapMgr.Get2PRandomMap(random);
             }
             else if (MapSelection == MapSelection.random3p)
             {
-                Map = new MapMgr().Get3PRandomMap(random);
+                Map = mapMgr.Get3PRandomMap(random);
             }
             else if (MapSelection == MapSelection.fix3p)
             {
-                Map = new MapMgr().Get3PFixedMap();
+                Map = mapMgr.Get3PFixedMap();
             }
             else if (MapSelection == MapSelection.fix4p)
             {
-                Map = new MapMgr().Get4PFixedMap();
+                Map = mapMgr.Get4PFixedMap();
             }
             else
             {
-                Map = new MapMgr().Get4PFixedMap();
+                Map = mapMgr.Get4PFixedMap();
             }
 
             ATTList = ATTMgr.GetRandomList(6, random);

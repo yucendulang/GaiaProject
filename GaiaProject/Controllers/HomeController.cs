@@ -213,6 +213,7 @@ namespace GaiaProject.Controllers
                         IsAllowLook = model.IsAllowLook,
                         IsRandomOrder = model.IsRandomOrder,
                         IsRotatoMap = model.IsRotatoMap,
+                        version = 3,
                     };
                 //配置信息
                 gameInfoModel.ATTList = string.Join("|", result.ATTList.Select(item => item.name));

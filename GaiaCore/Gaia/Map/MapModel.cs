@@ -125,48 +125,55 @@ namespace GaiaCore.Gaia
         /// </summary>
         /// <param name="isClockwise">是否顺时针</param>
         /// <returns></returns>
-        public  SpaceSector Rotate(bool isClockwise=true)
+        public  SpaceSector Rotate(bool isClockwise=true,int version=3)
         {
             var newTHA = new List<TerrenHex>();
-            int[] list;
-            if (isClockwise)//重新左(顺时针)只旋转一格
+            //版本低于san，用原地图
+            if (version < 3)
             {
-                list = new[] { 1, 3, 0, 8, 6, 2, 11, 4, 13, 9, 5, 14, 7, 16, 12, 10, 18, 15, 17 };
+                newTHA.Add(TerranHexArray[3]);
+                newTHA.Add(TerranHexArray[8]);
+                newTHA.Add(TerranHexArray[1]);
+                newTHA.Add(TerranHexArray[13]);
+                newTHA.Add(TerranHexArray[6]);
+                newTHA.Add(TerranHexArray[0]);
+                newTHA.Add(TerranHexArray[11]);
+                newTHA.Add(TerranHexArray[4]);
+                newTHA.Add(TerranHexArray[16]);
+                newTHA.Add(TerranHexArray[9]);
+                newTHA.Add(TerranHexArray[2]);
+                newTHA.Add(TerranHexArray[14]);
+                newTHA.Add(TerranHexArray[7]);
+                newTHA.Add(TerranHexArray[18]);
+                newTHA.Add(TerranHexArray[12]);
+                newTHA.Add(TerranHexArray[5]);
+                newTHA.Add(TerranHexArray[17]);
+                newTHA.Add(TerranHexArray[10]);
+                newTHA.Add(TerranHexArray[15]);
             }
-            else//重新右(逆时针)只旋转一格
+            else
             {
-                list = new[] { 2, 0, 5, 1, 7, 10, 4, 12, 3, 9, 15, 6, 14, 8, 11, 17, 13, 18, 16 };
+                int[] list;
+                if (isClockwise)//重新左(顺时针)只旋转一格
+                {
+                    list = new[] { 1, 3, 0, 8, 6, 2, 11, 4, 13, 9, 5, 14, 7, 16, 12, 10, 18, 15, 17 };
+                }
+                else//重新右(逆时针)只旋转一格
+                {
+                    list = new[] { 2, 0, 5, 1, 7, 10, 4, 12, 3, 9, 15, 6, 14, 8, 11, 17, 13, 18, 16 };
+                }
+                foreach (int i in list)
+                {
+                    newTHA.Add(TerranHexArray[i]);
+                }
             }
-            foreach (int i in list)
-            {
-                newTHA.Add(TerranHexArray[i]);
-            }
-            //            newTHA.Add(TerranHexArray[3]);
-            //            newTHA.Add(TerranHexArray[8]);
-            //            newTHA.Add(TerranHexArray[1]);
-            //            newTHA.Add(TerranHexArray[13]);
-            //            newTHA.Add(TerranHexArray[6]);
-            //            newTHA.Add(TerranHexArray[0]);
-            //            newTHA.Add(TerranHexArray[11]);
-            //            newTHA.Add(TerranHexArray[4]);
-            //            newTHA.Add(TerranHexArray[16]);
-            //            newTHA.Add(TerranHexArray[9]);
-            //            newTHA.Add(TerranHexArray[2]);
-            //            newTHA.Add(TerranHexArray[14]);
-            //            newTHA.Add(TerranHexArray[7]);
-            //            newTHA.Add(TerranHexArray[18]);
-            //            newTHA.Add(TerranHexArray[12]);
-            //            newTHA.Add(TerranHexArray[5]);
-            //            newTHA.Add(TerranHexArray[17]);
-            //            newTHA.Add(TerranHexArray[10]);
-            //            newTHA.Add(TerranHexArray[15]);
 
             SpaceSector spaceSector = new SpaceSector(newTHA);
             spaceSector.Name = this.Name;
             return spaceSector;
         }
 
-        public SpaceSector RandomRotato(Random random)
+        public SpaceSector RandomRotato(Random random,int version)
         {
             //Random  r = 
             var time = random.Next(6);
@@ -174,7 +181,7 @@ namespace GaiaCore.Gaia
             SpaceSector result=this;
             for (int i = 0; i < time; i++)
             {
-                result=result.Rotate();
+                result=result.Rotate(isClockwise: true, version: version);
             }
             result.Name = this.Name;
             return result;
