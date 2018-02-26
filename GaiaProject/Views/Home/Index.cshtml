@@ -8,7 +8,7 @@
 {
     <link rel="stylesheet" href="~/css/bootstrap-table.css">
     <script src="~/js/bootstrap-table.js"></script>
-    <p id="username" hidden="hidden">@ViewData["Message"]</p>
+    <input value='@ViewData["Message"]' type="hidden" id="username" />
     <p>
         <button type="button" class="btn btn-default settishi" id="close">关闭全部回合提示</button>
         <button type="button" class="btn btn-default settishi" id="open">启用全部回合提示</button>
