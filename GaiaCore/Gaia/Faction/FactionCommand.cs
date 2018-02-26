@@ -10,6 +10,10 @@ namespace GaiaCore.Gaia
 {
     public abstract partial class Faction
     {
+        /// <summary>
+        /// 是否执行主要行动
+        /// </summary>
+        public bool IsActionBurn { get; set; }
 
         public virtual bool BuildMine(Map map, int row, int col, out string log)
         {

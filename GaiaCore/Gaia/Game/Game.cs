@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using GaiaCore.Gaia.Game;
 using GaiaDbContext.Models.AccountViewModels;
 using GaiaDbContext.Models.HomeViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace GaiaCore.Gaia
 {
@@ -118,6 +119,7 @@ namespace GaiaCore.Gaia
                     }
                     else
                     {
+                        //结束回合
                         ret = ProcessSyntaxCommand(syntax, ref log);
                         if (ret && GameStatus.IsAllPass())
                         {
@@ -134,14 +136,14 @@ namespace GaiaCore.Gaia
                         }
                         else if (ret)
                         {
-#if DEBUG
-                            if (!syntax.EndsWith("qc"))
-                            {
-                                GameStatus.NextPlayer();
-                            }
-#else
-                            GameStatus.NextPlayer();
-#endif
+//#if DEBUG
+//                            if (!syntax.EndsWith("qc"))
+//                            {
+//                                GameStatus.NextPlayer();
+//                            }
+//#else
+//                            GameStatus.NextPlayer();
+//#endif
                         }
 
                         return ret;
@@ -483,14 +485,35 @@ namespace GaiaCore.Gaia
             var commandList = command.Split('.').Where(x=>!string.IsNullOrEmpty(x));
             //非免费行动只能执行一个
             var NoneFreeActionCount=commandList.Sum(y => GameFreeSyntax.GetRegexList().Exists(x => x.IsMatch(y)) ? 0 : 1);
-            if (NoneFreeActionCount == 0 && commandList.ToList().Exists(x => GameFreeSyntax.advTechRegex2.IsMatch(x))){
-                faction.IsSingleAdvTechTrack = true;
+            bool isflag = commandList.ToList().Exists(x => GameFreeSyntax.advTechRegex2.IsMatch(x));
+            if (isflag) { faction.IsSingleAdvTechTrack = true; }
+            //是否包含主要行动
+            bool isExitsAction = (NoneFreeActionCount==1&&!isflag) || (NoneFreeActionCount == 0 && isflag);
+            //判断是否唯一主要行动
+            if (isExitsAction){
+                //是否执行过主要行动
+                if (faction.IsActionBurn)
+                {
+                    log = "已经执行过主要行动";
+                    return false;
+                }
+                //临时设置已经执行主要行动
+                faction.IsActionBurn = true;
+
             }
-            else if (NoneFreeActionCount != 1)
+            //主要行动次数过多
+            else if (NoneFreeActionCount > 1 || (NoneFreeActionCount == 1 && isflag))
             {
-                log = "能且只能执行一个普通行动";
+                log = "能且只能执行一个主要行动";
                 return false;
             }
+            //判断是否执行主要行动
+//            if (NoneFreeActionCount !=1)
+//            {
+//                log = "主要行动只能执行一次";
+//                return false;
+//            }
+
             //能接建造行动的action也只能用一个
             if (commandList.Sum(y => GameFreeSyntax.actionRegex.IsMatch(y) ? 1 : 0) > 1)
             {
@@ -499,6 +522,11 @@ namespace GaiaCore.Gaia
             }
             var ret=ProcessCommandWithBackup(commandList.ToArray(),faction,out log);
             faction.ResetUnfinishAction();
+            //如果执行没有成功
+            if (isExitsAction && !ret)
+            {
+                faction.IsActionBurn = false;
+            }
             return ret;
         }
         private bool ProcessCommandWithBackup(string[] commandList, Faction faction, out string log)
@@ -864,12 +892,82 @@ namespace GaiaCore.Gaia
                         return false;
                     }
                 }
-#if Debug
-                else if (item.Contains("qc"))
+                //结束回合
+                else if (GameFreeSyntax.PassRegexTurn.IsMatch(item))
                 {
-
+                    //执行过主要行动
+                    if (faction.IsActionBurn)
+                    {
+                        //复位玩家执行主要行动
+                        faction.IsActionBurn = false;
+                        //到下一位玩家
+                        GameStatus.NextPlayer();
+                    }
+                    else
+                    {
+                        log = "还没有执行主要行动";
+                        return false;
+                    }
                 }
-#endif
+                //重置当论操作
+                else if (GameFreeSyntax.ResetRegexTurn.IsMatch(item))
+                {
+                    //当前用户
+                    var myUser = this.UserGameModels.Find(user => user.username == GetCurrentUserName());
+                    if (myUser != null)
+                    {
+                        if (myUser.resetNumber > 0)
+                        {
+                            //重置参数-1
+                            myUser.resetNumber--;
+
+                            var syntaxList = this.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                            //删除日志
+                            for (int i = syntaxList.Count - 1; i > 0; i--)
+                            {
+                                string str = syntaxList[i];
+                                var list = str.Split(':');
+                                //隔开
+                                if (list.Length == 2)
+                                {
+                                    //当前种族操作
+                                    if (list[0] == faction.FactionName.ToString())
+                                    {
+                                        syntaxList.RemoveAt(i);
+                                    }
+                                    //不是当前种族
+                                    else
+                                    {
+                                        //跳过吸收能量
+                                        if (GameSyntax.leechPowerRegex.IsMatch(list[1]) || GameSyntax.downgradeRegex.IsMatch(list[1]))
+                                        {
+
+                                        }
+                                        //如果是pass ，终止
+                                        else if (GameFreeSyntax.PassRegexTurn.IsMatch(list[1]))
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    syntaxList.RemoveAt(i);
+                                }
+                                //if (list[0])
+                            }
+                            this.UserActionLog = string.Join("\r\n", syntaxList);
+                            //重置游戏
+                            GameMgr.RestoreGame(this.GameName, this, isToDict: true);
+                        }
+                        else
+                        {
+                            log = "不能进行重置";
+                            return false;
+                        }
+
+                    }
+                }
                 else
                 {
                     log = "语句还不支持";

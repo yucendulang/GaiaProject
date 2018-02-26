@@ -26,13 +26,15 @@
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#xsnengliang">前</button>
                         <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#xsnengliang">后</button>
+                        <button type="button" class="btn btn-default ksaction" id="now" actionType="now" controlid="#xsnengliang">N</button>
+
                     </span>
                 </div>
             </div>
             <div class="col-md-8">
                 <div class="input-group">
-                    <select class="btn dropdown-toggle form-control" id="ksactionnumber" name="ksactionnumber" style="width: 100px">
-                        <option value="">执行次数</option>
+                    <select class="btn dropdown-toggle form-control" id="ksactionnumber" name="ksactionnumber" style="width: 80px">
+                        <option value="">次数</option>
                         <option value="1" selected="selected">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -44,6 +46,8 @@
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#ksactionall" actionnumber="#ksactionnumber">前</button>
                         <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#ksactionall" actionnumber="#ksactionnumber">后</button>
+                        <button type="button" class="btn btn-default ksaction" id="now" actionType="now" controlid="#ksactionall"  actionnumber="#ksactionnumber">N</button>
+
                     </span>
 
                 </div>
@@ -87,7 +91,7 @@
                     @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"), "--请选择回合助推板--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "rbtPassList", @syntax = "pass " })
 
                     <span class="input-group-btn">
-                        <button class="btn btn-default actionGp" type="button" syntax="pass ">结束回合</button>
+                        <button class="btn btn-default actionGp" type="button" syntax="pass ">选择助推板</button>
                     </span>
                 </div>
             </div>

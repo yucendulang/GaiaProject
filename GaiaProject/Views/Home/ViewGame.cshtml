@@ -54,7 +54,7 @@
             mapcolor: '@faction.ColorMap',
             round: @Model.GameStatus.RoundCount,
             factionName: '@faction.FactionName',
-            stage: -1,
+            stage: @((int)Model.GameStatus.stage),
             colorIndex:@faction.colorIndex,
             GameName: '@Html.Raw(Model.GameName)',
             PlayerIndex: @Model.GameStatus.PlayerIndex,
@@ -81,13 +81,14 @@ else
     var UserGameModel = @Model.UserGameModels.Find(item => item.username == User.Identity.Name);
     if (UserGameModel != null)
     {
-        <script>
+    <script>
             userInfo.UserGameModel = {
                 'remark': '@Html.Raw(UserGameModel.remark)',
                 'isTishi': @UserGameModel.isTishi.ToString().ToLower(),
                 'isSocket':@UserGameModel.isSocket.ToString().ToLower(),
+                'resetNumber':@UserGameModel.resetNumber,
             };
-        </script>
+    </script>
     }
 }
 
@@ -365,6 +366,16 @@ else
                 <input id="syntax" size="50" name="syntax" type="text" class="form-control" aria-label="Text input with multiple buttons">
             </div>
             <button id="syn" type="button" class="btn btn-primary" style="width: 100px">保存</button>
+            
+            @if (Model.GameStatus.stage == Stage.ROUNDSTART)
+            {
+                <button id="syn_pass" type="button" class="btn btn-primary" style="width: 100px" onclick="$('#syntax').val('pass turn');submitData();">结束操作</button>
+            
+                <button id="syn_pass" type="button" class="btn btn-primary" style="width: 100px" onclick="$('#syntax').val('reset turn');submitData();">重置操作(@UserGameModel?.resetNumber)</button>
+            }
+
+
+
             <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
             @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES && Model.FactionList.Count>0)
             {
