@@ -465,10 +465,17 @@ namespace GaiaCore.Gaia
             GetGameByName(GameName).RedoStack = Redo;
             return true;
         }
-
-        public static GaiaGame RestoreGame(string GameName,GaiaGame gg,int? row=null)
+        /// <summary>
+        /// 恢复游戏
+        /// </summary>
+        /// <param name="GameName"></param>
+        /// <param name="gg"></param>
+        /// <param name="isToDict"></param>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        public static GaiaGame RestoreGame(string GameName,GaiaGame gg,bool isToDict = false,int? row=null)
         {
-            return RestoreGameWithActionLog(new KeyValuePair<string, GaiaGame>(GameName, gg),null,false,row:row);
+            return RestoreGameWithActionLog(new KeyValuePair<string, GaiaGame>(GameName, gg),null, isToDict, row:row);
         }
     }
 }
