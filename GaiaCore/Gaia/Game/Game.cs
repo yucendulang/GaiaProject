@@ -948,6 +948,10 @@ namespace GaiaCore.Gaia
                                         {
                                             break;
                                         }
+                                        else
+                                        {
+                                            break;
+                                        }
                                     }
                                 }
                                 else
