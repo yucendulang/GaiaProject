@@ -282,7 +282,7 @@ function openQueryWindow(type, title,tishi,func) {
 }
 //手动输入
 $("#queryHandinput").click(function () {
-    $("#syntax").focus();
+    //$("#syntax").focus();
     if (windowFunc != undefined) {
         windowFunc();
     }

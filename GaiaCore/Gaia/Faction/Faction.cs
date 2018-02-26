@@ -131,7 +131,7 @@ namespace GaiaCore.Gaia
         public const int m_MineOreCost = 1;
         public const int m_MineCreditCost = 2;
         //统计用的一些数据
-        public TimeSpan ClockPerid;
+        public TimeSpan ClockPerid { get; set; }
         //一些不会变的常量
         protected const int m_TradeCenterOreCost = 2;
         protected const int m_TradeCenterCreditCostCluster = 3;
@@ -720,8 +720,8 @@ namespace GaiaCore.Gaia
         }
 
         public string GetClockPeriod()
-        {
-            return ClockPerid.ToString(@"dd\.hh\:mm\:ss");
+        {            
+            return ClockPerid.ToString(@"dd-hh\:mm\:ss");
         }
 
     }
