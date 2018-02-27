@@ -488,6 +488,12 @@ namespace GaiaProject.Controllers
             return View(list);
         }
 
+        public IActionResult FactionStatisticsChart(int? usercount, string username, int? orderType)
+        {
+            var list = this.GetFactionStatistics(null, usercount, username, orderType);
+            return View(list);
+        }
+
         /// <summary>
         /// 玩家的平均分
         /// </summary>

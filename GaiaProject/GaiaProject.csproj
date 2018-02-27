@@ -13,6 +13,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\lib\新文件夹1\**" />
+    <Compile Remove="wwwroot\lib\新文件夹\**" />
+    <Content Remove="wwwroot\lib\新文件夹1\**" />
+    <Content Remove="wwwroot\lib\新文件夹\**" />
+    <EmbeddedResource Remove="wwwroot\lib\新文件夹1\**" />
+    <EmbeddedResource Remove="wwwroot\lib\新文件夹\**" />
+    <None Remove="wwwroot\lib\新文件夹1\**" />
+    <None Remove="wwwroot\lib\新文件夹\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Views\Home\Gaia.cshtml" />
     <Content Remove="wwwroot/js\common.js" />
     <Content Remove="wwwroot/js\game.js" />
@@ -58,8 +69,6 @@
   <ItemGroup>
     <Folder Include="finishgame\" />
     <Folder Include="Properties\PublishProfiles\" />
-    <Folder Include="wwwroot\lib\新文件夹1\" />
-    <Folder Include="wwwroot\lib\新文件夹\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\assets\fonts\Pe-icon-7-stroke.svg" />

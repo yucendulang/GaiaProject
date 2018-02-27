@@ -3,7 +3,7 @@
 @model List<GaiaProject.Models.Data.GameInfoController.StatisticsFaction>
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "种族统计";
     Layout = "_Layout";
 }
 
@@ -23,9 +23,14 @@
                 </select>
 
                 <span class="input-group-btn">
+
                     <button class="btn btn-default" type="submit">搜索</button>
                 </span>
+                
             </div>
+        </div>
+        <div  class="col-lg-4">
+            <a href="/GameInfo/FactionStatisticsChart">图表统计</a>
         </div>
     </div>
 </form>
