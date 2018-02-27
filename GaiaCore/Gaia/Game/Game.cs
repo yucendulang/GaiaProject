@@ -998,7 +998,13 @@ namespace GaiaCore.Gaia
 
             return true;
         }
-
+        /// <summary>
+        /// 拿取科技版
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="faction"></param>
+        /// <param name="log"></param>
+        /// <returns></returns>
         private bool GetTechTile(string item,Faction faction,out string log)
         {
             log = string.Empty;
@@ -1062,6 +1068,7 @@ namespace GaiaCore.Gaia
                 log = string.Format("玩家曾经获得过该板块{0}", tile.GetType().Name);
                 return false;
             }
+            
             Action queue = () =>
             {
                 if (ATTList.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
@@ -1084,6 +1091,9 @@ namespace GaiaCore.Gaia
                     STT3List.Remove(tile as StandardTechnology);
                 }
                 faction.AddGameTiles(tile);
+                //数据库保存拿版记录
+                DbGameSave.SaveTTData(this,faction,techTileStr);
+
             };
             faction.ActionQueue.Enqueue(queue);
             faction.TechTilesGet--;
@@ -1353,7 +1363,7 @@ namespace GaiaCore.Gaia
         /// <summary>
         /// 数据库操作
         /// </summary>
-        private ApplicationDbContext dbContext;
+        public ApplicationDbContext dbContext;
 
         public string syntax;//最后一条保存
         public void Syntax(string syntax, out string log, string user = "",ApplicationDbContext dbContext = null)

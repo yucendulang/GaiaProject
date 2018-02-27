@@ -720,8 +720,8 @@ namespace GaiaCore.Gaia
         }
 
         public string GetClockPeriod()
-        {            
-            return ClockPerid.ToString(@"dd-hh\:mm\:ss");
+        {
+            return ClockPerid.ToString(@"dd\.hh\:mm\:ss");
         }
 
     }
