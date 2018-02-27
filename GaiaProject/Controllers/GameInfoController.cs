@@ -10,6 +10,7 @@ using GaiaProject.Data;
 using GaiaProject.Models.HomeViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query.Expressions;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -557,6 +558,59 @@ namespace GaiaProject.Controllers
 
         #endregion
 
+
+        #region 科技版统计
+
+//        public class TTModel
+//        {
+//            public string name { get; set; }
+//            public int count { get; set; }
+//
+//
+//        }
+
+        public IActionResult TTStatistics()
+        {
+            //储存
+            GameFactionExtendModel gameFactionExtendModel =new GameFactionExtendModel();
+
+            //高级科技
+            gameFactionExtendModel.ATT1 = (short) this.dbContext.GameFactionExtendModel.Count(item => item.ATT1 > 0);
+            gameFactionExtendModel.ATT2 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT2 > 0);
+            gameFactionExtendModel.ATT3 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT3 > 0);
+            gameFactionExtendModel.ATT4 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT4 > 0);
+            gameFactionExtendModel.ATT5 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT5 > 0);
+            gameFactionExtendModel.ATT6 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT6 > 0);
+            gameFactionExtendModel.ATT7 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT7 > 0);
+            gameFactionExtendModel.ATT8 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT8 > 0);
+            gameFactionExtendModel.ATT9 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT9 > 0);
+            gameFactionExtendModel.ATT10 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT10 > 0);
+            gameFactionExtendModel.ATT11 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT11 > 0);
+            gameFactionExtendModel.ATT12 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT12 > 0);
+            gameFactionExtendModel.ATT13 = (short) this.dbContext.GameFactionExtendModel.Count(item => item.ATT13 > 0);
+            gameFactionExtendModel.ATT14 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT14 > 0);
+            gameFactionExtendModel.ATT15 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT15 > 0);
+            //低级科技
+            gameFactionExtendModel.STT1 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT1 > 0);
+            gameFactionExtendModel.STT2 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT2 > 0);
+            gameFactionExtendModel.STT3 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT3 > 0);
+            gameFactionExtendModel.STT4 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT4 > 0);
+            gameFactionExtendModel.STT5 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT5 > 0);
+            gameFactionExtendModel.STT6 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT6 > 0);
+            gameFactionExtendModel.STT7 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT7 > 0);
+            gameFactionExtendModel.STT8 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT8 > 0);
+            gameFactionExtendModel.STT9 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT9 > 0);
+
+            //IQueryable<TTModel> ttModels = this.dbContext.GameFactionExtendModel.Where(item => item.ATT1 > 0).Select(item=>item);
+            //                (g => new TTModel
+            //            {
+            //                count = g.Sum(i => i.ATT1),
+            //                name = "ATT1"
+            //            });
+            return View(gameFactionExtendModel);
+        }
+
+        #endregion
 
         #region 操作内存和数据库游戏
 

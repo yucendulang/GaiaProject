@@ -1,0 +1,156 @@
+﻿@using GaiaCore.Gaia.Tiles
+@model GaiaDbContext.Models.HomeViewModels.GameFactionExtendModel
+
+@{
+    ViewBag.Title = "科技版统计";
+    Layout = "_Layout";
+}
+<link href="~/css/sitegameview.css" rel="stylesheet" />
+<h2>科技版统计</h2>
+
+<table>
+    <tr>
+        @foreach (var item in new List<AdavanceTechnology>()
+        {
+            new ATT1(),
+            new ATT2(),
+            new ATT3(),
+            new ATT4(),
+            new ATT5(),
+            new ATT6(),
+            new ATT7(),
+            new ATT8(),
+            new ATT9(),
+            new ATT10(),
+            new ATT11(),
+            new ATT12(),
+            new ATT13(),
+            new ATT14(),
+            new ATT15(),
+        })
+        {
+            <td title="" align="center" id="">
+                <div class="attcss @{@item.name}False"><span>@{@item.name}<br/>@{@item.desc}</span>
+                                                                                 </div></td>
+
+        }
+
+                                                                                 </tr>
+                                                                                 <tr>
+                                                                                     <td>
+                                                                                         @Model.ATT1
+                                                                                     </td>
+                                                                                     <td>
+                                                                                         @Model.ATT2
+                                                                                     </td>
+                                                                                     <td>
+                                                                                         @Model.ATT3
+                                                                                     </td>
+                                                                                     <td>
+                                                                                         @Model.ATT4
+                                                                                     </td>
+                                                                                     <td>
+                                                                                         @Model.ATT5
+                                                                                     </td>
+                                                                                     <td>
+                                                                                         @Model.ATT6
+                                                                                     </td>
+                                                                                     <td>
+                                                                                         @Model.ATT7
+                                                                                     </td>
+                                                                                     <td>
+                                                                                         @Model.ATT8
+                                                                                     </td>
+                                                                                     <td>
+                                                                                         @Model.ATT9
+                                                                                     </td>
+                                                                                     <td>
+                                                                                         @Model.ATT10
+                                                                                     </td>
+                                                                                     <td>
+                                                                                         @Model.ATT11
+                                                                                     </td>
+                                                                                     <td>
+                                                                                         @Model.ATT12
+                                                                                     </td>
+                                                                                     <td>
+                                                                                         @Model.ATT13
+                                                                                     </td>
+                                                                                     <td>
+                                                                                         @Model.ATT14
+                                                                                     </td>
+                                                                                     <td>
+                                                                                         @Model.ATT15
+                                                                                     </td>
+                                                                                 </tr>
+                                                                                 </table>
+
+
+                                                                                 <table>
+                                                                                     <tr>
+                                                                                         @foreach (var  item in new List<StandardTechnology>()
+                                                                                         {
+                                                                                             new STT1(),
+                                                                                             new STT2(),
+                                                                                             new STT3(),
+                                                                                             new STT4(),
+                                                                                             new STT5(),
+                                                                                             new STT6(),
+                                                                                             new STT7(),
+                                                                                             new STT8(),
+                                                                                             new STT9()
+                                                                                         })
+                                                                                         {
+                                                                                             <td title="@item.name" align="center" id="@item.name">
+
+                                                                                                 <div class="sttcss @{@item.name}False"><span>@item.name <br /> @item.desc</span>
+                                                                                                                      </div>
+                                                                                              </td>
+
+                                                                                         }
+                                                                                     </tr>
+                                                                                     <tr>
+                                                                                         <td>
+                                                                                             @Model.STT1
+                                                                                         </td>
+                                                                                         <td>
+                                                                                             @Model.STT2
+                                                                                         </td>
+                                                                                         <td>
+                                                                                             @Model.STT3
+                                                                                         </td>
+                                                                                         <td>
+                                                                                             @Model.STT4
+                                                                                         </td>
+                                                                                         <td>
+                                                                                             @Model.STT5
+                                                                                         </td>
+                                                                                         <td>
+                                                                                             @Model.STT6
+                                                                                         </td>
+                                                                                         <td>
+                                                                                             @Model.STT7
+                                                                                         </td>
+                                                                                         <td>
+                                                                                             @Model.STT8
+                                                                                         </td>
+                                                                                         <td>
+                                                                                             @Model.STT9
+                                                                                         </td>
+ 
+                                                                                     </tr>
+                                                                                 </table>
+
+
+
+
+<div>
+</div>
+
+
+@*@foreach (var item in Model)*@
+@*{*@
+@*    <div>*@
+@*        @item.count*@
+@*    </div>*@
+@*}*@
