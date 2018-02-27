@@ -641,7 +641,7 @@ namespace GaiaProject.Controllers
                             if (!this.dbContext.GameFactionModel.Any(item => item.gameinfo_id == gameInfoModel.Id))
                             {
                                 //保存种族信息
-                                GameSave.SaveFactionToDb(this.dbContext, result, gameInfoModel);
+                                DbGameSave.SaveFactionToDb(this.dbContext, result, gameInfoModel);
                             }
                         }
                     }
@@ -693,6 +693,7 @@ namespace GaiaProject.Controllers
         /// <returns></returns>
         public string UpdatenFinishFromDb()
         {
+            
             return UpdateFromDb(item => item.GameStatus == 8);
         }
 
@@ -706,7 +707,12 @@ namespace GaiaProject.Controllers
                 {
                     GameMgr.CreateNewGame(gameInfoModel.name, gameInfoModel.userlist.Split('|'), out GaiaGame result, gameInfoModel.MapSelction, isTestGame: gameInfoModel.IsTestGame == 1 ? true : false);
                     GaiaGame gg = GameMgr.GetGameByName(gameInfoModel.name);
+                    //gg.dbContext = this.dbContext;
                     gg.GameName = gameInfoModel.name;
+
+                    gg.dbContext = this.dbContext;
+                    gg.IsSaveToDb = true;
+
                     gg.UserActionLog = gameInfoModel.loginfo.Replace("|", "\r\n");
 
                     gg = GameMgr.RestoreGame(gameInfoModel.name, gg);
@@ -718,13 +724,13 @@ namespace GaiaProject.Controllers
                         if (!this.dbContext.GameFactionModel.Any(item => item.gameinfo_id == gameInfoModel.Id))
                         {
                             //保存种族信息
-                            GameSave.SaveFactionToDb(this.dbContext, gg, gameInfoModel);
+                            DbGameSave.SaveFactionToDb(this.dbContext, gg, gameInfoModel);
                         }
                         else
                         {
                             //总局计分问题，需要重新计算
 #if  DEBUG
-                            GameSave.SaveFactionToDb(this.dbContext, gg, gameInfoModel);
+                            DbGameSave.SaveFactionToDb(this.dbContext, gg, gameInfoModel);
 #endif
                         }
                     }

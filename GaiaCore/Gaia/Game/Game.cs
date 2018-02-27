@@ -136,14 +136,11 @@ namespace GaiaCore.Gaia
                         }
                         else if (ret)
                         {
-//#if DEBUG
-//                            if (!syntax.EndsWith("qc"))
-//                            {
-//                                GameStatus.NextPlayer();
-//                            }
-//#else
-//                            GameStatus.NextPlayer();
-//#endif
+                            //低版本直接到下一位玩家
+                            if (version < 4)
+                            {
+                                GameStatus.NextPlayer();
+                            }
                         }
 
                         return ret;
@@ -342,7 +339,7 @@ namespace GaiaCore.Gaia
             }
 
             //保存结果到数据库
-            GameSave.SaveGameToDb(this.dbContext,this);
+            DbGameSave.SaveGameToDb(this.dbContext,this);
         }
 
         private void IncomePhaseNextPlayer()
@@ -486,11 +483,12 @@ namespace GaiaCore.Gaia
             //非免费行动只能执行一个
             var NoneFreeActionCount=commandList.Sum(y => GameFreeSyntax.GetRegexList().Exists(x => x.IsMatch(y)) ? 0 : 1);
             bool isflag = commandList.ToList().Exists(x => GameFreeSyntax.advTechRegex2.IsMatch(x));
-            if (isflag) { faction.IsSingleAdvTechTrack = true; }
+            //升级科技
+            if (isflag&& NoneFreeActionCount == 0) { faction.IsSingleAdvTechTrack = true; }
             //是否包含主要行动
             bool isExitsAction = (NoneFreeActionCount==1&&!isflag) || (NoneFreeActionCount == 0 && isflag);
             //判断是否唯一主要行动
-            if (isExitsAction){
+            if (isExitsAction && this.version>3){
                 //是否执行过主要行动
                 if (faction.IsActionBurn)
                 {
@@ -502,7 +500,7 @@ namespace GaiaCore.Gaia
 
             }
             //主要行动次数过多
-            else if (NoneFreeActionCount > 1 || (NoneFreeActionCount == 1 && isflag))
+            else if (NoneFreeActionCount > 1)
             {
                 log = "能且只能执行一个主要行动";
                 return false;
@@ -1368,8 +1366,11 @@ namespace GaiaCore.Gaia
         public string syntax;//最后一条保存
         public void Syntax(string syntax, out string log, string user = "",ApplicationDbContext dbContext = null)
         {
-            //赋值
-            this.dbContext = dbContext;
+            if (this.dbContext == null)
+            {
+                //赋值
+                this.dbContext = dbContext;
+            }
             this.syntax = syntax;
 
             try
@@ -1734,6 +1735,12 @@ namespace GaiaCore.Gaia
         /// </summary>
         [JsonProperty]
         public bool IsRotatoMap { get; set; }
+
+
+        /// <summary>
+        /// 开始保存数据到数据库
+        /// </summary>
+        public bool IsSaveToDb { get; set; }
 
         public class STTInfo
         {

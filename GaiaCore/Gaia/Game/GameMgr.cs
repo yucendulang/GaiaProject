@@ -7,6 +7,7 @@ using System.Linq;
 using GaiaCore.Util;
 using System.Net.Http;
 using GaiaDbContext.Models.AccountViewModels;
+using GaiaProject.Data;
 
 namespace GaiaCore.Gaia
 {
@@ -213,6 +214,8 @@ namespace GaiaCore.Gaia
             gg.IsTestGame = item.Value.IsTestGame;//测试
             gg.IsSocket = item.Value.IsSocket;//即使制度
             gg.IsRotatoMap = item.Value.IsRotatoMap;//旋转地图
+            gg.IsSaveToDb = item.Value.IsSaveToDb;//是否保存数据
+            gg.dbContext = item.Value.dbContext;//数据源
             if (item.Value.version == 0)
             {
                 gg.version = 1;
@@ -228,7 +231,10 @@ namespace GaiaCore.Gaia
                 int rowIndex = 1;
                 foreach (var str in item.Value.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-
+                    if (str.Contains("HadschHalla:convert 1q to 1o.upgrade D12 to RL.+STT5. advance ship"))
+                    {
+                        int a = 1;
+                    }
                     gg.Syntax(str, out string log);
                     if (!string.IsNullOrEmpty(log))
                     {

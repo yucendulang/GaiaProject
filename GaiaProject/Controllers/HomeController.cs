@@ -193,7 +193,7 @@ namespace GaiaProject.Controllers
 
 
             //创建
-            bool create = GameMgr.CreateNewGame(model.Name, username, out GaiaGame result,model.MapSelction, isTestGame: model.IsTestGame,isSocket:model.IsSocket,IsRotatoMap:model.IsRotatoMap,version:3);
+            bool create = GameMgr.CreateNewGame(model.Name, username, out GaiaGame result,model.MapSelction, isTestGame: model.IsTestGame,isSocket:model.IsSocket,IsRotatoMap:model.IsRotatoMap,version:4);
             if (create && !model.IsTestGame && username[0]!=username[1])//测试局以及自己对战的局暂时不保留数据
             {
                 //保存到数据库
@@ -313,6 +313,8 @@ namespace GaiaProject.Controllers
                 gg.GameName = gameInfoModel.name;
                 gg.UserActionLog = log?.Replace("|", "\r\n");
 
+                //赋值会重写全部数据
+                //gg.dbContext = this.dbContext;
 
                 gg = GameMgr.RestoreGame(gameInfoModel.name, gg,row:row);
                 gg.GameName = gameInfoModel.name;
@@ -429,7 +431,7 @@ namespace GaiaProject.Controllers
                     syntax = string.Format("{0}:{1}", factionName, syntax);
                 }
                 //游戏结束，发送邮件赋值，
-                GaiaCore.Gaia.Game.GameSave._emailSender = this._emailSender;
+                GaiaCore.Gaia.Game.DbGameSave._emailSender = this._emailSender;
                 //执行命令
                 GaiaGame gaiaGame = GameMgr.GetGameByName(name);
                 try
