@@ -1572,7 +1572,13 @@ namespace GaiaCore.Gaia
                     //如果是第六回合并且PASS的玩家只需要吸收1魔力
                     if (this.GameStatus.RoundCount == 6 && this.FactionNextTurnList.Contains(item))
                     {
+                        //如果吸收1魔力
                         if (power == 1)
+                        {
+                            item.PowerIncrease(1);
+                        }
+                        //或者最多吸收1魔力
+                        else if (item.PowerToken1==0 && item.PowerToken2==1)
                         {
                             item.PowerIncrease(1);
                         }
