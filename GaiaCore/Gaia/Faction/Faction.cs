@@ -210,6 +210,11 @@ namespace GaiaCore.Gaia
         {
             //判断最大吸收能量
             var ret = Math.Min(PowerToken1*2 + PowerToken2, i);
+//            //如果最大吸收0能量，则跳过
+//            if (ret == 0)
+//            {
+//                return 0;
+//            }
             if (PowerToken1 > i)
             {
                 PowerToken1 -= i;
