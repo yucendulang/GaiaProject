@@ -231,7 +231,7 @@ namespace GaiaCore.Gaia
                 int rowIndex = 1;
                 foreach (var str in item.Value.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    if (str.Contains("HadschHalla:convert 1q to 1o.upgrade D12 to RL.+STT5. advance ship"))
+                    if (str.Contains("Xenos:build I3"))
                     {
                         int a = 1;
                     }

@@ -748,7 +748,7 @@ namespace GaiaProject.Controllers
         public string UpdatenFinishFromDb()
         {
             
-            return UpdateFromDb(item => item.GameStatus == 8);
+            return UpdateFromDb(item => item.GameStatus == 8 && item.saveState==0);
         }
 
         public string UpdateFromDb(Func<GameInfoModel, bool> func)
@@ -764,8 +764,14 @@ namespace GaiaProject.Controllers
                     //gg.dbContext = this.dbContext;
                     gg.GameName = gameInfoModel.name;
 
-                    gg.dbContext = this.dbContext;
-                    gg.IsSaveToDb = true;
+                    if (gameInfoModel.saveState == 0)
+                    {
+                        gg.dbContext = this.dbContext;
+                        gg.IsSaveToDb = true;
+
+                        gameInfoModel.saveState = 1;
+                    }
+
 
                     gg.UserActionLog = gameInfoModel.loginfo.Replace("|", "\r\n");
 

@@ -94,5 +94,10 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// 是否旋转地图
         /// </summary>
         public bool IsRotatoMap { get; set; }
+
+        /// <summary>
+        /// 保存信息状态
+        /// </summary>
+        public int saveState { get; set; }
     }
 }

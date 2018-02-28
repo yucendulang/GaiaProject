@@ -20,10 +20,10 @@ namespace GaiaCore.Gaia.Game
         public static void SaveTTData(GaiaGame gaiaGame,Faction faction,string techTileStr)
         {
             //开始保存数据
-            //            if (!gaiaGame.IsSaveToDb)
-            //            {
-            //                return;
-            //            }
+            if (!gaiaGame.IsSaveToDb)
+            {
+                return;
+            }
             //            //如果游戏没有结束不保存数据
             //            if (gaiaGame.GameStatus.status != Status.ENDED)
             //            {
