@@ -841,7 +841,13 @@ namespace GaiaCore.Gaia
                     ConvertPosToRowCol(pos, out int row, out int col);
                     if (!faction.BuildBlackPlanet(row, col, out log))
                     {
+                        faction.blankMine = 0;
                         return false;
+                    }
+                    else
+                    {
+                        //成功放置黑星的话
+                        faction.blankMine = 1;
                     }
 
                 }

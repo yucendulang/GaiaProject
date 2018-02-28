@@ -50,6 +50,7 @@ namespace GaiaCore.Gaia.Tiles
             {
                 result.Add(list.RandomRemove(random));
             }
+            //result.Insert(0, new RST7());
             return result;
         }
     }
@@ -68,7 +69,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "M->2VP";
+                return "M>>2VP";
             }
         }
         public override int GetTriggerScore => 2;
@@ -79,7 +80,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "TC->3VP";
+                return "TC>>3VP";
             }
         }
 
@@ -91,7 +92,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "SH/AC->5VP";
+                return "SH/AC>>5VP";
             }
         }
 
@@ -103,7 +104,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "M(G)->4VP";
+                return "M(G)>>4VP";
             }
         }
 
@@ -115,7 +116,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "AL->5VP";
+                return "AL>>5VP";
             }
         }
 
@@ -127,7 +128,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "RA->2VP";
+                return "RA>>2VP";
             }
         }
         public override int GetTriggerScore => 2;
@@ -138,7 +139,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "TF->2VP";
+                return "TF>>2VP";
             }
         }
 
@@ -150,7 +151,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "TC->4VP";
+                return "TC>>4VP";
             }
         }
 
@@ -162,7 +163,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "SH/AC->5VP";
+                return "SH/AC>>5VP";
             }
         }
 
@@ -174,7 +175,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "M(G)->3VP";
+                return "M(G)>>3VP";
             }
         }
 

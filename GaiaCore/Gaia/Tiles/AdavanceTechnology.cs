@@ -221,7 +221,8 @@ namespace GaiaCore.Gaia.Tiles
         }
         public override bool OneTimeAction(Faction faction)
         {
-            faction.Score += (GameConstNumber.MineCount - faction.Mines.Count) * 2;
+            //如果有黑星，加上计分
+            faction.Score += (GameConstNumber.MineCount - faction.Mines.Count + faction.blankMine) * 2;
             return true;
         }
     }
