@@ -986,7 +986,7 @@ namespace GaiaCore.Gaia
                 item.Invoke();
             }
             //检测q,o,c,k是否小于0
-            if (faction.QICs < 0 || faction.Ore < 0 || faction.Credit < 0 || faction.Knowledge < 0)
+            if (faction.QICs < 0 || faction.Ore < 0 || faction.Credit < 0 || faction.Knowledge < 0 ||faction.PowerToken2<0 || faction.PowerToken3<0)
             {
                 log = "资源不够";
                 //重新执行全部操作，重新恢复游戏
