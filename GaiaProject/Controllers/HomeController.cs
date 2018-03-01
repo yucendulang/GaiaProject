@@ -155,6 +155,8 @@ namespace GaiaProject.Controllers
             {
                 username = this.RandomSortList<string>(username).ToArray();
             }
+            //用户列表
+            List<UserGameModel> listUser = new List<UserGameModel>();
             //判断用户不存在
             foreach (var item in username)
             {
@@ -166,7 +168,12 @@ namespace GaiaProject.Controllers
                 }
                 else
                 {
-
+                    listUser.Add(new UserGameModel()
+                    {
+                        username = item,
+                        isTishi = true,
+                        paygrade = user.Result.paygrade,
+                    });
                 }
             }
             //存在屏蔽玩家
@@ -233,6 +240,9 @@ namespace GaiaProject.Controllers
                 this.dbContext.SaveChanges();
 
             }
+
+            //赋值用户信息
+            result.UserGameModels = listUser;
 
             ViewData["ReturnUrl"] = "/Home/ViewGame/" + model.Name;
             return Redirect("/home/viewgame/" + System.Net.WebUtility.UrlEncode(model.Name));

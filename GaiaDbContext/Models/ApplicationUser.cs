@@ -18,5 +18,10 @@ namespace GaiaDbContext.Models
         /// 分组ID，1=管理员
         /// </summary>
         public int? groupid { get; set; }
+
+        /// <summary>
+        /// 付费等级
+        /// </summary>
+        public int paygrade { get; set; }
     }
 }

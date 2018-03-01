@@ -43,15 +43,20 @@ namespace GaiaCore.Gaia
             LogEntityList = new List<LogEntity>();
 
             //用户列表，配置信息
-            this.UserGameModels = new List<UserGameModel>();
-            foreach (string item in username)
-            {
-                this.UserGameModels.Add(new UserGameModel()
-                {
-                    username = item,
-                    isTishi = true,
-                });
-            }
+//            if (this.UserGameModels == null)
+//            {
+//                this.UserGameModels = new List<UserGameModel>();
+//                foreach (string item in username)
+//                {
+//                    this.UserGameModels.Add(new UserGameModel()
+//                    {
+//                        username = item,
+//                        isTishi = true,
+//                        paygrade = this.dbContext.Users.SingleOrDefault(user=> user.UserName==item)?.paygrade,
+//                    });
+//                }
+//            }
+
         }
         public bool ProcessSyntax(string user, string syntax, out string log)
         {
@@ -1492,6 +1497,8 @@ namespace GaiaCore.Gaia
             }
             UserDic[user].Add(FactionList.Last());
             FactionList.Last().UserName = user;
+            //赋值usermodel
+            FactionList.Last().UserGameModel = this.UserGameModels.Find(userGame => userGame.username == user);
         }
 
         private void GameStart(string syntax, int i = 0)

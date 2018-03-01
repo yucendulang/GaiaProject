@@ -152,6 +152,10 @@ namespace GaiaCore.Gaia
         /// </summary>
         public string ChineseName { get; set; }
         public string UserName { get; set; }
+        /// <summary>
+        /// 选择种族的用户
+        /// </summary>
+        public UserGameModel UserGameModel { get; set; }
 
         //种族颜色
         // 0-人类 1-逢人 2-炽焰 3-格伦 4-大使 5-章鱼 6-伊塔

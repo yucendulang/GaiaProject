@@ -42,5 +42,13 @@ namespace GaiaDbContext.Models.AccountViewModels
         [JsonProperty]
 
         public int resetNumber { get; set; }
+
+
+        /// <summary>
+        /// 付费等级
+        /// </summary>
+        [JsonProperty]
+        public int? paygrade { get; set; }
+
     }
 }

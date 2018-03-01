@@ -24,7 +24,12 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">
-            <span class="badge" onclick="faction_scoreShow('@Model.GaiaGame.GameName','@Model.FactionName')">@Model.Score VP</span>
+            @if (Model.UserGameModel.paygrade > 0)
+            {
+                <img src = "/images/user/potato.png" />
+            }
+
+            <span class="badge" onclick="faction_scoreShow('@Model.GaiaGame.GameName', '@Model.FactionName')">@Model.Score VP</span>
 
             <span style="background-color: @Model.ColorCode">
                 <span class="color-@Model.FactionName">
@@ -32,7 +37,7 @@
                 </span>
 
             </span>
-            &nbsp;&nbsp;&nbsp;&nbsp;<span onclick="faction_logShow('@Model.GaiaGame.GameName','@Model.FactionName')">@Model.UserName</span>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span onclick="faction_logShow('@Model.GaiaGame.GameName', '@Model.FactionName')">@Model.UserName</span>
         </h3>
     </div>
     <div class="panel-body">
