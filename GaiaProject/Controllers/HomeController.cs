@@ -324,7 +324,7 @@ namespace GaiaProject.Controllers
                 gg.UserActionLog = log?.Replace("|", "\r\n");
 
                 //赋值会重写全部数据
-                //gg.dbContext = this.dbContext;
+                gg.dbContext = this.dbContext;
 
                 gg = GameMgr.RestoreGame(gameInfoModel.name, gg,row:row);
                 gg.GameName = gameInfoModel.name;

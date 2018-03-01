@@ -78,7 +78,7 @@ else
 
 @{
     //备忘信息
-    var UserGameModel = @Model.UserGameModels.Find(item => item.username == User.Identity.Name);
+    var UserGameModel = @Model.UserGameModels?.Find(item => item.username == User.Identity.Name);
     if (UserGameModel != null)
     {
     <script>
