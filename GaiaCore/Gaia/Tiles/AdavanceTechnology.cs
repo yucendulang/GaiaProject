@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using GaiaCore.Util;
 using System.Linq;
+using GaiaCore.Gaia.Game;
 
 namespace GaiaCore.Gaia.Tiles
 {
@@ -52,6 +53,15 @@ namespace GaiaCore.Gaia.Tiles
             this.showRank = 3;
 
         }
+        
+        /// <summary>
+        /// 获取得分
+        /// </summary>
+        /// <returns></returns>
+        public virtual Int16 GetResources(Faction faction)
+        {
+            return (short)this.GetTriggerScore;
+        }
         public virtual bool isPicked { set; get; }
     }
 
@@ -63,6 +73,11 @@ namespace GaiaCore.Gaia.Tiles
             {
                 return "Act:3O";
             }
+        }
+
+        public override short GetResources(Faction faction)
+        {
+            return 1;
         }
 
         public override bool InvokeGameTileAction(Faction faction)
@@ -83,7 +98,10 @@ namespace GaiaCore.Gaia.Tiles
                 return "Act:3K";
             }
         }
-
+        public override short GetResources(Faction faction)
+        {
+            return 1;
+        }
         public override bool InvokeGameTileAction(Faction faction)
         {
             faction.Knowledge += 3;
@@ -102,7 +120,10 @@ namespace GaiaCore.Gaia.Tiles
                 return "Act:1Q,5C";
             }
         }
-
+        public override short GetResources(Faction faction)
+        {
+            return 1;
+        }
         public override bool InvokeGameTileAction(Faction faction)
         {
             faction.QICs += 1;
@@ -158,9 +179,15 @@ namespace GaiaCore.Gaia.Tiles
                 return "pass-vp:AL*3";
             }
         }
-
+        public override short GetResources(Faction faction)
+        {
+            return (short)(faction.GameTileList.Where(x => x is AllianceTile).Count() * 3);
+        }
         public override int GetTurnEndScore(Faction faction)
         {
+            //保存高级版得分统计
+            DbTTSave.Score(this.GetType(), faction.GaiaGame, faction, true);
+
             return faction.GameTileList.Where(x => x is AllianceTile).Count() * 3;
         }
     }
@@ -173,9 +200,13 @@ namespace GaiaCore.Gaia.Tiles
                 return "pass-vp:P_type*1";
             }
         }
-
-        public override int GetTurnEndScore(Faction faction)
+        public override short GetResources(Faction faction)
         {
+            return (short)(faction.GetPlanetTypeCount());
+        }
+        public override int GetTurnEndScore(Faction faction)
+        {            //保存高级版得分统计
+            DbTTSave.Score(this.GetType(), faction.GaiaGame, faction, true);
             return faction.GetPlanetTypeCount();
         }
     }
@@ -188,8 +219,13 @@ namespace GaiaCore.Gaia.Tiles
                 return "pass-vp:RL*3";
             }
         }
-        public override int GetTurnEndScore(Faction faction)
+        public override short GetResources(Faction faction)
         {
+            return (short)((GameConstNumber.ResearchLabCount - faction.ResearchLabs.Count) * 3);
+        }
+        public override int GetTurnEndScore(Faction faction)
+        {            //保存高级版得分统计
+            DbTTSave.Score(this.GetType(), faction.GaiaGame, faction, true);
             return (GameConstNumber.ResearchLabCount - faction.ResearchLabs.Count) * 3;
         }
 
@@ -203,9 +239,13 @@ namespace GaiaCore.Gaia.Tiles
                 return "1SC->1O";
             }
         }
-
-        public override bool OneTimeAction(Faction faction)
+        public override short GetResources(Faction faction)
         {
+            return (short)(faction.GetSpaceSectorCount());
+        }
+        public override bool OneTimeAction(Faction faction)
+        {            //保存高级版得分统计
+            DbTTSave.Score(this.GetType(), faction.GaiaGame, faction, false);
             faction.Ore += faction.GetSpaceSectorCount();
             return true;
         }
@@ -219,8 +259,13 @@ namespace GaiaCore.Gaia.Tiles
                 return "1M->2VP";
             }
         }
-        public override bool OneTimeAction(Faction faction)
+        public override short GetResources(Faction faction)
         {
+            return (short)((GameConstNumber.MineCount - faction.Mines.Count + faction.blankMine) * 2);
+        }
+        public override bool OneTimeAction(Faction faction)
+        {            //保存高级版得分统计
+            DbTTSave.Score(this.GetType(), faction.GaiaGame, faction, false);
             //如果有黑星，加上计分
             faction.Score += (GameConstNumber.MineCount - faction.Mines.Count + faction.blankMine) * 2;
             return true;
@@ -235,9 +280,13 @@ namespace GaiaCore.Gaia.Tiles
                 return "1TC->4VP";
             }
         }
-
-        public override bool OneTimeAction(Faction faction)
+        public override short GetResources(Faction faction)
         {
+            return (short)((GameConstNumber.TradeCenterCount - faction.TradeCenters.Count) * 4);
+        }
+        public override bool OneTimeAction(Faction faction)
+        {            //保存高级版得分统计
+            DbTTSave.Score(this.GetType(), faction.GaiaGame, faction, false);
             faction.Score += (GameConstNumber.TradeCenterCount - faction.TradeCenters.Count) * 4;
             return true;
         }
@@ -251,9 +300,13 @@ namespace GaiaCore.Gaia.Tiles
                 return "1G->2VP";
             }
         }
-
-        public override bool OneTimeAction(Faction faction)
+        public override short GetResources(Faction faction)
         {
+            return (short)(faction.GaiaPlanetNumber * 2);
+        }
+        public override bool OneTimeAction(Faction faction)
+        {            //保存高级版得分统计
+            DbTTSave.Score(this.GetType(), faction.GaiaGame, faction, false);
             faction.Score += faction.GaiaPlanetNumber * 2;
             return true;
         }
@@ -267,8 +320,14 @@ namespace GaiaCore.Gaia.Tiles
                 return "1SC->2VP";
             }
         }
-        public override bool OneTimeAction(Faction faction)
+        public override short GetResources(Faction faction)
         {
+            return (short)(faction.GetSpaceSectorCount() * 2);
+        }
+        public override bool OneTimeAction(Faction faction)
+        {            
+            //保存高级版得分统计
+            DbTTSave.Score(this.GetType(), faction.GaiaGame, faction, false);
             faction.Score += faction.GetSpaceSectorCount() * 2;
             return true;
         }
@@ -283,9 +342,14 @@ namespace GaiaCore.Gaia.Tiles
                 return "1AL->5VP";
             }
         }
-
+        public override short GetResources(Faction faction)
+        {
+            return (short)(faction.GameTileList.Where(x => x is AllianceTile).Count() * 5);
+        }
         public override bool OneTimeAction(Faction faction)
         {
+            //保存高级版得分统计
+            DbTTSave.Score(this.GetType(), faction.GaiaGame, faction, false);
             faction.Score += faction.GameTileList.Where(x => x is AllianceTile).Count() * 5;
             return true;
         }

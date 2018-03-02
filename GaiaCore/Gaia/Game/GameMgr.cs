@@ -391,7 +391,11 @@ namespace GaiaCore.Gaia
             if (string.IsNullOrEmpty(filename))
             {
                 var d = new DirectoryInfo(BackupDataPath);
-                filename = (from p in d.EnumerateFiles() orderby p.Name descending select p.Name).FirstOrDefault();
+#if DEBUG
+                filename = (from p in d.EnumerateFiles()  orderby p.Name descending select p.Name).FirstOrDefault();
+#else
+                filename = (from p in d.EnumerateFiles() where p.Length/1024>100 orderby p.Name descending select p.Name).FirstOrDefault();
+#endif
             }
             if (string.IsNullOrEmpty(filename))
             {

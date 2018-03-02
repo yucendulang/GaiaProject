@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using GaiaCore.Gaia.Game;
 using GaiaDbContext.Models.AccountViewModels;
 
 namespace GaiaCore.Gaia
@@ -465,6 +466,8 @@ namespace GaiaCore.Gaia
                 ActionList.Add(tile.GetType().Name.ToLower(), tile.InvokeGameTileAction);
             }
             tile.OneTimeAction(this);
+
+
         }
         //private int m_TransformLevel;
 
