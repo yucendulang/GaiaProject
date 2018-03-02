@@ -763,7 +763,14 @@ namespace GaiaProject.Controllers
         /// <returns></returns>
         public string UpdatenFinishFromDb()
         {
-            
+            //没有更细的游戏
+            IQueryable<string> queryable = this.dbContext.GameInfoModel.Where(item => item.saveState == 0).Select(item => item.name);
+            //游戏下面的项
+            IQueryable<GameFactionExtendModel> gameFactionExtendModels = this.dbContext.GameFactionExtendModel.Where(item => queryable.Contains(item.gameinfo_name));
+            //先删除重复的信息
+            this.dbContext.GameFactionExtendModel.RemoveRange(gameFactionExtendModels);
+            this.dbContext.SaveChanges();
+
             return UpdateFromDb(item => item.GameStatus == 8 && item.saveState==0);
         }
 
