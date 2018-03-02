@@ -33,6 +33,8 @@
     <None Remove="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Remove="Properties\PublishProfiles\gaiaproject2 - FTP.pubxml" />
     <None Remove="Properties\PublishProfiles\gaiaproject2 - Web Deploy.pubxml" />
+    <None Remove="Properties\PublishProfiles\gaiaproject3 - FTP.pubxml" />
+    <None Remove="Properties\PublishProfiles\gaiaproject3 - Web Deploy.pubxml" />
     <None Remove="Views\Shared\htmlpage.html" />
   </ItemGroup>
   <ItemGroup>
