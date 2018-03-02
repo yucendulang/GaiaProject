@@ -4,7 +4,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using GaiaCore.Gaia.Game;
+using GaiaDbContext.Models.HomeViewModels;
+using Remotion.Linq.Utilities;
 
 namespace GaiaCore.Gaia
 {
@@ -213,7 +217,11 @@ namespace GaiaCore.Gaia
             }
             if(GameTileList.Exists(x=>x.GetType()==type))
             {
+                
                 Score += GameTileList.Find(x => x.GetType() == type).GetTriggerScore;
+                //高级版得分统计
+                DbTTSave.Score(type,this.GaiaGame,this,true);
+
             }
         }
 

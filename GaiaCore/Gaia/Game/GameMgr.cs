@@ -36,6 +36,7 @@ namespace GaiaCore.Gaia
                 result.IsSocket = isSocket;//即时制
                 result.IsRotatoMap = IsRotatoMap;//旋转地图
                 result.version = version;
+
                 //开局的两条命令
                 result.Syntax(GameSyntax.setupmap + " " + MapSelection, out string log);
                 result.Syntax(GameSyntax.setupGame + seed, out log);
@@ -224,8 +225,10 @@ namespace GaiaCore.Gaia
             {
                 gg.version = item.Value.version;
             }
-            
-            
+
+            //设置用户信息
+            gg.SetUserInfo();
+
             try
             {
                 int rowIndex = 1;
@@ -388,7 +391,11 @@ namespace GaiaCore.Gaia
             if (string.IsNullOrEmpty(filename))
             {
                 var d = new DirectoryInfo(BackupDataPath);
-                filename = (from p in d.EnumerateFiles() orderby p.Name descending select p.Name).FirstOrDefault();
+#if DEBUG
+                filename = (from p in d.EnumerateFiles()  orderby p.Name descending select p.Name).FirstOrDefault();
+#else
+                filename = (from p in d.EnumerateFiles() where p.Length/1024>100 orderby p.Name descending select p.Name).FirstOrDefault();
+#endif
             }
             if (string.IsNullOrEmpty(filename))
             {

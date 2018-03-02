@@ -62,5 +62,19 @@ namespace GaiaDbContext.Models.HomeViewModels
         public Int16 ATT13 { get; set; }
         public Int16 ATT14 { get; set; }
         public Int16 ATT15 { get; set; }
+
+        ///得分
+        public Int16 ATT4Score { get; set; }
+        public Int16 ATT5Score { get; set; }
+        public Int16 ATT6Score { get; set; }
+        public Int16 ATT7Score { get; set; }
+        public Int16 ATT8Score { get; set; }
+        public Int16 ATT9Score { get; set; }
+        public Int16 ATT10Score { get; set; }
+        public Int16 ATT11Score { get; set; }
+        public Int16 ATT12Score { get; set; }
+        public Int16 ATT13Score { get; set; }
+        public Int16 ATT14Score { get; set; }
+        public Int16 ATT15Score { get; set; }
     }
 }
