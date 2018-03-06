@@ -218,7 +218,6 @@ namespace GaiaCore.Gaia
             gg.IsSaveToDb = item.Value.IsSaveToDb;//是否保存数据
             gg.dbContext = item.Value.dbContext;//数据源
 
-            gg.LastMoveTime = item.Value.LastMoveTime;
             gg.UserGameModels = item.Value.UserGameModels;//恢复设置
 
             if (item.Value.version == 0)
@@ -279,6 +278,9 @@ namespace GaiaCore.Gaia
                 }
                 System.Diagnostics.Debug.WriteLine(item.Key + ":" + ex.ToString());
             }
+            //上次时间
+            gg.LastMoveTime = item.Value.LastMoveTime;
+
 
             //需要加载到内存
             if (isTodict)
