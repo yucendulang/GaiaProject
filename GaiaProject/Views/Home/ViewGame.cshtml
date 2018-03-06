@@ -367,7 +367,7 @@ else
             </div>
             <button id="syn" type="button" class="btn btn-primary" style="width: 100px">保存</button>
             
-            @if (Model.GameStatus.stage == Stage.ROUNDSTART)
+            @if (Model.version>3 && Model.GameStatus.stage == Stage.ROUNDSTART)
             {
                 <button id="syn_pass" type="button" class="btn btn-primary" style="width: 100px" onclick="$('#syntax').val('pass turn');submitData();">结束操作</button>
             
