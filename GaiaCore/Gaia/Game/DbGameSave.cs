@@ -170,28 +170,36 @@ namespace GaiaCore.Gaia.Game
                 {
                     return;
                 }
-
                 string finalScore = string.Join(":",
                     gaiaGame.FactionList.OrderByDescending(item => item.Score)
                         .Select(item => string.Format("{0}{1}({2})", item.ChineseName,
                             item.Score, item.UserName)));
-                string title = $"游戏({gaiaGame.GameName})结束,{finalScore}";
-                string message = "http://totoman.online/Home/RestoreGame/" + gameinfo.Id.ToString();
-                //向全部玩家发送游戏结束提醒
-                try
+
+                //已经结束的不发送邮件
+                if (gameinfo.GameStatus == 8)
                 {
-                    foreach (string s in gaiaGame.Username)
+                   return;
+                }
+                else
+                {
+                     string title = $"游戏({gaiaGame.GameName})结束,{finalScore}";
+                    string message = "http://totoman.online/Home/RestoreGame/" + gameinfo.Id.ToString();
+                    //向全部玩家发送游戏结束提醒
+                    try
                     {
-                        ApplicationUser applicationUser = dbContext.Users.SingleOrDefault(user => user.UserName == s);
-                        if (applicationUser != null)
+                        foreach (string s in gaiaGame.Username)
                         {
-                            _emailSender?.SendEmailAsync(applicationUser.Email, title, message);
+                            ApplicationUser applicationUser = dbContext.Users.SingleOrDefault(user => user.UserName == s);
+                            if (applicationUser != null)
+                            {
+                                _emailSender?.SendEmailAsync(applicationUser.Email, title, message);
+                            }
                         }
                     }
-                }
-                catch (Exception e)
-                {
+                    catch (Exception e)
+                    {
 
+                    }
                 }
 
                 //保存
