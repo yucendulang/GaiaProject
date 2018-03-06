@@ -135,27 +135,29 @@ namespace GaiaCore.Gaia
                     {
                         //结束回合
                         ret = ProcessSyntaxCommand(syntax, ref log);
-                        if (ret && GameStatus.IsAllPass())
+                        //低版本检测PASS到下一位玩家
+                        if (version < 4)
                         {
-                            if (FactionList.All(x => x.LeechPowerQueue.Count == 0))
+                            if (ret && GameStatus.IsAllPass())
                             {
-                                FactionList = FactionNextTurnList;
-                                FactionNextTurnList = new List<Faction>();
-                                NewRound();
+                                if (FactionList.All(x => x.LeechPowerQueue.Count == 0))
+                                {
+                                    FactionList = FactionNextTurnList;
+                                    FactionNextTurnList = new List<Faction>();
+                                    NewRound();
+                                }
+                                else
+                                {
+                                    GameStatus.stage = Stage.ROUNDWAITLEECHPOWER;
+                                }
                             }
-                            else
+                            else if (ret)
                             {
-                                GameStatus.stage = Stage.ROUNDWAITLEECHPOWER;
-                            }
-                        }
-                        else if (ret)
-                        {
-                            //低版本直接到下一位玩家
-                            if (version < 4)
-                            {
+                                //低版本直接到下一位玩家
                                 GameStatus.NextPlayer();
                             }
                         }
+
 
                         return ret;
                     }
@@ -500,7 +502,7 @@ namespace GaiaCore.Gaia
             //升级科技
             if (isflag&& NoneFreeActionCount == 0) { faction.IsSingleAdvTechTrack = true; }
             //是否包含主要行动
-            bool isExitsAction = (NoneFreeActionCount==1&&!isflag) || (NoneFreeActionCount == 0 && isflag);
+            bool isExitsAction = (NoneFreeActionCount==1 || isflag);
             //判断是否唯一主要行动
             if (isExitsAction && this.version>3){
                 //是否执行过主要行动
@@ -690,12 +692,15 @@ namespace GaiaCore.Gaia
                     {
                         return false;
                     }
-                    Action action = () =>
-                    {
-                        FactionNextTurnList.Add(faction);
-                        GameStatus.SetPassPlayerIndex(FactionList.IndexOf(faction));
-                    };
-                    faction.ActionQueue.Enqueue(action);
+                    //立即执行
+                    FactionNextTurnList.Add(faction);
+                    GameStatus.SetPassPlayerIndex(FactionList.IndexOf(faction));
+                    //                    Action action = () =>
+                    //                    {
+                    //                        FactionNextTurnList.Add(faction);
+                    //                        GameStatus.SetPassPlayerIndex(FactionList.IndexOf(faction));
+                    //                    };
+                    //                    faction.ActionQueue.Enqueue(action);
                 }
                 else if (GameSyntax.actionRegex.IsMatch(item))
                 {
@@ -918,14 +923,34 @@ namespace GaiaCore.Gaia
                     {
                         //复位玩家执行主要行动
                         faction.IsActionBurn = false;
-                        //到下一位玩家
-                        GameStatus.NextPlayer();
+                        //回合结束
+                        if (GameStatus.IsAllPass())
+                        {
+                            if (FactionList.All(x => x.LeechPowerQueue.Count == 0))
+                            {
+                                FactionList = FactionNextTurnList;
+                                FactionNextTurnList = new List<Faction>();
+                                NewRound();
+                            }
+                            else
+                            {
+                                GameStatus.stage = Stage.ROUNDWAITLEECHPOWER;
+                            }
+                        }
+                        else
+                        {
+                            //到下一位玩家
+                            GameStatus.NextPlayer();
+                        }
                     }
                     else
                     {
                         log = "还没有执行主要行动";
                         return false;
                     }
+
+
+
                 }
                 //重置当论操作
                 else if (GameFreeSyntax.ResetRegexTurn.IsMatch(item))
@@ -1157,23 +1182,37 @@ namespace GaiaCore.Gaia
                 log = string.Format("{0}板子不存在", rbtStr);
                 return false;
             }
-            Action action = () =>
+            //立即执行
+            faction.GameTileList.ForEach(y => faction.Score += y.GetTurnEndScore(faction));
+            if (faction.GameTileList.Exists(x => x is RoundBooster))
             {
-            //回合结束计分
-                faction.GameTileList.ForEach(y => faction.Score += y.GetTurnEndScore(faction));
-                if (faction.GameTileList.Exists(x => x is RoundBooster))
-                {
-                    var ret = faction.GameTileList.Find(x => x is RoundBooster) as RoundBooster;
-                    RBTList.Add(ret);
-                    faction.GameTileList.Remove(ret);
-                    ret.IsUsed = false; ;
-                    faction.PredicateActionList.Remove(ret.GetType().Name.ToLower());
-                    faction.ActionList.Remove(ret.GetType().Name.ToLower());
-                }
-                faction.AddGameTiles(rbt);
-                RBTList.Remove(rbt);
-            };
-            faction.ActionQueue.Enqueue(action);
+                var ret = faction.GameTileList.Find(x => x is RoundBooster) as RoundBooster;
+                RBTList.Add(ret);
+                faction.GameTileList.Remove(ret);
+                ret.IsUsed = false; ;
+                faction.PredicateActionList.Remove(ret.GetType().Name.ToLower());
+                faction.ActionList.Remove(ret.GetType().Name.ToLower());
+            }
+            faction.AddGameTiles(rbt);
+            RBTList.Remove(rbt);
+
+//            Action action = () =>
+//            {
+//            //回合结束计分
+//                faction.GameTileList.ForEach(y => faction.Score += y.GetTurnEndScore(faction));
+//                if (faction.GameTileList.Exists(x => x is RoundBooster))
+//                {
+//                    var ret = faction.GameTileList.Find(x => x is RoundBooster) as RoundBooster;
+//                    RBTList.Add(ret);
+//                    faction.GameTileList.Remove(ret);
+//                    ret.IsUsed = false; ;
+//                    faction.PredicateActionList.Remove(ret.GetType().Name.ToLower());
+//                    faction.ActionList.Remove(ret.GetType().Name.ToLower());
+//                }
+//                faction.AddGameTiles(rbt);
+//                RBTList.Remove(rbt);
+//            };
+//            faction.ActionQueue.Enqueue(action);
             return true;
         }
 

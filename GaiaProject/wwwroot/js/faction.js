@@ -217,7 +217,7 @@ if (userInfo.isRound) {
             if (number > 0) {
                 for (var i = 0; i < number; i++) {
                     //oldcode = $("#syntax").val();
-                    nowcode = value + ".";
+                    nowcode = nowcode + value + ".";
                 }
                 nowcode = nowcode.substr(0,nowcode.length-1);
             }
