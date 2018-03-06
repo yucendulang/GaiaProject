@@ -217,6 +217,7 @@ namespace GaiaCore.Gaia
             gg.IsRotatoMap = item.Value.IsRotatoMap;//旋转地图
             gg.IsSaveToDb = item.Value.IsSaveToDb;//是否保存数据
             gg.dbContext = item.Value.dbContext;//数据源
+            gg.UserGameModels = item.Value.UserGameModels;//恢复设置
             if (item.Value.version == 0)
             {
                 gg.version = 1;
