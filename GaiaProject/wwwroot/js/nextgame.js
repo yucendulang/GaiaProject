@@ -12,7 +12,7 @@ function GetNextGame() {
     if (obj.length===0 || obj.val().indexOf("True") === -1) {
         $.post("/home/GetNextGame",
             {
-                name: $("input#username").val()
+                name: $("#username").val()
             },
             function (data, status) {
                 if (data == undefined || data === "") {

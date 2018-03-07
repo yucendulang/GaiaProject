@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using GaiaCore.Gaia.Game;
 using GaiaDbContext.Models.AccountViewModels;
 using GaiaDbContext.Models.HomeViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace GaiaCore.Gaia
 {
@@ -41,24 +42,40 @@ namespace GaiaCore.Gaia
             LastMoveTime = DateTime.Now;
             LogEntityList = new List<LogEntity>();
 
+
+
+        }
+
+        /// <summary>
+        /// 设置用户信息
+        /// </summary>
+        public void SetUserInfo()
+        {
             //用户列表，配置信息
-            this.UserGameModels = new List<UserGameModel>();
-            foreach (string item in username)
+            if (this.UserGameModels == null)
             {
-                this.UserGameModels.Add(new UserGameModel()
+                this.UserGameModels = new List<UserGameModel>();
+                foreach (string item in this.Username)
                 {
-                    username = item,
-                    isTishi = true,
-                });
+                    this.UserGameModels.Add(new UserGameModel()
+                    {
+                        username = item,
+                        isTishi = true,
+                        paygrade = this.dbContext?.Users.SingleOrDefault(user => user.UserName == item)?.paygrade,
+                    });
+                }
             }
         }
+
         public bool ProcessSyntax(string user, string syntax, out string log)
         {
-            ///此处为打版本标记之处
-            if (version == 0)
-            {
-                version = 2;
-            }
+            /////此处为打版本标记之处
+            //if (version == 0)
+            //{
+            //    //version = 2;
+            //    //地图变更，版本改为3
+            //    version = 3;
+            //}
             log = string.Empty;
             syntax = syntax.ToLower();
             bool ret;
@@ -116,31 +133,31 @@ namespace GaiaCore.Gaia
                     }
                     else
                     {
+                        //结束回合
                         ret = ProcessSyntaxCommand(syntax, ref log);
-                        if (ret && GameStatus.IsAllPass())
+                        //低版本检测PASS到下一位玩家
+                        if (version < 4)
                         {
-                            if (FactionList.All(x => x.LeechPowerQueue.Count == 0))
+                            if (ret && GameStatus.IsAllPass())
                             {
-                                FactionList = FactionNextTurnList;
-                                FactionNextTurnList = new List<Faction>();
-                                NewRound();
+                                if (FactionList.All(x => x.LeechPowerQueue.Count == 0))
+                                {
+                                    FactionList = FactionNextTurnList;
+                                    FactionNextTurnList = new List<Faction>();
+                                    NewRound();
+                                }
+                                else
+                                {
+                                    GameStatus.stage = Stage.ROUNDWAITLEECHPOWER;
+                                }
                             }
-                            else
+                            else if (ret)
                             {
-                                GameStatus.stage = Stage.ROUNDWAITLEECHPOWER;
-                            }
-                        }
-                        else if (ret)
-                        {
-#if DEBUG
-                            if (!syntax.EndsWith("qc"))
-                            {
+                                //低版本直接到下一位玩家
                                 GameStatus.NextPlayer();
                             }
-#else
-                            GameStatus.NextPlayer();
-#endif
                         }
+
 
                         return ret;
                     }
@@ -338,7 +355,7 @@ namespace GaiaCore.Gaia
             }
 
             //保存结果到数据库
-            GameSave.SaveGameToDb(this.dbContext,this);
+            DbGameSave.SaveGameToDb(this.dbContext,this);
         }
 
         private void IncomePhaseNextPlayer()
@@ -481,14 +498,36 @@ namespace GaiaCore.Gaia
             var commandList = command.Split('.').Where(x=>!string.IsNullOrEmpty(x));
             //非免费行动只能执行一个
             var NoneFreeActionCount=commandList.Sum(y => GameFreeSyntax.GetRegexList().Exists(x => x.IsMatch(y)) ? 0 : 1);
-            if (NoneFreeActionCount == 0 && commandList.ToList().Exists(x => GameFreeSyntax.advTechRegex2.IsMatch(x))){
-                faction.IsSingleAdvTechTrack = true;
+            bool isflag = commandList.ToList().Exists(x => GameFreeSyntax.advTechRegex2.IsMatch(x));
+            //升级科技
+            if (isflag&& NoneFreeActionCount == 0) { faction.IsSingleAdvTechTrack = true; }
+            //是否包含主要行动
+            bool isExitsAction = (NoneFreeActionCount==1 || isflag);
+            //判断是否唯一主要行动
+            if (isExitsAction && this.version>3){
+                //是否执行过主要行动
+                if (faction.IsActionBurn)
+                {
+                    log = "已经执行过主要行动";
+                    return false;
+                }
+                //临时设置已经执行主要行动
+                faction.IsActionBurn = true;
+
             }
-            else if (NoneFreeActionCount != 1)
+            //主要行动次数过多
+            else if (NoneFreeActionCount > 1)
             {
-                log = "能且只能执行一个普通行动";
+                log = "能且只能执行一个主要行动";
                 return false;
             }
+            //判断是否执行主要行动
+//            if (NoneFreeActionCount !=1)
+//            {
+//                log = "主要行动只能执行一次";
+//                return false;
+//            }
+
             //能接建造行动的action也只能用一个
             if (commandList.Sum(y => GameFreeSyntax.actionRegex.IsMatch(y) ? 1 : 0) > 1)
             {
@@ -497,6 +536,11 @@ namespace GaiaCore.Gaia
             }
             var ret=ProcessCommandWithBackup(commandList.ToArray(),faction,out log);
             faction.ResetUnfinishAction();
+            //如果执行没有成功
+            if (isExitsAction && !ret)
+            {
+                faction.IsActionBurn = false;
+            }
             return ret;
         }
         private bool ProcessCommandWithBackup(string[] commandList, Faction faction, out string log)
@@ -648,12 +692,15 @@ namespace GaiaCore.Gaia
                     {
                         return false;
                     }
-                    Action action = () =>
-                    {
-                        FactionNextTurnList.Add(faction);
-                        GameStatus.SetPassPlayerIndex(FactionList.IndexOf(faction));
-                    };
-                    faction.ActionQueue.Enqueue(action);
+                    //立即执行
+                    FactionNextTurnList.Add(faction);
+                    GameStatus.SetPassPlayerIndex(FactionList.IndexOf(faction));
+                    //                    Action action = () =>
+                    //                    {
+                    //                        FactionNextTurnList.Add(faction);
+                    //                        GameStatus.SetPassPlayerIndex(FactionList.IndexOf(faction));
+                    //                    };
+                    //                    faction.ActionQueue.Enqueue(action);
                 }
                 else if (GameSyntax.actionRegex.IsMatch(item))
                 {
@@ -813,7 +860,13 @@ namespace GaiaCore.Gaia
                     ConvertPosToRowCol(pos, out int row, out int col);
                     if (!faction.BuildBlackPlanet(row, col, out log))
                     {
+                        faction.blankMine = 0;
                         return false;
+                    }
+                    else
+                    {
+                        //成功放置黑星的话
+                        faction.blankMine = 1;
                     }
 
                 }
@@ -862,12 +915,106 @@ namespace GaiaCore.Gaia
                         return false;
                     }
                 }
-#if Debug
-                else if (item.Contains("qc"))
+                //结束回合
+                else if (GameFreeSyntax.PassRegexTurn.IsMatch(item))
                 {
+                    //执行过主要行动
+                    if (faction.IsActionBurn)
+                    {
+                        //复位玩家执行主要行动
+                        faction.IsActionBurn = false;
+                        //回合结束
+                        if (GameStatus.IsAllPass())
+                        {
+                            if (FactionList.All(x => x.LeechPowerQueue.Count == 0))
+                            {
+                                FactionList = FactionNextTurnList;
+                                FactionNextTurnList = new List<Faction>();
+                                NewRound();
+                            }
+                            else
+                            {
+                                GameStatus.stage = Stage.ROUNDWAITLEECHPOWER;
+                            }
+                        }
+                        else
+                        {
+                            //到下一位玩家
+                            GameStatus.NextPlayer();
+                        }
+                    }
+                    else
+                    {
+                        log = "还没有执行主要行动";
+                        return false;
+                    }
+
+
 
                 }
-#endif
+                //重置当论操作
+                else if (GameFreeSyntax.ResetRegexTurn.IsMatch(item))
+                {
+                    //当前用户
+                    var myUser = this.UserGameModels.Find(user => user.username == GetCurrentUserName());
+                    if (myUser != null)
+                    {
+                        if (myUser.resetNumber > 0)
+                        {
+                            //重置参数-1
+                            myUser.resetNumber--;
+
+                            var syntaxList = this.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                            //删除日志
+                            for (int i = syntaxList.Count - 1; i > 0; i--)
+                            {
+                                string str = syntaxList[i];
+                                var list = str.Split(':');
+                                //隔开
+                                if (list.Length == 2)
+                                {
+                                    //当前种族操作
+                                    if (list[0] == faction.FactionName.ToString())
+                                    {
+                                        syntaxList.RemoveAt(i);
+                                    }
+                                    //不是当前种族
+                                    else
+                                    {
+                                        //跳过吸收能量
+                                        if (GameSyntax.leechPowerRegex.IsMatch(list[1]) || GameSyntax.downgradeRegex.IsMatch(list[1]))
+                                        {
+
+                                        }
+                                        //如果是pass ，终止
+                                        else if (GameFreeSyntax.PassRegexTurn.IsMatch(list[1]))
+                                        {
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    syntaxList.RemoveAt(i);
+                                }
+                                //if (list[0])
+                            }
+                            this.UserActionLog = string.Join("\r\n", syntaxList);
+                            //重置游戏
+                            GameMgr.RestoreGame(this.GameName, this, isToDict: true);
+                        }
+                        else
+                        {
+                            log = "不能进行重置";
+                            return false;
+                        }
+
+                    }
+                }
                 else
                 {
                     log = "语句还不支持";
@@ -883,10 +1030,24 @@ namespace GaiaCore.Gaia
             {
                 item.Invoke();
             }
+            //检测q,o,c,k是否小于0
+            if (faction.QICs < 0 || faction.Ore < 0 || faction.Credit < 0 || faction.Knowledge < 0 ||faction.PowerToken2<0 || faction.PowerToken3<0)
+            {
+                log = "资源不够";
+                //重新执行全部操作，重新恢复游戏
+                GameMgr.RestoreGame(this.GameName, this, true);
+                return false;
+            }
 
             return true;
         }
-
+        /// <summary>
+        /// 拿取科技版
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="faction"></param>
+        /// <param name="log"></param>
+        /// <returns></returns>
         private bool GetTechTile(string item,Faction faction,out string log)
         {
             log = string.Empty;
@@ -950,6 +1111,7 @@ namespace GaiaCore.Gaia
                 log = string.Format("玩家曾经获得过该板块{0}", tile.GetType().Name);
                 return false;
             }
+            
             Action queue = () =>
             {
                 if (ATTList.Exists(x => string.Compare(x.GetType().Name, techTileStr, true) == 0))
@@ -972,6 +1134,9 @@ namespace GaiaCore.Gaia
                     STT3List.Remove(tile as StandardTechnology);
                 }
                 faction.AddGameTiles(tile);
+                //数据库保存拿版记录
+                DbGameSave.SaveTTData(this,faction,techTileStr);
+
             };
             faction.ActionQueue.Enqueue(queue);
             faction.TechTilesGet--;
@@ -1017,23 +1182,37 @@ namespace GaiaCore.Gaia
                 log = string.Format("{0}板子不存在", rbtStr);
                 return false;
             }
-            Action action = () =>
+            //立即执行
+            faction.GameTileList.ForEach(y => faction.Score += y.GetTurnEndScore(faction));
+            if (faction.GameTileList.Exists(x => x is RoundBooster))
             {
-            //回合结束计分
-                faction.GameTileList.ForEach(y => faction.Score += y.GetTurnEndScore(faction));
-                if (faction.GameTileList.Exists(x => x is RoundBooster))
-                {
-                    var ret = faction.GameTileList.Find(x => x is RoundBooster) as RoundBooster;
-                    RBTList.Add(ret);
-                    faction.GameTileList.Remove(ret);
-                    ret.IsUsed = false; ;
-                    faction.PredicateActionList.Remove(ret.GetType().Name.ToLower());
-                    faction.ActionList.Remove(ret.GetType().Name.ToLower());
-                }
-                faction.AddGameTiles(rbt);
-                RBTList.Remove(rbt);
-            };
-            faction.ActionQueue.Enqueue(action);
+                var ret = faction.GameTileList.Find(x => x is RoundBooster) as RoundBooster;
+                RBTList.Add(ret);
+                faction.GameTileList.Remove(ret);
+                ret.IsUsed = false; ;
+                faction.PredicateActionList.Remove(ret.GetType().Name.ToLower());
+                faction.ActionList.Remove(ret.GetType().Name.ToLower());
+            }
+            faction.AddGameTiles(rbt);
+            RBTList.Remove(rbt);
+
+//            Action action = () =>
+//            {
+//            //回合结束计分
+//                faction.GameTileList.ForEach(y => faction.Score += y.GetTurnEndScore(faction));
+//                if (faction.GameTileList.Exists(x => x is RoundBooster))
+//                {
+//                    var ret = faction.GameTileList.Find(x => x is RoundBooster) as RoundBooster;
+//                    RBTList.Add(ret);
+//                    faction.GameTileList.Remove(ret);
+//                    ret.IsUsed = false; ;
+//                    faction.PredicateActionList.Remove(ret.GetType().Name.ToLower());
+//                    faction.ActionList.Remove(ret.GetType().Name.ToLower());
+//                }
+//                faction.AddGameTiles(rbt);
+//                RBTList.Remove(rbt);
+//            };
+//            faction.ActionQueue.Enqueue(action);
             return true;
         }
 
@@ -1227,9 +1406,9 @@ namespace GaiaCore.Gaia
                 SpaceSector newSector= spaceSector;
                 for (int i = 0; i < bs; i++)
                 {
-                    newSector = newSector?.Rotate(fx == "1");
+                    newSector = newSector?.Rotate(isClockwise:fx == "1",version:this.version);
                 }
-                if (newSector != null) this.Map.AddSpaceSector(x, y, newSector, null);
+                if (newSector != null) this.Map.AddSpaceSector(x, y, newSector, null,this.version);
 //                var seed = syntax.Substring(GameSyntax.setupGame.Length).ParseToInt(0);
 //                GameStart(syntax, seed);
 //                ChangeGameStatus(Stage.ROUNDSTART);
@@ -1241,13 +1420,16 @@ namespace GaiaCore.Gaia
         /// <summary>
         /// 数据库操作
         /// </summary>
-        private ApplicationDbContext dbContext;
+        public ApplicationDbContext dbContext;
 
         public string syntax;//最后一条保存
         public void Syntax(string syntax, out string log, string user = "",ApplicationDbContext dbContext = null)
         {
-            //赋值
-            this.dbContext = dbContext;
+            if (this.dbContext == null)
+            {
+                //赋值
+                this.dbContext = dbContext;
+            }
             this.syntax = syntax;
 
             try
@@ -1363,44 +1545,48 @@ namespace GaiaCore.Gaia
             }
             UserDic[user].Add(FactionList.Last());
             FactionList.Last().UserName = user;
+            //赋值usermodel
+            FactionList.Last().UserGameModel = this.UserGameModels?.Find(userGame => userGame.username == user);
         }
 
         private void GameStart(string syntax, int i = 0)
         {
             Seed = i == 0 ? RandomInstance.Next(int.MaxValue) : i;
             var random = new Random(Seed);
+            //实例化地图
+            MapMgr mapMgr=new MapMgr(this);
             if (MapSelection == MapSelection.randomall4p)
             {
-                Map = new MapMgr().Get4PAllRandomMap(random);
-                //Map = new MapMgr().Get4PRandomMap(random);
+                Map = mapMgr.Get4PAllRandomMap(random);
+                //Map = mapMgr.Get4PRandomMap(random);
             }
             else if (MapSelection == MapSelection.random4p)
             {
-                Map = new MapMgr().Get4PRandomMap(random);
+                Map = mapMgr.Get4PRandomMap(random);
             }
             else if (MapSelection == MapSelection.fix2p)
             {
-                Map = new MapMgr().Get2PFixedMap();
+                Map = mapMgr.Get2PFixedMap();
             }
             else if (MapSelection == MapSelection.random2p)
             {
-                Map = new MapMgr().Get2PRandomMap(random);
+                Map = mapMgr.Get2PRandomMap(random);
             }
             else if (MapSelection == MapSelection.random3p)
             {
-                Map = new MapMgr().Get3PRandomMap(random);
+                Map = mapMgr.Get3PRandomMap(random);
             }
             else if (MapSelection == MapSelection.fix3p)
             {
-                Map = new MapMgr().Get3PFixedMap();
+                Map = mapMgr.Get3PFixedMap();
             }
             else if (MapSelection == MapSelection.fix4p)
             {
-                Map = new MapMgr().Get4PFixedMap();
+                Map = mapMgr.Get4PFixedMap();
             }
             else
             {
-                Map = new MapMgr().Get4PFixedMap();
+                Map = mapMgr.Get4PFixedMap();
             }
 
             ATTList = ATTMgr.GetRandomList(6, random);
@@ -1433,14 +1619,27 @@ namespace GaiaCore.Gaia
         {
             foreach(var item in FactionList.Where(x => !x.FactionName.Equals(factionName)))
             {
-                //如果是第六回合并且PASS的玩家不需要吸收魔力
-                if (this.GameStatus.RoundCount == 6 && this.FactionNextTurnList.Contains(item))
-                {
-                    continue;
-                }
+
                 var power=Map.CalHighestPowerBuilding(row,col,item);
+               
                 if (power != 0)
                 {
+                    //如果是第六回合并且PASS的玩家只需要吸收1魔力
+                    if (this.GameStatus.RoundCount == 6 && this.FactionNextTurnList.Contains(item))
+                    {
+                        //如果吸收1魔力
+                        if (power == 1)
+                        {
+                            item.PowerIncrease(1);
+                        }
+                        //或者最多吸收1魔力
+                        else if (item.PowerToken1==0 && item.PowerToken2==1)
+                        {
+                            item.PowerIncrease(1);
+                        }
+                        continue;
+                    }
+
                     item.LeechPowerQueue.Add(new Tuple<int, FactionName>(power, factionName));
                 }
             }
@@ -1610,6 +1809,12 @@ namespace GaiaCore.Gaia
         /// </summary>
         [JsonProperty]
         public bool IsRotatoMap { get; set; }
+
+
+        /// <summary>
+        /// 开始保存数据到数据库
+        /// </summary>
+        public bool IsSaveToDb { get; set; }
 
         public class STTInfo
         {

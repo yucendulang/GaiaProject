@@ -19,10 +19,12 @@ namespace ManageTool
             var gamelist = GameMgr.GetAllGameName();
             foreach (var item in gamelist)
             {
+                //删除结束游戏
                 if (GameMgr.GetGameByName(item).GameStatus.stage == Stage.GAMEEND)
                 {
                     GameMgr.RemoveAndBackupGame(item);
                 }
+                //删除超过4天游戏
                 if (DateTime.Now.AddDays(-4) > GameMgr.GetGameByName(item).LastMoveTime)
                 {
                     GameMgr.RemoveAndBackupGame(item);

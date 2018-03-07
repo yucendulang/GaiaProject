@@ -22,6 +22,11 @@ namespace Gaia.Service
         }
 
 
+        public const string qqemail = "3031518365@qq.com";
+        public const string qqemail_user = "3031518365";
+        public const string qqemail_pwd = "otvgxwazalghdcfa";
+
+
         /// <summary>
         /// 发送邮件
         /// </summary>
@@ -32,7 +37,7 @@ namespace Gaia.Service
         public static bool SendEmail(string mailTo, string mailSubject, string mailContent)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("Gaia Project", "325153468@qq.com"));
+            message.From.Add(new MailboxAddress("Gaia Project", qqemail));
             //message.To.Add(new MailboxAddress("Mrs. Chanandler Bong", "84320362@qq.com"));
             message.To.Add(new MailboxAddress(mailTo, mailTo));
 
@@ -53,7 +58,7 @@ namespace Gaia.Service
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
 
                 // Note: only needed if the SMTP server requires authentication
-                client.Authenticate("325153468", "tvneoqqqpdkfbgci");
+                client.Authenticate(qqemail_user, qqemail_pwd);
 
                 client.Send(message);
                 client.Disconnect(true);

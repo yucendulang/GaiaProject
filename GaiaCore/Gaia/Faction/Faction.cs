@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using GaiaCore.Gaia.Game;
 using GaiaDbContext.Models.AccountViewModels;
 
 namespace GaiaCore.Gaia
@@ -131,7 +132,7 @@ namespace GaiaCore.Gaia
         public const int m_MineOreCost = 1;
         public const int m_MineCreditCost = 2;
         //统计用的一些数据
-        public TimeSpan ClockPerid;
+        public TimeSpan ClockPerid { get; set; }
         //一些不会变的常量
         protected const int m_TradeCenterOreCost = 2;
         protected const int m_TradeCenterCreditCostCluster = 3;
@@ -152,6 +153,10 @@ namespace GaiaCore.Gaia
         /// </summary>
         public string ChineseName { get; set; }
         public string UserName { get; set; }
+        /// <summary>
+        /// 选择种族的用户
+        /// </summary>
+        public UserGameModel UserGameModel { get; set; }
 
         //种族颜色
         // 0-人类 1-逢人 2-炽焰 3-格伦 4-大使 5-章鱼 6-伊塔
@@ -210,6 +215,11 @@ namespace GaiaCore.Gaia
         {
             //判断最大吸收能量
             var ret = Math.Min(PowerToken1*2 + PowerToken2, i);
+//            //如果最大吸收0能量，则跳过
+//            if (ret == 0)
+//            {
+//                return 0;
+//            }
             if (PowerToken1 > i)
             {
                 PowerToken1 -= i;
@@ -456,6 +466,8 @@ namespace GaiaCore.Gaia
                 ActionList.Add(tile.GetType().Name.ToLower(), tile.InvokeGameTileAction);
             }
             tile.OneTimeAction(this);
+
+
         }
         //private int m_TransformLevel;
 

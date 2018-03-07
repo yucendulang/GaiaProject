@@ -62,6 +62,10 @@
                             <a class="btn btn-info" href="#"  onclick="resetpwd('@item.Id')">
                                 重置密码
                             </a>
+
+@*                            <a class="btn btn-info" href="#"  onclick="setPayGrade('@item.Id')">*@
+@*                                付费用户*@
+@*                            </a>*@
                         }
                         
 
@@ -95,6 +99,7 @@
 @Html.Partial("Partial_PageInfo", Model)
 
 <script>
+    //重置密码
     function resetpwd(id) {
         $.post("/UserFriend/ResetPwd/"+id, "", function(data) {
             //alert(data);
@@ -103,4 +108,13 @@
             }
         });
     }
+    //设置成付费用户
+//    function setPayGrade(id) {
+//        $.post("/UserFriend/ResetPwd/"+id, "", function(data) {
+//            //alert(data);
+//            if (data.info.state === 200 && data.info.message ==="Succeeded") {
+//                alert("密码已经重置为12345678");
+//            }
+//        });
+//    }
 </script>

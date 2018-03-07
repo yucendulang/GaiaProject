@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GaiaDbContext.Models;
 using GaiaDbContext.Models.SystemModels;
 using GaiaProject.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -161,6 +162,21 @@ namespace GaiaProject.Controllers
             {
                 this.dbContext.DonateRecordModel.Add(newModel);
             }
+
+            //修改用户的等级
+            ApplicationUser singleOrDefault = this.dbContext.Users.SingleOrDefault(item => item.UserName == newModel.donateuser);
+            if (singleOrDefault == null)
+            {
+                throw new Exception("找不到次用户");
+            }
+            else
+            {
+                //更新用户信息
+                singleOrDefault.paygrade = 1;
+                this.dbContext.Users.Update(singleOrDefault);
+            }
+
+
             this.dbContext.SaveChanges();
             return Redirect("/Admin/DonateIndex");
         }
@@ -180,11 +196,25 @@ namespace GaiaProject.Controllers
             switch (type)
             {
                 case "donate":
-                    var donateRecordModel = this.dbContext.DonateRecordModel.SingleOrDefault(item => item.id == id);
+                    DonateRecordModel donateRecordModel = this.dbContext.DonateRecordModel.SingleOrDefault(item => item.id == id);
                     if (donateRecordModel != null)
                     {
                         this.dbContext.DonateRecordModel.Remove(donateRecordModel);
                         this.dbContext.SaveChanges();
+                        //查询捐赠记录是否为空
+                        if (!this.dbContext.DonateRecordModel.Any(
+                            item => item.donateuser == donateRecordModel.donateuser))
+                        {
+                            //取消用户等级
+                            ApplicationUser applicationUser = this.dbContext.Users.SingleOrDefault(item=>item.UserName==donateRecordModel.donateuser);
+                            if (applicationUser != null)
+                            {
+                                applicationUser.paygrade = 0;
+                                this.dbContext.Users.Update(applicationUser);
+                                this.dbContext.SaveChanges();
+                            }
+                        }
+
                     }
                     break;
             }

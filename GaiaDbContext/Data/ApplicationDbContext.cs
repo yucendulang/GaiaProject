@@ -49,6 +49,11 @@ namespace GaiaProject.Data
         public DbSet<GameFactionModel> GameFactionModel { get; set; }
 
         /// <summary>
+        /// 种族扩展信息
+        /// </summary>
+        public DbSet<GameFactionExtendModel> GameFactionExtendModel { get; set; }
+
+        /// <summary>
         /// 删除游戏请求
         /// </summary>
         public DbSet<GameDeleteModel> GameDeleteModel { get; set; }

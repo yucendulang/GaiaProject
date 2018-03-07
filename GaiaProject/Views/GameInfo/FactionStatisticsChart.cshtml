@@ -1,0 +1,230 @@
+﻿@using GaiaProject.Models.Data
+@model System.Collections.Generic.List<GaiaProject.Models.Data.GameInfoController.StatisticsFaction>
+
+@{
+    ViewBag.Title = "种族统计";
+    Layout = "_Layout";
+}
+<script src="~/lib/echarts/echarts.common.min.js"></script>
+<h2>种族统计</h2>
+<!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+<div id="main" style="width: 1400px;height:400px;"></div>
+
+<div id="chart_winprobability" style="width: 1400px;height:400px;"></div>
+
+<div id="chart_OccurrenceRate" style="width: 1400px;height:400px;"></div>
+
+<div id="chart_scoreavg" style="width: 1400px;height:400px;"></div>
+
+<div>
+
+</div>
+
+<script type="text/javascript">
+
+
+    function initChart_series(nameChart, controlName, data_x, series) {
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById(controlName));
+
+        // 指定图表的配置项和数据
+        option = {
+            title: {
+                text: nameChart
+            },
+            //color: ['#3398DB'],
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data: data_x,
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series: series
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+
+    function initChart(nameChart,controlName,data_x,data_y) {
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById(controlName));
+
+        // 指定图表的配置项和数据
+        option = {
+            title: {
+                text: nameChart
+            },
+            color: ['#3398DB'],
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data: data_x,
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+                {
+                    name: nameChart,
+                    type:'bar',
+                    barWidth: '60%',
+                    data: data_y,
+                    //顶部数字展示pzr
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: true,//是否展示
+                                position:'top',
+                                textStyle: {
+                                    fontWeight:'bolder',
+                                    fontSize : '12',
+                                    fontFamily : '微软雅黑',
+                                }
+                            }
+                        }
+                    }
+                }
+            ],
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+
+
+
+
+    data_juname = [@Html.Raw(string.Join(",", Model.Select(item => "'"+ item.ChineseName + "'")))];
+    data_junumber = [@string.Join(",", Model.Select(item => item.count))];
+
+    initChart_series("局数/胜场", "main", data_juname, [
+        {
+            name:'局数',
+            type: 'bar',
+            stack: '统计',
+            data: data_junumber,
+            //顶部数字展示pzr
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true,//是否展示
+                        //position:'top',
+                        textStyle: {
+                            fontWeight:'bolder',
+                            fontSize : '12',
+                            fontFamily : '微软雅黑',
+                        }
+                    }
+                }
+            }
+        },
+        {
+            name:'胜场',
+            type:'bar',
+            stack: '统计',
+            data: [@string.Join(",", Model.Select(item => item.numberwin))],
+            //顶部数字展示pzr
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true,//是否展示
+                        //position:'top',
+                        textStyle: {
+                            fontWeight:'bolder',
+                            fontSize : '12',
+                            fontFamily : '微软雅黑',
+                        }
+                    }
+                }
+            }
+        }]
+    );
+
+
+    initChart_series("胜率/出场率", "chart_winprobability", [@Html.Raw(string.Join(",", @Model.OrderByDescending(item=>item.winprobability).Select(item => "'"+ item.ChineseName + "'")))], [
+            {
+            name:'胜率',
+                type: 'bar',
+                stack: '统计',
+                data: [@string.Join(",", Model.OrderByDescending(item => item.winprobability).Select(item => item.winprobability))],
+                //顶部数字展示pzr
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,//是否展示
+                            //position:'top',
+                            textStyle: {
+                                fontWeight:'bolder',
+                                fontSize : '12',
+                                fontFamily : '微软雅黑',
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                name:'出场率',
+                type:'bar',
+                stack: '统计',
+                data: [@string.Join(",", Model.OrderByDescending(item => item.winprobability).Select(item => item.OccurrenceRate))],
+                //顶部数字展示pzr
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,//是否展示
+                            //position:'top',
+                            textStyle: {
+                                fontWeight:'bolder',
+                                fontSize : '12',
+                                fontFamily : '微软雅黑',
+                            }
+                        }
+                    }
+                }
+            }]
+    );
+
+    //initChart("胜率","chart_winprobability", [@Html.Raw(string.Join(",", @Model.OrderByDescending(item=>item.winprobability).Select(item => "'"+ item.ChineseName + "'")))], [@string.Join(",", Model.OrderByDescending(item => item.winprobability).Select(item => item.winprobability))]);
+
+    initChart("出场率","chart_OccurrenceRate", [@Html.Raw(string.Join(",", @Model.OrderByDescending(item=>item.OccurrenceRate).Select(item => "'"+ item.ChineseName + "'")))], [@string.Join(",", Model.OrderByDescending(item => item.OccurrenceRate).Select(item => item.OccurrenceRate))]);
+
+    initChart("平均分","chart_scoreavg", [@Html.Raw(string.Join(",", @Model.OrderByDescending(item=>item.scoreavg).Select(item => "'"+ item.ChineseName + "'")))], [@string.Join(",", Model.OrderByDescending(item => item.scoreavg).Select(item => item.scoreavg))]);
+
+</script>

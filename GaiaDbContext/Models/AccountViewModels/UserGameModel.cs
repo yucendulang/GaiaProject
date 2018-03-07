@@ -11,6 +11,7 @@ namespace GaiaDbContext.Models.AccountViewModels
         public UserGameModel()
         {
             this.isTishi = true;
+            this.resetNumber = 5;
         }
         /// <summary>
         /// 用户名
@@ -33,5 +34,21 @@ namespace GaiaDbContext.Models.AccountViewModels
         [JsonProperty]
 
         public bool isSocket { get; set; }
+
+        /// <summary>
+        /// 重置阐述
+        /// </summary>
+
+        [JsonProperty]
+
+        public int resetNumber { get; set; }
+
+
+        /// <summary>
+        /// 付费等级
+        /// </summary>
+        [JsonProperty]
+        public int? paygrade { get; set; }
+
     }
 }

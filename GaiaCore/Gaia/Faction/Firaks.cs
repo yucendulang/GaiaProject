@@ -49,6 +49,9 @@ namespace GaiaCore.Gaia
                 TradeCenters.RemoveAt(0);
                 TriggerRST(typeof(RST2));
                 TriggerRST(typeof(RST8));
+                //对ATT5(TC>>3VP)计分的支持
+                TriggerRST(typeof(ATT5));
+
                 GaiaGame.SetLeechPowerQueue(FactionName, row, col);
             });
             TechTracAdv++;

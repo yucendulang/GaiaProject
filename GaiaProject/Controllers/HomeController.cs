@@ -155,6 +155,8 @@ namespace GaiaProject.Controllers
             {
                 username = this.RandomSortList<string>(username).ToArray();
             }
+            //用户列表
+            List<UserGameModel> listUser = new List<UserGameModel>();
             //判断用户不存在
             foreach (var item in username)
             {
@@ -166,7 +168,12 @@ namespace GaiaProject.Controllers
                 }
                 else
                 {
-
+                    listUser.Add(new UserGameModel()
+                    {
+                        username = item,
+                        isTishi = true,
+                        paygrade = user.Result.paygrade,
+                    });
                 }
             }
             //存在屏蔽玩家
@@ -193,7 +200,7 @@ namespace GaiaProject.Controllers
 
 
             //创建
-            bool create = GameMgr.CreateNewGame(model.Name, username, out GaiaGame result,model.MapSelction, isTestGame: model.IsTestGame,isSocket:model.IsSocket,IsRotatoMap:model.IsRotatoMap);
+            bool create = GameMgr.CreateNewGame(model.Name, username, out GaiaGame result,model.MapSelction, isTestGame: model.IsTestGame,isSocket:model.IsSocket,IsRotatoMap:model.IsRotatoMap,version:4);
             if (create && !model.IsTestGame && username[0]!=username[1])//测试局以及自己对战的局暂时不保留数据
             {
                 //保存到数据库
@@ -213,6 +220,7 @@ namespace GaiaProject.Controllers
                         IsAllowLook = model.IsAllowLook,
                         IsRandomOrder = model.IsRandomOrder,
                         IsRotatoMap = model.IsRotatoMap,
+                        version = 3,
                     };
                 //配置信息
                 gameInfoModel.ATTList = string.Join("|", result.ATTList.Select(item => item.name));
@@ -232,6 +240,9 @@ namespace GaiaProject.Controllers
                 this.dbContext.SaveChanges();
 
             }
+
+            //赋值用户信息
+            result.UserGameModels = listUser;
 
             ViewData["ReturnUrl"] = "/Home/ViewGame/" + model.Name;
             return Redirect("/home/viewgame/" + System.Net.WebUtility.UrlEncode(model.Name));
@@ -307,13 +318,15 @@ namespace GaiaProject.Controllers
                     //log = game.UserActionLog;
                 }
 
-                GameMgr.CreateNewGame(gameInfoModel.name, gameInfoModel.userlist.Split('|'), out GaiaGame result, gameInfoModel.MapSelction, isTestGame: gameInfoModel.IsTestGame == 1 ? true : false,IsRotatoMap:gameInfoModel.IsRotatoMap);
+                GameMgr.CreateNewGame(gameInfoModel.name, gameInfoModel.userlist.Split('|'), out GaiaGame result, gameInfoModel.MapSelction, isTestGame: gameInfoModel.IsTestGame == 1 ? true : false,IsRotatoMap:gameInfoModel.IsRotatoMap,version:gameInfoModel.version);
                 GaiaGame gg = GameMgr.GetGameByName(gameInfoModel.name);
                 gg.GameName = gameInfoModel.name;
                 gg.UserActionLog = log?.Replace("|", "\r\n");
 
+                //赋值会重写全部数据
+                gg.dbContext = this.dbContext;
 
-                gg = GameMgr.RestoreGame(gameInfoModel.name, gg,row);
+                gg = GameMgr.RestoreGame(gameInfoModel.name, gg,row:row);
                 gg.GameName = gameInfoModel.name;
                 //从内存删除
                 GameMgr.DeleteOneGame(gameInfoModel.name);
@@ -428,7 +441,7 @@ namespace GaiaProject.Controllers
                     syntax = string.Format("{0}:{1}", factionName, syntax);
                 }
                 //游戏结束，发送邮件赋值，
-                GaiaCore.Gaia.Game.GameSave._emailSender = this._emailSender;
+                GaiaCore.Gaia.Game.DbGameSave._emailSender = this._emailSender;
                 //执行命令
                 GaiaGame gaiaGame = GameMgr.GetGameByName(name);
                 try

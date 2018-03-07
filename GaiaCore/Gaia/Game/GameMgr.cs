@@ -7,6 +7,7 @@ using System.Linq;
 using GaiaCore.Util;
 using System.Net.Http;
 using GaiaDbContext.Models.AccountViewModels;
+using GaiaProject.Data;
 
 namespace GaiaCore.Gaia
 {
@@ -19,7 +20,7 @@ namespace GaiaCore.Gaia
             m_dic = new Dictionary<string, GaiaGame>();
         }
 
-        public static bool CreateNewGame(string name, string[] username, out GaiaGame result, string MapSelection, int seed = 0, bool isTestGame = false,bool isSocket = false,bool IsRotatoMap = false)
+        public static bool CreateNewGame(string name, string[] username, out GaiaGame result, string MapSelection, int seed = 0, bool isTestGame = false,bool isSocket = false,bool IsRotatoMap = false,int version=3)
         {
             if (m_dic.ContainsKey(name))
             {
@@ -34,6 +35,8 @@ namespace GaiaCore.Gaia
                 result.GameName = name;//游戏名称
                 result.IsSocket = isSocket;//即时制
                 result.IsRotatoMap = IsRotatoMap;//旋转地图
+                result.version = version;
+
                 //开局的两条命令
                 result.Syntax(GameSyntax.setupmap + " " + MapSelection, out string log);
                 result.Syntax(GameSyntax.setupGame + seed, out log);
@@ -147,7 +150,7 @@ namespace GaiaCore.Gaia
             jsetting.ContractResolver = new LimitPropsContractResolver(new string[]
             {
                 "GameName",  "UserActionLog", "Username", "IsTestGame", "LastMoveTime", "version",
-                "UserGameModels","username","remark","isTishi","IsSocket","IsRotatoMap"
+                "UserGameModels","resetNumber","paygrade","username","remark","isTishi","IsSocket","IsRotatoMap"
             });
             var str = JsonConvert.SerializeObject(m_dic, Formatting.Indented, jsetting);
             var logPath = System.IO.Path.Combine(BackupDataPath, DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt");
@@ -212,6 +215,11 @@ namespace GaiaCore.Gaia
             gg.IsTestGame = item.Value.IsTestGame;//测试
             gg.IsSocket = item.Value.IsSocket;//即使制度
             gg.IsRotatoMap = item.Value.IsRotatoMap;//旋转地图
+            gg.IsSaveToDb = item.Value.IsSaveToDb;//是否保存数据
+            gg.dbContext = item.Value.dbContext;//数据源
+
+            gg.UserGameModels = item.Value.UserGameModels;//恢复设置
+
             if (item.Value.version == 0)
             {
                 gg.version = 1;
@@ -220,14 +228,19 @@ namespace GaiaCore.Gaia
             {
                 gg.version = item.Value.version;
             }
-            
-            
+
+            //设置用户信息
+            gg.SetUserInfo();
+
             try
             {
                 int rowIndex = 1;
                 foreach (var str in item.Value.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-
+                    if (str.Contains("Xenos:build I3"))
+                    {
+                        int a = 1;
+                    }
                     gg.Syntax(str, out string log);
                     if (!string.IsNullOrEmpty(log))
                     {
@@ -265,8 +278,10 @@ namespace GaiaCore.Gaia
                 }
                 System.Diagnostics.Debug.WriteLine(item.Key + ":" + ex.ToString());
             }
+            //上次时间
             gg.LastMoveTime = item.Value.LastMoveTime;
-            gg.UserGameModels = item.Value.UserGameModels;
+
+
             //需要加载到内存
             if (isTodict)
             {
@@ -381,7 +396,11 @@ namespace GaiaCore.Gaia
             if (string.IsNullOrEmpty(filename))
             {
                 var d = new DirectoryInfo(BackupDataPath);
-                filename = (from p in d.EnumerateFiles() orderby p.Name descending select p.Name).FirstOrDefault();
+#if DEBUG
+                filename = (from p in d.EnumerateFiles()  orderby p.Name descending select p.Name).FirstOrDefault();
+#else
+                filename = (from p in d.EnumerateFiles() where p.Length/1024>100 orderby p.Name descending select p.Name).FirstOrDefault();
+#endif
             }
             if (string.IsNullOrEmpty(filename))
             {
@@ -464,10 +483,17 @@ namespace GaiaCore.Gaia
             GetGameByName(GameName).RedoStack = Redo;
             return true;
         }
-
-        public static GaiaGame RestoreGame(string GameName,GaiaGame gg,int? row=null)
+        /// <summary>
+        /// 恢复游戏
+        /// </summary>
+        /// <param name="GameName"></param>
+        /// <param name="gg"></param>
+        /// <param name="isToDict"></param>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        public static GaiaGame RestoreGame(string GameName,GaiaGame gg,bool isToDict = false,int? row=null)
         {
-            return RestoreGameWithActionLog(new KeyValuePair<string, GaiaGame>(GameName, gg),null,false,row:row);
+            return RestoreGameWithActionLog(new KeyValuePair<string, GaiaGame>(GameName, gg),null, isToDict, row:row);
         }
     }
 }

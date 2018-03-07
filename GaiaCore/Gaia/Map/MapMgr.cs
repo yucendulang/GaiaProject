@@ -10,10 +10,12 @@ namespace GaiaCore.Gaia
     {
 
         List<SpaceSector> ssl;
-        public MapMgr()
+        private GaiaGame gaiaGame;
+        public MapMgr(GaiaGame gaiaGame)
         {
             ssl = new List<SpaceSector>();
             ssl.AddRange(BuildSpaceSector());
+            this.gaiaGame = gaiaGame;
         }
 
         private List<SpaceSector> BuildSpaceSector()
@@ -208,8 +210,8 @@ namespace GaiaCore.Gaia
             this.centerTuple_4p.ForEach(x =>
             {
                 var index = random.Next(randomList.Count);
-                SpaceSector spaceSector = randomList[index].RandomRotato(random);
-                result.AddSpaceSector(x.Item1, x.Item2, spaceSector, random);
+                SpaceSector spaceSector = randomList[index].RandomRotato(random,gaiaGame.version);
+                result.AddSpaceSector(x.Item1, x.Item2, spaceSector, random,this.gaiaGame.version);
                 //测试旋转
                 //spaceSector = spaceSector.Rotate();
                 //result.AddSpaceSector(x.Item1, x.Item2, spaceSector, null);
@@ -228,10 +230,10 @@ namespace GaiaCore.Gaia
         {
             var result = new Map();
             //0，1，2，3固定
-            result.AddSpaceSector(3, 10, ssl[0], random);
-            result.AddSpaceSector(6, 7, ssl[1], random);
-            result.AddSpaceSector(7, 12, ssl[2], random);
-            result.AddSpaceSector(10, 9, ssl[3], random);
+            result.AddSpaceSector(3, 10, ssl[0], random, this.gaiaGame.version);
+            result.AddSpaceSector(6, 7, ssl[1], random, this.gaiaGame.version);
+            result.AddSpaceSector(7, 12, ssl[2], random, this.gaiaGame.version);
+            result.AddSpaceSector(10, 9, ssl[3], random, this.gaiaGame.version);
             var randomList = new List<SpaceSector>()
             {
                 ssl[4],ssl[5],ssl[6],ssl[7],ssl[8],ssl[9]
@@ -244,7 +246,7 @@ namespace GaiaCore.Gaia
             centerTuple.ForEach(x =>
             {
                 var index = random.Next(randomList.Count);
-                result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random), random);
+                result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random,gaiaGame.version), random, this.gaiaGame.version);
                 randomList.RemoveAt(index);
             });
             return result;
@@ -252,24 +254,50 @@ namespace GaiaCore.Gaia
 
         public Map Get2PRandomMap(Random random)
         {
-            var result = new Map();
-            //result.AddSpaceSector(6, 7, ssl[2], random);
-            var randomList = new List<SpaceSector>()
+            //旧版本固定
+            if (gaiaGame.version < 3)
             {
-                ssl[0],ssl[1],ssl[2],ssl[3],ssl[10],ssl[11],ssl[12]
-            };
-            var centerTuple = new List<Tuple<int, int>>()
-            {
-                { 2,5},{6,2},{6,7},{10,4 },{ 3,10},{7,12},{ 10,9}
-            };
+                var result = new Map();
+                result.AddSpaceSector(6, 7, ssl[2], random, gaiaGame.version);
+                var randomList = new List<SpaceSector>()
+                {
+                    ssl[0],ssl[1],ssl[3],ssl[10],ssl[11],ssl[12]
+                };
+                var centerTuple = new List<Tuple<int, int>>()
+                {
+                    { 2,5},{6,2},{10,4 },{ 3,10},{7,12},{ 10,9}
+                };
 
-            centerTuple.ForEach(x =>
+                centerTuple.ForEach(x =>
+                {
+                    var index = random.Next(randomList.Count);
+                    result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random,gaiaGame.version), random, gaiaGame.version);
+                    randomList.RemoveAt(index);
+                });
+                return result;
+            }
+            else
             {
-                var index = random.Next(randomList.Count);
-                result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random), random);
-                randomList.RemoveAt(index);
-            });
-            return result;
+                var result = new Map();
+                //result.AddSpaceSector(6, 7, ssl[2], random);
+                var randomList = new List<SpaceSector>()
+                {
+                    ssl[0],ssl[1],ssl[2],ssl[3],ssl[10],ssl[11],ssl[12]
+                };
+                var centerTuple = new List<Tuple<int, int>>()
+                {
+                    { 2,5},{6,2},{6,7},{10,4 },{ 3,10},{7,12},{ 10,9}
+                };
+
+                centerTuple.ForEach(x =>
+                {
+                    var index = random.Next(randomList.Count);
+                    result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random, gaiaGame.version), random, this.gaiaGame.version);
+                    randomList.RemoveAt(index);
+                });
+                return result;
+            }
+
         }
 
         public Map Get3PRandomMap(Random random)
@@ -288,7 +316,7 @@ namespace GaiaCore.Gaia
             centerTuple.ForEach(x =>
             {
                 var index = random.Next(randomList.Count);
-                result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random), random);
+                result.AddSpaceSector(x.Item1, x.Item2, randomList[index].RandomRotato(random, gaiaGame.version), random, this.gaiaGame.version);
                 randomList.RemoveAt(index);
             });
             return result;
@@ -308,7 +336,7 @@ namespace GaiaCore.Gaia
             var result = new Map();
             foreach (var item in centerTuple)
             {
-                result.AddSpaceSector(item.Item1, item.Item2, ssl[sslList[centerTuple.IndexOf(item)]], null);
+                result.AddSpaceSector(item.Item1, item.Item2, ssl[sslList[centerTuple.IndexOf(item)]], null, this.gaiaGame.version);
             }
             return result;
         }
@@ -325,7 +353,7 @@ namespace GaiaCore.Gaia
             var result = new Map();
             foreach (var item in centerTuple)
             {
-                result.AddSpaceSector(item.Item1, item.Item2, ssl[sslList[centerTuple.IndexOf(item)]], null);
+                result.AddSpaceSector(item.Item1, item.Item2, ssl[sslList[centerTuple.IndexOf(item)]], null, this.gaiaGame.version);
             }
             return result;
         }
@@ -347,7 +375,7 @@ namespace GaiaCore.Gaia
             var result = new Map();
             foreach (var item in this.centerTuple_4p)
             {
-                result.AddSpaceSector(item.Item1, item.Item2, ssl[sslList[this.centerTuple_4p.IndexOf(item)]], null);
+                result.AddSpaceSector(item.Item1, item.Item2, ssl[sslList[this.centerTuple_4p.IndexOf(item)]], null, this.gaiaGame.version);
             }
             return result;
         }
@@ -400,7 +428,7 @@ namespace GaiaCore.Gaia
         /// </summary>
         public List<SpaceSector> ListSpaceSector=new List<SpaceSector>();
 
-        public void AddSpaceSector(int x, int y, SpaceSector ss, Random random)
+        public void AddSpaceSector(int x, int y, SpaceSector ss, Random random,int version)
         {
             //如果存在则删除，
             if (ListSpaceSector.Exists(item => item.Name == ss.Name))
@@ -423,7 +451,7 @@ namespace GaiaCore.Gaia
                 if (!ValidateMap(hexList))
                 {
                     //System.Diagnostics.Debug.WriteLine("发现不合法");
-                    AddSpaceSector(x, y, ss.RandomRotato(random), random);
+                    AddSpaceSector(x, y, ss.RandomRotato(random,version), random,version);
                 }
             }
         }

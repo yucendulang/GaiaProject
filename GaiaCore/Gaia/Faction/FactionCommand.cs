@@ -4,12 +4,24 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using GaiaCore.Gaia.Game;
+using GaiaDbContext.Models.HomeViewModels;
+using Remotion.Linq.Utilities;
 
 namespace GaiaCore.Gaia
 {
     public abstract partial class Faction
     {
+        /// <summary>
+        /// 是否执行主要行动
+        /// </summary>
+        public bool IsActionBurn { get; set; }
+        /// <summary>
+        /// 黑星数量
+        /// </summary>
+        public int blankMine { get; set; }
 
         public virtual bool BuildMine(Map map, int row, int col, out string log)
         {
@@ -90,6 +102,10 @@ namespace GaiaCore.Gaia
                 return false;
             }
             QSHIP = Math.Max((distanceNeed - GetShipDistance + 1) / 2, 0);
+            
+            //铲子计分，临时铲子和需要的铲子比较，取较大的
+            int sjTF = Math.Max(transNumNeed, TerraFormNumber);
+
             //扣资源建建筑
             Action queue = () =>
             {
@@ -116,7 +132,8 @@ namespace GaiaCore.Gaia
                 GaiaGame.SetLeechPowerQueue(FactionName, row, col);
                 TriggerRST(typeof(RST1));
                 TriggerRST(typeof(ATT4));
-                for (int i = 0; i < transNumNeed; i++)
+
+                for (int i = 0; i < sjTF; i++)
                 {
                     TriggerRST(typeof(RST7));
                 }
@@ -200,7 +217,11 @@ namespace GaiaCore.Gaia
             }
             if(GameTileList.Exists(x=>x.GetType()==type))
             {
+                
                 Score += GameTileList.Find(x => x.GetType() == type).GetTriggerScore;
+                //高级版得分统计
+                DbTTSave.Score(type,this.GaiaGame,this,true);
+
             }
         }
 
@@ -442,7 +463,7 @@ namespace GaiaCore.Gaia
         public virtual bool BuildIntialMine(Map map, int row, int col, out string log)
         {
             log = string.Empty;
-            if (!(map.HexArray[row, col].OGTerrain == OGTerrain))
+            if (map.HexArray[row, col].OGTerrain != OGTerrain)
             {
                 log = "地形不符";
                 return false;

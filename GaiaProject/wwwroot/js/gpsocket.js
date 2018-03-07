@@ -17,8 +17,13 @@ if (!!window.WebSocket && window.WebSocket.prototype.send) {
         };
         gp_socket.onmessage = function (event) {
             //alert(event.data);
+            //接收到刷新要求
             if (event.data !== undefined && parseInt(event.data) === 200) {
-                window.location.reload();
+                //命令框没有指令
+                var syntax = $("#syntax");
+                if (syntax.length === 0 || syntax.val().length === 0) {
+                    window.location.reload();
+                }
             }
         };
     }

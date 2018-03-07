@@ -108,6 +108,9 @@ namespace GaiaCore.Gaia
             ret.Add(advTechRegex2);
             ret.Add(NoAdvanceTechTrack);
             ret.Add(AllianceTileReGexRegex);
+            //pass turn
+            ret.Add(PassRegexTurn);
+            ret.Add(ResetRegexTurn);
             return ret;
         } 
         public static Regex burningRegex = new Regex("burn ([0-9])");
@@ -142,6 +145,16 @@ namespace GaiaCore.Gaia
         public static Regex PlanetRegex = new Regex(planet + " ([a-z][0-9]{1,2})");
         public static Regex NoAdvanceTechTrack = new Regex("-advance");
         public static Regex AllianceTileReGexRegex = new Regex("re (alt[0-9]{1})");
+
+        /// <summary>
+        /// 跳过行动
+        /// </summary>
+        public static Regex PassRegexTurn = new Regex("pass turn");
+
+        /// <summary>
+        /// 重置当前操作
+        /// </summary>
+        public static Regex ResetRegexTurn = new Regex("reset turn");
     }
 
     public static class GameSpecialSyntax
@@ -150,6 +163,8 @@ namespace GaiaCore.Gaia
         /// 跳过特殊行动的语句
         /// </summary>
         public static Regex PassRegex = new Regex("pass");
+
+
 
         public static Regex PowerPreview = new Regex("^setpower ([0-9]{1,2}),([0-9]{1,2}),([0-9]{1,2})$");
     }

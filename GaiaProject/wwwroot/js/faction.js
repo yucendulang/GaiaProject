@@ -180,15 +180,20 @@ if (userInfo.isRound) {
 
 
     //快速行动插入
-    $(".ksaction").click(function() {
+    $(".ksaction").click(function () {
+
+        var obj = $(this);
+
+        //行动类型，前后
+        var actionType = obj.attr("actionType");
+
         var oldcode = $("#syntax").val();
-        if (oldcode === "") {
+        if (actionType!=='now' && oldcode === "") {
             alert("必须先选择主要行动");
             return;
         }
-        var obj = $(this);
-        //行动类型，前后
-        var actionType = obj.attr("actionType");
+
+
         //对象ID
         var controlid = obj.attr("controlid");
         //下拉对象
@@ -205,27 +210,28 @@ if (userInfo.isRound) {
             value = syntax.format(value);
         }
         //是不是执行多次
+        var nowcode = "";
         var actionnumber = obj.attr("actionnumber");
         if (actionnumber !== undefined && actionnumber !== null && actionnumber !== "") {
             var number = parseInt($(actionnumber).val());
             if (number > 0) {
                 for (var i = 0; i < number; i++) {
-                    oldcode = $("#syntax").val();
-                    if (actionType === "before") {
-                        $("#syntax").val(value + "." + oldcode);
-                    } else {
-                        $("#syntax").val(oldcode + '.' + value);
-
-                    }
+                    //oldcode = $("#syntax").val();
+                    nowcode = nowcode + value + ".";
                 }
+                nowcode = nowcode.substr(0,nowcode.length-1);
             }
         } else {
-            if (actionType === "before") {
-                $("#syntax").val(value + "." + oldcode);
-            } else {
-                $("#syntax").val(oldcode + '.' + value);
+            nowcode = value;
+        }
 
-            }
+        if (actionType === "before") {
+            $("#syntax").val(nowcode + "." + oldcode);
+        } else if (actionType === "after") {
+            $("#syntax").val(oldcode + '.' + nowcode);
+        }
+        else if (actionType === "now") {
+            openQueryWindow(nowcode, "确认执行?");
         }
 
     });
@@ -276,7 +282,7 @@ function openQueryWindow(type, title,tishi,func) {
 }
 //手动输入
 $("#queryHandinput").click(function () {
-    $("#syntax").focus();
+    //$("#syntax").focus();
     if (windowFunc != undefined) {
         windowFunc();
     }
@@ -290,12 +296,25 @@ $("#querycfmModelYes").click(function () {
         windowFunc();
     }
 });
-
+//执行并且跳过回合
+$("#queryAndPass").click(function () {
+    //var value = $(this).attr("act");
+    $("#querycfmModel").modal('hide');
+    //alert(userInfo.stage);
+    //如果是行动阶段，直接执行
+    if (userInfo.stage === 5) {
+        $("#syntax").val($("#syntax").val() + ".pass turn");
+    }
+    submitData();
+    if (windowFunc != undefined) {
+        windowFunc();
+    }
+});
 
 //提交命令
 function submitData() {
     var value = $("#syntax").val();
-    if (value == "") {
+    if (value === "") {
         alert("请先选择行动");
         return;
     }

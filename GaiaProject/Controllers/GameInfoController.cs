@@ -10,6 +10,7 @@ using GaiaProject.Data;
 using GaiaProject.Models.HomeViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query.Expressions;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -488,6 +489,12 @@ namespace GaiaProject.Controllers
             return View(list);
         }
 
+        public IActionResult FactionStatisticsChart(int? usercount, string username, int? orderType)
+        {
+            var list = this.GetFactionStatistics(null, usercount, username, orderType);
+            return View(list);
+        }
+
         /// <summary>
         /// 玩家的平均分
         /// </summary>
@@ -551,6 +558,75 @@ namespace GaiaProject.Controllers
 
         #endregion
 
+
+        #region 科技版统计
+
+//        public class TTModel
+//        {
+//            public string name { get; set; }
+//            public int count { get; set; }
+//
+//
+//        }
+
+        public IActionResult TTStatistics()
+        {
+            //储存
+            GameFactionExtendModel gameFactionExtendModel =new GameFactionExtendModel();
+
+            //高级科技
+            gameFactionExtendModel.ATT1 = (short) this.dbContext.GameFactionExtendModel.Count(item => item.ATT1 > 0);
+            gameFactionExtendModel.ATT2 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT2 > 0);
+            gameFactionExtendModel.ATT3 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT3 > 0);
+            gameFactionExtendModel.ATT4 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT4 > 0);
+            gameFactionExtendModel.ATT5 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT5 > 0);
+            gameFactionExtendModel.ATT6 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT6 > 0);
+            gameFactionExtendModel.ATT7 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT7 > 0);
+            gameFactionExtendModel.ATT8 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT8 > 0);
+            gameFactionExtendModel.ATT9 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT9 > 0);
+            gameFactionExtendModel.ATT10 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT10 > 0);
+            gameFactionExtendModel.ATT11 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT11 > 0);
+            gameFactionExtendModel.ATT12 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT12 > 0);
+            gameFactionExtendModel.ATT13 = (short) this.dbContext.GameFactionExtendModel.Count(item => item.ATT13 > 0);
+            gameFactionExtendModel.ATT14 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT14 > 0);
+            gameFactionExtendModel.ATT15 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT15 > 0);
+            //低级科技
+            gameFactionExtendModel.STT1 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT1 > 0);
+            gameFactionExtendModel.STT2 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT2 > 0);
+            gameFactionExtendModel.STT3 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT3 > 0);
+            gameFactionExtendModel.STT4 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT4 > 0);
+            gameFactionExtendModel.STT5 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT5 > 0);
+            gameFactionExtendModel.STT6 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT6 > 0);
+            gameFactionExtendModel.STT7 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT7 > 0);
+            gameFactionExtendModel.STT8 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT8 > 0);
+            gameFactionExtendModel.STT9 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT9 > 0);
+
+            //平局得分
+            gameFactionExtendModel.ATT4Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT4 > 0).Sum(item=>item.ATT4Score)/ gameFactionExtendModel.ATT4);
+            gameFactionExtendModel.ATT5Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT5 > 0).Sum(item => item.ATT5Score) / gameFactionExtendModel.ATT5);
+            gameFactionExtendModel.ATT6Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT6 > 0).Sum(item => item.ATT6Score) / gameFactionExtendModel.ATT6);
+            gameFactionExtendModel.ATT7Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT7 > 0).Sum(item => item.ATT7Score) / gameFactionExtendModel.ATT7);
+            gameFactionExtendModel.ATT8Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT8 > 0).Sum(item => item.ATT8Score) / gameFactionExtendModel.ATT8);
+            gameFactionExtendModel.ATT9Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT9 > 0).Sum(item => item.ATT9Score) / gameFactionExtendModel.ATT9);
+            gameFactionExtendModel.ATT10Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT10 > 0).Sum(item => item.ATT10Score) / gameFactionExtendModel.ATT10);
+            gameFactionExtendModel.ATT11Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT11 > 0).Sum(item => item.ATT11Score) / gameFactionExtendModel.ATT11);
+            gameFactionExtendModel.ATT12Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT12 > 0).Sum(item => item.ATT12Score) / gameFactionExtendModel.ATT12);
+            gameFactionExtendModel.ATT13Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT13 > 0).Sum(item => item.ATT13Score) / gameFactionExtendModel.ATT13);
+            gameFactionExtendModel.ATT14Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT14 > 0).Sum(item => item.ATT14Score) / gameFactionExtendModel.ATT14);
+            gameFactionExtendModel.ATT15Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT15 > 0).Sum(item => item.ATT15Score) / gameFactionExtendModel.ATT15);
+
+
+
+            //IQueryable<TTModel> ttModels = this.dbContext.GameFactionExtendModel.Where(item => item.ATT1 > 0).Select(item=>item);
+            //                (g => new TTModel
+            //            {
+            //                count = g.Sum(i => i.ATT1),
+            //                name = "ATT1"
+            //            });
+            return View(gameFactionExtendModel);
+        }
+
+        #endregion
 
         #region 操作内存和数据库游戏
 
@@ -635,7 +711,7 @@ namespace GaiaProject.Controllers
                             if (!this.dbContext.GameFactionModel.Any(item => item.gameinfo_id == gameInfoModel.Id))
                             {
                                 //保存种族信息
-                                GameSave.SaveFactionToDb(this.dbContext, result, gameInfoModel);
+                                DbGameSave.SaveFactionToDb(this.dbContext, result, gameInfoModel);
                             }
                         }
                     }
@@ -687,7 +763,15 @@ namespace GaiaProject.Controllers
         /// <returns></returns>
         public string UpdatenFinishFromDb()
         {
-            return UpdateFromDb(item => item.GameStatus == 8);
+            //没有更细的游戏
+            IQueryable<string> queryable = this.dbContext.GameInfoModel.Where(item => item.saveState == 0).Select(item => item.name);
+            //游戏下面的项
+            IQueryable<GameFactionExtendModel> gameFactionExtendModels = this.dbContext.GameFactionExtendModel.Where(item => queryable.Contains(item.gameinfo_name));
+            //先删除重复的信息
+            this.dbContext.GameFactionExtendModel.RemoveRange(gameFactionExtendModels);
+            this.dbContext.SaveChanges();
+
+            return UpdateFromDb(item => item.GameStatus == 8 && item.saveState==0);
         }
 
         public string UpdateFromDb(Func<GameInfoModel, bool> func)
@@ -700,7 +784,18 @@ namespace GaiaProject.Controllers
                 {
                     GameMgr.CreateNewGame(gameInfoModel.name, gameInfoModel.userlist.Split('|'), out GaiaGame result, gameInfoModel.MapSelction, isTestGame: gameInfoModel.IsTestGame == 1 ? true : false);
                     GaiaGame gg = GameMgr.GetGameByName(gameInfoModel.name);
+                    //gg.dbContext = this.dbContext;
                     gg.GameName = gameInfoModel.name;
+
+                    if (gameInfoModel.saveState == 0)
+                    {
+                        gg.dbContext = this.dbContext;
+                        gg.IsSaveToDb = true;
+
+                        gameInfoModel.saveState = 1;
+                    }
+
+
                     gg.UserActionLog = gameInfoModel.loginfo.Replace("|", "\r\n");
 
                     gg = GameMgr.RestoreGame(gameInfoModel.name, gg);
@@ -712,13 +807,13 @@ namespace GaiaProject.Controllers
                         if (!this.dbContext.GameFactionModel.Any(item => item.gameinfo_id == gameInfoModel.Id))
                         {
                             //保存种族信息
-                            GameSave.SaveFactionToDb(this.dbContext, gg, gameInfoModel);
+                            DbGameSave.SaveFactionToDb(this.dbContext, gg, gameInfoModel);
                         }
                         else
                         {
                             //总局计分问题，需要重新计算
 #if  DEBUG
-                            GameSave.SaveFactionToDb(this.dbContext, gg, gameInfoModel);
+                            DbGameSave.SaveFactionToDb(this.dbContext, gg, gameInfoModel);
 #endif
                         }
                     }

@@ -145,24 +145,6 @@ namespace GaiaProject
 
 
 
-//            // Configure function 
-//            // 这里主要是监听 WebSocket的请求，然后Invoke Echo 方法进行相关操作。比如，它接受到浏览器发来 WebSocket 的Close 命令了，那么在Echo 方法直接 await webSocket.CloseAsync(result.CloseStatus.Value... 相关操作
-//            app.Use(async (context, next) =>
-//            {
-//                if (context.Request.Path == "/ws")
-//                {
-//                    if (context.WebSockets.IsWebSocketRequest)
-//                    {
-//                        WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-//                        await Echo(context, webSocket);
-//                    }
-//                    else
-//                    {
-//                        context.Response.StatusCode = 400;
-//                    }
-//                }
-//            });
-
         }
 
 

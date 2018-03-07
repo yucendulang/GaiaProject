@@ -114,5 +114,7 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// </summary>
         public int? scoreDifference { get; set; }
 
+
+
     }
 }

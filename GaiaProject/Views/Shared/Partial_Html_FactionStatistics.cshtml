@@ -9,6 +9,7 @@
         <td>胜场</td>
         <td>胜率</td>
         <td>出场率</td>
+        <td>胜率/出场率</td>
         <td>最低分</td>
         <td>最高分</td>
         <td>玩家</td>
@@ -33,6 +34,9 @@
             <td>@item.numberwin</td>
             <td>@item.winprobability%</td>
             <td>@item.OccurrenceRate%</td>
+
+            <td>@Math.Round((float)item.winprobability  / item.OccurrenceRate, 2)</td>
+
 
             <td>@item.scoremin</td>
             <td>@item.scoremax</td>
