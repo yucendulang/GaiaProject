@@ -3,6 +3,11 @@
     background-size: cover;
 }
 
-#myCanvasDiv {
-    
+
+.donator {
+    text-indent: 2em;
+    background-image: url(../../images/icon_donator.png);
+    background-position: 0 0;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
 }

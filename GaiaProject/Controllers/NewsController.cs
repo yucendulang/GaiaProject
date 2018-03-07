@@ -24,8 +24,9 @@ namespace GaiaProject.Controllers
         public IActionResult ShowInfo(int id)
         {
             //新闻信息
-            NewsInfoModel singleOrDefault = this.dbContext.NewsInfoModel.SingleOrDefault(item => item.type == id);
-            return View(singleOrDefault);
+            //NewsInfoModel singleOrDefault = this.dbContext.NewsInfoModel.SingleOrDefault(item => item.type == id);
+            //return View(singleOrDefault);
+            return View(null);
             
         }
     }
