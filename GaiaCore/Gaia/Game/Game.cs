@@ -1425,7 +1425,8 @@ namespace GaiaCore.Gaia
         public string syntax;//最后一条保存
         public void Syntax(string syntax, out string log, string user = "",ApplicationDbContext dbContext = null)
         {
-            if (this.dbContext == null)
+            //dbContext = 
+            if (dbContext != null)
             {
                 //赋值
                 this.dbContext = dbContext;
