@@ -571,8 +571,14 @@ namespace GaiaProject.Controllers
 
         public IActionResult TTStatistics()
         {
+            //列表统计
+            List<GameFactionExtendModel> list =new List<GameFactionExtendModel>();
             //储存
             GameFactionExtendModel gameFactionExtendModel =new GameFactionExtendModel();
+
+
+
+            //gameFactionExtendModel.ATT1 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT1 > 0 && item.rank == 1);
 
             //高级科技
             gameFactionExtendModel.ATT1 = (short) this.dbContext.GameFactionExtendModel.Count(item => item.ATT1 > 0);
@@ -602,19 +608,77 @@ namespace GaiaProject.Controllers
             gameFactionExtendModel.STT9 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.STT9 > 0);
 
             //平局得分
-            gameFactionExtendModel.ATT4Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT4 > 0).Sum(item=>item.ATT4Score)/ gameFactionExtendModel.ATT4);
-            gameFactionExtendModel.ATT5Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT5 > 0).Sum(item => item.ATT5Score) / gameFactionExtendModel.ATT5);
-            gameFactionExtendModel.ATT6Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT6 > 0).Sum(item => item.ATT6Score) / gameFactionExtendModel.ATT6);
-            gameFactionExtendModel.ATT7Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT7 > 0).Sum(item => item.ATT7Score) / gameFactionExtendModel.ATT7);
-            gameFactionExtendModel.ATT8Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT8 > 0).Sum(item => item.ATT8Score) / gameFactionExtendModel.ATT8);
-            gameFactionExtendModel.ATT9Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT9 > 0).Sum(item => item.ATT9Score) / gameFactionExtendModel.ATT9);
-            gameFactionExtendModel.ATT10Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT10 > 0).Sum(item => item.ATT10Score) / gameFactionExtendModel.ATT10);
-            gameFactionExtendModel.ATT11Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT11 > 0).Sum(item => item.ATT11Score) / gameFactionExtendModel.ATT11);
-            gameFactionExtendModel.ATT12Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT12 > 0).Sum(item => item.ATT12Score) / gameFactionExtendModel.ATT12);
-            gameFactionExtendModel.ATT13Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT13 > 0).Sum(item => item.ATT13Score) / gameFactionExtendModel.ATT13);
-            gameFactionExtendModel.ATT14Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT14 > 0).Sum(item => item.ATT14Score) / gameFactionExtendModel.ATT14);
-            gameFactionExtendModel.ATT15Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT15 > 0).Sum(item => item.ATT15Score) / gameFactionExtendModel.ATT15);
+            try
+            {
+                gameFactionExtendModel.ATT4Score = gameFactionExtendModel.ATT4>0?(short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT4 > 0).Sum(item => item.ATT4Score) / gameFactionExtendModel.ATT4):(short)0;
+                gameFactionExtendModel.ATT5Score = gameFactionExtendModel.ATT5 > 0 ? (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT5 > 0).Sum(item => item.ATT5Score) / gameFactionExtendModel.ATT5):(short)0;
+                gameFactionExtendModel.ATT6Score = gameFactionExtendModel.ATT6 > 0 ? (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT6 > 0).Sum(item => item.ATT6Score) / gameFactionExtendModel.ATT6):(short)0;
+                gameFactionExtendModel.ATT7Score = gameFactionExtendModel.ATT7 > 0 ? (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT7 > 0).Sum(item => item.ATT7Score) / gameFactionExtendModel.ATT7):(short)0;
+                gameFactionExtendModel.ATT8Score = gameFactionExtendModel.ATT8 > 0 ? (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT8 > 0).Sum(item => item.ATT8Score) / gameFactionExtendModel.ATT8):(short)0;
+                gameFactionExtendModel.ATT9Score = gameFactionExtendModel.ATT9 > 0 ? (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT9 > 0).Sum(item => item.ATT9Score) / gameFactionExtendModel.ATT9):(short)0;
+                gameFactionExtendModel.ATT10Score = gameFactionExtendModel.ATT10 > 0 ? (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT10 > 0).Sum(item => item.ATT10Score) / gameFactionExtendModel.ATT10):(short)0;
+                gameFactionExtendModel.ATT11Score = gameFactionExtendModel.ATT11 > 0 ? (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT11 > 0).Sum(item => item.ATT11Score) / gameFactionExtendModel.ATT11):(short)0;
+                gameFactionExtendModel.ATT12Score = gameFactionExtendModel.ATT12 > 0 ? (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT12 > 0).Sum(item => item.ATT12Score) / gameFactionExtendModel.ATT12):(short)0;
+                gameFactionExtendModel.ATT13Score = gameFactionExtendModel.ATT13 > 0 ? (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT13 > 0).Sum(item => item.ATT13Score) / gameFactionExtendModel.ATT13):(short)0;
+                gameFactionExtendModel.ATT14Score = gameFactionExtendModel.ATT14 > 0 ? (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT14 > 0).Sum(item => item.ATT14Score) / gameFactionExtendModel.ATT14):(short)0;
+                gameFactionExtendModel.ATT15Score = gameFactionExtendModel.ATT15 > 0 ? (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT15 > 0).Sum(item => item.ATT15Score) / gameFactionExtendModel.ATT15):(short)0;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
 
+
+            list.Add(gameFactionExtendModel);
+
+            //添加排名统计
+            Action<int> addGfe = (index) => {
+                //平局得分
+                GameFactionExtendModel model = new GameFactionExtendModel();
+                model.ATT1 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT1 > 0 && item.rank == index);
+                model.ATT2 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT2 > 0 && item.rank == index);
+                model.ATT3 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT3 > 0 && item.rank == index);
+                model.ATT4 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT4 > 0 && item.rank == index);
+                model.ATT5 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT5 > 0 && item.rank == index);
+                model.ATT6 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT6 > 0 && item.rank == index);
+                model.ATT7 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT7 > 0 && item.rank == index);
+                model.ATT8 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT8 > 0 && item.rank == index);
+                model.ATT9 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT9 > 0 && item.rank == index);
+                model.ATT10 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT10 > 0 && item.rank == index);
+                model.ATT11 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT11 > 0 && item.rank == index);
+                model.ATT12 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT12 > 0 && item.rank == index);
+                model.ATT13 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT13 > 0 && item.rank == index);
+                model.ATT14 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT14 > 0 && item.rank == index);
+                model.ATT15 = (short)this.dbContext.GameFactionExtendModel.Count(item => item.ATT15 > 0 && item.rank == index);
+
+                //平局得分
+                try
+                {
+                    model.ATT4Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT4 > 0 && item.rank == index).Sum(item => item.ATT4Score) / model.ATT4);
+                    model.ATT5Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT5 > 0 && item.rank == index).Sum(item => item.ATT5Score) / model.ATT5);
+                    model.ATT6Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT6 > 0 && item.rank == index).Sum(item => item.ATT6Score) / model.ATT6);
+                    model.ATT7Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT7 > 0 && item.rank == index).Sum(item => item.ATT7Score) / model.ATT7);
+                    model.ATT8Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT8 > 0 && item.rank == index).Sum(item => item.ATT8Score) / model.ATT8);
+                    model.ATT9Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT9 > 0 && item.rank == index).Sum(item => item.ATT9Score) / model.ATT9);
+                    model.ATT10Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT10 > 0 && item.rank == index).Sum(item => item.ATT10Score) / model.ATT10);
+                    model.ATT11Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT11 > 0 && item.rank == index).Sum(item => item.ATT11Score) / model.ATT11);
+                    model.ATT12Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT12 > 0 && item.rank == index).Sum(item => item.ATT12Score) / model.ATT12);
+                    model.ATT13Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT13 > 0 && item.rank == index).Sum(item => item.ATT13Score) / model.ATT13);
+                    model.ATT14Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT14 > 0 && item.rank == index).Sum(item => item.ATT14Score) / model.ATT14);
+                    model.ATT15Score = (short)(this.dbContext.GameFactionExtendModel.Where(item => item.ATT15 > 0 && item.rank == index).Sum(item => item.ATT15Score) / model.ATT15);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+
+                list.Add(model);
+            };
+            //1-4
+            addGfe(1);
+            addGfe(2);
+            addGfe(3);
+            addGfe(4);
 
 
             //IQueryable<TTModel> ttModels = this.dbContext.GameFactionExtendModel.Where(item => item.ATT1 > 0).Select(item=>item);
@@ -623,7 +687,7 @@ namespace GaiaProject.Controllers
             //                count = g.Sum(i => i.ATT1),
             //                name = "ATT1"
             //            });
-            return View(gameFactionExtendModel);
+            return View(list);
         }
 
         #endregion
@@ -782,7 +846,7 @@ namespace GaiaProject.Controllers
                 //如果日志不是空的
                 if (!string.IsNullOrEmpty(gameInfoModel.loginfo))
                 {
-                    GameMgr.CreateNewGame(gameInfoModel.name, gameInfoModel.userlist.Split('|'), out GaiaGame result, gameInfoModel.MapSelction, isTestGame: gameInfoModel.IsTestGame == 1 ? true : false);
+                    GameMgr.CreateNewGame(gameInfoModel.name, gameInfoModel.userlist.Split('|'), out GaiaGame result, gameInfoModel.MapSelction, isTestGame: gameInfoModel.IsTestGame == 1 ? true : false,version:gameInfoModel.version);
                     GaiaGame gg = GameMgr.GetGameByName(gameInfoModel.name);
                     //gg.dbContext = this.dbContext;
                     gg.GameName = gameInfoModel.name;
@@ -818,7 +882,7 @@ namespace GaiaProject.Controllers
                         }
                     }
 
-                    GameMgr.DeleteOneGame(gameInfoModel.name);
+                    //GameMgr.DeleteOneGame(gameInfoModel.name);
                 }
             }
             this.dbContext.SaveChanges();

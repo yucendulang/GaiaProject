@@ -6,6 +6,7 @@ using Gaia.Service;
 using GaiaDbContext.Models;
 using GaiaDbContext.Models.HomeViewModels;
 using GaiaProject.Data;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace GaiaCore.Gaia.Game
 {
@@ -121,11 +122,18 @@ namespace GaiaCore.Gaia.Game
                 //如果没有记录
                 if (extendModel == null)
                 {
+                    //获取排名
+                    int rank = gaiaGame.dbContext.GameFactionModel
+                        .SingleOrDefault(item => item.gameinfo_name == gaiaGame.GameName &&
+                                                 item.username == faction.UserName)?.rank??0;
+
                     extendModel = new GameFactionExtendModel()
                     {
-                        gameinfo_name = gaiaGame.GameName,//名称
-                        FactionName = faction.FactionName.ToString(),//种族   
+                        gameinfo_name = gaiaGame.GameName, //名称
+                        FactionName = faction.FactionName.ToString(), //种族   
                         username = faction.UserName,
+                        //rank = faction.,
+                        rank = rank,
                     };
                     fz(extendModel);
                     gaiaGame.dbContext.GameFactionExtendModel.Add(extendModel);
@@ -144,6 +152,8 @@ namespace GaiaCore.Gaia.Game
             {
 
             }
+
+            //var server = gaiaGame.dbContext.Database.GetService<this>();
         }
 
 

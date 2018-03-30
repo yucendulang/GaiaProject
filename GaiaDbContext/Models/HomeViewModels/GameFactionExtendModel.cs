@@ -30,6 +30,11 @@ namespace GaiaDbContext.Models.HomeViewModels
         public string FactionName { get; set; }
 
         /// <summary>
+        /// 排名
+        /// </summary>
+        public int rank { get; set; }
+
+        /// <summary>
         /// 基础科技版
         /// </summary>
         public Int16 STT1 { get; set; }

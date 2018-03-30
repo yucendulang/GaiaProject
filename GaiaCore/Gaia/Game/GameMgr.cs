@@ -129,7 +129,7 @@ namespace GaiaCore.Gaia
                 var result = GetAllGameName(userName).ToList().Find(x =>
                 {
                     var gg = GetGameByName(x);
-                    if (!gg.UserGameModels.Find(item => item.username == userName).isTishi)
+                    if (gg.UserGameModels==null || gg.UserGameModels.All(item => item.username != userName) || !(gg.UserGameModels.Find(item => item.username == userName).isTishi))
                     {
                         return false;
                     }

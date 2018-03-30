@@ -1,5 +1,6 @@
-﻿@using GaiaCore.Gaia.Tiles
-@model GaiaDbContext.Models.HomeViewModels.GameFactionExtendModel
+﻿@using System.Collections.Generic
+@using GaiaCore.Gaia.Tiles
+@model System.Collections.Generic.List<GaiaDbContext.Models.HomeViewModels.GameFactionExtendModel>
 
 @{
     ViewBag.Title = "科技版统计";
@@ -38,49 +39,49 @@
                                                                                  </tr>
                                                                                  <tr>
                                                                                      <td>
-                                                                                         @Model.ATT1
+                                                                                         @Model[0].ATT1
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT2
+                                                                                         @Model[0].ATT2
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT3
+                                                                                         @Model[0].ATT3
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT4
+                                                                                         @Model[0].ATT4
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT5
+                                                                                         @Model[0].ATT5
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT6
+                                                                                         @Model[0].ATT6
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT7
+                                                                                         @Model[0].ATT7
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT8
+                                                                                         @Model[0].ATT8
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT9
+                                                                                         @Model[0].ATT9
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT10
+                                                                                         @Model[0].ATT10
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT11
+                                                                                         @Model[0].ATT11
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT12
+                                                                                         @Model[0].ATT12
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT13
+                                                                                         @Model[0].ATT13
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT14
+                                                                                         @Model[0].ATT14
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT15
+                                                                                         @Model[0].ATT15
                                                                                      </td>
                                                                                  </tr>
                                                                                  <tr>
@@ -94,42 +95,94 @@
                                                                                         
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT4Score
+                                                                                         @Model[0].ATT4Score
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT5Score
+                                                                                         @Model[0].ATT5Score
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT6Score
+                                                                                         @Model[0].ATT6Score
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT7Score
+                                                                                         @Model[0].ATT7Score
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT8Score
+                                                                                         @Model[0].ATT8Score
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT9Score
+                                                                                         @Model[0].ATT9Score
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT10Score
+                                                                                         @Model[0].ATT10Score
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT11Score
+                                                                                         @Model[0].ATT11Score
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT12Score
+                                                                                         @Model[0].ATT12Score
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT13Score
+                                                                                         @Model[0].ATT13Score
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT14Score
+                                                                                         @Model[0].ATT14Score
                                                                                      </td>
                                                                                      <td>
-                                                                                         @Model.ATT15Score
+                                                                                         @Model[0].ATT15Score
                                                                                      </td>
                                                                                  </tr>
+    
+    @for (int index = 1; index < 5; index++)
+    {
+        <tr>
+            <td>
+                排名 @index/均分
+            </td>
+            <td>
+                                                                                         
+            </td>
+            <td>
+                                                                                        
+            </td>
+            <td>
+                @Model[index].ATT4/@Model[index].ATT4Score
+            </td>
+            <td>
+                @Model[index].ATT5/@Model[index].ATT5Score
+            </td>
+            <td>
+                @Model[index].ATT6/@Model[index].ATT6Score
+            </td>
+            <td>
+                @Model[index].ATT7/@Model[index].ATT7Score
+            </td>
+            <td>
+                @Model[index].ATT8/@Model[index].ATT8Score
+            </td>
+            <td>
+                @Model[index].ATT9/@Model[index].ATT9Score
+            </td>
+            <td>
+                @Model[index].ATT10/@Model[index].ATT10Score
+            </td>
+            <td>
+                @Model[index].ATT11/@Model[index].ATT11Score
+            </td>
+            <td>
+                @Model[index].ATT12/@Model[index].ATT12Score
+            </td>
+            <td>
+                @Model[index].ATT13/@Model[index].ATT13Score
+            </td>
+            <td>
+                @Model[index].ATT14/@Model[index].ATT14Score
+            </td>
+            <td>
+                @Model[index].ATT15/@Model[index].ATT15Score
+            </td>
+        </tr>
+
+    }
                                                                                  </table>
 
 
@@ -158,31 +211,31 @@
                                                                                      </tr>
                                                                                      <tr>
                                                                                          <td>
-                                                                                             @Model.STT1
+                                                                                             @Model[0].STT1
                                                                                          </td>
                                                                                          <td>
-                                                                                             @Model.STT2
+                                                                                             @Model[0].STT2
                                                                                          </td>
                                                                                          <td>
-                                                                                             @Model.STT3
+                                                                                             @Model[0].STT3
                                                                                          </td>
                                                                                          <td>
-                                                                                             @Model.STT4
+                                                                                             @Model[0].STT4
                                                                                          </td>
                                                                                          <td>
-                                                                                             @Model.STT5
+                                                                                             @Model[0].STT5
                                                                                          </td>
                                                                                          <td>
-                                                                                             @Model.STT6
+                                                                                             @Model[0].STT6
                                                                                          </td>
                                                                                          <td>
-                                                                                             @Model.STT7
+                                                                                             @Model[0].STT7
                                                                                          </td>
                                                                                          <td>
-                                                                                             @Model.STT8
+                                                                                             @Model[0].STT8
                                                                                          </td>
                                                                                          <td>
-                                                                                             @Model.STT9
+                                                                                             @Model[0].STT9
                                                                                          </td>
  
                                                                                      </tr>
