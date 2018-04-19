@@ -21,7 +21,7 @@ using GaiaDbContext.Models;
 using GaiaProject.Notice;
 using Microsoft.AspNetCore.Http;
 using UEditorNetCore;
-
+using Microsoft.AspNetCore.Identity;
 
 namespace GaiaProject
 {
@@ -62,7 +62,7 @@ namespace GaiaProject
         {
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("GaiaProject")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("GaiaDbContext")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -122,7 +122,7 @@ namespace GaiaProject
 
             app.UseStaticFiles();
 
-            app.UseIdentity();
+            app.UseAuthentication();
 
 
             //websocket中间件，需要在mvc之前声明
