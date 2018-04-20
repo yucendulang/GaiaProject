@@ -64,8 +64,8 @@ namespace GaiaProject
         {
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
-                //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("GaiaDbContext"))
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("GaiaDbContext"))
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("GaiaDbContext"))
+                //options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("GaiaDbContext"))
                 );
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -102,7 +102,10 @@ namespace GaiaProject
 
             services.AddMvc()
                 .AddViewLocalization()
-                .AddDataAnnotationsLocalization();
+                .AddDataAnnotationsLocalization(options => {
+                    options.DataAnnotationLocalizerProvider = (type, factory) =>
+                        factory.Create(typeof(SharedResources));
+                });
 
             //解决输出中文问题https://q.cnblogs.com/q/86078/
             services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.All));

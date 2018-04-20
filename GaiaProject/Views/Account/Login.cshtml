@@ -4,7 +4,7 @@
 @using Microsoft.AspNetCore.Http.Authentication
 @model LoginViewModel
 @inject SignInManager<ApplicationUser> SignInManager
-@inject IViewLocalizer localizer;
+@inject IHtmlLocalizer<SharedResources> localizer;
 @{
     ViewData["Title"] = localizer["登录"];
 }

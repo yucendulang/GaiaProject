@@ -1,8 +1,9 @@
 ﻿@using GaiaDbContext.Models
 @using Microsoft.AspNetCore.Http
+
 @inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
 @inject UserManager<ApplicationUser> UserManager
-
+@inject IHtmlLocalizer<SharedResources> localizer;
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +18,7 @@
     }
 
     @*<meta name="viewport" content="width=device-width, initial-scale=0.4, minimum-scale=0.4, maximum-scale=2.0, user-scalable=yes" />*@
-    <title>@ViewData["Title"] - 盖亚计划</title>
+        <title>@ViewData["Title"] - @localizer["盖亚计划"]</title>
 
 
 
@@ -37,35 +38,36 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">盖亚计划</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">@localizer["盖亚计划"]</a>
             </div>
             <div class="navbar-collapse collapse">
 
 
 
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">种族</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">帮助</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About"> @localizer["种族"]</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact" >@localizer["帮助"]</a></li>
+ 
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">统计 <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@localizer["统计"] <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/GameInfo/Index?isAdmin=3&GameStatus=0">管理游戏</a></li>
-                            <li><a href="/GameInfo/Index?GameStatus=8">结束游戏</a></li>
+                            <li><a href="/GameInfo/Index?isAdmin=3&GameStatus=0">@localizer["管理游戏"]</a></li>
+                            <li><a href="/GameInfo/Index?GameStatus=8">@localizer["结束游戏"]</a></li>
 
-                            <li><a asp-area="" asp-controller="GameInfo" asp-action="FactionList">使用种族</a></li>
-                            <li><a asp-area="" asp-controller="GameInfo" asp-action="ApplyDeleteList">等待删除游戏</a></li>
+                            <li><a asp-area="" asp-controller="GameInfo" asp-action="FactionList">@localizer["使用种族"]</a></li>
+                            <li><a asp-area="" asp-controller="GameInfo" asp-action="ApplyDeleteList">@localizer["等待删除游戏"]</a></li>
 
                             <li role="separator" class="divider"></li>
-                            <li><a href="/GameInfo/Index?isAdmin=2">公开游戏</a></li>
+                            <li><a href="/GameInfo/Index?isAdmin=2">@localizer["公开游戏"]</a></li>
                             <li>
-                                <a href="/GameInfo/UserScoreAvg?usercount=4">玩家统计</a>
+                                <a href="/GameInfo/UserScoreAvg?usercount=4">@localizer["玩家统计"]</a>
                             </li>
-                            <li><a href="/GameInfo/FactionList?type=2&usercount=4">种族高分</a></li>
+                            <li><a href="/GameInfo/FactionList?type=2&usercount=4">@localizer["种族高分"]</a></li>
                             <li>
-                                <a href="/GameInfo/FactionStatistics?usercount=4">种族统计</a>
+                                <a href="/GameInfo/FactionStatistics?usercount=4">@localizer["种族统计"]</a>
                             </li>
                             <li>
-                                <a href="/GameInfo/TTStatistics">科技版</a>
+                                <a href="/GameInfo/TTStatistics">@localizer["科技版"]</a>
 
                                 
                             </li>
@@ -75,18 +77,18 @@
                     @if (UserManager.GetUserAsync(User).Result != null && UserManager.GetUserAsync(User).Result.groupid==1)
                     {
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">管理 <span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@localizer["管理"] <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li>
 
 @*                                    <a href="/GameInfo/Index?isAdmin=1&GameStatus=0">未结束游戏</a>*@
 @*                                    <a href="/GameInfo/Index?isAdmin=1&GameStatus=8">全部结束游戏</a>*@
 
-                                    <a href="/GameInfo/FactionList?type=1">全部种族</a>
+                                    <a href="/GameInfo/FactionList?type=1">@localizer["全部种族"]</a>
 
 
 @*                                    <a href="/MatchInfo">测试比赛</a>*@
-                                    <a href="/Admin/NewsIndex">进入管理后台</a>
+                                    <a href="/Admin/NewsIndex">@localizer["进入管理后台"]</a>
 
                                 </li>
 
