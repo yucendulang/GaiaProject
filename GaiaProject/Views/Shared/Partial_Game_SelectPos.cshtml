@@ -1,5 +1,6 @@
 ﻿@using GaiaCore.Gaia
 @model GaiaCore.Gaia.GaiaGame
+@inject IHtmlLocalizer<SharedResources> localizer
 <!-- 模态框（Modal）选择地图 -->
 <div class="modal fade" id="myModalCanves" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="width: 1000px;height: 800px">
@@ -9,7 +10,7 @@
                     &times;
                 </button>
                 <h4 class="modal-title" id="myModalLabel">
-                    请选择位置
+                    @localizer["请选择位置"]
                 </h4>
             </div>
             <div class="modal-body" id="canvasSelectMap">
@@ -20,19 +21,19 @@
                     </div>
                     <div style="display: none" id="allistdiv">
                         <div>
-                            <span>注:目前没有找到很好的办法删除画的点，所以取消后图标依然在地图上。</span>
+                            <span>@localizer["注"]:@localizer["目前没有找到很好的办法删除画的点"]，@localizer["所以取消后图标依然在地图上。"]</span>
                         </div>
-                        @Html.DropDownList("enumList", new SelectList(Model.ALTList.GroupBy(a => a.desc).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name) }), "name", "desc"), "--请选择联邦板块--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList", @syntax = "+" })
+                        @Html.DropDownList("enumList", new SelectList(Model.ALTList.GroupBy(a => a.desc).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name) }), "name", "desc"), "--" + localizer["请选择联邦板块"] + "--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList", @syntax = "+" })
                     </div>
                     <div id="">
                         <select class="btn dropdown-toggle form-control" id="mapkjlist" name="enumList" syntax="advance " style="display: none">
-                            <option value="">--请选择升级科技--</option>
-                            <option value="tf">地形改造</option>
-                            <option value="ship">航行</option>
-                            <option value="ai">人工智能</option>
-                            <option value="gaia">盖亚计划</option>
-                            <option value="eco">经济</option>
-                            <option value="sci">科学</option>
+                            <option value="">--@localizer["请选择升级科技"]--</option>
+                            <option value="tf">@localizer["地形改造"]</option>
+                            <option value="ship">@localizer["航行"]</option>
+                            <option value="ai">@localizer["人工智能"]</option>
+                            <option value="gaia">@localizer["盖亚计划"]</option>
+                            <option value="eco">@localizer["经济"]</option>
+                            <option value="sci">@localizer["科学"]</option>
                         </select>
                     </div>
                 </div>
@@ -42,10 +43,10 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">
-                    取消
+                    @localizer["取消"]
                 </button>
                 <button type="button" class="btn btn-primary" id="queryPosList">
-                    确定
+                    @localizer["确定"]
                 </button>
             </div>
         </div><!-- /.modal-content -->
@@ -62,25 +63,25 @@
         <div class="modal-content message_align">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">提示信息</h4>
+                <h4 class="modal-title">@localizer["提示信息"]</h4>
             </div>
             <div class="modal-body" id="">
-                <p id="querytitle">您确认要执行吗？</p>
+                <p id="querytitle">@localizer["您确认要执行吗？"]</p>
                 <p id="querysyntax"></p>
                 <p id="querytishi"></p>
 
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="queryHandinput">手动输入</button>
-                
+                <button type="button" class="btn btn-default" data-dismiss="modal">@localizer["取消"]</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="queryHandinput">@localizer["手动输入"]</button>
+
                 @if (Model.GameStatus.stage == Stage.ROUNDSTART)//如果是回合中
                 {
-                    <button type="button" class="btn btn-default" data-dismiss="modal" id="queryAndPass">执行并结束</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="queryAndPass">@localizer["执行并结束"]</button>
                 }
-                <a class="btn btn-success" data-dismiss="modal" id="querycfmModelYes">立即执行</a>
-                
+                <a class="btn btn-success" data-dismiss="modal" id="querycfmModelYes">@localizer["立即执行"]</a>
+
 
             </div>
         </div><!-- /.modal-content -->

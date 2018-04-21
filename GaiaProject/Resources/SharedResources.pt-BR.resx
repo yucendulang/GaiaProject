@@ -138,8 +138,20 @@
   <data name="上次行动时间" xml:space="preserve">
     <value>Último Movimento</value>
   </data>
+  <data name="下回合收入" xml:space="preserve">
+    <value>Renda na próxima Rodada</value>
+  </data>
+  <data name="主城等级" xml:space="preserve">
+    <value>Nivel Federação</value>
+  </data>
   <data name="人工智能" xml:space="preserve">
     <value>Inteligência Artificial</value>
+  </data>
+  <data name="人数" xml:space="preserve">
+    <value>Nº Pessoas</value>
+  </data>
+  <data name="使用" xml:space="preserve">
+    <value>Utilizado</value>
   </data>
   <data name="使用已有账户登录" xml:space="preserve">
     <value>Login de uma conta já existente</value>
@@ -147,17 +159,29 @@
   <data name="使用种族" xml:space="preserve">
     <value>Listar Facções</value>
   </data>
+  <data name="保存" xml:space="preserve">
+    <value>Salvar</value>
+  </data>
+  <data name="保存成功" xml:space="preserve">
+    <value>Salvo com sucesso</value>
+  </data>
   <data name="修改信息" xml:space="preserve">
     <value>Atualizar Informações</value>
   </data>
   <data name="修改密码" xml:space="preserve">
     <value>Alterar Senha</value>
   </data>
+  <data name="全部" xml:space="preserve">
+    <value>Todos</value>
+  </data>
   <data name="全部种族" xml:space="preserve">
     <value>Todas as Facções</value>
   </data>
   <data name="公开游戏" xml:space="preserve">
     <value>Abrir Jogo</value>
+  </data>
+  <data name="出场率" xml:space="preserve">
+    <value>Taxa Aparição</value>
   </data>
   <data name="分数" xml:space="preserve">
     <value>Fração</value>
@@ -168,6 +192,9 @@
   <data name="前" xml:space="preserve">
     <value>Antes</value>
   </data>
+  <data name="取消" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
   <data name="后" xml:space="preserve">
     <value>Depois</value>
   </data>
@@ -177,32 +204,101 @@
   <data name="回合" xml:space="preserve">
     <value>Rodada</value>
   </data>
+  <data name="回合助推板" xml:space="preserve">
+    <value>Booster Rodada</value>
+  </data>
+  <data name="回合提示" xml:space="preserve">
+    <value>Dicas Rodada</value>
+  </data>
+  <data name="回合结束计分" xml:space="preserve">
+    <value>Pontuação Final Rodada</value>
+  </data>
   <data name="地形改造" xml:space="preserve">
     <value>Transformação de Terreno</value>
+  </data>
+  <data name="基础科技" xml:space="preserve">
+    <value>Ciência e Tecnologia Básica</value>
+  </data>
+  <data name="备忘" xml:space="preserve">
+    <value>Memo</value>
   </data>
   <data name="密码" xml:space="preserve">
     <value>Senha</value>
   </data>
+  <data name="局数" xml:space="preserve">
+    <value>Nº Jogos</value>
+  </data>
   <data name="帮助" xml:space="preserve">
     <value>Ajuda</value>
+  </data>
+  <data name="平均分" xml:space="preserve">
+    <value>Pontuação Média</value>
+  </data>
+  <data name="当前回合玩家" xml:space="preserve">
+    <value>Jogador Atual</value>
   </data>
   <data name="快速行动" xml:space="preserve">
     <value>Ação Rápida</value>
   </data>
+  <data name="您确认要执行吗？" xml:space="preserve">
+    <value>Deseja mesmo executar?</value>
+  </data>
   <data name="房间" xml:space="preserve">
     <value>Sala</value>
+  </data>
+  <data name="所以取消后图标依然在地图上。" xml:space="preserve">
+    <value>Então, após o cancelamento, o ícone ainda está no mapa.</value>
+  </data>
+  <data name="手动输入" xml:space="preserve">
+    <value>Inserir manualmente</value>
+  </data>
+  <data name="执行并结束" xml:space="preserve">
+    <value>Execute e Termine</value>
   </data>
   <data name="找回密码?" xml:space="preserve">
     <value>Esqueceu sua senha?</value>
   </data>
+  <data name="换取知识" xml:space="preserve">
+    <value>Trocar Conhecimento</value>
+  </data>
   <data name="提示" xml:space="preserve">
     <value>Dica</value>
+  </data>
+  <data name="提示信息" xml:space="preserve">
+    <value>Informação</value>
   </data>
   <data name="放置黑星" xml:space="preserve">
     <value>Coloque Estrelas Negras (Satelite???)</value>
   </data>
+  <data name="数量" xml:space="preserve">
+    <value>Qtd.</value>
+  </data>
+  <data name="时常" xml:space="preserve">
+    <value>Frequência</value>
+  </data>
+  <data name="星域" xml:space="preserve">
+    <value>Qtd. Setores</value>
+  </data>
+  <data name="星球" xml:space="preserve">
+    <value>Planeta</value>
+  </data>
+  <data name="星球种类" xml:space="preserve">
+    <value>Qtd. Planetas</value>
+  </data>
   <data name="是" xml:space="preserve">
     <value>Sim</value>
+  </data>
+  <data name="智慧石所在区域" xml:space="preserve">
+    <value>Local Pedra Cerebral</value>
+  </data>
+  <data name="最低分" xml:space="preserve">
+    <value>Menor Pontuação</value>
+  </data>
+  <data name="最高分" xml:space="preserve">
+    <value>Maior Pontuação</value>
+  </data>
+  <data name="未使用" xml:space="preserve">
+    <value>Não utilizado</value>
   </data>
   <data name="查看好友" xml:space="preserve">
     <value>Lista de Amigos</value>
@@ -213,26 +309,44 @@
   <data name="欢迎" xml:space="preserve">
     <value>Bem vindo</value>
   </data>
+  <data name="注" xml:space="preserve">
+    <value>Nota</value>
+  </data>
   <data name="注册" xml:space="preserve">
     <value>Registrar</value>
   </data>
   <data name="版本" xml:space="preserve">
     <value>Versão</value>
   </data>
+  <data name="特权" xml:space="preserve">
+    <value>Privilégio</value>
+  </data>
   <data name="牺牲能量" xml:space="preserve">
     <value>Sacrificar Energia</value>
+  </data>
+  <data name="玩家" xml:space="preserve">
+    <value>Jogadores</value>
   </data>
   <data name="玩家统计" xml:space="preserve">
     <value>Estatísticas do Jogador</value>
   </data>
   <data name="用户名" xml:space="preserve">
-    <value>Usuario</value>
+    <value>Usuário</value>
   </data>
   <data name="登录" xml:space="preserve">
     <value>Login</value>
   </data>
+  <data name="盖亚区盖亚数量" xml:space="preserve">
+    <value>Gaia Formers Disponíveis</value>
+  </data>
   <data name="盖亚计划" xml:space="preserve">
     <value>Projeto Gaia</value>
+  </data>
+  <data name="目前没有找到很好的办法删除画的点" xml:space="preserve">
+    <value>Atualmente não há uma boa forma de excluir um ponto pintado</value>
+  </data>
+  <data name="确定" xml:space="preserve">
+    <value>OK</value>
   </data>
   <data name="确定升级" xml:space="preserve">
     <value>Aprimorar</value>
@@ -249,8 +363,17 @@
   <data name="科学" xml:space="preserve">
     <value>Ciência</value>
   </data>
+  <data name="科技" xml:space="preserve">
+    <value>Ciência e Tecnologia</value>
+  </data>
+  <data name="科技总分" xml:space="preserve">
+    <value>Total Ciência e Tecnologia</value>
+  </data>
   <data name="科技版" xml:space="preserve">
     <value>Estatíticas por Tecnologia</value>
+  </data>
+  <data name="立即执行" xml:space="preserve">
+    <value>Executar Agora</value>
   </data>
   <data name="等待删除游戏" xml:space="preserve">
     <value>Esperar para Excluir Jogo</value>
@@ -264,8 +387,14 @@
   <data name="管理游戏" xml:space="preserve">
     <value>Gerenciar Jogo</value>
   </data>
+  <data name="终局计分板" xml:space="preserve">
+    <value>Pontuação do Final</value>
+  </data>
   <data name="经济" xml:space="preserve">
     <value>Economia</value>
+  </data>
+  <data name="结局总计分" xml:space="preserve">
+    <value>Pontos Total Final</value>
   </data>
   <data name="结束游戏" xml:space="preserve">
     <value>Finalizar Jogo</value>
@@ -273,20 +402,65 @@
   <data name="统计" xml:space="preserve">
     <value>Estatísticas</value>
   </data>
+  <data name="联邦板块" xml:space="preserve">
+    <value>Tile de Federações</value>
+  </data>
+  <data name="胜场" xml:space="preserve">
+    <value>Vitórias</value>
+  </data>
+  <data name="胜率" xml:space="preserve">
+    <value>Taxa Vitórias</value>
+  </data>
+  <data name="能力是否使用" xml:space="preserve">
+    <value>Usar Habilidade</value>
+  </data>
   <data name="航行" xml:space="preserve">
     <value>Navegação</value>
+  </data>
+  <data name="虚拟玩家" xml:space="preserve">
+    <value>Jogador Virtual</value>
   </data>
   <data name="行动区域" xml:space="preserve">
     <value>Área de Ação</value>
   </data>
+  <data name="被覆盖的科技" xml:space="preserve">
+    <value>Tecnologia Coberta</value>
+  </data>
+  <data name="要塞行动" xml:space="preserve">
+    <value>Ação Instituto Planetário</value>
+  </data>
   <data name="记住我?" xml:space="preserve">
     <value>Lembrar de Mim?</value>
+  </data>
+  <data name="请先选择联邦板块" xml:space="preserve">
+    <value>Selecione o Primeiro Setor da Federeção</value>
+  </data>
+  <data name="请选择位置" xml:space="preserve">
+    <value>Por favor selecione um local</value>
   </data>
   <data name="请选择升级科技" xml:space="preserve">
     <value>Selecione a tecnologia para Aprimorar</value>
   </data>
   <data name="请选择回合助推板" xml:space="preserve">
     <value>Selecione o Bônus da Rodada</value>
+  </data>
+  <data name="请选择科技板块" xml:space="preserve">
+    <value>Selecione a área de Tecnologia</value>
+  </data>
+  <data name="请选择联邦板块" xml:space="preserve">
+    <value>Selecione a Localização da Federação</value>
+  </data>
+  <data name="请选择被覆盖科技" xml:space="preserve">
+    <value>Selecione a Tecnologia P/ Cobrir</value>
+  </data>
+  <data name="请选择高级科技" xml:space="preserve">
+    <value>Selecione a Tecnologia Avançada</value>
+  </data>
+  <data name="资源总分" xml:space="preserve">
+    <value>Total de Recursos</value>
+  </data>
+  <data name="跳过回合玩家" xml:space="preserve">
+    <value>Passaram</value>
   </data>
   <data name="进入管理后台" xml:space="preserve">
     <value>Selecionar Fundo Tela</value>
@@ -299,5 +473,14 @@
   </data>
   <data name="选择联邦位置" xml:space="preserve">
     <value>Selecione a Localização da Federação</value>
+  </data>
+  <data name="选择联邦板块" xml:space="preserve">
+    <value>Selecione o Tile de Federação</value>
+  </data>
+  <data name="选择要升级的建筑" xml:space="preserve">
+    <value>Selecione a Construção para aprimorar</value>
+  </data>
+  <data name="高级科技" xml:space="preserve">
+    <value>Tecnologia Avançada</value>
   </data>
 </root>

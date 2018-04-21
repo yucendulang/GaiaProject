@@ -2,6 +2,7 @@
 @using GaiaDbContext.Models
 
 @inject UserManager<ApplicationUser> UserManager
+@inject IHtmlLocalizer<SharedResources> localizer
 @model Faction
 
 
@@ -26,7 +27,7 @@
         <h3 class="panel-title">
             @if (Model.UserGameModel?.paygrade > 0)
             {
-                <img src = "/images/user/potato.png" />
+                <img src="/images/user/potato.png" />
             }
 
             <span class="badge" onclick="faction_scoreShow('@Model.GaiaGame.GameName', '@Model.FactionName')">@Model.Score VP</span>
@@ -42,40 +43,40 @@
     </div>
     <div class="panel-body">
         <div>
-            下回合收入:
+            @localizer["下回合收入"]:
             <div class="btn-group" role="group" aria-label="First group">
                 @foreach (var income in @Model.CalNextTurnIncome())
                 {
                     <button type="button" class="btn btn-default">@income.Key:@income.Value</button>
                 }
-                <button type="button" class="btn btn-default">G星球:@Model.GaiaPlanetNumber </button>
-                <button type="button" class="btn btn-default">星球种类:@Model.GetPlanetTypeCount() </button>
-                <button type="button" class="btn btn-default">星域:@Model.GetSpaceSectorCount()</button>
-                <button type="button" class="btn btn-default">时常:@Model.GetClockPeriod()</button>
+                    <button type="button" class="btn btn-default">G @localizer["星球"]:@Model.GaiaPlanetNumber </button>
+                    <button type="button" class="btn btn-default">@localizer["星球种类"]:@Model.GetPlanetTypeCount() </button>
+                    <button type="button" class="btn btn-default">@localizer["星域"]:@Model.GetSpaceSectorCount()</button>
+                    <button type="button" class="btn btn-default">@localizer["时常"]:@Model.GetClockPeriod()</button>
                 @if (@Model is MadAndroid)
                 {
-                    <button type="button" class="btn btn-default">能力是否使用:
-                        @if  ((@Model as MadAndroid).IsMadAndroidAbilityUsed)
+                    <button type="button" class="btn btn-default">@localizer["能力是否使用"]:
+                        @if ((@Model as MadAndroid).IsMadAndroidAbilityUsed)
                         {
-                            <span  style="color:red">使用</span>
+                            <span style="color:red">@localizer["使用"]</span>
                         }
                         else
                         {
-                            <span style="color:green">未使用</span>
+                            <span style="color:green">@localizer["未使用"]</span>
                         }
                     </button>
                 }
                 else if (@Model is BalTak)
                 {
-                    <button type="button" class="btn btn-default">盖亚区盖亚数量:@((@Model as BalTak).GaiasGaiaArea.Count) </button>
+                    <button type="button" class="btn btn-default">@localizer["盖亚区盖亚数量"]:@((@Model as BalTak).GaiasGaiaArea.Count) </button>
                 }
                 else if (@Model is Taklons)
                 {
-                    <button type="button" class="btn btn-default">智慧石所在区域:@((@Model as Taklons).BigStone) </button>
+                    <button type="button" class="btn btn-default">@localizer["智慧石所在区域"]:@((@Model as Taklons).BigStone) </button>
                 }
                 else if (@Model is Hive)
                 {
-                    <button type="button" class="btn btn-default">主城等级:@((@Model as Hive).GetMainAllianceGrade()) </button>
+                    <button type="button" class="btn btn-default">@localizer["主城等级"]:@((@Model as Hive).GetMainAllianceGrade()) </button>
                 }
             </div>
         </div>
@@ -88,11 +89,11 @@
                     <div class="col-lg-6">
                         <div class="input-group">
 
-                            @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListHadsch, "code", "name"), "--要塞行动--", new { @class = "btn dropdown-toggle form-control", @id = "StrongHoldKs", @syntax = "convert {0}" })
+                            @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListHadsch, "code", "name"), "--" + localizer["要塞行动"].Value + "--", new { @class = "btn dropdown-toggle form-control", @id = "StrongHoldKs", @syntax = "convert {0}" })
 
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#StrongHoldKs">前</button>
-                                <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#StrongHoldKs">后</button>
+                                <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#StrongHoldKs">@localizer["前"]</button>
+                                <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#StrongHoldKs">@localizer["后"]</button>
                             </span>
                         </div>
                     </div>
@@ -104,20 +105,20 @@
                         {
                             <div class="input-group">
 
-                                @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListNevla, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control", @id = "NevlaKs", @syntax = "convert {0}" })
+                                @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListNevla, "code", "name"), "--" + localizer["快速行动"].Value + "--", new { @class = "btn dropdown-toggle form-control", @id = "NevlaKs", @syntax = "convert {0}" })
 
                                 <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#NevlaKs">前</button>
-                                    <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#NevlaKs">后</button>
+                                    <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#NevlaKs">@localizer["前"]</button>
+                                    <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#NevlaKs">@localizer["后"]</button>
                                 </span>
                             </div>
                         }
 
                         <div class="input-group">
-                            <input type="text" class="form-control" id="cxpwtozs" placeholder="换取知识" syntax="convert {0}pwsp to {0}k">
+                            <input type="text" class="form-control" id="cxpwtozs" placeholder="@localizer["换取知识"]" syntax="convert {0}pwsp to {0}k">
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#cxpwtozs">前</button>
-                                <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#cxpwtozs">后</button>
+                                <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#cxpwtozs">@localizer["前"]</button>
+                                <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#cxpwtozs">@localizer["后"]</button>
                             </span>
                         </div>
                     </div>
@@ -129,11 +130,11 @@
                     <div class="col-lg-6">
                         <div class="input-group">
 
-                            @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListBalTak, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control", @id = "BalTakKs", @syntax = "convert {0}" })
+                            @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListBalTak, "code", "name"), "--" + localizer["快速行动"].Value + "--", new { @class = "btn dropdown-toggle form-control", @id = "BalTakKs", @syntax = "convert {0}" })
 
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#BalTakKs">前</button>
-                                <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#BalTakKs">后</button>
+                                <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#BalTakKs">@localizer["前"]</button>
+                                <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#BalTakKs">@localizer["后"]</button>
                             </span>
                         </div>
                     </div>
@@ -143,11 +144,11 @@
                     <div class="col-lg-6">
                         <div class="input-group">
 
-                            @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTaklons, "code", "name"), "--快速行动--", new { @class = "btn dropdown-toggle form-control", @id = "TaklonsKs", @syntax = "{0}" })
+                            @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTaklons, "code", "name"), "--" + localizer["快速行动"].Value + "--", new { @class = "btn dropdown-toggle form-control", @id = "TaklonsKs", @syntax = "{0}" })
 
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#TaklonsKs">前</button>
-                                <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#TaklonsKs">后</button>
+                                <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#TaklonsKs">@localizer["前"]</button>
+                                <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#TaklonsKs">@localizer["后"]</button>
                             </span>
                         </div>
                     </div>
@@ -243,7 +244,7 @@
         </div>
 
 
-        <div help="回合/特权/科技版" class="row">
+        <div help="@localizer["回合"]/@localizer["特权"]/@localizer["科技版"]" class="row">
             @foreach (var it in @Model.GameTileList.OrderBy(a => a.showRank))
             {
                 <div class="col-md-3">
@@ -322,7 +323,7 @@
             }
 
         </div>
-        <div help="被覆盖的科技" class="row">
+        <div help="@localizer["被覆盖的科技"]" class="row">
 
             @foreach (var item in @Model.GameTileListCovered)
             {
