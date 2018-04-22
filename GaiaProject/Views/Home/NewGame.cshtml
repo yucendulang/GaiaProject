@@ -3,9 +3,10 @@
 @using GaiaDbContext.Models
 @model GaiaProject.Models.HomeViewModels.NewGameViewModel
 @inject ApplicationDbContext dbContext
+@inject IHtmlLocalizer<SharedResources> localizer
 
 @{
-    ViewData["Title"] = "创建新的房间";
+    ViewData["Title"] = localizer["创建新的房间"];
 }
 
 @inject UserManager<ApplicationUser> UserManager
@@ -20,7 +21,7 @@
         var fList = dbContext.UserFriend.Where(item => item.UserName == User.Identity.Name).ToList();
         if (fList.Count > 0)
         {
-            <span>选择好友:</span>
+            <span>@localizer["选择好友"]:</span>
             <div class="btn-group" role="group" aria-label="..." id="userList">
                 @foreach (var user in dbContext.UserFriend.Where(item => item.UserName == User.Identity.Name))
                 {
@@ -61,7 +62,7 @@
     </script>
 
     <form asp-controller="Home" asp-action="NewGame" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" id="playForm">
-        
+
         <div asp-validation-summary="All" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="Name" class="col-md-2 control-label"></label>
@@ -153,19 +154,19 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <label asp-for="MapSelction">
-                    <input asp-for="MapSelction" type="radio" value="fix2p" />双人固定
-                    <input asp-for="MapSelction" type="radio" value="random2p" />双人随机
-                    <input asp-for="MapSelction" type="radio" value="fix3p" />双人变体固定
-                    <input asp-for="MapSelction" type="radio" value="random3p" />双人变体随机
-                    <input asp-for="MapSelction" type="radio" value="fix4p" />四人固定
-                    <input asp-for="MapSelction" type="radio" value="random4p" />四人部分随机
-                    <input asp-for="MapSelction" type="radio" value="randomall4p" checked="checked" />四人完全随机
+                    <input asp-for="MapSelction" type="radio" value="fix2p" />@localizer["双人固定"]
+                    <input asp-for="MapSelction" type="radio" value="random2p" />@localizer["双人随机"]
+                    <input asp-for="MapSelction" type="radio" value="fix3p" />@localizer["双人变体固定"]
+                    <input asp-for="MapSelction" type="radio" value="random3p" />@localizer["双人变体随机"]
+                    <input asp-for="MapSelction" type="radio" value="fix4p" />@localizer["四人固定"]
+                    <input asp-for="MapSelction" type="radio" value="random4p" />@localizer["四人部分随机"]
+                    <input asp-for="MapSelction" type="radio" value="randomall4p" checked="checked" />@localizer["四人完全随机"]
                 </label>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <button type="submit" class="btn btn-default">创建</button>
+                <button type="submit" class="btn btn-default">@localizer["创建"]</button>
             </div>
         </div>
     </form>

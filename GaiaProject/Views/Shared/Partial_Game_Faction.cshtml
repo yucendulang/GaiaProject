@@ -100,7 +100,7 @@
                 @foreach (var item in Model.LogEntityList.OrderByDescending(x => x.Row).Take(5))
                 {
                     <tr>
-                        <td>@item.ChineseName</td>
+                        <td>@localizer[item?.ChineseName ?? ""]</td>
                         <td>@item.ResouceEnd?.m_score VP</td>
 
                         <td>@item.Syntax</td>
