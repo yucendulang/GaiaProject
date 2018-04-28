@@ -978,4 +978,13 @@
   <data name="现在是Round" xml:space="preserve">
     <value>Estamos na Rodada</value>
   </data>
+  <data name="创建大厅房间" xml:space="preserve">
+    <value>Criar Sala Espera</value>
+  </data>
+  <data name="地图模式" xml:space="preserve">
+    <value>Modo do Mapa</value>
+  </data>
+  <data name="禁止种族" xml:space="preserve">
+    <value>Proibir Facções</value>
+  </data>
 </root>

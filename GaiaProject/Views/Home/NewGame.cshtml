@@ -183,7 +183,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-md-2 control-label">地图模式</label>
+            <label class="col-md-2 control-label">@localizer["地图模式"]</label>
             <div class="col-md-10">
                 <label asp-for="MapSelction">
                     
@@ -191,11 +191,11 @@
                     {
                          if (selction.code == "randomall4p")
                          {
-                             <input asp-for="MapSelction" type="radio" value="@selction.code"  checked="checked"/>@selction.name
+                             <input asp-for="MapSelction" type="radio" value="@selction.code"  checked="checked"/>@localizer[selction.name]
                          }
                          else
                          {
-                             <input asp-for="MapSelction" type="radio" value="@selction.code"/>@selction.name
+                             <input asp-for="MapSelction" type="radio" value="@selction.code"/>@localizer[selction.name]
                          }
                     }                    
 
@@ -204,7 +204,7 @@
         </div>
         
         <div class="form-group">
-            <label class="col-md-2 control-label">禁止种族</label>
+            <label class="col-md-2 control-label">@localizer["禁止种族"]</label>
             <div class="col-md-10">
                 @foreach (var
                     fac in
@@ -214,7 +214,7 @@
                     }))
                 {
 
-                    <input type="checkbox" value="@fac.FactionName" name="jinzhi"/>@fac.ChineseName
+                    <input type="checkbox" value="@fac.FactionName" name="jinzhi"/>@localizer[fac.ChineseName]
                 }
 
             </div>
