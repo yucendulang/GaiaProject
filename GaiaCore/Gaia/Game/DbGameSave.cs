@@ -372,5 +372,15 @@ namespace GaiaCore.Gaia.Game
 
             int a = 1;
         }
+
+
+        /// <summary>
+        /// 保存开局的创建信息
+        /// </summary>
+//        public void SaveCreateGameInfo()
+//        {
+//            
+//        }
+
     }
 }

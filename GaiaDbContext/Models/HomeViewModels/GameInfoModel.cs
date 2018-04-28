@@ -99,5 +99,24 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// 保存信息状态
         /// </summary>
         public int saveState { get; set; }
+
+
+        /// <summary>
+        /// 游戏说明
+        /// </summary>
+        [Display(Name = "游戏说明")]
+        public string remark { get; set; }
+
+        /// <summary>
+        /// 是否游戏大厅
+        /// </summary>
+        [Display(Name = "是否游戏大厅")]
+        public bool isHall { get; set; }
+        /// <summary>
+        /// 禁止种族
+        /// </summary>
+        public string jinzhiFaction { get; set; }
+
+
     }
 }

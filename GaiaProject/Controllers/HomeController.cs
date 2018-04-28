@@ -126,6 +126,9 @@ namespace GaiaProject.Controllers
             return newList;
         }
 
+
+
+
         // POST: /Home/NewGame
         [HttpPost]
         public IActionResult NewGame(NewGameViewModel model)
@@ -144,11 +147,121 @@ namespace GaiaProject.Controllers
                 ModelState.AddModelError(string.Empty,  "游戏名称已经存在");
                 return View(model);          
             }
+            //保存游戏信息
+            Action<GaiaGame> saveGameInfo = (result) =>
+            {
+                //保存到数据库
+                GaiaDbContext.Models.HomeViewModels.GameInfoModel gameInfoModel =
+                    new GaiaDbContext.Models.HomeViewModels.GameInfoModel()
+                    {
+                        name = model.Name,
+
+                        //UserCount = model.isHall?model.UserCount: username.Length,
+                        MapSelction = model.MapSelction,
+                        IsTestGame = model.IsTestGame ? 1 : 0,
+                        GameStatus = 0,
+                        starttime = DateTime.Now,
+                        endtime = DateTime.Now,
+                        username = HttpContext.User.Identity.Name,
+
+                        IsAllowLook = model.IsAllowLook,
+                        IsRandomOrder = model.IsRandomOrder,
+                        IsRotatoMap = model.IsRotatoMap,
+                        version = 4,
+
+                        //游戏大厅
+                        isHall = model.isHall,
+                        remark = model.remark,
+                        //round = model.isHall?-1:0,
+                    };
+                //游戏大厅
+                if (model.isHall)
+                {
+                    gameInfoModel.round = -1;
+                    gameInfoModel.UserCount = model.UserCount;
+                    gameInfoModel.userlist = string.Format("|{0}|", this.User.Identity.Name);
+                }
+                else
+                {
+                    gameInfoModel.round = 0;
+                    gameInfoModel.UserCount = username.Length;
+                    gameInfoModel.userlist = string.Join("|", username);
+
+                }
+                gameInfoModel.jinzhiFaction = this.HttpContext.Request.Form["jinzhi"];
+                //有游戏信息
+                if (result != null)
+                {
+                    //配置信息
+                    gameInfoModel.ATTList = string.Join("|", result.ATTList.Select(item => item.name));
+                    gameInfoModel.FSTList = string.Join("|", result.FSTList.Select(item => item.GetType().Name));
+                    gameInfoModel.RBTList = string.Join("|", result.RBTList.Select(item => item.name));
+                    gameInfoModel.RSTList = string.Join("|", result.RSTList.Select(item => item.GetType().Name));
+                    gameInfoModel.STT3List = string.Join("|",
+                        result.STT3List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
+                    gameInfoModel.STT6List = string.Join("|",
+                        result.STT6List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
+                    gameInfoModel.scoreFaction =
+                        string.Join(":",
+                            result.FactionList.OrderBy(item => item.Score)
+                                .Select(item => string.Format("{0}{1}({2})", item.ChineseName,
+                                    "", item.UserName))); //最后的得分情况
+                }
+                this.dbContext.GameInfoModel.Add(gameInfoModel);
+                this.dbContext.SaveChanges();
+            };
+
+            //如果是大厅
+            if (model.isHall)
+            {
+                saveGameInfo(null);
+                return Redirect("/Home/GameHallList/");
+            }
+            else
+            {
 
 
+                //存在屏蔽玩家
+                // 以及是否存在屏蔽用户
+                //IQueryable<UserFriend> friendList = this.dbContext.UserFriend.AsQueryable();
+                int count = username.Length;
+                for (int i = 0; i < count - 1; i++)
+                {
+                    for (int j = i + 1; j < count; j++)
+                    {
+                        var j1 = j;
+                        if (this.dbContext.UserFriend.Any(
+                            friend => (friend.UserName == username[i] && friend.UserNameTo == username[j1] &&
+                                       friend.Type == 2) ||
+                                      (friend.UserNameTo == username[i] && friend.UserName == username[j1] &&
+                                       friend.Type == 2)))
+                        {
+                            ModelState.AddModelError(string.Empty, string.Format("{0}和{1}不能同时存在", username[i], username[j1]));
+                            return View(model);
+                        }
+                    }
+                }
 
+                //被禁止的种族
+                model.jinzhiFaction = this.HttpContext.Request.Form["jinzhi"];
+                //model.jinzhiFaction = jinzhiFaction;
+                GaiaGame result = this.CreateGame(username, model);
 
+                if (model.isHall || (result!=null && !model.IsTestGame && username[0] != username[1]))//测试局以及自己对战的局暂时不保留数据
+                {
+                    saveGameInfo(result);
+                }
 
+                ViewData["ReturnUrl"] = "/Home/ViewGame/" + model.Name;
+                return Redirect("/home/viewgame/" + System.Net.WebUtility.UrlEncode(model.Name));
+            }
+        
+        }
+        /// <summary>
+        /// 创建游戏，从内存
+        /// </summary>
+        private GaiaGame CreateGame(string[] username, NewGameViewModel model)
+        {
             //删除空白玩家
             username = username.Where(x => !string.IsNullOrEmpty(x)).ToArray();
 
@@ -157,16 +270,17 @@ namespace GaiaProject.Controllers
             {
                 username = this.RandomSortList<string>(username).ToArray();
             }
+
             //用户列表
             List<UserGameModel> listUser = new List<UserGameModel>();
             //判断用户不存在
             foreach (var item in username)
             {
-                var user=_userManager.FindByNameAsync(item);
+                var user = _userManager.FindByNameAsync(item);
                 if (user.Result == null)
                 {
                     ModelState.AddModelError(string.Empty, item + "用户不存在");
-                    return View(model);
+                    //return View("NewGame");
                 }
                 else
                 {
@@ -178,80 +292,16 @@ namespace GaiaProject.Controllers
                     });
                 }
             }
-            //存在屏蔽玩家
-            // 以及是否存在屏蔽用户
-            //IQueryable<UserFriend> friendList = this.dbContext.UserFriend.AsQueryable();
-            int count = username.Length;
-            for (int i = 0; i < count-1 ; i++)
-            {
-                for (int j = i+1 ; j < count; j++)
-                {
-                    var j1 = j;
-                    if (this.dbContext.UserFriend.Any(
-                        friend => (friend.UserName == username[i] && friend.UserNameTo == username[j1] &&
-                                   friend.Type == 2) ||
-                                  (friend.UserNameTo == username[i] && friend.UserName == username[j1] &&
-                                   friend.Type == 2)))
-                    {
-                        ModelState.AddModelError(string.Empty, string.Format("{0}和{1}不能同时存在", username[i], username[j1]));
-                        return View(model);
-                    }
-                }
-            }
+            //穿件游戏
+            bool create = GameMgr.CreateNewGame(model.Name, username, out GaiaGame result, model.MapSelction, isTestGame: model.IsTestGame, isSocket: model.IsSocket, IsRotatoMap: model.IsRotatoMap, version: 4);
 
-
-
-            //创建
-            bool create = GameMgr.CreateNewGame(model.Name, username, out GaiaGame result,model.MapSelction, isTestGame: model.IsTestGame,isSocket:model.IsSocket,IsRotatoMap:model.IsRotatoMap,version:4);
-            if (create && !model.IsTestGame && username[0]!=username[1])//测试局以及自己对战的局暂时不保留数据
-            {
-                //保存到数据库
-                GaiaDbContext.Models.HomeViewModels.GameInfoModel gameInfoModel =
-                    new GaiaDbContext.Models.HomeViewModels.GameInfoModel()
-                    {
-                        name = model.Name,
-                        userlist = string.Join("|", username),
-                        UserCount = username.Length,
-                        MapSelction = model.MapSelction,
-                        IsTestGame = model.IsTestGame?1:0,
-                        GameStatus = 0,
-                        starttime = DateTime.Now,
-                        endtime = DateTime.Now,
-                        username = HttpContext.User.Identity.Name,
-
-                        IsAllowLook = model.IsAllowLook,
-                        IsRandomOrder = model.IsRandomOrder,
-                        IsRotatoMap = model.IsRotatoMap,
-                        version = 3,
-                    };
-                //配置信息
-                gameInfoModel.ATTList = string.Join("|", result.ATTList.Select(item => item.name));
-                gameInfoModel.FSTList = string.Join("|", result.FSTList.Select(item => item.GetType().Name));
-                gameInfoModel.RBTList = string.Join("|", result.RBTList.Select(item => item.name));
-                gameInfoModel.RSTList = string.Join("|", result.RSTList.Select(item => item.GetType().Name));
-                gameInfoModel.STT3List = string.Join("|",
-                    result.STT3List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
-                gameInfoModel.STT6List = string.Join("|",
-                    result.STT6List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
-                gameInfoModel.scoreFaction =
-                    string.Join(":",
-                        result.FactionList.OrderBy(item => item.Score)
-                            .Select(item => string.Format("{0}{1}({2})", item.ChineseName,
-                                "", item.UserName))); //最后的得分情况
-                this.dbContext.GameInfoModel.Add(gameInfoModel);
-                this.dbContext.SaveChanges();
-
-            }
 
             //赋值用户信息
             result.UserGameModels = listUser;
 
-
-            //被禁止的种族
-            string jinzhiFaction = this.HttpContext.Request.Form["jinzhi"];
-            if (!string.IsNullOrEmpty(jinzhiFaction))
+            if (!string.IsNullOrEmpty(model.jinzhiFaction))
             {
-               var list =  new List<Faction>()
+                var list = new List<Faction>()
                 {
                     new Terraner(null),
                     new Lantida(null),
@@ -269,16 +319,14 @@ namespace GaiaProject.Controllers
                     new Nevla(null)
                 };
                 result.JinzhiFaction = new List<Faction>();
-                foreach (string name in jinzhiFaction.Split(','))
+                foreach (string name in model.jinzhiFaction.Split(','))
                 {
-                    result.JinzhiFaction.Add(list.Find(fac=>fac.FactionName.ToString() == name));
+                    result.JinzhiFaction.Add(list.Find(fac => fac.FactionName.ToString() == name));
                 }
             }
-
-
-            ViewData["ReturnUrl"] = "/Home/ViewGame/" + model.Name;
-            return Redirect("/home/viewgame/" + System.Net.WebUtility.UrlEncode(model.Name));
+            return result;
         }
+
         // GET: /Home/NewGame
         [HttpGet]
         public IActionResult NewGame()
@@ -293,6 +341,151 @@ namespace GaiaProject.Controllers
             }
             return View();
         }
+        /// <summary>
+        /// 游戏大厅
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult NewGameHall()
+        {
+            var task = _userManager.GetUserAsync(HttpContext.User);
+            Task[] taskarray = new Task[] { task };
+            Task.WaitAll(taskarray, millisecondsTimeout: 1000);
+            if (task.Result != null)
+            {
+                ViewData["Message"] = task.Result.UserName;
+                ViewData["GameList"] = GameMgr.GetAllGameName(task.Result.UserName);
+            }
+            GaiaProject.Models.HomeViewModels.NewGameViewModel model =
+                new GaiaProject.Models.HomeViewModels.NewGameViewModel()
+                {
+                    isHall = true,IsAllowLook = true,IsRandomOrder = true
+                };
+            return View("NewGame", model);
+        }
+        /// <summary>
+        /// 游戏大厅列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult GameHallList()
+        {
+            var task = _userManager.GetUserAsync(HttpContext.User);
+            Task[] taskarray = new Task[] { task };
+            Task.WaitAll(taskarray, millisecondsTimeout: 1000);
+            if (task.Result != null)
+            {
+                ViewData["Message"] = task.Result.UserName;
+                ViewData["GameList"] = GameMgr.GetAllGameName(task.Result.UserName);
+            }
+            var list = this.dbContext.GameInfoModel.Where(item => item.isHall == true && item.round == -1).ToList();
+            return View(list);
+        }
+        /// <summary>
+        /// 加入游戏
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<JsonResult> JoinGame(int id)
+        {
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
+
+            GameInfoModel gameInfoModel = this.dbContext.GameInfoModel.SingleOrDefault(item => item.Id == id);
+            if (gameInfoModel != null)
+            {
+                //如果包括自己
+                if (gameInfoModel.userlist.Contains(string.Format("|{0}|", this.User.Identity.Name)))
+                {
+                    jsonData.info.state = 400;
+                    jsonData.info.message = "已经加入";
+                }
+                else
+                {
+                    gameInfoModel.userlist = gameInfoModel.userlist + this.User.Identity.Name +"|";
+
+                    //判断是否满足人数，正式开始游戏
+                    string[] username = gameInfoModel.userlist.Trim('|').Split('|');
+                    if (username.Length == gameInfoModel.UserCount)
+                    {
+                        gameInfoModel.round = 0;
+                        NewGameViewModel newGameViewModel =  new NewGameViewModel()
+                        {
+                            IsAllowLook = gameInfoModel.IsAllowLook,
+                            IsRandomOrder = gameInfoModel.IsRandomOrder,
+                            IsRotatoMap = gameInfoModel.IsRotatoMap,
+                            IsTestGame = gameInfoModel.IsTestGame==1,
+                            MapSelction = gameInfoModel.MapSelction,
+                            Name = gameInfoModel.name,
+                            jinzhiFaction = gameInfoModel.jinzhiFaction,
+                        };
+                        //创建游戏
+                        this.CreateGame(username, newGameViewModel);
+                    }
+                    this.dbContext.GameInfoModel.Update(gameInfoModel);
+                    this.dbContext.SaveChanges();
+
+                    jsonData.info.state = 200;
+                    jsonData.info.message = "成功";
+                }
+            }
+
+            return new JsonResult(jsonData);
+
+        }
+        /// <summary>
+        /// 退出游戏
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<JsonResult> ExitGame(int id)
+        {
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
+            GameInfoModel gameInfoModel = this.dbContext.GameInfoModel.SingleOrDefault(item => item.Id == id);
+            if (gameInfoModel != null)
+            {
+                string username = this.User.Identity.Name;
+                //如果不包括自己
+                if (!gameInfoModel.userlist.Contains(username))
+                {
+                    jsonData.info.state = 400;
+                    jsonData.info.message = "没有加入,无法取消";
+                }
+                else
+                {
+                    if (gameInfoModel.username == username)
+                    {
+                        jsonData.info.state = 400;
+                        jsonData.info.message = "创建人暂时无法退出";
+
+                    }
+                    else
+                    {
+                        gameInfoModel.userlist = gameInfoModel.userlist.Replace("|" + username + "|", "");
+                        //判断结尾和开头
+                        if (!gameInfoModel.userlist.StartsWith("|"))
+                        {
+                            gameInfoModel.userlist = "|" + gameInfoModel.userlist;
+                        }
+                        if (!gameInfoModel.userlist.EndsWith("|"))
+                        {
+                            gameInfoModel.userlist = gameInfoModel.userlist + "|";
+                        }
+
+                        this.dbContext.GameInfoModel.Update(gameInfoModel);
+                        this.dbContext.SaveChanges();
+                        jsonData.info.state = 200;
+                        jsonData.info.message = "成功";
+                    }
+
+                }
+            }
+
+            return new JsonResult(jsonData);
+
+        }
+
 
         public IActionResult ViewGame(string id)
         {

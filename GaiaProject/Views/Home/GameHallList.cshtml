@@ -1,0 +1,89 @@
+﻿@using GaiaCore.Gaia.Data
+@model List<GaiaDbContext.Models.HomeViewModels.GameInfoModel>
+
+@{
+    ViewBag.Title = "游戏大厅";
+    Layout = "_Layout";
+
+    string myName = string.Format("|{0}|", this.User.Identity.Name);
+}
+
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <a href="/home/NewGame" class="btn btn-primary">创建房间</a>
+
+        <a href="/home/NewGameHall" class="btn btn-primary">创建大厅房间</a>
+    </div>
+
+
+
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <td>房间</td>
+                <td>时间</td>
+                <td>人数</td>
+                <td>玩家</td>
+
+                <td>地图模式</td>
+                <td>禁止种族</td>
+                <td>创建人</td>
+                <td>备注</td>
+                <td>加入</td>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var gameinfo in Model)
+        {
+            <tr>
+                <td>@gameinfo.name</td>
+                <td>@gameinfo.starttime</td>
+                <td>@gameinfo.userlist?.Trim('|').Split('|').Length/@gameinfo.UserCount</td>
+                <td>@gameinfo.userlist</td>
+
+                <td>@GameInfoAttribute.MapSelction.Find(item=>item.code == gameinfo.MapSelction)?.name </td>
+                <td>@gameinfo.jinzhiFaction</td>
+                <td>@gameinfo.username</td>
+                <td>@gameinfo.remark</td>
+                <td>
+                    @if (gameinfo.userlist == null || !gameinfo.userlist.Contains(myName))
+                    {
+                        <button class="btn btn-default" onclick="joinGame(@gameinfo.Id)">加入</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-default" onclick="exitGame(@gameinfo.Id)">退出</button>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+</div>
+
+
+<script type="text/javascript">
+
+    function postGameData(url) {
+        $.post(url,
+            "",
+            function(data) {
+                if (data.info.state === 200) {
+                    location.reload();
+                } else {
+                    alert(data.info.message);
+                }
+            });
+    }
+
+    function joinGame(id) {
+        postGameData("/Home/JoinGame/" + id);
+    }
+
+    function exitGame(id) {
+        postGameData("/Home/ExitGame/" + id);
+    }
+
+</script>
