@@ -1,4 +1,6 @@
 ﻿@using System.Linq
+@using GaiaCore.Gaia
+@using GaiaCore.Gaia.Data
 @using GaiaProject.Data
 @using GaiaDbContext.Models
 @model GaiaProject.Models.HomeViewModels.NewGameViewModel
@@ -71,34 +73,63 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="Player1" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Player1" class="form-control player" value="@ViewData["Message"]" />
-                <span asp-validation-for="Player1" class="text-danger"></span>
+        
+        @if (Model != null && Model.isHall) //如果是游戏大厅
+        {
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserCount" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="UserCount" class="form-control" value="" />
+                    <span asp-validation-for="UserCount" class="text-danger"></span>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Player2" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Player2" class="form-control player" />
-                <span asp-validation-for="Player2" class="text-danger"></span>
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="remark" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="remark" class="form-control" value="" />
+                    <span asp-validation-for="remark" class="text-danger"></span>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Player3" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Player3" class="form-control player" />
-                <span asp-validation-for="Player3" class="text-danger"></span>
+
+
+            <input type="hidden" name="isHall" value="true"/>
+        }
+        else
+        {
+            <div class="form-group">
+                <label asp-for="Player1" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Player1" class="form-control player" value="@ViewData["Message"]" />
+                    <span asp-validation-for="Player1" class="text-danger"></span>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Player4" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Player4" class="form-control player" />
-                <span asp-validation-for="Player4" class="text-danger"></span>
+            <div class="form-group">
+                <label asp-for="Player2" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Player2" class="form-control player" />
+                    <span asp-validation-for="Player2" class="text-danger"></span>
+                </div>
             </div>
-        </div>
+            <div class="form-group">
+                <label asp-for="Player3" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Player3" class="form-control player" />
+                    <span asp-validation-for="Player3" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Player4" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Player4" class="form-control player" />
+                    <span asp-validation-for="Player4" class="text-danger"></span>
+                </div>
+            </div>
+        }
+
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <div class="checkbox">
@@ -152,26 +183,56 @@
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+            <label class="col-md-2 control-label">地图模式</label>
+            <div class="col-md-10">
                 <label asp-for="MapSelction">
-                    <input asp-for="MapSelction" type="radio" value="fix2p" />@localizer["双人固定"]
-                    <input asp-for="MapSelction" type="radio" value="random2p" />@localizer["双人随机"]
-                    <input asp-for="MapSelction" type="radio" value="fix3p" />@localizer["双人变体固定"]
-                    <input asp-for="MapSelction" type="radio" value="random3p" />@localizer["双人变体随机"]
-                    <input asp-for="MapSelction" type="radio" value="fix4p" />@localizer["四人固定"]
-                    <input asp-for="MapSelction" type="radio" value="random4p" />@localizer["四人部分随机"]
-                    <input asp-for="MapSelction" type="radio" value="randomall4p" checked="checked" />@localizer["四人完全随机"]
+                    
+                    @foreach (var selction in GameInfoAttribute.MapSelction)
+                    {
+                         if (selction.code == "randomall4p")
+                         {
+                             <input asp-for="MapSelction" type="radio" value="@selction.code"  checked="checked"/>@selction.name
+                         }
+                         else
+                         {
+                             <input asp-for="MapSelction" type="radio" value="@selction.code"/>@selction.name
+                         }
+                    }                    
+
                 </label>
             </div>
         </div>
+        
+        <div class="form-group">
+            <label class="col-md-2 control-label">禁止种族</label>
+            <div class="col-md-10">
+                @foreach (var
+                    fac in
+                    (new List<Faction>()
+                    {
+                        new Terraner(null), new Lantida(null),new HadschHalla(null), new Hive(null), new Ambas(null), new Taklons(null),new Itar(null), new Nevla(null)
+                    }))
+                {
+
+                    <input type="checkbox" value="@fac.FactionName" name="jinzhi"/>@fac.ChineseName
+                }
+
+            </div>
+        </div>
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <button type="submit" class="btn btn-default">@localizer["创建"]</button>
             </div>
         </div>
     </form>
+    
 
-</div>
+    
+    
+
+
+                                                                                          </div>
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }

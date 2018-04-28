@@ -42,6 +42,28 @@ namespace GaiaProject.Models.HomeViewModels
         [Display(Name = "旋转地图(随机模式下尾家旋转)")]
         public bool IsRotatoMap { get; set; }
 
+
+        /// <summary>
+        /// 玩家人数
+        /// </summary>
+        [Display(Name = "玩家人数")]
+        public int UserCount { get; set; }
+
+        /// <summary>
+        /// 游戏说明
+        /// </summary>
+        [Display(Name = "游戏说明")]
+        public string remark { get; set; }
+
+        /// <summary>
+        /// 是否游戏大厅
+        /// </summary>
+        [Display(Name = "是否游戏大厅")]
+        public bool isHall { get; set; }
+
+        [Display(Name = "禁止种族")]
+
+        public string jinzhiFaction { get; set; }
     }
 
 }
