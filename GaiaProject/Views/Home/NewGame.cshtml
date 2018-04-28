@@ -1,4 +1,5 @@
 ﻿@using System.Linq
+@using GaiaCore.Gaia
 @using GaiaProject.Data
 @using GaiaDbContext.Models
 @model GaiaProject.Models.HomeViewModels.NewGameViewModel
@@ -151,26 +152,56 @@
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+            <label class="col-md-2 control-label">地图模式</label>
+            <div class="col-md-10">
                 <label asp-for="MapSelction">
-                    <input asp-for="MapSelction" type="radio" value="fix2p" />双人固定
-                    <input asp-for="MapSelction" type="radio" value="random2p" />双人随机
-                    <input asp-for="MapSelction" type="radio" value="fix3p" />双人变体固定
-                    <input asp-for="MapSelction" type="radio" value="random3p" />双人变体随机
-                    <input asp-for="MapSelction" type="radio" value="fix4p" />四人固定
-                    <input asp-for="MapSelction" type="radio" value="random4p" />四人部分随机
-                    <input asp-for="MapSelction" type="radio" value="randomall4p" checked="checked" />四人完全随机
+                    <input asp-for="MapSelction" type="radio" value="fix2p"/>双人固定
+                    <input asp-for="MapSelction" type="radio" value="random2p"/>双人随机
+                    <input asp-for="MapSelction" type="radio" value="fix3p"/>双人变体固定
+                    <input asp-for="MapSelction" type="radio" value="random3p"/>双人变体随机
+                    <input asp-for="MapSelction" type="radio" value="fix4p"/>四人固定
+                    <input asp-for="MapSelction" type="radio" value="random4p"/>四人部分随机
+                    <input asp-for="MapSelction" type="radio" value="randomall4p" checked="checked"/>四人完全随机
                 </label>
             </div>
         </div>
+        
+        <div class="form-group">
+            <label class="col-md-2 control-label">禁止种族</label>
+            <div class="col-md-10">
+
+
+
+                @foreach (var
+                    fac in
+                    (new List<Faction>()
+                    {
+                        new Terraner(null), new Lantida(null),new HadschHalla(null), new Hive(null), new Ambas(null), new Taklons(null),new Itar(null), new Nevla(null)
+                    }))
+                {
+
+                    <input type="checkbox" value="@fac.FactionName" name="jinzhi"/>@fac.ChineseName
+            @*                    <button type="button" class="btn btn-default color-@fac.FactionName" style="background-color: @fac.ColorCode" id="@fac.FactionName" syntax="setup ">@fac.ChineseName</button>*@
+
+
+                }
+
+            </div>
+        </div>
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <button type="submit" class="btn btn-default">创建</button>
             </div>
         </div>
     </form>
+    
 
-</div>
+    
+    
+
+
+                                                                                          </div>
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }

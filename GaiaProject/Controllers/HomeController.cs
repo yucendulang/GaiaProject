@@ -142,9 +142,11 @@ namespace GaiaProject.Controllers
             if (this.dbContext.GameInfoModel.Any(item => item.name == model.Name)||GameMgr.GetGameByName(model.Name)!=null)
             {
                 ModelState.AddModelError(string.Empty,  "游戏名称已经存在");
-                return View(model);
-
+                return View(model);          
             }
+
+
+
 
 
             //删除空白玩家
@@ -243,6 +245,36 @@ namespace GaiaProject.Controllers
 
             //赋值用户信息
             result.UserGameModels = listUser;
+
+
+            //被禁止的种族
+            string jinzhiFaction = this.HttpContext.Request.Form["jinzhi"];
+            if (!string.IsNullOrEmpty(jinzhiFaction))
+            {
+               var list =  new List<Faction>()
+                {
+                    new Terraner(null),
+                    new Lantida(null),
+                    new Hive(null),
+                    new HadschHalla(null),
+                    new BalTak(null),
+                    new Geoden(null),
+                    new Gleen(null),
+                    new Xenos(null),
+                    new Ambas(null),
+                    new Taklons(null),
+                    new Firaks(null),
+                    new MadAndroid(null),
+                    new Itar(null),
+                    new Nevla(null)
+                };
+                result.JinzhiFaction = new List<Faction>();
+                foreach (string name in jinzhiFaction.Split(','))
+                {
+                    result.JinzhiFaction.Add(list.Find(fac=>fac.FactionName.ToString() == name));
+                }
+            }
+
 
             ViewData["ReturnUrl"] = "/Home/ViewGame/" + model.Name;
             return Redirect("/home/viewgame/" + System.Net.WebUtility.UrlEncode(model.Name));

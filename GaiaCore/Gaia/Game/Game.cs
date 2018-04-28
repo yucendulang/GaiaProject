@@ -1811,6 +1811,11 @@ namespace GaiaCore.Gaia
         [JsonProperty]
         public bool IsRotatoMap { get; set; }
 
+        /// <summary>
+        /// 禁止种族
+        /// </summary>
+        public List<Faction> JinzhiFaction { get; set; }
+
 
         /// <summary>
         /// 开始保存数据到数据库
