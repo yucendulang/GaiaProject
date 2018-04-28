@@ -137,6 +137,7 @@ foreach (var fac in @Model.FactionList)
     foreach (var leech in fac.LeechPowerQueue)
     {
         <p>@localizer[fac.ChineseName] @localizer["是否要从"] @leech.Item2 @localizer["吸取"] @leech.Item1 @localizer["点能量"]</p>
+        <p>@localizer["{0} 是否要从 {1} 吸取 {2} 点能量", localizer[fac.ChineseName], @leech.Item2, @leech.Item1]</p>
 }
 }
         <br>
@@ -316,7 +317,8 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.MAPROTATE)
     {
         <form asp-controller="Home" asp-action="LeechPower" method="post" class="form-horizontal">
             <div>
-                @fac.FactionName @localizer["是否要从"] @leech.Item2 @localizer["吸取"] @leech.Item1 @localizer["点能量"]
+                @localizer["{0} 是否要从 {1} 吸取 {2} 点能量", fac.FactionName, @leech.Item2, @leech.Item1]
+
                 <input name="isPwFirst" id="pwFirst" type="radio" checked="checked" value="true" /> @localizer["先增加能量"]
                 <input name="isPwFirst" id="pwFirst" type="radio" value="false" />先增加能量Token
             </div>
@@ -331,7 +333,8 @@ else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.MAPROTATE)
 else
 {
         <form asp-controller="Home" asp-action="LeechPower" method="post" class="form-horizontal">
-            <div>@fac.FactionName @localizer["是否要从"] @leech.Item2 @localizer["吸取"] @leech.Item1 @localizer["点能量"]</div>
+            <div>@localizer["{0} 是否要从 {1} 吸取 {2} 点能量", fac.FactionName, @leech.Item2, @leech.Item1]</div>
+
             <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
             <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
             <input name="power" class="form-control" value="@leech.Item1" type="hidden" />

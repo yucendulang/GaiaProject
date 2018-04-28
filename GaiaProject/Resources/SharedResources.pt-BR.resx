@@ -460,7 +460,7 @@
     <value>Dicas Rodada</value>
   </data>
   <data name="回合操作" xml:space="preserve">
-    <value>Operação Rodada</value>
+    <value>Ação da Rodada</value>
   </data>
   <data name="回合结束计分" xml:space="preserve">
     <value>Pontuação Final Rodada</value>
@@ -986,5 +986,8 @@
   </data>
   <data name="禁止种族" xml:space="preserve">
     <value>Proibir Facções</value>
+  </data>
+  <data name="{0} 是否要从 {1} 吸取 {2} 点能量" xml:space="preserve">
+    <value>{0}, deseja cobrar {2} de poder do {1}?</value>
   </data>
 </root>
