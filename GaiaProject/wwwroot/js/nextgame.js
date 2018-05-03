@@ -20,10 +20,10 @@ function GetNextGame() {
                 } else {
                     //console.log(data);
                     if (IsSocket) {
-                        $("#gameOtherInfo").html('<a href="/home/viewgame/' + data + '" target="_blank">游戏' + data +'</a>到你的回合');
+                        $("#gameOtherInfo").html('<a href="/home/viewgame/' + data + '" target="_blank">' + _("游戏") + data + "</a>" + _("到你的回合"));
                     } else {
                         window.location.href = "/home/viewgame/" + data;
-                        alert("你的回合");
+                        alert(_("你的回合"));
                     }
                 }
 
