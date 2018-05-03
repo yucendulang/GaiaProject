@@ -1,0 +1,993 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Alliance Tile" xml:space="preserve">
+    <value>Tile Federação</value>
+  </data>
+  <data name="AmbasPIAbility" xml:space="preserve">
+    <value>Uma vez por rodada, como uma ação, você pode trocar seu instituto planetário por uma de suas minas no tabuleiro de jogo (isso pode ajudá-lo a formar uma nova federação). Isso não tem impacto nas federações existentes, mesmo que seu valor de energia seja menor que sete. A troca não conta como uma ação de construção ou aprimoramento; nenhum VP ou poder pode ser ganho com isso.</value>
+  </data>
+  <data name="AmbasSpecial" xml:space="preserve">
+    <value>Um minério adicional é produzido na posição 0 na mina, e a fortaleza produz 1 poder a mais</value>
+  </data>
+  <data name="BalTakInitialAbility" xml:space="preserve">
+    <value>Você não pode avançar na área de pesquisa de “Navegação”, mesmo se você pegar o tile de tecnologia abaixo da área de pesquisa “Navegação”. Se você pegar esse tile de tecnologia, nenhum avanço ocorrerá. Como uma ação livre, você pode mover um Gaiaformer de um espaço Gaiaformer do seu tabuleiro de facção para sua área de Gaia para ganhar um Q.I.C. Os Gaiaformers na sua área Gaia não podem ser utilizados até a próxima fase Gaia. Na próxima fase Gaia, mova qualquer Gaiaformer em sua área Gaia de volta ao seu espaço Gaiaformer.</value>
+  </data>
+  <data name="BalTakPIAbility" xml:space="preserve">
+    <value>Libera o avanço na área de Pesquisa "Navegação"</value>
+  </data>
+  <data name="BalTakSpecial" xml:space="preserve">
+    <value>Academia 2 produz 4 créditos em vez de blocos quânticos. No inicio 1 bloco quântico a menos</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirmar Senha</value>
+  </data>
+  <data name="Credit" xml:space="preserve">
+    <value>Créditos</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>excluir</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="Final Score" xml:space="preserve">
+    <value>Pontuação Final</value>
+  </data>
+  <data name="FiraksPIAbility" xml:space="preserve">
+    <value>Como uma ação, você pode "rebaixar" um laboratório de pesquisa para uma estação de comércio e avançar imediatamente um nível em uma área de pesquisa de sua escolha. O avanço em uma área de pesquisa é explicado na página 15 do manual. Isso conta como uma ação “Aprimoramento para Estação de Comércio”. Posteriormente, você pode atualizar a estação de comércio de volta para um laboratório de pesquisa usando as regras normais (incluindo a obtenção de um novo tile de tecnologia).</value>
+  </data>
+  <data name="FiraksSpecial" xml:space="preserve">
+    <value>O laboratório 0 produz 1 ponto adicional de conhecimento, no inicio 1 conhecimento a menos, 1 minério a menos</value>
+  </data>
+  <data name="GeodenPIAbility" xml:space="preserve">
+    <value>Na primeira vez que você construir uma mina em novo tipo de planeta, obtenha 3 de conhecimento. (Você não ganha conhecimento para tipos de planetas que você colonizou antes de atualizar para seu instituto planetário.)</value>
+  </data>
+  <data name="GleenInitialAbility" xml:space="preserve">
+    <value>Se você ganhar Q.I.C, ganhe o mesmo tanto de minérios; depois de ter feito o upgrade para a academia 2, esse efeito não se aplica mais. Para tornar um planeta Gaia habitável, pague um minério em vez de um Q.I.C. Cada vez que você constrói uma mina em um planeta Gaia, ganhe dois VP adicionais.</value>
+  </data>
+  <data name="GleenPIAbility" xml:space="preserve">
+    <value>Quando você fizer o upgrade para o instituto planetário, ganhe imediatamente o token de federação de Gleens (ganhando os recursos mostrados normalmente). Ganhar este tile conta como formar uma federação. O próprio instituto planetário ainda pode fazer parte de uma nova federação.</value>
+  </data>
+  <data name="GleenSpecial" xml:space="preserve">
+    <value>O Instituto Planetário não produz tokens de poder, em vez disso produz um minério adicional</value>
+  </data>
+  <data name="HadschHallaPIAbility" xml:space="preserve">
+    <value>Você pode gastar créditos em vez de poder para fazer ações livres que lhe permitem obter recursos.</value>
+  </data>
+  <data name="HadschHallaSpecial" xml:space="preserve">
+    <value>Estação de Comércio 3 Créditos Adicionais</value>
+  </data>
+  <data name="HiveInitialAbility" xml:space="preserve">
+    <value>Durante o setup, não coloque minas. Ao invés disso, depois que todos os outros jogadores colocarem minas (incluindo a terceira mina dos Xenos), coloque seu instituto planetário em qualquer planeta vermelho. Você pode ter apenas uma federação durante todo o jogo, mas, diferentemente de outras facções, você poderá aumentar essa federação para obter novos tokens de federação. Depois de formar uma federação, para realizar novamente a ação “Formar uma Federação”, você deve conectar os planetas a essa federação em vez de formar uma nova federação. Os valores de energia das estruturas nesses planetas devem levar o valor total de energia dessa federação para pelo menos 7X, onde X é o número de tokens de federação que você possui mais um (sem incluir o token de federação do nível 5 de “Terraformação”) . Todas as outras regras para formar uma federação se aplicam, incluindo a construção de satélites e a obtenção de tokens de federação. Para construir um satélite durante esta ação, você deve gastar um Q.I.C. em vez de descartar um poder.</value>
+  </data>
+  <data name="HivePIAbility" xml:space="preserve">
+    <value>Como uma ação especial, coloque uma estação espacial em um espaço acessível que não contenha um planeta ou outra estação espacial. A acessibilidade de um espaço segue as mesmas regras da ação “Construa uma mina”. Como os planetas, uma estação espacial pode ser conectada com satélites; cada estação espacial conta como tendo um valor de potência de um para sua federação. Uma estação espacial não é uma estrutura, portanto, colocá-la não permite que os oponentes cobrem energia. Uma estação espacial não conta como um planeta colonizado, mas pode ser usada como um “ponto de partida” ao determinar a acessibilidade de um planeta (isto é, o alcance pode ser contado a partir de uma estação espacial). Seus oponentes podem colocar satélites em um espaço contendo uma estação espacial.</value>
+  </data>
+  <data name="HiveSpecial" xml:space="preserve">
+    <value>O Instituto Planetário também produz um Q.I.C.</value>
+  </data>
+  <data name="Itar 用+sttx/attx获取板子 一次只能拿一块" xml:space="preserve">
+    <value>Itar usa +sttx/attx para pegar um tile de cada vez</value>
+  </data>
+  <data name="ItarInitialAbility" xml:space="preserve">
+    <value>Toda vez que você descartar um token de poder da área II do seu ciclo de poder para mover outro token de poder para a área III, coloque o token de poder descartado em sua área Gaia em vez de perdê-lo.</value>
+  </data>
+  <data name="ItarPIAbility" xml:space="preserve">
+    <value>Durante a fase Gaia, você pode descartar 4 tokens de poder da sua área Gaia para ganhar imediatamente um tile de tecnologia (padrão ou avançado). As regras para obter um Tile de Tecnologia são explicadas na página 13 do manual. Você pode fazer isso quantas vezes puder.</value>
+  </data>
+  <data name="ItarSpecial" xml:space="preserve">
+    <value>A Academia 1 produz 1 conhecimento extra, e o Instituto Planetário nº 0 produz um contador adicional de energia, no inicio 1 minério a mais.</value>
+  </data>
+  <data name="LantidsInitialAbility" xml:space="preserve">
+    <value>Quando você faz a ação “Construa uma Mina”, você pode construir uma mina em um planeta colonizado por um oponente (incluindo o Planeta Perdido). Coloque sua mina ao lado da estrutura do adversário. Você não precisa pagar pelo terraformação, mas ainda deve pagar o custo da mina. Esta mina conta como uma mina normal em qualquer situação, exceto a seguinte: esta mina não pode ser atualizada, e não conta para quaisquer efeitos relacionados a quantos tipos de planetas ou planetas Gaia você tenha colonizado.</value>
+  </data>
+  <data name="LantidsPIAbility" xml:space="preserve">
+    <value>Cada vez que você constrói uma mina em um planeta colonizado por um oponente, ganhe 2 de conhecimento.</value>
+  </data>
+  <data name="LantidsSpecial" xml:space="preserve">
+    <value>Instituto Planetário não produz Poder</value>
+  </data>
+  <data name="MadAndroidInitialability" xml:space="preserve">
+    <value>Uma vez por rodada, como uma ação, você pode avançar seu token de nível mais baixo em uma área de pesquisa (sem pagar o conhecimento). Se vários de seus tokens estiverem empatados no nível mais baixo, escolha um dos tokens empatados para avançar. Para avançar para o nível 5 dessa maneira, você ainda deve virar um token de federação como normalmente faria. Lembre-se, apenas um jogador pode atingir o nível 5 de cada área de pesquisa.</value>
+  </data>
+  <data name="MadAndroidPIAbility" xml:space="preserve">
+    <value>O valor de poder de suas estruturas em planetas cinzas (seu planeta natal) é aumentado em um (além de quaisquer outros efeitos que aumentem seu valor de poder).</value>
+  </data>
+  <data name="MadAndroidSpecial" xml:space="preserve">
+    <value>As posições do seu instituto planetário e academias são invertidos no seu tabuleiro de facção, assim como a renda que você ganha para as estações de comércio e laboratórios de pesquisa. Tal como acontece com as outras facções, atualizando para uma academia ou um laboratório de pesquisa permite que você ganhe um tile de tecnologia. Laboratório nº 0 não produz conhecimento, no inicio 2 pontos a menos de conhecimento.</value>
+  </data>
+  <data name="NevlaInitialAbility" xml:space="preserve">
+    <value>Como uma ação livre, você pode mover um token de poder da área III do seu ciclo de poder para sua área Gaia para ganhar um conhecimento (esses tokens de poder seguem as regras normais da fase de Gaia). Isso não conta como poder gasto.</value>
+  </data>
+  <data name="NevlaPIAbility" xml:space="preserve">
+    <value>Você pode gastar tokens de poder na área III do seu ciclo de poder como se tivessem dois de potência. Em outras situações, eles contam como um token de poder (ao iniciar um Projeto Gaia, construir satélites, etc.). Ao pagar por uma ação de poder com um custo de energia ímpar (1, 3, 5, etc.), a potência não consumida é perdida.</value>
+  </data>
+  <data name="NevlaSpecial" xml:space="preserve">
+    <value>Todos os laboratórios produzem 2 pontos de poder, ao invés de 1 ponto de conhecimento (Ponto 0 ainda produz 1 ponto de conhecimento), no inicio 1 ponto de conhecimento a menos</value>
+  </data>
+  <data name="NewAccount" xml:space="preserve">
+    <value>Criar uma nova conta</value>
+  </data>
+  <data name="pass" xml:space="preserve">
+    <value>Passar</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Senha</value>
+  </data>
+  <data name="Pass跳过此行动阶段" xml:space="preserve">
+    <value>Passe pule este estágio de ação</value>
+  </data>
+  <data name="redo" xml:space="preserve">
+    <value>refazer</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Registrar</value>
+  </data>
+  <data name="report" xml:space="preserve">
+    <value>relatório</value>
+  </data>
+  <data name="Round" xml:space="preserve">
+    <value>Rodada</value>
+  </data>
+  <data name="TaklonsInitialAbility" xml:space="preserve">
+    <value>A Pedra Cerebral conta como um marcador de poder (ao iniciar um Projeto Gaia, construir satélites, etc.), mas você pode gastá-lo como se fosse três 3 poderes.</value>
+  </data>
+  <data name="TaklonsPIAbility" xml:space="preserve">
+    <value>Cada vez que você cobrar poder da “Ação Passiva: Cobrar Poder”, você ganha um token de poder. Você pode optar por obter esse poder antes ou depois de cobrar.</value>
+  </data>
+  <data name="TerranerInitialAbility" xml:space="preserve">
+    <value>Durante a fase Gaia, mova as fichas de poder da sua área Gaia para a área II do seu ciclo de poder em vez de mover para a área I.</value>
+  </data>
+  <data name="TerranerPIAbility" xml:space="preserve">
+    <value>Durante a fase Gaia, quando você mover as fichas de poder de sua área Gaia para a área II de seu ciclo de poder, você pode ganhar recursos como se estivesse gastando a mesma quantidade de poder para realizar ações livres.</value>
+  </data>
+  <data name="Turn" xml:space="preserve">
+    <value>Turno</value>
+  </data>
+  <data name="undo" xml:space="preserve">
+    <value>desfazer</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>Usuário</value>
+  </data>
+  <data name="XenosInitialAbility" xml:space="preserve">
+    <value>Você coloca uma terceira mina no inicio depois que todas as outras minas iniciais forem colocadas.</value>
+  </data>
+  <data name="XenosPIAbility" xml:space="preserve">
+    <value>Você pode formar federações com um valor de poder total de 6 em vez de 7</value>
+  </data>
+  <data name="XenosSpecial" xml:space="preserve">
+    <value>Você ganha um Q.I.C. como rendimento em vez de um token de poder no rendimento do Instituto Planetário.</value>
+  </data>
+  <data name="上一步" xml:space="preserve">
+    <value>Etapa Anterior</value>
+  </data>
+  <data name="上次行动时间" xml:space="preserve">
+    <value>Último Movimento</value>
+  </data>
+  <data name="下一步" xml:space="preserve">
+    <value>Próximo Passo</value>
+  </data>
+  <data name="下回合收入" xml:space="preserve">
+    <value>Renda na próxima Rodada</value>
+  </data>
+  <data name="主城等级" xml:space="preserve">
+    <value>Nivel Federação</value>
+  </data>
+  <data name="亚特兰斯星人" xml:space="preserve">
+    <value>Lantids</value>
+  </data>
+  <data name="人工智能" xml:space="preserve">
+    <value>Inteligência Artificial</value>
+  </data>
+  <data name="人数" xml:space="preserve">
+    <value>Nº Pessoas</value>
+  </data>
+  <data name="人类" xml:space="preserve">
+    <value>Terraner</value>
+  </data>
+  <data name="人类正常使用Convert命令 一次只能转换一种资源" xml:space="preserve">
+    <value>Comando converter: pode-se converter um recurso por vez</value>
+  </data>
+  <data name="从服务器恢复所有游戏" xml:space="preserve">
+    <value>Recuperar todos os jogos do servidor</value>
+  </data>
+  <data name="伊塔星人" xml:space="preserve">
+    <value>Itars</value>
+  </data>
+  <data name="你的游戏" xml:space="preserve">
+    <value>Seu Jogo</value>
+  </data>
+  <data name="使用" xml:space="preserve">
+    <value>Utilizado</value>
+  </data>
+  <data name="使用已有账户登录" xml:space="preserve">
+    <value>Login de uma conta já existente</value>
+  </data>
+  <data name="使用智慧石指令示例" xml:space="preserve">
+    <value>Exemplo de Instrução de uso da Pedra Cerebral</value>
+  </data>
+  <data name="使用种族" xml:space="preserve">
+    <value>Listar Facções</value>
+  </data>
+  <data name="保存" xml:space="preserve">
+    <value>Executar</value>
+  </data>
+  <data name="保存成功" xml:space="preserve">
+    <value>Salvo com sucesso</value>
+  </data>
+  <data name="信用点" xml:space="preserve">
+    <value>Créditos</value>
+  </data>
+  <data name="修改信息" xml:space="preserve">
+    <value>Atualizar Informações</value>
+  </data>
+  <data name="修改密码" xml:space="preserve">
+    <value>Alterar Senha</value>
+  </data>
+  <data name="做Gaia行动" xml:space="preserve">
+    <value>Ação Gaia</value>
+  </data>
+  <data name="允许观看(其他玩家可以查看)" xml:space="preserve">
+    <value>Outros jogadores podem assistir?</value>
+  </data>
+  <data name="先增加能量" xml:space="preserve">
+    <value>Aumentar poder primeiro</value>
+  </data>
+  <data name="全部" xml:space="preserve">
+    <value>Todos</value>
+  </data>
+  <data name="全部兑换信用点" xml:space="preserve">
+    <value>Creditos a resgatar</value>
+  </data>
+  <data name="全部种族" xml:space="preserve">
+    <value>Todas as Facções</value>
+  </data>
+  <data name="公开游戏" xml:space="preserve">
+    <value>Abrir Jogo</value>
+  </data>
+  <data name="关闭" xml:space="preserve">
+    <value>Desligar</value>
+  </data>
+  <data name="关闭全部回合提示" xml:space="preserve">
+    <value>Desativar Todas Dicas</value>
+  </data>
+  <data name="冰雪" xml:space="preserve">
+    <value>Gelo</value>
+  </data>
+  <data name="出场率" xml:space="preserve">
+    <value>Taxa Aparição</value>
+  </data>
+  <data name="分数" xml:space="preserve">
+    <value>VP</value>
+  </data>
+  <data name="创建" xml:space="preserve">
+    <value>Criar</value>
+  </data>
+  <data name="创建一个新的账户?" xml:space="preserve">
+    <value>Criar uma nova conta?</value>
+  </data>
+  <data name="创建房间" xml:space="preserve">
+    <value>Criar Sala</value>
+  </data>
+  <data name="创建新的房间" xml:space="preserve">
+    <value>Nova Sala</value>
+  </data>
+  <data name="初始星球颜色" xml:space="preserve">
+    <value>Planeta Natal</value>
+  </data>
+  <data name="初始研究" xml:space="preserve">
+    <value>Pesquisa Inicial</value>
+  </data>
+  <data name="删除所有游戏" xml:space="preserve">
+    <value>Excluir todos os jogos</value>
+  </data>
+  <data name="利爪族" xml:space="preserve">
+    <value>Taklons</value>
+  </data>
+  <data name="前" xml:space="preserve">
+    <value>Antes</value>
+  </data>
+  <data name="即时刷新(需要浏览器支持websocket)" xml:space="preserve">
+    <value>Atualizar automaticamente? (Browser precisar suportar websocket)</value>
+  </data>
+  <data name="双人变体固定" xml:space="preserve">
+    <value>Fixo 3P</value>
+  </data>
+  <data name="双人变体随机" xml:space="preserve">
+    <value>3P Aleatório</value>
+  </data>
+  <data name="双人固定" xml:space="preserve">
+    <value>Fixo 2P</value>
+  </data>
+  <data name="双人随机" xml:space="preserve">
+    <value>2P Aleatório</value>
+  </data>
+  <data name="取消" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="变化数值" xml:space="preserve">
+    <value>Modificado</value>
+  </data>
+  <data name="后" xml:space="preserve">
+    <value>Depois</value>
+  </data>
+  <data name="否" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="启用全部回合提示" xml:space="preserve">
+    <value>Ativar Dicas de Rodadas</value>
+  </data>
+  <data name="吸取" xml:space="preserve">
+    <value>cobrar</value>
+  </data>
+  <data name="命令" xml:space="preserve">
+    <value>Ordem</value>
+  </data>
+  <data name="四人固定" xml:space="preserve">
+    <value>Fixo 4P</value>
+  </data>
+  <data name="四人完全随机" xml:space="preserve">
+    <value>4P Tudo Aleatório</value>
+  </data>
+  <data name="四人部分随机" xml:space="preserve">
+    <value>4P Aleatório</value>
+  </data>
+  <data name="回合" xml:space="preserve">
+    <value>Rodada</value>
+  </data>
+  <data name="回合助推板" xml:space="preserve">
+    <value>Booster Rodada</value>
+  </data>
+  <data name="回合提示" xml:space="preserve">
+    <value>Dicas Rodada</value>
+  </data>
+  <data name="回合操作" xml:space="preserve">
+    <value>Ação da Rodada</value>
+  </data>
+  <data name="回合结束计分" xml:space="preserve">
+    <value>Pontuação Final Rodada</value>
+  </data>
+  <data name="圣禽族" xml:space="preserve">
+    <value>Hadsch Hallas</value>
+  </data>
+  <data name="地图选择" xml:space="preserve">
+    <value>Seleção de Mapa</value>
+  </data>
+  <data name="地形改造" xml:space="preserve">
+    <value>Transformação de Terreno</value>
+  </data>
+  <data name="基础科技" xml:space="preserve">
+    <value>Ciência e Tecnologia Básica</value>
+  </data>
+  <data name="备份所有游戏" xml:space="preserve">
+    <value>Backup de todos os jogos</value>
+  </data>
+  <data name="备忘" xml:space="preserve">
+    <value>Memo</value>
+  </data>
+  <data name="大使星人" xml:space="preserve">
+    <value>Ambas</value>
+  </data>
+  <data name="密码" xml:space="preserve">
+    <value>Senha</value>
+  </data>
+  <data name="对局记录" xml:space="preserve">
+    <value>Registro de Jogo</value>
+  </data>
+  <data name="局数" xml:space="preserve">
+    <value>Nº Jogos</value>
+  </data>
+  <data name="帮助" xml:space="preserve">
+    <value>Ajuda</value>
+  </data>
+  <data name="平均分" xml:space="preserve">
+    <value>Pontuação Média</value>
+  </data>
+  <data name="建造初始房子" xml:space="preserve">
+    <value>selecionar construção inicial</value>
+  </data>
+  <data name="异空族" xml:space="preserve">
+    <value>Xenos</value>
+  </data>
+  <data name="当前回合玩家" xml:space="preserve">
+    <value>Jogadores Ativos</value>
+  </data>
+  <data name="快速行动" xml:space="preserve">
+    <value>Ação Rápida</value>
+  </data>
+  <data name="恢复单个游戏" xml:space="preserve">
+    <value>Continuar um Jogo</value>
+  </data>
+  <data name="恢复所有游戏" xml:space="preserve">
+    <value>Continuar todos os jogos</value>
+  </data>
+  <data name="您确认要执行吗？" xml:space="preserve">
+    <value>Deseja mesmo executar?</value>
+  </data>
+  <data name="或" xml:space="preserve">
+    <value>ou</value>
+  </data>
+  <data name="房间" xml:space="preserve">
+    <value>Sala</value>
+  </data>
+  <data name="房间名称" xml:space="preserve">
+    <value>Nome da Sala</value>
+  </data>
+  <data name="所以取消后图标依然在地图上。" xml:space="preserve">
+    <value>Então, após o cancelamento, o ícone ainda está no mapa.</value>
+  </data>
+  <data name="手动输入" xml:space="preserve">
+    <value>Inserir manualmente</value>
+  </data>
+  <data name="执行并结束" xml:space="preserve">
+    <value>Execute e Termine</value>
+  </data>
+  <data name="找回密码?" xml:space="preserve">
+    <value>Esqueceu sua senha?</value>
+  </data>
+  <data name="折叠科技" xml:space="preserve">
+    <value>Tecnologias ????</value>
+  </data>
+  <data name="换取知识" xml:space="preserve">
+    <value>Trocar Conhecimento</value>
+  </data>
+  <data name="提示" xml:space="preserve">
+    <value>Dica</value>
+  </data>
+  <data name="提示信息" xml:space="preserve">
+    <value>Informação</value>
+  </data>
+  <data name="放置黑星" xml:space="preserve">
+    <value>Coloque Estrelas Negras (Satelite???)</value>
+  </data>
+  <data name="数量" xml:space="preserve">
+    <value>Qtd.</value>
+  </data>
+  <data name="旋转地图" xml:space="preserve">
+    <value>girar o mapa</value>
+  </data>
+  <data name="旋转地图(随机模式下尾家旋转)" xml:space="preserve">
+    <value>Rotacionar Mapa</value>
+  </data>
+  <data name="旋转步数" xml:space="preserve">
+    <value>Número de giros</value>
+  </data>
+  <data name="无" xml:space="preserve">
+    <value>Nenhum(a)</value>
+  </data>
+  <data name="时常" xml:space="preserve">
+    <value>Frequência</value>
+  </data>
+  <data name="星域" xml:space="preserve">
+    <value>Qtd. Setores</value>
+  </data>
+  <data name="星域板块" xml:space="preserve">
+    <value>Placa Federação</value>
+  </data>
+  <data name="星球" xml:space="preserve">
+    <value>Planeta</value>
+  </data>
+  <data name="星球种类" xml:space="preserve">
+    <value>Qtd. Planetas</value>
+  </data>
+  <data name="星际要塞能力" xml:space="preserve">
+    <value>Habilidade Instituto Planetário</value>
+  </data>
+  <data name="星际要塞行动指令示例" xml:space="preserve">
+    <value>Exemplo de comando da habilidade do Instituto Planetário</value>
+  </data>
+  <data name="是" xml:space="preserve">
+    <value>Sim</value>
+  </data>
+  <data name="是否为测试局" xml:space="preserve">
+    <value>Jogo teste?</value>
+  </data>
+  <data name="是否要从" xml:space="preserve">
+    <value>Quer</value>
+  </data>
+  <data name="显示全部日志" xml:space="preserve">
+    <value>Mostrar Logs</value>
+  </data>
+  <data name="晶矿星人" xml:space="preserve">
+    <value>Geodens</value>
+  </data>
+  <data name="智慧石所在区域" xml:space="preserve">
+    <value>Local Pedra Cerebral</value>
+  </data>
+  <data name="暂无对局" xml:space="preserve">
+    <value>Nenhuma Partida</value>
+  </data>
+  <data name="最低分" xml:space="preserve">
+    <value>Menor Pontuação</value>
+  </data>
+  <data name="最高分" xml:space="preserve">
+    <value>Maior Pontuação</value>
+  </data>
+  <data name="未使用" xml:space="preserve">
+    <value>Não utilizado</value>
+  </data>
+  <data name="查看好友" xml:space="preserve">
+    <value>Lista de Amigos</value>
+  </data>
+  <data name="格伦星人" xml:space="preserve">
+    <value>Gleens</value>
+  </data>
+  <data name="棕色" xml:space="preserve">
+    <value>Castanho</value>
+  </data>
+  <data name="橙色" xml:space="preserve">
+    <value>Laranja</value>
+  </data>
+  <data name="次数" xml:space="preserve">
+    <value>Vezes</value>
+  </data>
+  <data name="欢迎" xml:space="preserve">
+    <value>Bem vindo</value>
+  </data>
+  <data name="氧化" xml:space="preserve">
+    <value>Óxido</value>
+  </data>
+  <data name="沙漠" xml:space="preserve">
+    <value>Deserto</value>
+  </data>
+  <data name="沼泽" xml:space="preserve">
+    <value>Pântano</value>
+  </data>
+  <data name="注" xml:space="preserve">
+    <value>Nota</value>
+  </data>
+  <data name="注册" xml:space="preserve">
+    <value>Registrar</value>
+  </data>
+  <data name="游戏结束" xml:space="preserve">
+    <value>Fim de Jogo</value>
+  </data>
+  <data name="灰色" xml:space="preserve">
+    <value>Cinza</value>
+  </data>
+  <data name="点能量" xml:space="preserve">
+    <value>pontos de poder</value>
+  </data>
+  <data name="炽炎族" xml:space="preserve">
+    <value>Bal T’aks</value>
+  </data>
+  <data name="熔岩" xml:space="preserve">
+    <value>Vulcânico</value>
+  </data>
+  <data name="版本" xml:space="preserve">
+    <value>Versão</value>
+  </data>
+  <data name="特权" xml:space="preserve">
+    <value>Privilégio</value>
+  </data>
+  <data name="特殊" xml:space="preserve">
+    <value>Especial</value>
+  </data>
+  <data name="牺牲能量" xml:space="preserve">
+    <value>Sacrificar Energia</value>
+  </data>
+  <data name="玩家" xml:space="preserve">
+    <value>Jogadores</value>
+  </data>
+  <data name="玩家1" xml:space="preserve">
+    <value>Jogador 1</value>
+  </data>
+  <data name="玩家2" xml:space="preserve">
+    <value>Jogador 2</value>
+  </data>
+  <data name="玩家3" xml:space="preserve">
+    <value>Jogador 3</value>
+  </data>
+  <data name="玩家4" xml:space="preserve">
+    <value>Jogador 4</value>
+  </data>
+  <data name="玩家统计" xml:space="preserve">
+    <value>Estatísticas do Jogador</value>
+  </data>
+  <data name="玩家顺序是" xml:space="preserve">
+    <value>A ordem dos jogadores é</value>
+  </data>
+  <data name="现在是" xml:space="preserve">
+    <value>Agora é</value>
+  </data>
+  <data name="现在等待" xml:space="preserve">
+    <value>Aguarde</value>
+  </data>
+  <data name="用户名" xml:space="preserve">
+    <value>Usuário</value>
+  </data>
+  <data name="疯狂机器" xml:space="preserve">
+    <value>Mad Android</value>
+  </data>
+  <data name="登录" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="白色" xml:space="preserve">
+    <value>Branco</value>
+  </data>
+  <data name="的回合" xml:space="preserve">
+    <value>Rodada</value>
+  </data>
+  <data name="盖亚区盖亚数量" xml:space="preserve">
+    <value>Gaia Formers Disponíveis</value>
+  </data>
+  <data name="盖亚计划" xml:space="preserve">
+    <value>Projeto Gaia</value>
+  </data>
+  <data name="盖亚阶段指令示例" xml:space="preserve">
+    <value>Exemplo de Instrução na fase Gaia</value>
+  </data>
+  <data name="目前没有找到很好的办法删除画的点" xml:space="preserve">
+    <value>Atualmente não há uma boa forma de excluir um ponto pintado</value>
+  </data>
+  <data name="知识" xml:space="preserve">
+    <value>Conhecimento</value>
+  </data>
+  <data name="矿" xml:space="preserve">
+    <value>Mina</value>
+  </data>
+  <data name="确定" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="确定升级" xml:space="preserve">
+    <value>Aprimorar</value>
+  </data>
+  <data name="确定旋转" xml:space="preserve">
+    <value>Rotacionar</value>
+  </data>
+  <data name="确认" xml:space="preserve">
+    <value>Confirmar</value>
+  </data>
+  <data name="种族" xml:space="preserve">
+    <value>Facções</value>
+  </data>
+  <data name="种族初始能力" xml:space="preserve">
+    <value>Habilidade Inicial</value>
+  </data>
+  <data name="种族名" xml:space="preserve">
+    <value>Facção</value>
+  </data>
+  <data name="种族统计" xml:space="preserve">
+    <value>Estatísticas por Facção</value>
+  </data>
+  <data name="种族高分" xml:space="preserve">
+    <value>Recordes por Facção</value>
+  </data>
+  <data name="科学" xml:space="preserve">
+    <value>Ciência</value>
+  </data>
+  <data name="科技" xml:space="preserve">
+    <value>Ciência e Tecnologia</value>
+  </data>
+  <data name="科技总分" xml:space="preserve">
+    <value>Total Ciência e Tecnologia</value>
+  </data>
+  <data name="科技版" xml:space="preserve">
+    <value>Estatíticas por Tecnologia</value>
+  </data>
+  <data name="立即执行" xml:space="preserve">
+    <value>Executar Agora</value>
+  </data>
+  <data name="章鱼人" xml:space="preserve">
+    <value>Firaks</value>
+  </data>
+  <data name="等待以下吸取能量" xml:space="preserve">
+    <value>Aguardando cobrar energia</value>
+  </data>
+  <data name="等待删除游戏" xml:space="preserve">
+    <value>Esperar para Excluir Jogo</value>
+  </data>
+  <data name="等待玩家" xml:space="preserve">
+    <value>Aguardando Por</value>
+  </data>
+  <data name="管理" xml:space="preserve">
+    <value>Gerenciar</value>
+  </data>
+  <data name="管理游戏" xml:space="preserve">
+    <value>Gerenciar Jogo</value>
+  </data>
+  <data name="红色" xml:space="preserve">
+    <value>Vermelho</value>
+  </data>
+  <data name="终局计分板" xml:space="preserve">
+    <value>Pontuação do Final</value>
+  </data>
+  <data name="经济" xml:space="preserve">
+    <value>Economia</value>
+  </data>
+  <data name="结局总计分" xml:space="preserve">
+    <value>Pontos Total Final</value>
+  </data>
+  <data name="结束操作" xml:space="preserve">
+    <value>Passar Turno</value>
+  </data>
+  <data name="结束旋转" xml:space="preserve">
+    <value>Finalizar Rotação</value>
+  </data>
+  <data name="结束游戏" xml:space="preserve">
+    <value>Finalizar Jogo</value>
+  </data>
+  <data name="统计" xml:space="preserve">
+    <value>Estatísticas</value>
+  </data>
+  <data name="联邦板块" xml:space="preserve">
+    <value>Tile de Federações</value>
+  </data>
+  <data name="胜场" xml:space="preserve">
+    <value>Vitórias</value>
+  </data>
+  <data name="胜率" xml:space="preserve">
+    <value>Taxa Vitórias</value>
+  </data>
+  <data name="能力是否使用" xml:space="preserve">
+    <value>Usar Habilidade</value>
+  </data>
+  <data name="能量" xml:space="preserve">
+    <value>Poder</value>
+  </data>
+  <data name="航行" xml:space="preserve">
+    <value>Navegação</value>
+  </data>
+  <data name="获取所有游戏列表" xml:space="preserve">
+    <value>Listar todos os Jogos</value>
+  </data>
+  <data name="蓝色" xml:space="preserve">
+    <value>Azul</value>
+  </data>
+  <data name="虚拟玩家" xml:space="preserve">
+    <value>Jogador Virtual</value>
+  </data>
+  <data name="蜂人" xml:space="preserve">
+    <value>Ivits</value>
+  </data>
+  <data name="行动区域" xml:space="preserve">
+    <value>Área de Ação</value>
+  </data>
+  <data name="被覆盖的科技" xml:space="preserve">
+    <value>Tecnologia Coberta</value>
+  </data>
+  <data name="要塞行动" xml:space="preserve">
+    <value>Ação Instituto Planetário</value>
+  </data>
+  <data name="记住我?" xml:space="preserve">
+    <value>Lembrar de Mim?</value>
+  </data>
+  <data name="语句" xml:space="preserve">
+    <value>Comando</value>
+  </data>
+  <data name="请先登录" xml:space="preserve">
+    <value>Precisa estar conectado</value>
+  </data>
+  <data name="请先选择联邦板块" xml:space="preserve">
+    <value>Selecione o Primeiro Setor da Federeção</value>
+  </data>
+  <data name="请选择位置" xml:space="preserve">
+    <value>Por favor selecione um local</value>
+  </data>
+  <data name="请选择升级科技" xml:space="preserve">
+    <value>Selecione a tecnologia para Aprimorar</value>
+  </data>
+  <data name="请选择回合助推板" xml:space="preserve">
+    <value>Selecione o Bônus da Rodada</value>
+  </data>
+  <data name="请选择科技板块" xml:space="preserve">
+    <value>Selecione a área de Tecnologia</value>
+  </data>
+  <data name="请选择联邦板块" xml:space="preserve">
+    <value>Selecione a Localização da Federação</value>
+  </data>
+  <data name="请选择被覆盖科技" xml:space="preserve">
+    <value>Selecione a Tecnologia P/ Cobrir</value>
+  </data>
+  <data name="请选择高级科技" xml:space="preserve">
+    <value>Selecione a Tecnologia Avançada</value>
+  </data>
+  <data name="资源总分" xml:space="preserve">
+    <value>Total de Recursos</value>
+  </data>
+  <data name="超星人" xml:space="preserve">
+    <value>Nevlas</value>
+  </data>
+  <data name="跳过回合玩家" xml:space="preserve">
+    <value>Passaram</value>
+  </data>
+  <data name="进入第六回合" xml:space="preserve">
+    <value>Na 6ª Rodada</value>
+  </data>
+  <data name="进入管理后台" xml:space="preserve">
+    <value>Selecionar Fundo Tela</value>
+  </data>
+  <data name="退出" xml:space="preserve">
+    <value>Sair</value>
+  </data>
+  <data name="逆时针" xml:space="preserve">
+    <value>Sentido Anti-horário</value>
+  </data>
+  <data name="选择助推板" xml:space="preserve">
+    <value>Selecione o Bônus da Rodada</value>
+  </data>
+  <data name="选择回合助推板" xml:space="preserve">
+    <value>selecionar booster da rodada</value>
+  </data>
+  <data name="选择好友" xml:space="preserve">
+    <value>Selecione os amigos</value>
+  </data>
+  <data name="选择想要的能量分配方式" xml:space="preserve">
+    <value>Escolha a distribuição de poder desejada</value>
+  </data>
+  <data name="选择科技版" xml:space="preserve">
+    <value>Selecione Tile de Tecnologia</value>
+  </data>
+  <data name="选择联邦位置" xml:space="preserve">
+    <value>Selecione a Localização da Federação</value>
+  </data>
+  <data name="选择联邦板块" xml:space="preserve">
+    <value>Selecione o Tile de Federação</value>
+  </data>
+  <data name="选择要升级的建筑" xml:space="preserve">
+    <value>Selecione a Construção para aprimorar</value>
+  </data>
+  <data name="选种族" xml:space="preserve">
+    <value>selecionar facção</value>
+  </data>
+  <data name="重置操作" xml:space="preserve">
+    <value>Reinicializar</value>
+  </data>
+  <data name="量子魔方" xml:space="preserve">
+    <value>Inteligência Artificial</value>
+  </data>
+  <data name="钛金" xml:space="preserve">
+    <value>Titânio</value>
+  </data>
+  <data name="陆地" xml:space="preserve">
+    <value>Terra</value>
+  </data>
+  <data name="随机顺位" xml:space="preserve">
+    <value>Ordem Aleatória</value>
+  </data>
+  <data name="顺时针" xml:space="preserve">
+    <value>Sentido Horário</value>
+  </data>
+  <data name="颜色是" xml:space="preserve">
+    <value>Cor</value>
+  </data>
+  <data name="高级科技" xml:space="preserve">
+    <value>Tecnologia Avançada</value>
+  </data>
+  <data name="黄色" xml:space="preserve">
+    <value>Amarelo</value>
+  </data>
+  <data name="现在是Round" xml:space="preserve">
+    <value>Estamos na Rodada</value>
+  </data>
+  <data name="创建大厅房间" xml:space="preserve">
+    <value>Criar Sala Espera</value>
+  </data>
+  <data name="地图模式" xml:space="preserve">
+    <value>Modo do Mapa</value>
+  </data>
+  <data name="禁止种族" xml:space="preserve">
+    <value>Proibir Facções</value>
+  </data>
+  <data name="{0} 是否要从 {1} 吸取 {2} 点能量" xml:space="preserve">
+    <value>{0}, deseja cobrar {2} de poder do {1}?</value>
+  </data>
+</root>

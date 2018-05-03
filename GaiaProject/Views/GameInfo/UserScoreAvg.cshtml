@@ -1,6 +1,7 @@
 ﻿@using GaiaCore.Gaia
 @using GaiaProject.Models.Data
 @model List<GaiaProject.Models.Data.GameInfoController.StatisticsFaction>
+@inject IHtmlLocalizer<SharedResources> localizer
 
 @{
     ViewBag.Title = "title";
@@ -15,7 +16,7 @@
                 @Html.Partial("Partial_Html_UserCount", this)
 
                 @Html.DropDownList("FactionName", new SelectList(new List<Faction>() { new Terraner(null), new Lantida(null), new Hive(null), new HadschHalla(null), new BalTak(null), new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null), new MadAndroid(null), new Itar(null), new Nevla(null) }, "FactionName", "ChineseName"),
-             "--种族--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList" })
+                  "--种族--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList" })
 
                 <select class="btn dropdown-toggle form-control" id="orderType" name="orderType" style="width: 100px">
                     <option value="">--排序方式--</option>
@@ -35,40 +36,40 @@
 
 <table class="table">
     <thead>
-    <tr>
-        <td>玩家</td>
+        <tr>
+            <td>玩家</td>
 
-        <td>局数</td>
-        <td>胜场</td>
-        <td>胜率</td>
-        <td>最低分</td>
-        <td>最高分</td>
+            <td>局数</td>
+            <td>胜场</td>
+            <td>胜率</td>
+            <td>最低分</td>
+            <td>最高分</td>
 
-        <td>平均分</td>
+            <td>平均分</td>
 
 
 
-    </tr>
+        </tr>
     </thead>
     <tbody>
 
-    @foreach (GameInfoController.StatisticsFaction item in Model)
-    {
-        <tr>
-            <td>
-                @item.ChineseName
-            </td>
-            <td>
-                @item.count
-            </td>
-            <td>@item.numberwin</td>
-            <td>@item.winprobability %</td>
-            <td>@item.scoremin</td>
-            <td>@item.scoremax</td>
+        @foreach (GameInfoController.StatisticsFaction item in Model)
+        {
+            <tr>
+                <td>
+                    @localizer[item.ChineseName]
+                </td>
+                <td>
+                    @item.count
+                </td>
+                <td>@item.numberwin</td>
+                <td>@item.winprobability %</td>
+                <td>@item.scoremin</td>
+                <td>@item.scoremax</td>
 
-            <td>@item.scoreavg</td>
-        </tr>
-    }
+                <td>@item.scoreavg</td>
+            </tr>
+        }
 
     </tbody>
 </table>

@@ -1,6 +1,8 @@
 ﻿@using GaiaCore.Gaia
 @using GaiaDbContext.Models
 
+@inject IHtmlLocalizer<SharedResources> localizer;
+
 @model IEnumerable<KeyValuePair<string, GaiaCore.Gaia.GaiaGame>>
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -14,14 +16,14 @@
 <table class="table table-condensed">
     <thead>
         <tr>
-            <td>房间</td>
-            <td>种族</td>
-            <td>上次行动时间</td>
-            <td>回合</td>
-            <td>等待玩家</td>
-            <td>分数</td>
-            <td>版本/提示</td>
-@*            <td>回合玩家</td>*@
+            <td>@localizer["房间"]</td>
+            <td>@localizer["种族"]</td>
+            <td>@localizer["上次行动时间"]</td>
+            <td>@localizer["回合"]</td>
+            <td>@localizer["等待玩家"]</td>
+            <td>@localizer["分数"]</td>
+            <td>@localizer["版本"]/@localizer["提示"]</td>
+            @*            <td>回合玩家</td>*@
 
         </tr>
     </thead>
@@ -36,11 +38,11 @@
                 <td><a href="/home/ViewGame/@item.Key">@item.Key</a></td>
                 @if (item.Value.UserDic.ContainsKey(User.Identity.Name))
                 {
-                    <td>@string.Join(",", @item.Value.UserDic[User.Identity.Name].Select(x => x.ChineseName))</td>
+                    <td>@string.Join(",", @item.Value.UserDic[User.Identity.Name].Select(x => localizer[x.ChineseName].Value))</td>
                 }
                 else
                 {
-                    <td>@string.Join(",", @item.Value.FactionList.Select(x => x.ChineseName))</td>
+                    <td>@string.Join(",", @item.Value.FactionList.Select(x => localizer[x.ChineseName].Value))</td>
                 }
                 <td>@item.Value.GetLastMovePreriod()</td>
                 <td>@item.Value.GameStatus.RoundCount</td>
@@ -53,8 +55,8 @@
                 {
                     <td> @string.Join(",", @item.Value.FactionList.Select(x => x.Score)) </td>
                 }
-                <td>V@(item.Value.version)/@(item.Value.UserGameModels.Find(userGame=> userGame.username== userName).isTishi?"是":"否")</td>
-@*                <td>@string.Join("|", item.Value.FactionList.Except(item.Value.FactionNextTurnList).Select(fac=> fac.UserName))</td>*@
+                <td>V@(item.Value.version)/@(item.Value.UserGameModels.Find(userGame => userGame.username == userName).isTishi ? localizer["是"] : localizer["否"])</td>
+                @*                <td>@string.Join("|", item.Value.FactionList.Except(item.Value.FactionNextTurnList).Select(fac=> fac.UserName))</td>*@
             </tr>
         }
     </tbody>

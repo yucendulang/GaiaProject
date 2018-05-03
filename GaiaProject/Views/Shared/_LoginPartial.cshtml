@@ -3,6 +3,7 @@
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject IHtmlLocalizer<SharedResources> localizer;
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -11,19 +12,19 @@
 
 
             <li class="dropdown">
-                <a href="/Manage/Index" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">欢迎 @UserManager.GetUserName(User)!<span class="caret"></span></a>
+                <a href="/Manage/Index" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@localizer["欢迎"] @UserManager.GetUserName(User)!<span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="/Manage/ChangePassword">修改密码</a>
+                        <a href="/Manage/ChangePassword">@localizer["修改密码"]</a>
 
-                        <a href="/Manage/ChangeInfo">修改信息</a>
-                        <a href="/UserFriend">查看好友</a>
+                        <a href="/Manage/ChangeInfo">@localizer["修改信息"]</a>
+                        <a href="/UserFriend">@localizer["查看好友"]</a>
                     </li>
                 </ul>
             </li>
 
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link">退出</button>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link">@localizer["退出"]</button>
             </li>
         </ul>
     </form>
@@ -31,8 +32,8 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="" asp-controller="Account" asp-action="Register2">注册</a></li>
-        <li><a asp-area="" asp-controller="Account" asp-action="Login">登录</a></li>
+        <li><a asp-area="" asp-controller="Account" asp-action="Register2">@localizer["注册"]</a></li>
+        <li><a asp-area="" asp-controller="Account" asp-action="Login">@localizer["登录"]</a></li>
     </ul>
 }
 

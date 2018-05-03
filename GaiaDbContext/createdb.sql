@@ -13,7 +13,7 @@ File Encoding         : 65001
 
 Date: 2018-02-01 22:44:53
 */
-
+SET DATEFORMAT ymd;  
 
 -- ----------------------------
 -- Table structure for __EFMigrationsHistory

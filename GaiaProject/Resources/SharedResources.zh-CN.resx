@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AmbasPIAbility" xml:space="preserve">
+    <value>每回合1次，将星际要塞与另一个自己已建好的矿场互换位置，不影响已经形成的联邦</value>
+  </data>
+  <data name="AmbasSpecial" xml:space="preserve">
+    <value>矿场0号位额外生产1个矿石，要塞额外生产1个能量指示物</value>
+  </data>
+  <data name="BalTakInitialAbility" xml:space="preserve">
+    <value>无法推进航海研究区域，作为自由行动，你可以将你可用的盖亚改造单元放入盖亚区域，换取1个量子方块。位于盖亚区域的盖亚改造单元，会在下一轮盖亚阶段后重新变为可用状态。</value>
+  </data>
+  <data name="BalTakPIAbility" xml:space="preserve">
+    <value>解除航海研究区域的推进限制</value>
+  </data>
+  <data name="BalTakSpecial" xml:space="preserve">
+    <value>大学院2产出4点信用点，取代量子方块。初始少1个量子方块</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>确认密码</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>邮箱</value>
+  </data>
+  <data name="FiraksPIAbility" xml:space="preserve">
+    <value>每回合1次，你可以将你的1个研究所降级为贸易中心（视为1个建造贸易中心的建筑行动），并立即选择1项研究区域推进1格</value>
+  </data>
+  <data name="FiraksSpecial" xml:space="preserve">
+    <value>实验室0号位额外生产1点知识，初始少1点知识，少1个矿石</value>
+  </data>
+  <data name="GeodenPIAbility" xml:space="preserve">
+    <value>每当在1种未建造过建筑的星球类型上建造矿场，获得3知识。在星际要塞建造前所建造的星球类型不会触发该能力</value>
+  </data>
+  <data name="GleenInitialAbility" xml:space="preserve">
+    <value>除非建造了生产量子方块的学院2，否则该种族每当获得量子方块时，都将以获得矿石进行替代。该种族在建造建筑到盖亚星球时，需要支付1个矿石而非1个量子方块。每当在盖亚星球建造矿场时，额外获得2分</value>
+  </data>
+  <data name="GleenPIAbility" xml:space="preserve">
+    <value>立即获得1个专属联邦板块（1点知识,1个矿石,2点信用点,可翻面）</value>
+  </data>
+  <data name="GleenSpecial" xml:space="preserve">
+    <value>要塞不生产能量指示物，额外生产1个矿石</value>
+  </data>
+  <data name="HadschHallaPIAbility" xml:space="preserve">
+    <value>作为自由行动，该种族可以使用信用点代替能量兑换资源</value>
+  </data>
+  <data name="HadschHallaSpecial" xml:space="preserve">
+    <value>贸易中心0号位额外生产3点信用点</value>
+  </data>
+  <data name="HiveInitialAbility" xml:space="preserve">
+    <value>初始建筑设置时，该种族初始建筑为1个星际要塞，而非2个矿场。且放置时无论顺位，永远最后放置（此规则优先于异空族的第3个矿场放置）。整局游戏中，该种族只能形成1个联邦，但每当该联邦中的建筑能量值大于等于X*7时（X等于已经获得的联邦板块数+1），则可花费行动获得另1块联邦板块。该种族放置每个卫星的花费为1个量子方块，而非移除1个能量指示物。</value>
+  </data>
+  <data name="HivePIAbility" xml:space="preserve">
+    <value>每回合1次，该种族可以放置1个空间站标记在1个非星球空位上，不会影响其他玩家的卫星放置，反之亦然。空间站放置距离依赖于种族的航行距离。空间站能量价值为1，可以被卫星连接以获得联邦板块。但因为不属于建筑，因此无法获得相关计分，也不会使对手或因为对手的行动获得能量。</value>
+  </data>
+  <data name="HiveSpecial" xml:space="preserve">
+    <value>星际要塞额外生产1个量子方块。</value>
+  </data>
+  <data name="ItarInitialAbility" xml:space="preserve">
+    <value>每当该种族牺牲2号能量区域的能量进3号区域时，原本应被移除的能量指示物会进入该种族的盖亚区域。</value>
+  </data>
+  <data name="ItarPIAbility" xml:space="preserve">
+    <value>盖亚阶段时，该种族可以选择移除盖亚区域的4个能量指示物获得1个科技板块，该行动可以进行多次。</value>
+  </data>
+  <data name="ItarSpecial" xml:space="preserve">
+    <value>大学院1额外生产1点知识，要塞0号位额外生产1个能量指示物，初始多1个矿石</value>
+  </data>
+  <data name="LantidsInitialAbility" xml:space="preserve">
+    <value>可将矿场建造在对手已建造建筑的星球上，无需匹配星球适应性，仍需支付矿场本身的建造费用，通过此法建造的矿场不能升级，也不能以任何途径获得星球种类以及盖亚星球计分</value>
+  </data>
+  <data name="LantidsPIAbility" xml:space="preserve">
+    <value>每当将矿场建造在对手已建造建筑的星球上时，获得2点知识</value>
+  </data>
+  <data name="LantidsSpecial" xml:space="preserve">
+    <value>要塞不生产能量指示物</value>
+  </data>
+  <data name="MadAndroidInitialability" xml:space="preserve">
+    <value>每回合1次，你可以选择你的研究中最靠后的一项研究区域推进1格，若有多项目在最靠后，由你选择推进哪一项研究</value>
+  </data>
+  <data name="MadAndroidPIAbility" xml:space="preserve">
+    <value>所有位于灰色星球上你的建筑，能量价值+1</value>
+  </data>
+  <data name="MadAndroidSpecial" xml:space="preserve">
+    <value>贸易中心与实验室生产资源对调（每个贸易中心均生产1点知识，实验室生产信用点为3/4/5），星际要塞与大学院位置对调（贸易中心可升级为大学院，实验室可升级为星际要塞）。实验室0号位不生产知识，初始少2点知识</value>
+  </data>
+  <data name="NevlaInitialAbility" xml:space="preserve">
+    <value>作为自由行动，该种族可以选择将原力区域的1个能量指示物移动到盖亚区域中，换取1点知识。</value>
+  </data>
+  <data name="NevlaPIAbility" xml:space="preserve">
+    <value>该种族3号能量区域的每个能量在使用时，可作为2点能量使用（放置卫星和盖亚改造所花费能量不属于“使用”）。</value>
+  </data>
+  <data name="NevlaSpecial" xml:space="preserve">
+    <value>所有实验室生产2点能量，取代1点知识（0号位依然生产1点知识），初始少1点知识</value>
+  </data>
+  <data name="NewAccount" xml:space="preserve">
+    <value>创建一个新的账户.</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>密码</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>注册</value>
+  </data>
+  <data name="TaklonsInitialAbility" xml:space="preserve">
+    <value>初始有1枚”智慧石“标记位于1号能量区域，智慧石在因获得能量而移动时如同普通能量指示物，在3号区域作为能源使用时，可当做3点能量使用。（放置卫星和盖亚改造所花费能量不属于“使用”）</value>
+  </data>
+  <data name="TaklonsPIAbility" xml:space="preserve">
+    <value>每当因为对手的建造或升级行动导致你获得能量时，你可以额外获得1个能量指示物到你的1号能量区域</value>
+  </data>
+  <data name="TerranerInitialAbility" xml:space="preserve">
+    <value>盖亚阶段时，盖亚区域的能量标记进入2号区域，而不是1号区域</value>
+  </data>
+  <data name="TerranerPIAbility" xml:space="preserve">
+    <value>盖亚阶段时，盖亚区域的能量标记进入2号区域时，免费获得等同于盖亚区域能量标记数量的能量用于兑换资源，兑换比例与自由行动相同</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>用户名</value>
+  </data>
+  <data name="XenosInitialAbility" xml:space="preserve">
+    <value>初始建筑设置时，该种族初始建筑为3个矿场，而非2个。第3个矿场在所有玩家放置玩自己的矿场后再放置（除蜂人外）</value>
+  </data>
+  <data name="XenosPIAbility" xml:space="preserve">
+    <value>该种族形成联邦，联邦内建筑能量值只需要6点。</value>
+  </data>
+  <data name="XenosSpecial" xml:space="preserve">
+    <value>要塞不生产能量指示物，额外生产1个量子方块</value>
+  </data>
+</root>

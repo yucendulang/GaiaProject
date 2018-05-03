@@ -21,7 +21,9 @@ using GaiaDbContext.Models;
 using GaiaProject.Notice;
 using Microsoft.AspNetCore.Http;
 using UEditorNetCore;
-
+using Microsoft.AspNetCore.Identity;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace GaiaProject
 {
@@ -62,7 +64,9 @@ namespace GaiaProject
         {
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("GaiaProject")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("GaiaDbContext"))
+                //options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("GaiaDbContext"))
+                );
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -94,8 +98,14 @@ namespace GaiaProject
             services.AddUEditorService();
             //缓存系统
             services.AddMemoryCache();
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-            services.AddMvc();
+            services.AddMvc()
+                .AddViewLocalization()
+                .AddDataAnnotationsLocalization(options => {
+                    options.DataAnnotationLocalizerProvider = (type, factory) =>
+                        factory.Create(typeof(SharedResources));
+                });
 
             //解决输出中文问题https://q.cnblogs.com/q/86078/
             services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.All));
@@ -120,9 +130,24 @@ namespace GaiaProject
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            var supportedCultures = new[]
+            {
+                new CultureInfo("pt-BR"),
+                new CultureInfo("zh-CN"),
+            };
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("pt-BR"),
+                // Formatting numbers, dates, etc.
+                SupportedCultures = supportedCultures,
+                // UI strings that we have localized.
+                SupportedUICultures = supportedCultures
+            });
+
             app.UseStaticFiles();
 
-            app.UseIdentity();
+            app.UseAuthentication();
 
 
             //websocket中间件，需要在mvc之前声明
