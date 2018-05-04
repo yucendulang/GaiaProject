@@ -156,6 +156,24 @@
   <data name="FourPWTo1QIC" xml:space="preserve">
     <value>Converte 4 Pontos de Poder para 1 QIC</value>
   </data>
+  <data name="FSFederationBuildings" xml:space="preserve">
+    <value>Maior nº Construções em Federações</value>
+  </data>
+  <data name="FSGaiaPlanets" xml:space="preserve">
+    <value>Maior nº Planetas Gaia</value>
+  </data>
+  <data name="FSMaxBuildings" xml:space="preserve">
+    <value>Maior nº Construções</value>
+  </data>
+  <data name="FSPlanetTypes" xml:space="preserve">
+    <value>Maior nº Tipos de Planetas</value>
+  </data>
+  <data name="FSSatelites" xml:space="preserve">
+    <value>Maior nº Satélites</value>
+  </data>
+  <data name="FSSpaceSector" xml:space="preserve">
+    <value>Maior nº Setores Espaciais</value>
+  </data>
   <data name="OneGaiaTo1Credit" xml:space="preserve">
     <value>Converte 1 Gaia Former para 1 Crédito</value>
   </data>

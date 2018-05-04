@@ -156,6 +156,24 @@
   <data name="FourPWTo1QIC" xml:space="preserve">
     <value>4点能量兑换1个量子方块</value>
   </data>
+  <data name="FSFederationBuildings" xml:space="preserve">
+    <value>自己所有联盟内建筑数量最多</value>
+  </data>
+  <data name="FSGaiaPlanets" xml:space="preserve">
+    <value>自己建筑所处盖亚星球数量最多</value>
+  </data>
+  <data name="FSMaxBuildings" xml:space="preserve">
+    <value>自己建筑数量最多</value>
+  </data>
+  <data name="FSPlanetTypes" xml:space="preserve">
+    <value>自己建筑所处星球种类最多</value>
+  </data>
+  <data name="FSSatelites" xml:space="preserve">
+    <value>自己卫星数量最多</value>
+  </data>
+  <data name="FSSpaceSector" xml:space="preserve">
+    <value>自己建筑所处星域数量最多</value>
+  </data>
   <data name="OneGaiaTo1Credit" xml:space="preserve">
     <value>1个盖亚单元兑换1点信用点</value>
   </data>

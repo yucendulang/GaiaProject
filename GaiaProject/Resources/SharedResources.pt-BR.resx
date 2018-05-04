@@ -439,7 +439,7 @@
     <value>cobrar</value>
   </data>
   <data name="命令" xml:space="preserve">
-    <value>Ordem</value>
+    <value>Comando</value>
   </data>
   <data name="四人固定" xml:space="preserve">
     <value>Fixo 4P</value>
@@ -490,7 +490,7 @@
     <value>Senha</value>
   </data>
   <data name="对局记录" xml:space="preserve">
-    <value>Registro de Jogo</value>
+    <value>Histórico do Jogo</value>
   </data>
   <data name="局数" xml:space="preserve">
     <value>Nº Jogos</value>
@@ -886,7 +886,7 @@
     <value>Selecione a tecnologia para Aprimorar</value>
   </data>
   <data name="请选择回合助推板" xml:space="preserve">
-    <value>Selecione o Bônus da Rodada</value>
+    <value>Selecione o Booster da Rodada</value>
   </data>
   <data name="请选择科技板块" xml:space="preserve">
     <value>Selecione a área de Tecnologia</value>
@@ -922,7 +922,7 @@
     <value>Sentido Anti-horário</value>
   </data>
   <data name="选择助推板" xml:space="preserve">
-    <value>Selecione o Bônus da Rodada</value>
+    <value>Selecione o Booster da Rodada</value>
   </data>
   <data name="选择回合助推板" xml:space="preserve">
     <value>selecionar booster da rodada</value>
@@ -989,5 +989,8 @@
   </data>
   <data name="{0} 是否要从 {1} 吸取 {2} 点能量" xml:space="preserve">
     <value>{0}, deseja cobrar {2} de poder do {1}?</value>
+  </data>
+  <data name="现在是 &lt;span class=&quot;buildcolor&quot;&gt;{0}&lt;/span&gt; 的回合, 颜色是 {1}" xml:space="preserve">
+    <value>Rodada do &lt;span class="buildcolor"&gt;{0}&lt;/span&gt;, com a cor {1}</value>
   </data>
 </root>
