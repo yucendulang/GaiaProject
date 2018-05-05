@@ -178,6 +178,60 @@ namespace GaiaCore.Gaia.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 自己所有联盟内建筑数量最多.
+        /// </summary>
+        internal static string FSFederationBuildings {
+            get {
+                return ResourceManager.GetString("FSFederationBuildings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 自己建筑所处盖亚星球数量最多.
+        /// </summary>
+        internal static string FSGaiaPlanets {
+            get {
+                return ResourceManager.GetString("FSGaiaPlanets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 自己建筑数量最多.
+        /// </summary>
+        internal static string FSMaxBuildings {
+            get {
+                return ResourceManager.GetString("FSMaxBuildings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 自己建筑所处星球种类最多.
+        /// </summary>
+        internal static string FSPlanetTypes {
+            get {
+                return ResourceManager.GetString("FSPlanetTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 自己卫星数量最多.
+        /// </summary>
+        internal static string FSSatelites {
+            get {
+                return ResourceManager.GetString("FSSatelites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 自己建筑所处星域数量最多.
+        /// </summary>
+        internal static string FSSpaceSector {
+            get {
+                return ResourceManager.GetString("FSSpaceSector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 1个盖亚单元兑换1点信用点.
         /// </summary>
         internal static string OneGaiaTo1Credit {

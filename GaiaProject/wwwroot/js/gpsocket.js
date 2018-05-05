@@ -37,6 +37,6 @@ if (!!window.WebSocket && window.WebSocket.prototype.send) {
 //    }
 }
 else {
-    alert("你的浏览器不支持及时自动刷新!");
+    alert(_("你的浏览器不支持及时自动刷新!"));
 }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using GaiaCore.Util;
+using GaiaCore.Gaia.Resources;
 
 namespace GaiaCore.Gaia.Tiles
 {
@@ -65,7 +66,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "自己建筑数量最多";
+                return Messages.FSMaxBuildings;
             }
         }
 
@@ -81,7 +82,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "自己所有联盟内建筑数量最多";
+                return  Messages.FSFederationBuildings;
             }
         }
 
@@ -97,7 +98,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "自己建筑所处星球种类最多";
+                return Messages.FSPlanetTypes;
             }
         }
 
@@ -113,7 +114,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "自己建筑所处盖亚星球数量最多";
+                return Messages.FSGaiaPlanets;
             }
         }
 
@@ -129,7 +130,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "自己建筑所处星域数量最多";
+                return Messages.FSSpaceSector;
             }
         }
 
@@ -145,7 +146,7 @@ namespace GaiaCore.Gaia.Tiles
         {
             get
             {
-                return "自己卫星数量最多";
+                return Messages.FSSatelites;
             }
         }
 

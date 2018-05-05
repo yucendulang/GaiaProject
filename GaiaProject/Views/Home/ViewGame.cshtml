@@ -113,257 +113,257 @@ else
         <div class="panel-heading">@localizer["回合操作"]</div>
         <div class="panel-body">
             @if (@Model.FactionList.Count > @Model.GameStatus.PlayerIndex)
-    {
-        <style type="text/css">
+            {
+                <style type="text/css">
 
                 .buildcolor {
                     background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode
                 }
-        </style>
-        <script>
+                </style>
+                <script>
                 //$("#gameTopInfo").css("background-color","@Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode");
-        </script>
-}
+                </script>
+            }
 
             <input id="username" name="name" class="form-control" value="@User.Identity.Name" type="hidden" />
             <input id="isMyTurn" name="name" class="form-control" value="@User.Identity.Name.Equals(Model.GetCurrentUserName()).ToString()" type="hidden" />
             <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
             @if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDWAITLEECHPOWER)
-    {
+            {
 
-        <p>@localizer["等待以下吸取能量"]</p>
-foreach (var fac in @Model.FactionList)
-{
-    foreach (var leech in fac.LeechPowerQueue)
-    {
-        <p>@localizer[fac.ChineseName] @localizer["是否要从"] @leech.Item2 @localizer["吸取"] @leech.Item1 @localizer["点能量"]</p>
-        <p>@localizer["{0} 是否要从 {1} 吸取 {2} 点能量", localizer[fac.ChineseName], @leech.Item2, @leech.Item1]</p>
-}
-}
-        <br>
-}
-else if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDSTART)
-{
-        <p>@localizer["现在是Round"] @Model.GameStatus.RoundCount,@localizer["Turn"] @Model.GameStatus.TurnCount</p>
-
-        <p>@localizer["现在是"] <span class="buildcolor">@localizer[Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName]</span> @localizer["的回合"],@localizer["颜色是"] @Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()</p>
-
-
-
-        <!-- 模态框（Modal）选择地图 -->
-        @Html.Partial("Partial_Game_SelectPos", Model)//
-
-
-}
-
-else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
-{
-        <p>@localizer["现在等待"] @Model.Username[Model.GameStatus.PlayerIndex] @localizer["选种族"] setup xxx.</p>
-
-        <p>@localizer["玩家顺序是"] @string.Join("|", Model.Username)</p>
-        <div class="btn-group" id="selectfaction" role="group" aria-label="...">
-            @{
-                var facList = (new List<Faction>()
+                <p>@localizer["等待以下吸取能量"]</p>
+                foreach (var fac in @Model.FactionList)
                 {
-                    new Terraner(null), new Lantida(null), new Hive(null), new HadschHalla(null), new BalTak(null),
-                    new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null),
-                    new MadAndroid(null), new Itar(null), new Nevla(null)
-                });
-                if (Model.JinzhiFaction != null)
-                {
-                    facList.RemoveAll(item => Model.JinzhiFaction.Select(jzFac=> jzFac.FactionName).Contains(item.FactionName) );//item.FactionName.ToString() == "s"
+                    foreach (var leech in fac.LeechPowerQueue)
+                    {
+                        <p>@localizer[fac.ChineseName] @localizer["是否要从"] @leech.Item2 @localizer["吸取"] @leech.Item1 @localizer["点能量"]</p>
+                        <p>@localizer["{0} 是否要从 {1} 吸取 {2} 点能量", localizer[fac.ChineseName], @leech.Item2, @leech.Item1]</p>
+                    }
                 }
+                <br>
             }
-            @foreach (var fac in facList.Where(item => !Model.FactionList.Select(fa => fa.ColorCode).Contains(item.ColorCode)))
-    {
-        <button type="button" class="btn btn-default color-@fac.FactionName" style="background-color: @fac.ColorCode" id="@fac.FactionName" syntax="setup ">@localizer[fac.ChineseName]</button>
+            else if (@Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDSTART)
+            {
+                <p>@localizer["现在是Round"] @Model.GameStatus.RoundCount,@localizer["Turn"] @Model.GameStatus.TurnCount</p>
 
-}
-            <script>
-                $("#selectfaction button").click(function () {
-                    $("#syntax").val("setup {0}".format(this.id));
-                });
-            </script>
-        </div>
-}
-else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.INITIALMINES)
-{
+                <p>@localizer["现在是 <span class=\"buildcolor\">{0}</span> 的回合, 颜色是 {1}", localizer[Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName], localizer[Model.FactionList[Model.GameStatus.PlayerIndex].OGTerrain.ToString()]] </p>
 
-        <p>@localizer["现在等待"] <span class="buildcolor color-">@localizer[Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName]</span> @localizer["建造初始房子"] </p>
-        <script>
+
+
+                <!-- 模态框（Modal）选择地图 -->
+                @Html.Partial("Partial_Game_SelectPos", Model)//
+
+
+            }
+
+            else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.FACTIONSELECTION)
+            {
+                <p>@localizer["现在等待"] @Model.Username[Model.GameStatus.PlayerIndex] @localizer["选种族"] setup xxx.</p>
+
+                <p>@localizer["玩家顺序是"] @string.Join("|", Model.Username)</p>
+                <div class="btn-group" id="selectfaction" role="group" aria-label="...">
+                    @{
+                        var facList = (new List<Faction>()
+        {
+            new Terraner(null), new Lantida(null), new Hive(null), new HadschHalla(null), new BalTak(null),
+            new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null),
+            new MadAndroid(null), new Itar(null), new Nevla(null)
+        });
+                        if (Model.JinzhiFaction != null)
+                        {
+                            facList.RemoveAll(item => Model.JinzhiFaction.Select(jzFac => jzFac.FactionName).Contains(item.FactionName));//item.FactionName.ToString() == "s"
+                        }
+                    }
+                    @foreach (var fac in facList.Where(item => !Model.FactionList.Select(fa => fa.ColorCode).Contains(item.ColorCode)))
+                    {
+                        <button type="button" class="btn btn-default color-@fac.FactionName" style="background-color: @fac.ColorCode" id="@fac.FactionName" syntax="setup ">@localizer[fac.ChineseName]</button>
+
+                    }
+                    <script>
+                        $("#selectfaction button").click(function () {
+                            $("#syntax").val("setup {0}".format(this.id));
+                        });
+                    </script>
+                </div>
+            }
+            else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.INITIALMINES)
+            {
+
+                <p>@localizer["现在等待"] <span class="buildcolor color-">@localizer[Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName]</span> @localizer["建造初始房子"] </p>
+                <script>
                 userInfo.mapcolor = '@Model.FactionList[Model.GameStatus.PlayerIndex].ColorMap';
                 userInfo.stage = 2;
-        </script>
-        @Html.Partial("Partial_Game_SelectPos", Model)//
+                </script>
+                @Html.Partial("Partial_Game_SelectPos", Model)//
 
-}
-else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.SELECTROUNDBOOSTER)
-{
+            }
+            else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.SELECTROUNDBOOSTER)
+            {
 
-        <p>@localizer["现在等待"] <span class="buildcolor">@localizer[Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName]</span> @localizer["选择回合助推板"] +rbtx</p>
+                <p>@localizer["现在等待"] <span class="buildcolor">@localizer[Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName]</span> @localizer["选择回合助推板"] +rbtx</p>
 
-if (isAction)
-{
-        @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"), "--" + localizer["请选择回合助推板"].Value + "--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "rbtList", @syntax = "+" })
-}
-}
-else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
-{
+                if (isAction)
+                {
+                    @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"), "--" + localizer["请选择回合助推板"].Value + "--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "rbtList", @syntax = "+" })
+                }
+            }
+            else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.GAMEEND)
+            {
 
-        <p>@localizer["游戏结束"] @string.Join("|", @Model.FactionList.OrderByDescending(x => x.Score).Select(x => string.Format("{0}:{1}", localizer[x.ChineseName].Value, x.Score)))</p>
-}
-else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
-{
-        <div>
-            <p>
-                @localizer["现在等待"] <span style="background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode">@localizer[Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName]</span> @localizer["做Gaia行动"]
-            </p>
-            <p>@localizer["Pass跳过此行动阶段"]</p>
-            <p>@localizer["Itar 用+sttx/attx获取板子 一次只能拿一块"]</p>
-            <p>@localizer["人类正常使用Convert命令 一次只能转换一种资源"]</p>
+                <p>@localizer["游戏结束"] @string.Join("|", @Model.FactionList.OrderByDescending(x => x.Score).Select(x => string.Format("{0}:{1}", localizer[x.ChineseName].Value, x.Score)))</p>
+            }
+            else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDGAIAPHASE)
+            {
+                <div>
+                    <p>
+                        @localizer["现在等待"] <span style="background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode">@localizer[Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName]</span> @localizer["做Gaia行动"]
+                    </p>
+                    <p>@localizer["Pass跳过此行动阶段"]</p>
+                    <p>@localizer["Itar 用+sttx/attx获取板子 一次只能拿一块"]</p>
+                    <p>@localizer["人类正常使用Convert命令 一次只能转换一种资源"]</p>
 
-            @if (isRound)
-    {
-        @if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Itar)
-{
-        <div class="btn-group" role="group" aria-label="...">
-            <button class="btn btn-default" onclick="openSelectTT('{0}')">@localizer["选择科技版"]</button>
+                    @if (isRound)
+                    {
+                        @if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Itar)
+                        {
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button class="btn btn-default" onclick="openSelectTT('{0}')">@localizer["选择科技版"]</button>
 
-            <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
-        </div>
-        <!-- 模态框（Modal）选择地图 -->
-        @Html.Partial("Partial_Game_SelectPos", Model)//
-}
-else if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Terraner)
-{
+                                <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">pass</button>
+                            </div>
+                            <!-- 模态框（Modal）选择地图 -->
+                            @Html.Partial("Partial_Game_SelectPos", Model)//
+                        }
+                        else if (@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName == FactionName.Terraner)
+                        {
 
-        <div>
-            <span>PG:<span id="TerranerPowerToken">@Model.FactionList[Model.GameStatus.PlayerIndex].PowerTokenGaia</span></span>
-
-
-
-            @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTerraner, "code", "name"), "--" + @localizer["快速行动"].Value + "--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert " })
-
-            <button class="btn btn-default" onclick="submitData();">@localizer["确认"]</button>
-
-            <button class="btn btn-default" onclick="$('#syntax').val('convert '+$('#TerranerPowerToken').text()+'pw'+' to '+$('#TerranerPowerToken').text()+'c');">@localizer["全部兑换信用点"]</button>
-
-
-            <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">@localizer["pass"]</button>
-        </div>
-        <script>
-
-        </script>
-
-}
-}
+                            <div>
+                                <span>PG:<span id="TerranerPowerToken">@Model.FactionList[Model.GameStatus.PlayerIndex].PowerTokenGaia</span></span>
 
 
 
+                                @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActListTerraner, "code", "name"), "--" + @localizer["快速行动"].Value + "--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "updatekj", @syntax = "convert " })
 
-        </div>
-}
-//旋转地图
-else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.MAPROTATE)
-{
-        <div>
+                                <button class="btn btn-default" onclick="submitData();">@localizer["确认"]</button>
 
-            <p>@localizer["等待玩家"] @Model.GetCurrentUserName() @localizer["旋转地图"]</p>
+                                <button class="btn btn-default" onclick="$('#syntax').val('convert '+$('#TerranerPowerToken').text()+'pw'+' to '+$('#TerranerPowerToken').text()+'c');">@localizer["全部兑换信用点"]</button>
 
-            @if (User.Identity.Name.Equals(Model.GetCurrentUserName()))
-    {
-        @Html.DropDownList("sclist", new SelectList(Model.Map.ListSpaceSector.OrderBy(item => Int32.Parse(item.Name)), "Name", "Name"), "--" + localizer["星域板块"].Value + "--", new { @class = "btn dropdown-toggle form-control", @id = "rotatesc", @syntax = "" })
 
-        <select class="btn dropdown-toggle form-control" id="rotatefx" name="rotatefx" style="width: 100px">
-            <option value="1">@localizer["顺时针"]</option>
-            <option value="2">@localizer["逆时针"]</option>
-        </select>
+                                <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">@localizer["pass"]</button>
+                            </div>
+                            <script>
 
-        <select class="btn dropdown-toggle form-control" id="rotatebs" name="rotatebs" style="width: 100px">
-            <option value="1">--@localizer["旋转步数"]--</option>
-            <option value="1" selected="selected">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
-        <button class="btn btn-default" id="rotatebtn">@localizer["确定旋转"]</button>
+                            </script>
 
-        <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">@localizer["结束旋转"]</button>
+                        }
+                    }
 
-        <script>
-            $("#rotatebtn").click(function () {
-                $('#syntax').val('setupmaprotate {0} {1} {2}'.format($('#rotatesc').val(), $('#rotatefx').val(), $('#rotatebs').val()));
-                submitData();
-            });
-        </script>
-}
 
-        </div>
-}
+
+
+                </div>
+            }
+            //旋转地图
+            else if (Model.GameStatus.stage == GaiaCore.Gaia.Stage.MAPROTATE)
+            {
+                <div>
+
+                    <p>@localizer["等待玩家"] @Model.GetCurrentUserName() @localizer["旋转地图"]</p>
+
+                    @if (User.Identity.Name.Equals(Model.GetCurrentUserName()))
+                    {
+                        @Html.DropDownList("sclist", new SelectList(Model.Map.ListSpaceSector.OrderBy(item => Int32.Parse(item.Name)), "Name", "Name"), "--" + localizer["星域板块"].Value + "--", new { @class = "btn dropdown-toggle form-control", @id = "rotatesc", @syntax = "" })
+
+                        <select class="btn dropdown-toggle form-control" id="rotatefx" name="rotatefx" style="width: 100px">
+                            <option value="1">@localizer["顺时针"]</option>
+                            <option value="2">@localizer["逆时针"]</option>
+                        </select>
+
+                        <select class="btn dropdown-toggle form-control" id="rotatebs" name="rotatebs" style="width: 100px">
+                            <option value="1">--@localizer["旋转步数"]--</option>
+                            <option value="1" selected="selected">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <button class="btn btn-default" id="rotatebtn">@localizer["确定旋转"]</button>
+
+                        <button class="btn btn-default" onclick="$('#syntax').val('pass');submitData();">@localizer["结束旋转"]</button>
+
+                        <script>
+                            $("#rotatebtn").click(function () {
+                                $('#syntax').val('setupmaprotate {0} {1} {2}'.format($('#rotatesc').val(), $('#rotatefx').val(), $('#rotatebs').val()));
+                                submitData();
+                            });
+                        </script>
+                    }
+
+                </div>
+            }
 
 
 
             @if (Model.UserDic.ContainsKey(User.Identity.Name))
 
-    {
-        @foreach (var fac in Model.UserDic[User.Identity.Name])
+            {
+                @foreach (var fac in Model.UserDic[User.Identity.Name])
 
-{
-        @foreach (var leech in fac.LeechPowerQueue)
+                {
+                    @foreach (var leech in fac.LeechPowerQueue)
 
-{
-    if (fac is Taklons && fac.StrongHold == null)
-    {
-        <form asp-controller="Home" asp-action="LeechPower" method="post" class="form-horizontal">
-            <div>
-                @localizer["{0} 是否要从 {1} 吸取 {2} 点能量", fac.FactionName, @leech.Item2, @leech.Item1]
+                    {
+                        if (fac is Taklons && fac.StrongHold == null)
+                        {
+                            <form asp-controller="Home" asp-action="LeechPower" method="post" class="form-horizontal">
+                                <div>
+                                    @localizer["{0} 是否要从 {1} 吸取 {2} 点能量", fac.FactionName, @leech.Item2, @leech.Item1]
 
-                <input name="isPwFirst" id="pwFirst" type="radio" checked="checked" value="true" /> @localizer["先增加能量"]
-                <input name="isPwFirst" id="pwFirst" type="radio" value="false" />先增加能量Token
-            </div>
-            <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
-            <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
-            <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
-            <input name="leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
-            <button type="submit" name="isLeech" class="btn btn-default" value="true" style="width: 100px">@localizer["是"]</button>
-            <button type="submit" name="isLeech" class="btn btn-default" value="false" style="width: 100px">@localizer["否"]</button>
-        </form>
-}
-else
-{
-        <form asp-controller="Home" asp-action="LeechPower" method="post" class="form-horizontal">
-            <div>@localizer["{0} 是否要从 {1} 吸取 {2} 点能量", fac.FactionName, @leech.Item2, @leech.Item1]</div>
+                                    <input name="isPwFirst" id="pwFirst" type="radio" checked="checked" value="true" /> @localizer["先增加能量"]
+                                    <input name="isPwFirst" id="pwFirst" type="radio" value="false" />先增加能量Token
+                                </div>
+                                <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
+                                <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
+                                <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
+                                <input name="leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
+                                <button type="submit" name="isLeech" class="btn btn-default" value="true" style="width: 100px">@localizer["是"]</button>
+                                <button type="submit" name="isLeech" class="btn btn-default" value="false" style="width: 100px">@localizer["否"]</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form asp-controller="Home" asp-action="LeechPower" method="post" class="form-horizontal">
+                                <div>@localizer["{0} 是否要从 {1} 吸取 {2} 点能量", fac.FactionName, @leech.Item2, @leech.Item1]</div>
 
-            <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
-            <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
-            <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
-            <input name="leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
-            <button type="submit" name="isLeech" class="btn btn-default" value="true" style="width: 100px">@localizer["是"]</button>
-            <button type="submit" name="isLeech" class="btn btn-default" value="false" style="width: 100px">@localizer["否"]</button>
-        </form>
-}
+                                <input name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
+                                <input name="factionName" class="form-control" value="@fac.FactionName" type="hidden" />
+                                <input name="power" class="form-control" value="@leech.Item1" type="hidden" />
+                                <input name="leechFactionName" class="form-control" value="@leech.Item2" type="hidden" />
+                                <button type="submit" name="isLeech" class="btn btn-default" value="true" style="width: 100px">@localizer["是"]</button>
+                                <button type="submit" name="isLeech" class="btn btn-default" value="false" style="width: 100px">@localizer["否"]</button>
+                            </form>
+                        }
 
-}
-}
-if (User.Identity.Name.Equals(Model.GetCurrentUserName()) && Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDINCOME)
-{
-        <p>@localizer["现在是Round"] @Model.GameStatus.RoundCount,@localizer["Turn"] @Model.GameStatus.TurnCount</p>
-        <p>
-            @localizer["现在等待"] <span style="background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode">@localizer[Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName]</span> @localizer["选择想要的能量分配方式"]
-        </p>
-foreach (var item in Model.FactionList[Model.GameStatus.PlayerIndex].PowerPreview)
-{
-        <button id="pwincome" class="btn btn-default" value="@item.Item1,@item.Item2,@item.Item3">@item.Item1|@item.Item2|@item.Item3</button>
-}
+                    }
+                }
+                if (User.Identity.Name.Equals(Model.GetCurrentUserName()) && Model.GameStatus.stage == GaiaCore.Gaia.Stage.ROUNDINCOME)
+                {
+                    <p>@localizer["现在是Round"] @Model.GameStatus.RoundCount,@localizer["Turn"] @Model.GameStatus.TurnCount</p>
+                    <p>
+                        @localizer["现在等待"] <span style="background-color: @Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode">@localizer[Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName]</span> @localizer["选择想要的能量分配方式"]
+                    </p>
+                    foreach (var item in Model.FactionList[Model.GameStatus.PlayerIndex].PowerPreview)
+                    {
+                        <button id="pwincome" class="btn btn-default" value="@item.Item1,@item.Item2,@item.Item3">@item.Item1|@item.Item2|@item.Item3</button>
+                    }
 
-}
-}
+                }
+            }
 
             @if (ViewData["log"] != null)
-    {
-        <p>@ViewData["log"]</p>
-}
+            {
+                <p>@ViewData["log"]</p>
+            }
 
 
 
@@ -373,34 +373,34 @@ foreach (var item in Model.FactionList[Model.GameStatus.PlayerIndex].PowerPrevie
 
 
             @if (User.Identity.Name.Equals(Model.GetCurrentUserName()))
-    {
+            {
 
-        <div class="form-inline">
-            @*<div class="input-group-btn">*@
-            <div class="input-group">
-                <span class="input-group-addon">@localizer["命令"]</span>
-                <input id="syntax" size="50" name="syntax" type="text" class="form-control" aria-label="Text input with multiple buttons">
-            </div>
-            <button id="syn" type="button" class="btn btn-primary" style="width: 100px">@localizer["保存"]</button>
+                <div class="form-inline">
+                    @*<div class="input-group-btn">*@
+                    <div class="input-group">
+                        <span class="input-group-addon">@localizer["命令"]</span>
+                        <input id="syntax" size="50" name="syntax" type="text" class="form-control" aria-label="Text input with multiple buttons">
+                    </div>
+                    <button id="syn" type="button" class="btn btn-primary" style="width: 100px">@localizer["保存"]</button>
 
-            @if (Model.version > 3 && Model.GameStatus.stage == Stage.ROUNDSTART)
-    {
-        <button id="syn_pass" type="button" class="btn btn-primary" style="width: 100px" onclick="$('#syntax').val('pass turn');submitData();">@localizer["结束操作"]</button>
+                    @if (Model.version > 3 && Model.GameStatus.stage == Stage.ROUNDSTART)
+                    {
+                        <button id="syn_pass" type="button" class="btn btn-primary" style="width: 100px" onclick="$('#syntax').val('pass turn');submitData();">@localizer["结束操作"]</button>
 
-        <button id="syn_pass" type="button" class="btn btn-primary" style="width: 100px" onclick="$('#syntax').val('reset turn');submitData();">@localizer["重置操作"] (@UserGameModel?.resetNumber)</button>
-}
+                        <button id="syn_pass" type="button" class="btn btn-primary" style="width: 100px" onclick="$('#syntax').val('reset turn');submitData();">@localizer["重置操作"] (@UserGameModel?.resetNumber)</button>
+                    }
 
 
 
-            <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
-            @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES && Model.FactionList.Count > 0)
-    {
-        <input id="test3" name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden" />
-}
-            <a class="btn btn-default" data-toggle="collapse" href="#techDisplay" role="button" style="box-shadow:none">@localizer["折叠科技"]</a>
+                    <input id="test1" name="name" class="form-control" value="@Context.Request.Path.Value.Split('/')[3]" type="hidden" />
+                    @if (@Model.GameStatus.stage >= GaiaCore.Gaia.Stage.INITIALMINES && Model.FactionList.Count > 0)
+                    {
+                        <input id="test3" name="factionName" class="form-control" value="@Model.FactionList[Model.GameStatus.PlayerIndex].FactionName" type="hidden" />
+                    }
+                    <a class="btn btn-default" data-toggle="collapse" href="#techDisplay" role="button" style="box-shadow:none">@localizer["折叠科技"]</a>
 
-        </div>
-}
+                </div>
+            }
         </div>
     </div>
 

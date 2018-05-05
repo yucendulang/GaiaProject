@@ -83,7 +83,7 @@ $(".selectchange").change(function () {
 $(".actionGp").click(function () {
     //$("#syntax").val("{0}-{1}".format($(this).attr("syntax"), $($(this).attr("valueid")).val()));
     //submitData();
-    openQueryWindow($("#syntax").val(), "确认?");
+    openQueryWindow($("#syntax").val(), _("确认?"));
 });
 
 
@@ -92,7 +92,7 @@ if (userInfo.isRound) {
     $("#actBody div").click(function() {
         var value = this.id.replace(" ", "");
         if ($(this).find("a").css("color") === "rgb(255, 0, 0)") {
-            alert("行动已被执行");
+            alert(_("行动已被执行"));
         } else {
 
             if (value === "ACT6" || value === "ACT2") {
@@ -103,7 +103,7 @@ if (userInfo.isRound) {
             } else if (value === "ACT9") {
                 $("#myAltModal").modal();
             } else {
-                openQueryWindow("action {0}".format(value), "确认执行?", $(this).attr("tishi"));
+                openQueryWindow("action {0}".format(value), _("确认执行?"), $(this).attr("tishi"));
                 //$("#syntax").val("action {0}".format(value));
             }
         }
@@ -116,30 +116,30 @@ if (userInfo.isRound) {
         $("#allistdiv").show();
 
         $("#myModalCanves").modal();
-        createMap({ id: "myCanvasSelect", type: "al2", action: "建筑" });
+        createMap({ id: "myCanvasSelect", type: "al2", action: _("建筑") });
     });
 
     //点击回合组推板
     $("#rbt_s_list div").click(function() {
-        openQueryWindow(this.id, "确认PASS?");
+        openQueryWindow(this.id, _("确认PASS?"));
     });
 
     //特殊行动
     $("#playerFaction .STT1False").click(function() {
             var obj = $(this);
-            openQueryWindow(obj.attr("syntax") + this.id, "确认执行?");
+            openQueryWindow(obj.attr("syntax") + this.id, _("确认执行?"));
         }
     );
     //AC2=Q
     $("#playerFaction .AC2False").click(function() {
             var obj = $(this);
-            openQueryWindow(obj.attr("syntax") + this.id, "确认执行?");
+            openQueryWindow(obj.attr("syntax") + this.id, _("确认执行?"));
         }
     );
     //AC2=4C
     $("#playerFaction .BalAC2False").click(function() {
             var obj = $(this);
-            openQueryWindow(obj.attr("syntax") + this.id, "确认执行?");
+            openQueryWindow(obj.attr("syntax") + this.id, _("确认执行?"));
         }
     );
 
@@ -189,7 +189,7 @@ if (userInfo.isRound) {
 
         var oldcode = $("#syntax").val();
         if (actionType!=='now' && oldcode === "") {
-            alert("必须先选择主要行动");
+            alert(_("必须先选择主要行动"));
             return;
         }
 
@@ -204,7 +204,7 @@ if (userInfo.isRound) {
         var value = control.val();
         //下拉代码
         if (value === "") {
-            alert("请选择要进行的操作");
+            alert(_("请选择要进行的操作"));
             return;
         } else {
             value = syntax.format(value);
@@ -231,7 +231,7 @@ if (userInfo.isRound) {
             $("#syntax").val(oldcode + '.' + nowcode);
         }
         else if (actionType === "now") {
-            openQueryWindow(nowcode, "确认执行?");
+            openQueryWindow(nowcode, _("确认执行?"));
         }
 
     });
@@ -239,17 +239,17 @@ if (userInfo.isRound) {
     //点击高级板块
     $("#playerFaction .ATT1False").click(function() {
             var obj = $(this);
-            openQueryWindow(obj.attr("syntax") + this.id, "确认执行?");
+            openQueryWindow(obj.attr("syntax") + this.id, _("确认执行?"));
         }
     );
     $("#playerFaction .ATT2False").click(function() {
             var obj = $(this);
-            openQueryWindow(obj.attr("syntax") + this.id, "确认执行?");
+            openQueryWindow(obj.attr("syntax") + this.id, _("确认执行?"));
         }
     );
     $("#playerFaction .ATT3False").click(function() {
             var obj = $(this);
-            openQueryWindow(obj.attr("syntax") + this.id, "确认执行?");
+            openQueryWindow(obj.attr("syntax") + this.id, _("确认执行?"));
         }
     );
 } else {
@@ -274,7 +274,7 @@ function openQueryWindow(type, title,tishi,func) {
         $("#querytitle").html(title);
     } else {
         //
-        $("#querytitle").html("您确认要执行吗?");
+        $("#querytitle").html(_("您确认要执行吗?"));
     }
 
     $("#querycfmModel").modal();
@@ -315,7 +315,7 @@ $("#queryAndPass").click(function () {
 function submitData() {
     var value = $("#syntax").val();
     if (value === "") {
-        alert("请先选择行动");
+        alert(_("请先选择行动"));
         return;
     }
     $.post("/home/Syntax",
