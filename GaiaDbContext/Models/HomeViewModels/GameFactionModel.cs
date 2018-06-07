@@ -116,5 +116,10 @@ namespace GaiaDbContext.Models.HomeViewModels
 
 
 
+        /// <summary>
+        /// 用户积分
+        /// </summary>
+        public int scoreUser { get; set; }
+
     }
 }

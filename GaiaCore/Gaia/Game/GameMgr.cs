@@ -285,14 +285,23 @@ namespace GaiaCore.Gaia
             //需要加载到内存
             if (isTodict)
             {
-                if (m_dic.ContainsKey(item.Key))
+                //如果是结束的游戏，跳过
+                if (item.Value.GameStatus.stage == Stage.GAMEEND)
                 {
-                    m_dic[item.Key] = gg;
+                    
                 }
-                else
+                else//其它
                 {
-                    m_dic.Add(item.Key, gg);
+                    if (m_dic.ContainsKey(item.Key))
+                    {
+                        m_dic[item.Key] = gg;
+                    }
+                    else
+                    {
+                        m_dic.Add(item.Key, gg);
+                    }
                 }
+
             }
             else
             {

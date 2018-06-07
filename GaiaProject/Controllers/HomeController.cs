@@ -289,6 +289,7 @@ namespace GaiaProject.Controllers
                         username = item,
                         isTishi = true,
                         paygrade = user.Result.paygrade,
+                        scoreUserStart = user.Result.scoreUser,
                     });
                 }
             }

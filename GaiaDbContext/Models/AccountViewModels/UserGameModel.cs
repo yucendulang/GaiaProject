@@ -50,5 +50,11 @@ namespace GaiaDbContext.Models.AccountViewModels
         [JsonProperty]
         public int? paygrade { get; set; }
 
+
+        /// <summary>
+        /// 用户加入时积分
+        /// </summary>
+        public int scoreUserStart { get; set; }
+
     }
 }

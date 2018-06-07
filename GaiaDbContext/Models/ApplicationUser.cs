@@ -23,5 +23,11 @@ namespace GaiaDbContext.Models
         /// 付费等级
         /// </summary>
         public int paygrade { get; set; }
+
+
+        /// <summary>
+        /// 用户积分
+        /// </summary>
+        public int scoreUser { get; set; }
     }
 }

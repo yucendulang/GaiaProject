@@ -591,7 +591,8 @@ function textSpaceSectorCenterName(ctx, row, col, name) {
     //console.log(row, col, "isCenter");
     ctx.beginPath();
     ctx.font = "10px Verdana";
-    ctx.fillStyle = Global.planetText;
+    //ctx.fillStyle = Global.planetText;
+    ctx.fillStyle = Global.spaceText;
     ctx.fillText(name, row - 8, col - 12);
     ctx.closePath();
 }
