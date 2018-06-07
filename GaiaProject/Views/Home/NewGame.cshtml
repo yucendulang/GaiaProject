@@ -5,9 +5,10 @@
 @using GaiaDbContext.Models
 @model GaiaProject.Models.HomeViewModels.NewGameViewModel
 @inject ApplicationDbContext dbContext
+@inject IHtmlLocalizer<SharedResources> localizer
 
 @{
-    ViewData["Title"] = "创建新的房间";
+    ViewData["Title"] = localizer["创建新的房间"];
 }
 
 @inject UserManager<ApplicationUser> UserManager
@@ -22,7 +23,7 @@
         var fList = dbContext.UserFriend.Where(item => item.UserName == User.Identity.Name).ToList();
         if (fList.Count > 0)
         {
-            <span>选择好友:</span>
+            <span>@localizer["选择好友"]:</span>
             <div class="btn-group" role="group" aria-label="..." id="userList">
                 @foreach (var user in dbContext.UserFriend.Where(item => item.UserName == User.Identity.Name))
                 {
@@ -63,7 +64,7 @@
     </script>
 
     <form asp-controller="Home" asp-action="NewGame" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" id="playForm">
-        
+
         <div asp-validation-summary="All" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="Name" class="col-md-2 control-label"></label>
@@ -182,7 +183,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-md-2 control-label">地图模式</label>
+            <label class="col-md-2 control-label">@localizer["地图模式"]</label>
             <div class="col-md-10">
                 <label asp-for="MapSelction">
                     
@@ -190,11 +191,11 @@
                     {
                          if (selction.code == "randomall4p")
                          {
-                             <input asp-for="MapSelction" type="radio" value="@selction.code"  checked="checked"/>@selction.name
+                             <input asp-for="MapSelction" type="radio" value="@selction.code"  checked="checked"/>@localizer[selction.name]
                          }
                          else
                          {
-                             <input asp-for="MapSelction" type="radio" value="@selction.code"/>@selction.name
+                             <input asp-for="MapSelction" type="radio" value="@selction.code"/>@localizer[selction.name]
                          }
                     }                    
 
@@ -203,7 +204,7 @@
         </div>
         
         <div class="form-group">
-            <label class="col-md-2 control-label">禁止种族</label>
+            <label class="col-md-2 control-label">@localizer["禁止种族"]</label>
             <div class="col-md-10">
                 @foreach (var
                     fac in
@@ -213,7 +214,7 @@
                     }))
                 {
 
-                    <input type="checkbox" value="@fac.FactionName" name="jinzhi"/>@fac.ChineseName
+                    <input type="checkbox" value="@fac.FactionName" name="jinzhi"/>@localizer[fac.ChineseName]
                 }
 
             </div>
@@ -221,7 +222,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <button type="submit" class="btn btn-default">创建</button>
+                <button type="submit" class="btn btn-default">@localizer["创建"]</button>
             </div>
         </div>
     </form>

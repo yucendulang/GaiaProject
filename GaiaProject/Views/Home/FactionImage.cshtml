@@ -1,12 +1,13 @@
 ﻿@using GaiaCore.Gaia
 @model object
+@inject IHtmlLocalizer<SharedResources> localizer
 
 @{
-    ViewBag.Title = "种族";
+    ViewBag.Title = localizer["种族"];
     Layout = "_Layout";
 }
 
-<h2>种族</h2>
+<h2>@localizer["种族"]</h2>
 
 @foreach (var faction in (new List<Faction>()
 {
@@ -16,7 +17,7 @@ new MadAndroid(null), new Itar(null), new Nevla(null)
 }))
 {
     <div class="panel panel-default" id="@faction.FactionName">
-        <div class="panel-heading" style="background-color: @faction.ColorCode;"><span>@faction.ChineseName</span></div>
+        <div class="panel-heading" style="background-color: @faction.ColorCode;"><span>@localizer[faction.ChineseName]</span></div>
         <div class="panel-body">
             <img src="/images/faction/@(faction.FactionName).jpg" alt="...">
         </div>
@@ -31,7 +32,7 @@ new MadAndroid(null), new Itar(null), new Nevla(null)
             @foreach (var fac in (new List<Faction>() { new Terraner(null), new Lantida(null), new Hive(null), new HadschHalla(null), new BalTak(null), new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null), new MadAndroid(null), new Itar(null), new Nevla(null) }))
             {
                 <button type="button" class="btn btn-default" style="background-color: @fac.ColorCode" divid="@fac.FactionName" id="@fac.FactionName" onclick="goDiv('@fac.FactionName')">
-                    @fac.ChineseName
+                    @localizer[fac.ChineseName]
                 </button>
             }
 
@@ -40,7 +41,7 @@ new MadAndroid(null), new Itar(null), new Nevla(null)
 </nav>
 <script>
     function goDiv(div) {
-        var a = $("#"+div).offset().top-50;
-        $("html,body").animate({scrollTop:a}, 'slow');
+        var a = $("#" + div).offset().top - 50;
+        $("html,body").animate({ scrollTop: a }, 'slow');
     }
 </script>

@@ -22,12 +22,12 @@ function getKjTile() {
     if ($("#attList").val() !== "") {
         var fg = $("#fg_sttList").val();
         if (fg === "") {
-            alert("请选择覆盖科技");
+            alert(_("请选择覆盖科技"));
             return false;
         }
         else if (kj === "") {
             //execcode = "".format()
-            alert("请选择升级科技");
+            alert(_("请选择升级科技"));
             return false;
         } else {
             execcode = ("+{0}.-{1}. advance {2}".format($("#attList").val(), fg, kj));
@@ -42,7 +42,7 @@ function getKjTile() {
     else {
         if (kj === "") {
             execcode = " ";
-            //alert("请选择升级科技");
+            //alert(_("请选择升级科技"));
             //return false;
         }
         else {
@@ -89,7 +89,7 @@ function actClick(e) {
     }
 
     if (userInfo.factionName !== "Lantida" && clickObj.typename != undefined && clickObj.typename !== "gaizao") {
-        alert("不能选择已经有建筑的地点");
+        alert(_("不能选择已经有建筑的地点"));
     }
     else {
 
@@ -103,25 +103,25 @@ function actClick(e) {
         if (clickTypeData.action === "planet") {
             var plant = $("#syntax").val() + ".planet {0}".format(clickObj.position);
             //$("#syntax").val();
-            //getMineCost(urlship, plant, "确认放置黑星?", closeMap);
-            openQueryWindow(plant, "确认放置黑星?", null, closeMap);
+            //getMineCost(urlship, plant, _("确认放置黑星?"), closeMap);
+            openQueryWindow(plant, _("确认放置黑星?"), null, closeMap);
         } else {
             //盖亚改造单元
             if (clickObj.typename === "gaizao") {
-                getMineCost(urlship, syntax.format(".gaia " + clickObj.position), "确认进行盖亚改造?", closeMap);
+                getMineCost(urlship, syntax.format(".gaia " + clickObj.position), _("确认进行盖亚改造?"), closeMap);
                 //openQueryWindow($("#syntax").val().format(".gaia " + clickObj.position), "确认进行盖亚?", null, closeMap);
             }
             else {
                 var buildcode = syntax.format(".build " + clickObj.position);
                 //自己颜色星球直接建造
                 if (clickObj.mapcolor === userInfo.mapcolor) {
-                    getMineCost(urlship, buildcode, "确认在原生地进行建造?", closeMap);
-                    //openQueryWindow(buildcode, "确认在原生地进行建造?", null, closeMap);
+                    getMineCost(urlship, buildcode, _("确认在原生地进行建造?"), closeMap);
+                    //openQueryWindow(buildcode, _("确认在原生地进行建造?"), null, closeMap);
                 } else {
                     //如果是绿星
                     if (clickObj.mapcolor === "#80F080") {
-                        getMineCost(urlship, buildcode, "确认在盖亚星球进行建造?", closeMap);
-                        //openQueryWindow(buildcode, "确认在盖亚星球进行建造?", null, closeMap);
+                        getMineCost(urlship, buildcode, _("确认在盖亚星球进行建造?"), closeMap);
+                        //openQueryWindow(buildcode, _("确认在盖亚星球进行建造?"), null, closeMap);
                     } else {
                         //非自己颜色的星球需要计算转换率
                         var cindex = cycle.indexOf(clickObj.mapcolor);
@@ -129,7 +129,7 @@ function actClick(e) {
                         if (cindex > 3) {
                             cindex = 7 - cindex;
                         }
-                        getMineCost(urlship, buildcode, "确认进行建造?<br/>地形转化率为" + cindex, closeMap);
+                        getMineCost(urlship, buildcode, _("确认进行建造?") + "<br/>" + _("地形转化率为") + cindex, closeMap);
                         //openQueryWindow(buildcode, "确认进行建造?<br/>地形转化率为" + cindex, null, closeMap);
 
                     }
@@ -149,14 +149,14 @@ function getMineCost(url, code, tishi, func) {
         if (data.info.state === 200) {
             var cost;
             if (data.data.qship > 0) {
-                cost = "<br/><span style='color:red'>需要加速Q:" + data.data.qship + "</span><br/>";
+                cost = "<br/><span style='color:red'>" + _("需要加速Q:") + data.data.qship + "</span><br/>";
             } else {
-                cost = "<br/>需要加速Q:" + data.data.qship + "<br/>";
+                cost = "<br/>" + _("需要加速Q:") + data.data.qship + "<br/>";
             }
             if (data.data.ore > 1) {
-                cost += "<span style='color:red'>花费资源:" + data.data.ore + "o " + data.data.credit + "c</span>";
+                cost += "<span style='color:red'>"+ _("花费资源:") + data.data.ore + "o " + data.data.credit + "c</span>";
             } else {
-                cost += "花费资源:" + data.data.ore + "o " + data.data.credit + "c";
+                cost += _("花费资源:") + data.data.ore + "o " + data.data.credit + "c";
             }
             if (data.data.qship > 0 || data.data.ore > 1) {
                 //$("#queryHandinput").css("float", "right");
@@ -223,7 +223,7 @@ function createMap(data) {
                     if (index > -1) {
                         //不是自己自己的建筑
                         if (userInfo.buildcolor !== clickObj.buildcolor) {
-                            openQueryWindow("build {0}".format(clickObj.position), "确认进行建造?".format(clickObj.position));
+                            openQueryWindow("build {0}".format(clickObj.position), _("确认进行建造?").format(clickObj.position));
                             return;
                         }
                         //如果是自己的建筑，正常升级
@@ -242,34 +242,34 @@ function createMap(data) {
                         if (!clickObj.allowUpgrade && userInfo.factionName === "Lantida") {
                             return;
                         }
-                    openQueryWindow("upgrade {0} to {1}".format(clickObj.position, "TC"), "是否要升级{0}建筑".format(clickObj.position));
+                    openQueryWindow("upgrade {0} to {1}".format(clickObj.position, "TC"), _("是否要升级{0}建筑").format(clickObj.position));
                     break;
                 case "TradeCenter":
                 case "ResearchLab":
 
                     //如果是ResearchLab
                     //如果是疯狂机器回合
-                    if ("MadAndroid" === userInfo.factionName) {
-                        if (clickObj.typename === "ResearchLab") {
-                            $("#updateBuildList").html('<option value="">--请选择升级建筑--</option><option value="SH" selected = "selected">SH</option>');
-                            $("#sttBody").hide();
-                        }
-                        else {//TradeCenter
-                            $("#updateBuildList").html('<option value="">--请选择升级建筑--</option><option value="RL">ResearchLab</option><option value="AC1">AC1</option><option value="AC2">AC2</option>');
-                            $("#sttBody").show();
+                        if ("MadAndroid" === userInfo.factionName) {
+                            if (clickObj.typename === "ResearchLab") {
+                                $("#updateBuildList").html('<option value="">--' + _("请选择升级建筑") + '--</option><option value="SH" selected = "selected">' + _("SH") + '</option>');
+                                $("#sttBody").hide();
+                            }
+                            else {//TradeCenter
+                                $("#updateBuildList").html('<option value="">--' + _("请选择升级建筑") + '--</option><option value="RL">' + _("ResearchLab") + '</option><option value="AC1">' + _("AC1") + '</option><option value="AC2">' + _("AC2") + '</option>');
+                                $("#sttBody").show();
 
+                            }
+                        } else {
+                            if (clickObj.typename === "ResearchLab") {
+                                $("#updateBuildList").html('<option value="">--' + _("请选择升级建筑") + '--</option><option value="AC1">' + _("AC1") + '</option><option value="AC2">' + _("AC2") + '</option>');
+                                $("#sttBody").show();
+                            }
+                            else {
+                                $("#updateBuildList").html('<option value="">--' + _("请选择升级建筑") + '--</option><option value="RL">' + _("ResearchLab") + '</option><option value="SH">' + _("SH") + '</option>');
+                                $("#sttBody").hide();
+                            }
                         }
-                    } else {
-                        if (clickObj.typename === "ResearchLab") {
-                            $("#updateBuildList").html('<option value="">--请选择升级建筑--</option><option value="AC1">AC1</option><option value="AC2">AC2</option>');
-                            $("#sttBody").show();
-                        }
-                        else {
-                            $("#updateBuildList").html('<option value="">--请选择升级建筑--</option><option value="RL">ResearchLab</option><option value="SH">SH</option>');
-                            $("#sttBody").hide();
-                        }
-                    }
-                    $("#updateBuildList").show();
+                        $("#updateBuildList").show();
 
 
                     openSelectTT("upgrade " + clickObj.position + " to {0}");
@@ -290,11 +290,11 @@ function createMap(data) {
                     break;
                 case "gaizao":
                     //$("#syntax").val("gaia " + clickObj.position);
-                    getMineCost(urlship, "gaia " + clickObj.position, "确认进行盖亚改造?", null);
-                    //openQueryWindow("gaia " + clickObj.position, "确认进行盖亚改造?");
+                    getMineCost(urlship, "gaia " + clickObj.position, _("确认进行盖亚改造?"), null);
+                    //openQueryWindow("gaia " + clickObj.position, _("确认进行盖亚改造?"));
                     break;
                 default:
-                    console.log("不能继续升级");
+                    console.log(_("不能继续升级"));
                 }   
              
             }
@@ -303,28 +303,28 @@ function createMap(data) {
                 if (clickObj.mapcolor === userInfo.mapcolor) {
                     //初始
                     if (userInfo.stage === 2) {
-                        openQueryWindow("build " + clickObj.position, "确认放置在" + clickObj.position);
+                        openQueryWindow("build " + clickObj.position, _("确认放置在") + clickObj.position);
                     } else {
-                        getMineCost(urlship, "build " + clickObj.position, "确认进行盖亚改造?", null);
+                        getMineCost(urlship, "build " + clickObj.position, _("确认进行盖亚改造?"), null);
                     }
-                    //openQueryWindow("build " + clickObj.position, "确认在原生地进行建造?");
+                    //openQueryWindow("build " + clickObj.position, _("确认在原生地进行建造?"));
                 }
                 //非自己颜色星球
                 else {
                     if (userInfo.stage === 2) {
-                        alert("初始建筑必须放在原始星球上面");
+                        alert(_("初始建筑必须放在原始星球上面"));
                         return;
                     }
                     ///空白星球
                     else if (clickObj.mapcolor === "#FFFFFF") {
-                        alert("不能再空白星球上面建造");
+                        alert(_("不能再空白星球上面建造"));
                         return;
                     } else {
                         //如果是绿星
                         if (clickObj.mapcolor === "#80F080") {
                             //alert(userInfo.factionName);
 
-                            getMineCost(urlship, "build " + clickObj.position, "确认在盖亚星球进行建造?", null);
+                            getMineCost(urlship, "build " + clickObj.position, _("确认在盖亚星球进行建造?"), null);
 
                             //$("#syntax").val("build " + clickObj.position);
                         } else {
@@ -334,7 +334,7 @@ function createMap(data) {
                             if (cindex > 3) {
                                 cindex = 7 - cindex;
                             }
-                            getMineCost(urlship, "build " + clickObj.position, "确认进行建造?<br/>地形转化率:" + cindex, null);
+                            getMineCost(urlship, "build " + clickObj.position, "确认进行建造?" + "<br/>" + _("地形转化率:") + cindex, null);
 
                             //openQueryWindow("build " + clickObj.position, "确认进行建造?<br/>地形转化率为" + cindex);
                         }
@@ -402,7 +402,7 @@ function createMap(data) {
                     return;
                 }
                 //if (data.type === "al1" && clickObj.typename !== undefined) {
-                //    alert("不能选择已经有建筑的地点");
+                //    alert(_("不能选择已经有建筑的地点"));
                 //}
                 //else if (data.type === "al2" && clickObj.typename === undefined) {
                 //    alert("不能选择空白的地点");
@@ -480,7 +480,7 @@ function DrawMap(ctx) {
                             DrawGaiaBuilding(ctx, j, i, array[i][j].factionBelongTo);
                             break;
                         default:
-                            console.log(array[i][j].building.name + "不支持");
+                            console.log(array[i][j].building.name + _("不支持"));
                     }
                     if (array[i][j].specialBuilding != null) {
                         DrawLantidaMine(ctx, j, i);

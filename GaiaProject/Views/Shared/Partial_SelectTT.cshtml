@@ -1,4 +1,5 @@
 ﻿@model GaiaCore.Gaia.GaiaGame
+@inject IHtmlLocalizer<SharedResources> localizer
 
 @{
     var alList = Model.FactionList[Model.GameStatus.PlayerIndex].GameTileList.FindAll(a => a.typename == "alt");
@@ -12,29 +13,29 @@
                     &times;
                 </button>
                 <h4 class="modal-title" id="myModalLabel">
-                    选择要升级的建筑
+                    @localizer["选择要升级的建筑"]
                 </h4>
             </div>
             <div class="modal-body">
                 <select class="btn dropdown-toggle form-control" id="updateBuildList"></select>
                 <div id="sttBody">
-                    @Html.DropDownList("enumList", new SelectList(Model.STT6List.GroupBy(a => a.name).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name) }), "name", "desc"), "--请选择科技板块(6)--", new { @class = "btn dropdown-toggle form-control updatettlist", @id = "stt6List", @syntax = ".+" })
+                    @Html.DropDownList("enumList", new SelectList(Model.STT6List.GroupBy(a => a.name).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name) }), "name", "desc"), "--" + localizer["请选择科技板块"].Value + "(6)--", new { @class = "btn dropdown-toggle form-control updatettlist", @id = "stt6List", @syntax = ".+" })
                     <div class="form-inline">
-                        @Html.DropDownList("enumList", new SelectList(Model.STT3List.GroupBy(a => a.name).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name) }), "name", "desc"), "--请选择科技板块(3)--", new { @class = "btn dropdown-toggle form-control updatettlist", @id = "stt3List", @syntax = ".+" })
+                        @Html.DropDownList("enumList", new SelectList(Model.STT3List.GroupBy(a => a.name).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.name) }), "name", "desc"), "--" + localizer["请选择科技板块"].Value + "(3)--", new { @class = "btn dropdown-toggle form-control updatettlist", @id = "stt3List", @syntax = ".+" })
                         <select class="btn dropdown-toggle form-control" id="updatekj" name="enumList" syntax=".+">
-                            <option value="">--请选择升级科技--</option>
-                            <option value="tf">地形改造</option>
-                            <option value="ship">航行</option>
-                            <option value="ai">人工智能</option>
-                            <option value="gaia">盖亚计划</option>
-                            <option value="eco">经济</option>
-                            <option value="sci">科学</option>
+                            <option value="">--@localizer["请选择升级科技"]--</option>
+                            <option value="tf">@localizer["地形改造"]</option>
+                            <option value="ship">@localizer["航行"]</option>
+                            <option value="ai">@localizer["人工智能"]</option>
+                            <option value="gaia">@localizer["盖亚计划"]</option>
+                            <option value="eco">@localizer["经济"]</option>
+                            <option value="sci">@localizer["科学"]</option>
                         </select>
 
                     </div>
                     <div class="form-inline">
-                        @Html.DropDownList("enumList", new SelectList(Model.ATTList, "name", "desc"), "--请选择高级科技--", new { @class = "btn dropdown-toggle form-control updatettlist", @id = "attList", @syntax = ".+" })
-                        @Html.DropDownList("enumList", new SelectList(Model.FactionList[Model.GameStatus.PlayerIndex].GameTileList.FindAll(a => a.typename == "stt"), "name", "desc"), "--请选择被覆盖科技--", new { @class = "btn dropdown-toggle form-control ", @id = "fg_sttList", @syntax = ".+" })
+                        @Html.DropDownList("enumList", new SelectList(Model.ATTList, "name", "desc"), "--" + localizer["请选择高级科技"].Value + "--", new { @class = "btn dropdown-toggle form-control updatettlist", @id = "attList", @syntax = ".+" })
+                        @Html.DropDownList("enumList", new SelectList(Model.FactionList[Model.GameStatus.PlayerIndex].GameTileList.FindAll(a => a.typename == "stt"), "name", "desc"), "--" + localizer["请选择被覆盖科技"].Value + "--", new { @class = "btn dropdown-toggle form-control ", @id = "fg_sttList", @syntax = ".+" })
                     </div>
                     <div class="form-inline">
                         <span id="showSyntax"></span>
@@ -44,10 +45,10 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">
-                    取消
+                    @localizer["取消"]
                 </button>
                 <button type="button" class="btn btn-primary" id="updateQuery">
-                    确定
+                    @localizer["确定"]
                 </button>
             </div>
         </div><!-- /.modal-content -->
@@ -62,18 +63,18 @@
                     &times;
                 </button>
                 <h4 class="modal-title" id="myAltModalLabel">
-                    选择联邦板块
+                    @localizer["选择联邦板块"]
                 </h4>
             </div>
             <div class="modal-body">
-                @Html.DropDownList("enumList", new SelectList(alList, "name", "desc"), "--请选择联邦板块--", new { @class = "btn dropdown-toggle form-control", @id = "copy_attList", @syntax = ".+" })
+                @Html.DropDownList("enumList", new SelectList(alList, "name", "desc"), "--" + localizer["请选择联邦板块"].Value + "--", new { @class = "btn dropdown-toggle form-control", @id = "copy_attList", @syntax = ".+" })
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">
-                    取消
+                    @localizer["取消"]
                 </button>
                 <button type="button" class="btn btn-primary" id="queryAltTile">
-                    确定
+                    @localizer["确定"]
                 </button>
             </div>
         </div><!-- /.modal-content -->
@@ -104,7 +105,7 @@
             $(".updatettlist").not($(this)).val("");
         });
 
-        $('#myModalLabel').text("请选择科技板块");
+        $('#myModalLabel').text("@localizer["请选择科技板块"]");
         $('#updateBuildList').hide();
         //确认选择
         $("#updateQuery").click(function () {
@@ -132,10 +133,10 @@
 
 
         //选择联邦板块
-        $("#queryAltTile").click(function() {
+        $("#queryAltTile").click(function () {
             var value = $("#copy_attList").val();
             if (value === "") {
-                alert("请先选择联邦板块");
+                alert("@localizer["请先选择联邦板块"]");
             } else {
                 $("#syntax").val("action act9.re {0}".format(value));
                 $('#myAltModal').modal('hide');

@@ -3,6 +3,7 @@
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject IHtmlLocalizer<SharedResources> localizer
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -10,15 +11,15 @@
     <script src="~/js/bootstrap-table.js"></script>
     <input value='@ViewData["Message"]' type="hidden" id="username" />
     <p>
-        <button type="button" class="btn btn-default settishi" id="close">关闭全部回合提示</button>
-        <button type="button" class="btn btn-default settishi" id="open">启用全部回合提示</button>
+        <button type="button" class="btn btn-default settishi" id="close">@localizer["关闭全部回合提示"]</button>
+        <button type="button" class="btn btn-default settishi" id="open">@localizer["启用全部回合提示"]</button>
     </p>
     <div class="panel panel-default">
-        <div class="panel-heading donator">你的游戏</div>
+        <div class="panel-heading donator">@localizer["你的游戏"]</div>
         <div class="panel-body">
-            <a href="/home/NewGame" class="btn btn-primary">创建房间</a>
+            <a href="/home/NewGame" class="btn btn-primary">@localizer["创建房间"]</a>
 
-            <a href="/home/NewGameHall" class="btn btn-primary">创建大厅房间</a>
+            <a href="/home/NewGameHall" class="btn btn-primary">@localizer["创建大厅房间"]</a>
         </div>
 
         <script>
@@ -36,14 +37,14 @@
 
 
         @if (ViewData["GameList"] != null)
-        {
-            @Html.Partial("Partial_AllGameList", ViewData["GameList"])
-        }
+    {
+        @Html.Partial("Partial_AllGameList", ViewData["GameList"])
+}
         @if (ViewData["GameList"] == null)
-        {
-            <p>暂无对局</p>
+    {
+        <p>@localizer["暂无对局"]</p>
 
-        }
+}
 
     </div>
 
@@ -97,19 +98,19 @@
     @*    </ul>*@
     @if (User.Identity.Name.Equals("yucenyucen@126.com") || User.Identity.Name.Equals("xsssssssch@hotmail.com") || User.Identity.Name.Equals("toto") || User.Identity.Name.Equals("totofans"))
     {
-        <p><a href="/home/GetAllGame">获取所有游戏列表</a></p>
+        <p><a href="/home/GetAllGame">@localizer["获取所有游戏列表"]</a></p>
 
     }
 
 
     @if (UserManager.GetUserName(User).Equals("yucenyucen@126.com") || UserManager.GetUserName(User).Equals("totofans"))
     {
-        <p><a href="/home/BackupData">备份所有游戏</a></p>
-        <p><a href="/home/RestoreData">恢复所有游戏</a></p>
-        @*<p><a href="/home/DeleteAllGame">删除所有游戏</a></p>*@
+        <p><a href="/home/BackupData">@localizer["备份所有游戏"]</a></p>
+        <p><a href="/home/RestoreData">@localizer["恢复所有游戏"]</a></p>
+        @*<p><a href="/home/DeleteAllGame">@localizer["删除所有游戏"]</a></p>*@
         <environment names="Development">
-            <p><a href="/home/RestoreDataFromServer">从服务器恢复所有游戏</a></p>
-            <p><a href="/home/RestoreDataFromServerOneGame/112701">恢复单个游戏</a></p>
+            <p><a href="/home/RestoreDataFromServer">@localizer["从服务器恢复所有游戏"]</a></p>
+            <p><a href="/home/RestoreDataFromServerOneGame/112701">@localizer["恢复单个游戏"]</a></p>
         </environment>
     }
 

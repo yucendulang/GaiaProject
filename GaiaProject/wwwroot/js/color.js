@@ -77,6 +77,6 @@ $("document").ready(function () {
         backgroundColor: "#E0F0FF"
     });
 
-    console.log("加载种族配色方案完毕");
+    console.log(_("加载种族配色方案完毕"));
 
 });

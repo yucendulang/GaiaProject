@@ -1,7 +1,8 @@
-﻿
+﻿@inject IHtmlLocalizer<SharedResources> localizer
+
 <select class="btn dropdown-toggle form-control" id="usercount" name="usercount">
-    <option value="">--人数--</option>
-    <option value="0">全部</option>
+    <option value="">--@localizer["人数"]--</option>
+    <option value="0">@localizer["全部"]</option>
     <option value="2">2</option>
     <option value="3">3</option>
     <option value="4">4</option>

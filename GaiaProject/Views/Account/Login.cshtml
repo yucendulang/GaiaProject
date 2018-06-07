@@ -4,9 +4,9 @@
 @using Microsoft.AspNetCore.Http.Authentication
 @model LoginViewModel
 @inject SignInManager<ApplicationUser> SignInManager
-
+@inject IHtmlLocalizer<SharedResources> localizer;
 @{
-    ViewData["Title"] = "登录";
+    ViewData["Title"] = localizer["登录"];
 }
 
 <h2>@ViewData["Title"].</h2>
@@ -14,7 +14,7 @@
     <div class="col-md-8">
         <section>
             <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-                <h4>使用已有账户登录.</h4>
+                <h4>@localizer["使用已有账户登录"].</h4>
                 <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
@@ -43,48 +43,48 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <button type="submit" class="btn btn-default">登录</button>
+                        <button type="submit" class="btn btn-default">@localizer["登录"]</button>
                     </div>
                 </div>
                 <p>
-                    <a asp-action="Register2" asp-route-returnurl="@ViewData["ReturnUrl"]">创建一个新的账户?</a>
+                    <a asp-action="Register2" asp-route-returnurl="@ViewData["ReturnUrl"]">@localizer["创建一个新的账户?"]</a>
                 </p>
                 <p>
-                    <a asp-action="ForgotPassword">找回密码?</a>
+                    <a asp-action="ForgotPassword">@localizer["找回密码?"]</a>
                 </p>
             </form>
         </section>
     </div>
     <div class="col-md-4">
         @*<section>
-            <h4>Use another service to log in.</h4>
-            <hr />
-            @{
-                var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
-                if (loginProviders.Count == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-                            for details on setting up this ASP.NET application to support logging in via external services.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                <h4>Use another service to log in.</h4>
+                <hr />
+                @{
+                    var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
+                    if (loginProviders.Count == 0)
+                    {
                         <div>
                             <p>
-                                @foreach (var provider in loginProviders)
-                                {
-                                    <button type="submit" class="btn btn-default" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">@provider.AuthenticationScheme</button>
-                                }
+                                There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
+                                for details on setting up this ASP.NET application to support logging in via external services.
                             </p>
                         </div>
-                    </form>
+                    }
+                    else
+                    {
+                        <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                            <div>
+                                <p>
+                                    @foreach (var provider in loginProviders)
+                                    {
+                                        <button type="submit" class="btn btn-default" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">@provider.AuthenticationScheme</button>
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    }
                 }
-            }
-        </section>*@
+            </section>*@
     </div>
 </div>
 
