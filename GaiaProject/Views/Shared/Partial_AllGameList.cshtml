@@ -34,30 +34,41 @@
         {
             color = (item.Value.GetCurrentUserName() == userName || (item.Value.UserDic.Count > 1 && item.Value.GameStatus.stage == Stage.ROUNDWAITLEECHPOWER && item.Value.UserDic.ContainsKey(userName) && item.Value.UserDic[userName].Exists(y => y.LeechPowerQueue.Count != 0))) ? "#CD950C" : "";
 
-            <tr style="background: @color">
-                <td><a href="/home/ViewGame/@item.Key">@item.Key</a></td>
-                @if (item.Value.UserDic.ContainsKey(User.Identity.Name))
-                {
-                    <td>@string.Join(",", @item.Value.UserDic[User.Identity.Name].Select(x => localizer[x.ChineseName].Value))</td>
-                }
-                else
-                {
-                    <td>@string.Join(",", @item.Value.FactionList.Select(x => localizer[x.ChineseName].Value))</td>
-                }
-                <td>@item.Value.GetLastMovePreriod()</td>
-                <td>@item.Value.GameStatus.RoundCount</td>
-                <td>@item.Value.GetCurrentUserName()</td>
-                @if (item.Value.UserDic.ContainsKey(User.Identity.Name))
-                {
-                    <td>@string.Join(",", @item.Value.UserDic[User.Identity.Name].Select(x => x.Score))</td>
-                }
-                else
-                {
-                    <td> @string.Join(",", @item.Value.FactionList.Select(x => x.Score)) </td>
-                }
+        <tr style="background: @color">
+            <td><a href="/home/ViewGame/@item.Key">@item.Key</a></td>
+            @if (item.Value.UserDic.ContainsKey(User.Identity.Name))
+    {
+        <td>@string.Join(",", @item.Value.UserDic[User.Identity.Name].Select(x => localizer[x.ChineseName].Value))</td>
+}
+else
+{
+        <td>@string.Join(",", @item.Value.FactionList.Select(x => localizer[x.ChineseName].Value))</td>
+}
+            <td>@item.Value.GetLastMovePreriod()</td>
+            <td>@item.Value.GameStatus.RoundCount</td>
+            <td>@item.Value.GetCurrentUserName()</td>
+            @if (item.Value.UserDic.ContainsKey(User.Identity.Name))
+    {
+        <td>@string.Join(",", @item.Value.UserDic[User.Identity.Name].Select(x => x.Score))</td>
+}
+else
+{
+        <td> @string.Join(",", @item.Value.FactionList.Select(x => x.Score)) </td>
+}
+
+
+            @try
+            {
                 <td>V@(item.Value.version)/@(item.Value.UserGameModels.Find(userGame => userGame.username == userName).isTishi ? localizer["是"] : localizer["否"])</td>
-                @*                <td>@string.Join("|", item.Value.FactionList.Except(item.Value.FactionNextTurnList).Select(fac=> fac.UserName))</td>*@
-            </tr>
+            }
+            catch (Exception e)
+            {
+
+            }
+
+
+        @*                <td>@string.Join("|", item.Value.FactionList.Except(item.Value.FactionNextTurnList).Select(fac=> fac.UserName))</td>*@
+        </tr>
         }
     </tbody>
 </table>

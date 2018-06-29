@@ -141,6 +141,9 @@ namespace GaiaProject.Controllers
             {
                 model.Name = Guid.NewGuid().ToString();
             }
+            //清除空格
+            model.Name = model.Name.Trim();
+
             string[] username = new string[] { model.Player1, model.Player2, model.Player3, model.Player4 };
             if (this.dbContext.GameInfoModel.Any(item => item.name == model.Name)||GameMgr.GetGameByName(model.Name)!=null)
             {
@@ -489,6 +492,34 @@ namespace GaiaProject.Controllers
                         jsonData.info.message = "成功";
                     }
 
+                }
+            }
+
+            return new JsonResult(jsonData);
+
+        }
+
+
+        /// <summary>
+        /// 删除游戏
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<JsonResult> DeleteHallGame(int id)
+        {
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
+            GameInfoModel gameInfoModel = this.dbContext.GameInfoModel.SingleOrDefault(item => item.Id == id);
+            if (gameInfoModel != null)
+            {
+                string username = this.User.Identity.Name;
+
+                //是自己创建的 或者管理员
+                if (username == gameInfoModel.username || (_userManager.GetUserAsync(User).Result != null && _userManager.GetUserAsync(User).Result.groupid == 1))
+                {
+                    this.dbContext.GameInfoModel.Remove(gameInfoModel);
+                    this.dbContext.SaveChanges();
+                    jsonData.info.state = 200;
                 }
             }
 

@@ -1,11 +1,17 @@
 ﻿@using GaiaCore.Gaia.Data
+@using GaiaDbContext.Models
 @model List<GaiaDbContext.Models.HomeViewModels.GameInfoModel>
+@inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewBag.Title = "游戏大厅";
     Layout = "_Layout";
 
     string myName = string.Format("|{0}|", this.User.Identity.Name);
+}
+
+@{
+    bool isAdmin = UserManager.GetUserAsync(User).Result != null && UserManager.GetUserAsync(User).Result.groupid == 1;
 }
 
 
@@ -34,30 +40,36 @@
             </tr>
         </thead>
         <tbody>
-        @foreach (var gameinfo in Model)
-        {
-            <tr>
-                <td>@gameinfo.name</td>
-                <td>@gameinfo.starttime</td>
-                <td>@gameinfo.userlist?.Trim('|').Split('|').Length/@gameinfo.UserCount</td>
-                <td>@gameinfo.userlist</td>
+            @foreach (var gameinfo in Model)
+            {
+                <tr>
+                    <td>@gameinfo.name</td>
+                    <td>@gameinfo.starttime</td>
+                    <td>@gameinfo.userlist?.Trim('|').Split('|').Length/@gameinfo.UserCount</td>
+                    <td>@gameinfo.userlist</td>
 
-                <td>@GameInfoAttribute.MapSelction.Find(item=>item.code == gameinfo.MapSelction)?.name </td>
-                <td>@gameinfo.jinzhiFaction</td>
-                <td>@gameinfo.username</td>
-                <td>@gameinfo.remark</td>
-                <td>
-                    @if (gameinfo.userlist == null || !gameinfo.userlist.Contains(myName))
-                    {
-                        <button class="btn btn-default" onclick="joinGame(@gameinfo.Id)">加入</button>
-                    }
-                    else
-                    {
-                        <button class="btn btn-default" onclick="exitGame(@gameinfo.Id)">退出</button>
-                    }
-                </td>
-            </tr>
-        }
+                    <td>@GameInfoAttribute.MapSelction.Find(item => item.code == gameinfo.MapSelction)?.name </td>
+                    <td>@gameinfo.jinzhiFaction</td>
+                    <td>@gameinfo.username</td>
+                    <td>@gameinfo.remark</td>
+                    <td>
+                        @if (gameinfo.userlist == null || !gameinfo.userlist.Contains(myName))
+                        {
+                            <button class="btn btn-default" onclick="joinGame(@gameinfo.Id)">加入</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-default" onclick="exitGame(@gameinfo.Id)">退出</button>
+                        }
+
+                        @if (isAdmin || gameinfo.username == Context.User.Identity.Name)
+                        {
+                            <button class="btn btn-default" onclick="deleteGame(@gameinfo.Id)">删除</button>
+                        }
+
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 
@@ -69,7 +81,7 @@
     function postGameData(url) {
         $.post(url,
             "",
-            function(data) {
+            function (data) {
                 if (data.info.state === 200) {
                     location.reload();
                 } else {
@@ -84,6 +96,10 @@
 
     function exitGame(id) {
         postGameData("/Home/ExitGame/" + id);
+    }
+
+    function deleteGame(id) {
+        postGameData("/Home/DeleteHallGame/" + id);
     }
 
 </script>
