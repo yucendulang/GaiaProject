@@ -180,6 +180,7 @@ namespace GaiaProject.Controllers
                     gameInfoModel.round = -1;
                     gameInfoModel.UserCount = model.UserCount;
                     gameInfoModel.userlist = string.Format("|{0}|", this.User.Identity.Name);
+
                 }
                 else
                 {
@@ -214,8 +215,16 @@ namespace GaiaProject.Controllers
             //如果是大厅
             if (model.isHall)
             {
-                saveGameInfo(null);
-                return Redirect("/Home/GameHallList/");
+                //人数大于4
+                if (model.UserCount > 4)
+                {
+                    return Redirect("/home/NewGameHall");
+                }
+                else
+                {
+                    saveGameInfo(null);
+                    return Redirect("/Home/GameHallList/");
+                }
             }
             else
             {

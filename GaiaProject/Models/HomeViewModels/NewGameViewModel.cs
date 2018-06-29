@@ -46,7 +46,7 @@ namespace GaiaProject.Models.HomeViewModels
         /// <summary>
         /// 玩家人数
         /// </summary>
-        [Display(Name = "玩家人数")]
+        [Display(Name = "玩家人数")]        
         public int UserCount { get; set; }
 
         /// <summary>

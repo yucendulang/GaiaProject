@@ -188,7 +188,9 @@ namespace GaiaCore.Gaia.Game
                 //已经结束的不发送邮件
                 if (gameinfo.GameStatus == 8)
                 {
-                   return;
+                    //从内存删除
+                    GameMgr.DeleteOneGame(gaiaGame.GameName);
+                    return;
                 }
                 else
                 {
