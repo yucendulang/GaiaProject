@@ -25,7 +25,22 @@ function getClickObj(x, y) {
     }
 };
 
-
+(function bkimg() {
+    var planetImgs = ["terra", "oxide", "volcanic", "desert", "swamp", "titanium", "ice", "gaia", "transdim", "space"];
+    colorPlant = { "#6bd8f3": "terra", "#f23c4d": "oxide", "#ea8736": "volcanic", "#facd2f": "desert", "#ad5e2f": "swamp", "#a3a3a3": "titanium", "#d3f1f5": "ice", "#80F080": "gaia", "#D19FE8": "transdim", "#000000": "space" };
+    var loadedImgs = 0;
+    for (var i = 0; i < planetImgs.length; i++) {
+        var img = $('<img src="/images/planet/' + planetImgs[i] + '.png" id="' + planetImgs[i] + '" style="display: none;" />')[0];
+        img.onload = function () {
+            this.onload = null;
+            loadedImgs++;
+            if (loadedImgs >= 10) {
+                createMap({ id: "myCanvas", type: "build" });
+            }
+        }
+        document.getElementsByTagName("body")[0].appendChild(img);
+    }
+})();
 
 String.prototype.format = function (args) {
     var result = this;
@@ -51,21 +66,18 @@ String.prototype.format = function (args) {
     return result;
 }
 
-createMap({ id: "myCanvas", type:"build"});
-
-
 //弹出地图选择位置
-function selectMapPos(value, syntax,action) {
+function selectMapPos(value, syntax, action) {
     $("#allistdiv").hide();
     $("#myModalCanves").modal();
-    if (action === undefined || action === "ACT6" || action === "ACT2" || action === "RBT1" || action ==="RBT2") {
+    if (action === undefined || action === "ACT6" || action === "ACT2" || action === "RBT1" || action === "RBT2") {
         //action = "act";
         syntax = "action {0}".format(value) + " {0}";
         //$("#syntax").val(syntax);
     } else {
         //action = "planet";
     }
-    createMap({ id: "myCanvasSelect", type: "act", action: action, syntax: syntax});
+    createMap({ id: "myCanvasSelect", type: "act", action: action, syntax: syntax });
 }
 //选择种族，选择回合版,快速行动
 $(".selectchange").change(function () {
@@ -89,7 +101,7 @@ $(".actionGp").click(function () {
 
 if (userInfo.isRound) {
     //能量行动
-    $("#actBody div").click(function() {
+    $("#actBody div").click(function () {
         var value = this.id.replace(" ", "");
         if ($(this).find("a").css("color") === "rgb(255, 0, 0)") {
             alert(_("行动已被执行"));
@@ -112,7 +124,7 @@ if (userInfo.isRound) {
     });
 
     //选择建筑位置
-    $("#createZjAl").click(function() {
+    $("#createZjAl").click(function () {
         $("#allistdiv").show();
 
         $("#myModalCanves").modal();
@@ -120,36 +132,36 @@ if (userInfo.isRound) {
     });
 
     //点击回合组推板
-    $("#rbt_s_list div").click(function() {
+    $("#rbt_s_list div").click(function () {
         openQueryWindow(this.id, _("确认PASS?"));
     });
 
     //特殊行动
-    $("#playerFaction .STT1False").click(function() {
+    $("#playerFaction .STT1False").click(function () {
             var obj = $(this);
             openQueryWindow(obj.attr("syntax") + this.id, _("确认执行?"));
         }
     );
     //AC2=Q
-    $("#playerFaction .AC2False").click(function() {
+    $("#playerFaction .AC2False").click(function () {
             var obj = $(this);
             openQueryWindow(obj.attr("syntax") + this.id, _("确认执行?"));
         }
     );
     //AC2=4C
-    $("#playerFaction .BalAC2False").click(function() {
+    $("#playerFaction .BalAC2False").click(function () {
             var obj = $(this);
             openQueryWindow(obj.attr("syntax") + this.id, _("确认执行?"));
         }
     );
 
     //放置黑星
-    $("#planetMine").click(function() {
+    $("#planetMine").click(function () {
         selectMapPos("", "planet {0}", "planet");
     });
 
     //种族能力
-    $(".MapAction").click(function() {
+    $(".MapAction").click(function () {
         //
         var id = this.id;
 
@@ -165,7 +177,7 @@ if (userInfo.isRound) {
                 id: "myCanvasSelect",
                 type: "pos",
                 showid: "#mapkjlist",
-                func: function(pos) {
+                func: function (pos) {
                     var value = "action fir.downgrade {0}.advance {1}";
                     return value.format(pos, $("#mapkjlist").val());
                 }
@@ -188,7 +200,7 @@ if (userInfo.isRound) {
         var actionType = obj.attr("actionType");
 
         var oldcode = $("#syntax").val();
-        if (actionType!=='now' && oldcode === "") {
+        if (actionType !== 'now' && oldcode === "") {
             alert(_("必须先选择主要行动"));
             return;
         }
@@ -219,7 +231,7 @@ if (userInfo.isRound) {
                     //oldcode = $("#syntax").val();
                     nowcode = nowcode + value + ".";
                 }
-                nowcode = nowcode.substr(0,nowcode.length-1);
+                nowcode = nowcode.substr(0, nowcode.length - 1);
             }
         } else {
             nowcode = value;
@@ -237,17 +249,17 @@ if (userInfo.isRound) {
     });
 
     //点击高级板块
-    $("#playerFaction .ATT1False").click(function() {
+    $("#playerFaction .ATT1False").click(function () {
             var obj = $(this);
             openQueryWindow(obj.attr("syntax") + this.id, _("确认执行?"));
         }
     );
-    $("#playerFaction .ATT2False").click(function() {
+    $("#playerFaction .ATT2False").click(function () {
             var obj = $(this);
             openQueryWindow(obj.attr("syntax") + this.id, _("确认执行?"));
         }
     );
-    $("#playerFaction .ATT3False").click(function() {
+    $("#playerFaction .ATT3False").click(function () {
             var obj = $(this);
             openQueryWindow(obj.attr("syntax") + this.id, _("确认执行?"));
         }
@@ -262,7 +274,7 @@ if (userInfo.isRound) {
 
 var windowFunc;
 //弹出确认对话框
-function openQueryWindow(type, title,tishi,func) {
+function openQueryWindow(type, title, tishi, func) {
     //actType = "action {0}".format(actType);
     //actType = type;
     $("#syntax").val(type);
@@ -415,20 +427,20 @@ $(document).ready(function () {
 //
 function faction_getLog(gameName, factionName, factionType) {
     $.get("/Home/SyntaxLog/" + gameName + "?factionName=" + factionName + "&factionType=" + factionType,
-        function(data) {
+        function (data) {
             //alert(data);
-            $("#queryInfoBody").html("<table class='table'><thead data-toggle='collapse' data-target='#demo'><tr><th>种族名</th><th class='text-right'>变化数值</th><th>分数</th><th class='text-right'>变化数值</th><th>信用点</th><th class='text-right'>变化数值</th><th>矿</th><th class='text-right'>变化数值</th><th>QIC</th><th class='text-right'>变化数值</th><th>知识</th><th class='text-right'>变化数值</th><th>能量</th><th>语句</th></tr></thead>" + data.data+"</table>");
+            $("#queryInfoBody").html("<table class='table'><thead data-toggle='collapse' data-target='#demo'><tr><th>种族名</th><th class='text-right'>变化数值</th><th>分数</th><th class='text-right'>变化数值</th><th>信用点</th><th class='text-right'>变化数值</th><th>矿</th><th class='text-right'>变化数值</th><th>QIC</th><th class='text-right'>变化数值</th><th>知识</th><th class='text-right'>变化数值</th><th>能量</th><th>语句</th></tr></thead>" + data.data + "</table>");
             $("#queryInfoModel").modal();
         });
 }
 //得分明细
-function faction_scoreShow(gameName,factionName) {
+function faction_scoreShow(gameName, factionName) {
     //alert(factionName);
     //openQueryWindow($("#syntax").val(), "确认?");
     faction_getLog(gameName, factionName, 1);
 }
 //日志明细
-function faction_logShow(gameName,factionName) {
+function faction_logShow(gameName, factionName) {
     //alert(factionName);
     faction_getLog(gameName, factionName, 0);
 

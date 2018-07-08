@@ -1,7 +1,12 @@
 (function() {
 
 	var translate = function(text)
-	{
+    {
+        var href = location.href;
+        if (href.indexOf("totoman") > -1) {
+            return text;
+        }
+
 		var xlate = translateLookup(text);
 		
 		if (typeof xlate == "function")

@@ -1,14 +1,15 @@
-﻿// Write your Javascript code.
+// Write your Javascript code.
 "use strict";
 var hex_size = 30;
 var hex_width = hex_size * Math.sqrt(3);
-var hex_height = hex_size * 1.5;
+var hex_height = hex_size * 1.5; 
 
 //第一次运行，加载事件
 var isFirstAct = true;
 var isFirstAl = true;
 var isFirstBuild = true;
 
+ 
 ///获取选择的科技板块
 function getKjTile() {
 
@@ -639,8 +640,20 @@ function makeHexPath(ctx, x, y, size, color, name, array, col, row) {
     //ctx.strokeStyle = "Black"; 
     ctx.strokeStyle = Global.haxLine;
 
-    ctx.fillStyle = color;
-    ctx.fill();
+    
+	
+	if(colorPlant[color]!=undefined){
+		ctx.fillStyle = Global.spaceBg;
+		ctx.fill();
+		var img=document.getElementById(colorPlant[color]);
+		//var pat=ctx.createPattern(img,"no-repeat");
+		//ctx.drawImage(img, x-30, y+3,30,30);//275  35
+		ctx.drawImage(img, x-43, y+1,55,49);
+	}else{
+		ctx.fillStyle = color;
+		ctx.fill();
+	} 
+	
     ctx.closePath();
     ctx.stroke();
     ctx.restore();
@@ -1024,13 +1037,14 @@ function ConvertRaceIntToColor(i) {
 
 //转换空置地区中的文字颜色
 function ConvertBackGroundColorToTextColor(color) {
-    if (color === ConvertIntToColor(300)) {
+    if (color === ConvertIntToColor(300) ||  color == cycle[0]) {
         //return "gray";
         //太空中的文字颜色
         return Global.spaceText;
     } else {
         //星球上的文字颜色
-        return Global.planetText;
+        //return Global.planetText;
+		return Global.spaceText;
     }
 }
 
@@ -1074,3 +1088,6 @@ function renderColorCycle(ctx) {
     }
     ctx.restore();
 }
+
+
+

@@ -76,6 +76,8 @@
   <ItemGroup>
     <Folder Include="finishgame\" />
     <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="wwwroot\images\新文件夹1\" />
+    <Folder Include="wwwroot\images\新文件夹\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\assets\fonts\Pe-icon-7-stroke.svg" />
