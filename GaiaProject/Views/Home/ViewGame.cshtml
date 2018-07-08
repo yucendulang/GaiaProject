@@ -59,6 +59,7 @@
             colorIndex:@faction.colorIndex,
             GameName: '@Html.Raw(Model.GameName)',
             PlayerIndex: @Model.GameStatus.PlayerIndex,
+            paygrade:@faction.UserGameModel.paygrade,
         };
         //alert(userInfo.isRound);
     </script>
@@ -72,7 +73,7 @@ else
             stage: -1,
             colorIndex: -1,
             GameName: '@Model.GameName',
-            PlayerIndex:0
+            PlayerIndex: 0,
         };
     </script>
 }

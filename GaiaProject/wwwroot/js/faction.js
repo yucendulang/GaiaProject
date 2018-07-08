@@ -25,22 +25,44 @@ function getClickObj(x, y) {
     }
 };
 
-(function bkimg() {
-    var planetImgs = ["terra", "oxide", "volcanic", "desert", "swamp", "titanium", "ice", "gaia", "transdim", "space"];
-    colorPlant = { "#6bd8f3": "terra", "#f23c4d": "oxide", "#ea8736": "volcanic", "#facd2f": "desert", "#ad5e2f": "swamp", "#a3a3a3": "titanium", "#d3f1f5": "ice", "#80F080": "gaia", "#D19FE8": "transdim", "#000000": "space" };
-    var loadedImgs = 0;
-    for (var i = 0; i < planetImgs.length; i++) {
-        var img = $('<img src="/images/planet/' + planetImgs[i] + '.png" id="' + planetImgs[i] + '" style="display: none;" />')[0];
-        img.onload = function () {
-            this.onload = null;
-            loadedImgs++;
-            if (loadedImgs >= 10) {
-                createMap({ id: "myCanvas", type: "build" });
+if (userInfo != undefined && userInfo.paygrade > 0) {
+    (function bkimg() {
+        var planetImgs = [
+            "terra", "oxide", "volcanic", "desert", "swamp", "titanium", "ice", "gaia", "transdim", "space"
+        ];
+        colorPlant = {
+            "#6bd8f3": "terra",
+            "#f23c4d": "oxide",
+            "#ea8736": "volcanic",
+            "#facd2f": "desert",
+            "#ad5e2f": "swamp",
+            "#a3a3a3": "titanium",
+            "#d3f1f5": "ice",
+            "#80F080": "gaia",
+            "#D19FE8": "transdim",
+            "#000000": "space"
+        };
+        var loadedImgs = 0;
+        for (var i = 0; i < planetImgs.length; i++) {
+            var img = $('<img src="/images/planet/' +
+                planetImgs[i] +
+                '.png" id="' +
+                planetImgs[i] +
+                '" style="display: none;" />')[0];
+            img.onload = function() {
+                this.onload = null;
+                loadedImgs++;
+                if (loadedImgs >= 10) {
+                    createMap({ id: "myCanvas", type: "build" });
+                }
             }
+            document.getElementsByTagName("body")[0].appendChild(img);
         }
-        document.getElementsByTagName("body")[0].appendChild(img);
-    }
-})();
+    })();
+} else {
+    createMap({ id: "myCanvas", type: "build" });
+}
+
 
 String.prototype.format = function (args) {
     var result = this;

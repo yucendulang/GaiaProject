@@ -641,18 +641,23 @@ function makeHexPath(ctx, x, y, size, color, name, array, col, row) {
     ctx.strokeStyle = Global.haxLine;
 
     
-	
-	if(colorPlant[color]!=undefined){
-		ctx.fillStyle = Global.spaceBg;
-		ctx.fill();
-		var img=document.getElementById(colorPlant[color]);
-		//var pat=ctx.createPattern(img,"no-repeat");
-		//ctx.drawImage(img, x-30, y+3,30,30);//275  35
-		ctx.drawImage(img, x-43, y+1,55,49);
-	}else{
-		ctx.fillStyle = color;
-		ctx.fill();
-	} 
+
+    if (userInfo!=undefined && userInfo.paygrade > 0) {
+        if (colorPlant[color] != undefined) {
+            ctx.fillStyle = Global.spaceBg;
+            ctx.fill();
+            var img = document.getElementById(colorPlant[color]);
+            //var pat=ctx.createPattern(img,"no-repeat");
+            //ctx.drawImage(img, x-30, y+3,30,30);//275  35
+            ctx.drawImage(img, x - 43, y + 1, 55, 49);
+        } else {
+            ctx.fillStyle = color;
+            ctx.fill();
+        }
+    } else {
+        ctx.fillStyle = color;
+        ctx.fill();
+    }
 	
     ctx.closePath();
     ctx.stroke();
