@@ -134,11 +134,12 @@ namespace GaiaProject
             {
                 new CultureInfo("pt-BR"),
                 new CultureInfo("zh-CN"),
+                new CultureInfo("en"),
             };
 
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
-                DefaultRequestCulture = new RequestCulture("pt-BR"),
+                DefaultRequestCulture = new RequestCulture("en"),
                 // Formatting numbers, dates, etc.
                 SupportedCultures = supportedCultures,
                 // UI strings that we have localized.
