@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../wwwroot/lib/jquery/dist/jquery.js"></script>
+</head>
+<body>
+    
+<div id="ambas" style="background: url(../wwwroot/images/factionboard/ambas.jpg);background-size: cover; width: 925px; height: 590px;position: relative">
+
+</div>
+<!--<img src="../wwwroot/images/factionboard/ambas.jpg" style="width: 50%; height: 50%"/>-->
+
+</body>
+</html>
+
+<script>
+    $(function () {
+        //mine
+        var startLeft_mine = 455;
+        var startTop_mine = 530;
+        for (var i = 0; i < 6; i++) {
+            $("#ambas").append('<img src="../wwwroot/images/factionboard/ambas_mine.png" style="left: ' + startLeft_mine + 'px; top: ' + startTop_mine+'px;position: absolute" />');
+            startLeft_mine -= 47;
+        }
+
+        //tc
+        var startLeft_tc = 265;
+        var startTop_tc = 420;
+        for (var i = 0; i < 3; i++) {
+            $("#ambas").append('<img src="../wwwroot/images/factionboard/ambas_tc.png" style="left: ' + startLeft_tc + 'px; top: '+startTop_tc+'px;position: absolute" />');
+            startLeft_tc -= 47;
+        }
+
+        //te
+        var startLeft_te = 595;
+        var startTop_te = 410;
+        for (var i = 0; i < 2; i++) {
+            $("#ambas").append('<img src="../wwwroot/images/factionboard/ambas_te.png" style="left: ' + startLeft_te + 'px; top: ' + startTop_te+'px;position: absolute" />');
+            startLeft_te -= 65;
+        }
+
+        //ac
+        var startLeft_ac = 570;
+        var startTop_ac = 300;
+        for (var i = 0; i < 2; i++) {
+            $("#ambas").append('<img src="../wwwroot/images/factionboard/ambas_ac.png" style="left: ' + startLeft_ac + 'px; top: ' + startTop_ac+'px;position: absolute" />');
+            startLeft_ac -= 100;
+        }
+
+        //sh
+        var startLeft_sh = 140;
+        var startTop_sh = 300;
+        for (var i = 0; i < 1; i++) {
+            $("#ambas").append('<img src="../wwwroot/images/factionboard/ambas_sh.png" style="left: ' + startLeft_sh + 'px; top: ' + startTop_sh+'px;position: absolute" />');
+        }
+
+    })
+</script>
