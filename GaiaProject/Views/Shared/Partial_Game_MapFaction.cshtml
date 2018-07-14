@@ -18,6 +18,7 @@
 
         @if (Model.GameStatus.stage != Stage.MAPROTATE)
         {
+            //回合计分
             <div>
                 <ul class="list-group" style="width: 120px;position: absolute; z-index: 10; top: 0px; left: 15px;">
                     @for (int i = 0; i < Model.RSTList.Count; i++)
@@ -37,7 +38,7 @@
                     }
                 </ul>
             </div>
-
+            //能量行动
             <div style="position: absolute; z-index: 999;top: 1px;left:450px" id="gameAction">
                 <div class="row" id="actBody">
                     @foreach (var item in Model.MapActionMrg.mapActList)
@@ -74,19 +75,59 @@
                     }
                 </div>
             </div>
-
+            //玩家
             <div style="position: absolute; z-index: 100; left: 770px;top: 700px">
                 @localizer["当前回合玩家"]:
                 @foreach (var orderPlayer in Model.FactionList.Except(Model.FactionNextTurnList))
-    {
-            <span style="background-color: @orderPlayer.ColorCode">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span>
-}
+                {
+                    <span style="background-color: @orderPlayer.ColorCode">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span>
+                }
 
                 <br />@localizer["跳过回合玩家"]:
                 @foreach (var orderPlayer in Model.FactionNextTurnList)
-    {
-            <span style="background-color: @orderPlayer.ColorCode">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span>
-}
+                {
+                    <span style="background-color: @orderPlayer.ColorCode">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span>
+                }
+            </div>
+
+            //终局计分版，大连
+            <div style="position: absolute; z-index: 101; left: 840px; top: 80px">
+                @foreach (var item in Model.FSTList)
+                {
+                    <div style="float: left; margin-left: 8px">
+                        <span style="display: block; margin-top: 5px">@item.GetType().Name</span>
+                        
+                        @{ Model.FactionList.ForEach(x => x.FinalEndScore = 0);
+                            item.InvokeGameTileAction(Model.FactionList); }
+                        @foreach (var fac in Model.FactionList)//.OrderByDescending(order=> item.TargetNumber(order))
+                        {
+                            <div style="">
+                                <span style="background-color: @fac.ColorCode; ">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>@(item.TargetNumber(fac))/@(fac.FinalEndScore)</span>
+                            </div>
+                        }
+                        @if (Model.FactionList.Count == 2)
+                        {
+                            <div style="">
+                                <span style="background-color:green; ">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>@(item.TargetNumber(new VirtualPlayerFaction(FactionName.Ambas, null)))@*/@(36 - Model.FactionList.Sum(x=>x.FinalEndScore))VP*@</span>                              
+                            </div>
+                        }
+
+                    </div>
+                }
+               
+            </div>
+
+            //预计得分
+            <div style="position: absolute; z-index: 101; left: 850px; top: 200px">
+
+                @{ Model.FactionList.ForEach(x => x.FinalEndScore = 0);
+                    Model.FSTList.ForEach(x => x.InvokeGameTileAction(Model.FactionList)); }
+                @foreach (var fac in Model.FactionList.OrderByDescending(order=> order.GetFinalEndScorePreview()))
+                {
+                    <div style="">
+                        <span style="background-color: @fac.ColorCode; ">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span><span>@(fac.GetFinalEndScorePreview())VP</span>                              
+                    </div>                    
+                }
             </div>
 
 
