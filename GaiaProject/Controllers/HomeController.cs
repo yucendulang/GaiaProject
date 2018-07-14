@@ -46,6 +46,8 @@ namespace GaiaProject.Controllers
                 return Redirect("/News/ShowInfo/3");
             }
 
+            //AuthMessageSender.SendEmail("325153468@qq.com", "test", "sbs");
+
             var task = _userManager.GetUserAsync(HttpContext.User);
             Task[] taskarray = new Task[] { task };
             Task.WaitAll(taskarray, millisecondsTimeout: 1000);
