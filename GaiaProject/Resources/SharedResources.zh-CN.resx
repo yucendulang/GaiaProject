@@ -240,4 +240,20 @@
   <data name="XenosSpecial" xml:space="preserve">
     <value>要塞不生产能量指示物，额外生产1个量子方块</value>
   </data>
+
+  <data name="大厅" xml:space="preserve">
+    <value>大厅</value>
+  </data>
+  <data name="changelanguage" xml:space="preserve">
+    <value>切换语言</value>
+  </data>
+  <data name="Chinese" xml:space="preserve">
+    <value>中文</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>英文</value>
+  </data>
+  <data name="Portuguese" xml:space="preserve">
+    <value>葡萄牙文</value>
+  </data>
 </root>

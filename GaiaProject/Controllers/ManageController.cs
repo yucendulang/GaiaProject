@@ -438,5 +438,14 @@ namespace GaiaProject.Controllers
         }
 
         #endregion
+
+
+        [HttpGet]
+        public async Task<IActionResult> ChangeLanguage(string id)
+        {
+            Response.Cookies.Append(".AspNetCore.Culture", string.Format("c={0}|uic={0}","en"));
+            return Redirect("/");
+        }
+
     }
 }
