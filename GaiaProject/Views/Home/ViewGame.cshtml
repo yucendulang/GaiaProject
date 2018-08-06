@@ -122,7 +122,7 @@ else
                 }
                 </style>
                 <script>
-                //$("#gameTopInfo").css("background-color","@Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode");
+                    //$("#gameTopInfo").css("background-color","@Model.FactionList[Model.GameStatus.PlayerIndex].ColorCode");
                 </script>
             }
 
@@ -192,8 +192,8 @@ else
 
                 <p>@localizer["现在等待"] <span class="buildcolor color-">@localizer[Model.FactionList[Model.GameStatus.PlayerIndex].ChineseName]</span> @localizer["建造初始房子"] </p>
                 <script>
-                userInfo.mapcolor = '@Model.FactionList[Model.GameStatus.PlayerIndex].ColorMap';
-                userInfo.stage = 2;
+                    userInfo.mapcolor = '@Model.FactionList[Model.GameStatus.PlayerIndex].ColorMap';
+                    userInfo.stage = 2;
                 </script>
                 @Html.Partial("Partial_Game_SelectPos", Model)//
 
@@ -389,6 +389,9 @@ else
                         <button id="syn_pass" type="button" class="btn btn-primary" style="width: 100px" onclick="$('#syntax').val('pass turn');submitData();">@localizer["结束操作"]</button>
 
                         <button id="syn_pass" type="button" class="btn btn-primary" style="width: 100px" onclick="$('#syntax').val('reset turn');submitData();">@localizer["重置操作"] (@UserGameModel?.resetNumber)</button>
+
+
+
                     }
 
 
@@ -443,7 +446,14 @@ else
     }
 
     <div class="panel panel-default">
-        <div class="panel-heading">@localizer["对局记录"]</div>
+        <div class="panel-heading">@localizer["对局记录"] 
+        
+            @if (@UserGameModel?.paygrade > 0)
+            {
+            <a href="/Home/ReturnMyTurn/@Model.GameName">@localizer["强制退回到自己回合(土豆)"] (@UserGameModel?.resetPayNumber)</a>
+            }
+
+        </div>
         <table class="table table-condensed">
             <thead data-toggle="collapse" data-target="#demo">
                 <tr>

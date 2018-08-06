@@ -12,6 +12,7 @@ namespace GaiaDbContext.Models.AccountViewModels
         {
             this.isTishi = true;
             this.resetNumber = 5;
+            this.resetPayNumber = 5;
         }
         /// <summary>
         /// 用户名
@@ -43,6 +44,13 @@ namespace GaiaDbContext.Models.AccountViewModels
 
         public int resetNumber { get; set; }
 
+        /// <summary>
+        /// 会员强制退回操作
+        /// </summary>
+
+        [JsonProperty]
+
+        public int resetPayNumber { get; set; }
 
         /// <summary>
         /// 付费等级

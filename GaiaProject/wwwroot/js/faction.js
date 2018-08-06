@@ -25,7 +25,7 @@ function getClickObj(x, y) {
     }
 };
 
-if (userInfo != undefined && userInfo.paygrade > 0) {
+if (false &&  userInfo != undefined && userInfo.paygrade > 0) {
     (function bkimg() {
         var planetImgs = [
             "terra", "oxide", "volcanic", "desert", "swamp", "titanium", "ice", "gaia", "transdim", "space"
@@ -345,6 +345,22 @@ $("#queryAndPass").click(function () {
     }
 });
 
+function syntaxCode(syntax, faction) {
+    $.post("/home/Syntax",
+        {
+            name: $("#test1").val(),
+            syntax: syntax,
+            factionName: faction,
+        },
+        function (data, status) {
+            if (data.indexOf("error") != -1) {
+                alert(data);
+            } else {
+                location.reload();
+            }
+        });
+}
+
 //提交命令
 function submitData() {
     var value = $("#syntax").val();
@@ -358,7 +374,7 @@ function submitData() {
             syntax: value,
             factionName: $("#test3").val(),
         },
-        function (data, status) {
+        function(data, status) {
             if (data.indexOf("error") != -1) {
                 alert(data);
             } else {

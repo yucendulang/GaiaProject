@@ -957,60 +957,69 @@ namespace GaiaCore.Gaia
                 {
                     //当前用户
                     var myUser = this.UserGameModels.Find(user => user.username == GetCurrentUserName());
+
                     if (myUser != null)
                     {
-                        if (myUser.resetNumber > 0)
+                        //会员回退
+                        if (item.Equals("reset turn2"))
                         {
-                            //重置参数-1
-                            myUser.resetNumber--;
 
-                            var syntaxList = this.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                            //删除日志
-                            for (int i = syntaxList.Count - 1; i > 0; i--)
-                            {
-                                string str = syntaxList[i];
-                                var list = str.Split(':');
-                                //隔开
-                                if (list.Length == 2)
-                                {
-                                    //当前种族操作
-                                    if (list[0] == faction.FactionName.ToString())
-                                    {
-                                        syntaxList.RemoveAt(i);
-                                    }
-                                    //不是当前种族
-                                    else
-                                    {
-                                        //跳过吸收能量
-                                        if (GameSyntax.leechPowerRegex.IsMatch(list[1]) || GameSyntax.downgradeRegex.IsMatch(list[1]))
-                                        {
-
-                                        }
-                                        //如果是pass ，终止
-                                        else if (GameFreeSyntax.PassRegexTurn.IsMatch(list[1]))
-                                        {
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            break;
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    syntaxList.RemoveAt(i);
-                                }
-                                //if (list[0])
-                            }
-                            this.UserActionLog = string.Join("\r\n", syntaxList);
-                            //重置游戏
-                            GameMgr.RestoreGame(this.GameName, this, isToDict: true);
                         }
                         else
                         {
-                            log = "不能进行重置";
-                            return false;
+                            if (myUser.resetNumber > 0)
+                            {
+                                //重置参数-1
+                                myUser.resetNumber--;
+
+                                var syntaxList = this.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                                //删除日志
+                                for (int i = syntaxList.Count - 1; i > 0; i--)
+                                {
+                                    string str = syntaxList[i];
+                                    var list = str.Split(':');
+                                    //隔开
+                                    if (list.Length == 2)
+                                    {
+                                        //当前种族操作
+                                        if (list[0] == faction.FactionName.ToString())
+                                        {
+                                            syntaxList.RemoveAt(i);
+                                        }
+                                        //不是当前种族
+                                        else
+                                        {
+                                            //跳过吸收能量
+                                            if (GameSyntax.leechPowerRegex.IsMatch(list[1]) || GameSyntax.downgradeRegex.IsMatch(list[1]))
+                                            {
+
+                                            }
+                                            //如果是pass ，终止
+                                            else if (GameFreeSyntax.PassRegexTurn.IsMatch(list[1]))
+                                            {
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        syntaxList.RemoveAt(i);
+                                    }
+                                    //if (list[0])
+                                }
+                                this.UserActionLog = string.Join("\r\n", syntaxList);
+                                //重置游戏
+                                GameMgr.RestoreGame(this.GameName, this, isToDict: true);
+                            }
+                            else
+                            {
+                                log = "不能进行重置";
+                                return false;
+                            }
                         }
 
                     }

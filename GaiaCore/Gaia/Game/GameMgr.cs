@@ -169,7 +169,7 @@ namespace GaiaCore.Gaia
             jsetting.ContractResolver = new LimitPropsContractResolver(new string[]
             {
                 "GameName",  "UserActionLog", "Username", "IsTestGame", "LastMoveTime", "version",
-                "UserGameModels","resetNumber","paygrade","username","remark","isTishi","IsSocket","IsRotatoMap"
+                "UserGameModels","resetNumber","resetPayNumber","paygrade","username","remark","isTishi","IsSocket","IsRotatoMap"
             });
             var str = JsonConvert.SerializeObject(m_dic, Formatting.Indented, jsetting);
             var logPath = System.IO.Path.Combine(BackupDataPath, DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt");
@@ -507,6 +507,8 @@ namespace GaiaCore.Gaia
             GetGameByName(GameName).RedoStack = Redo;
             return true;
         }
+
+
         /// <summary>
         /// 恢复游戏
         /// </summary>

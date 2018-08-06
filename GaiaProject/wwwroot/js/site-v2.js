@@ -642,7 +642,7 @@ function makeHexPath(ctx, x, y, size, color, name, array, col, row) {
 
     
 
-    if (userInfo!=undefined && userInfo.paygrade > 0) {
+    if (false && userInfo!=undefined && userInfo.paygrade > 0) {
         if (colorPlant[color] != undefined) {
             ctx.fillStyle = Global.spaceBg;
             ctx.fill();

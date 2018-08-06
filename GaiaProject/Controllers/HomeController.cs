@@ -797,6 +797,83 @@ namespace GaiaProject.Controllers
             return GameMgr.UndoOneStep(id);
         }
 
+        /// <summary>
+        /// 会员退回到自己回合
+        /// </summary>
+        /// <param name="GameName"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult ReturnMyTurn(string id)
+        {
+            var gg = GameMgr.GetGameByName(id);
+            if (gg != null)
+            {
+                //当前用户
+                var myUser = gg.UserGameModels.Find(user => user.username == HttpContext.User.Identity.Name.ToString());
+                //不是会员
+                if (myUser.paygrade == 0 || myUser.resetPayNumber==0)
+                {
+
+                }
+                else
+                {
+                    //-1
+                    myUser.resetPayNumber--;
+
+                    //首先要找到自己最近的操作
+                    bool flag = false;
+                    //种族名称
+                    Faction myFaction = gg.FactionList.Find(f => f.UserName == myUser.username);
+
+                    var syntaxList = gg.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                    if (myFaction != null)
+                    {
+                        for (int i = syntaxList.Count - 1; i > 0; i--)
+                        {
+                            string str = syntaxList[i];
+                            var list = str.Split(':');
+                            //隔开
+                            if (list.Length == 2)
+                            {
+                                //当前种族操作
+                                if (list[0] == myFaction.FactionName.ToString())
+                                {
+                                    if (list[1].Contains("pass turn"))
+                                    {
+                                        flag = true;
+                                    }
+                                    syntaxList.RemoveAt(i);
+                                }
+                                //不是当前种族
+                                else
+                                {
+                                    //以及经过自己的主主回合，以及不是自己的回合
+                                    if (flag && list[0] != myFaction.FactionName.ToString())
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        syntaxList.RemoveAt(i);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                syntaxList.RemoveAt(i);
+                            }
+                        }
+                    }
+                    gg.UserActionLog = string.Join("\r\n", syntaxList);
+                    //重置游戏
+                    GameMgr.RestoreGame(gg.GameName, gg, isToDict: true);
+                }
+            }
+        
+            return Redirect("/home/ViewGame/"+id);
+        }
+
+
         public bool ReportBug(string id)
         {
             if (!PowerUser.IsPowerUser(User.Identity.Name))
