@@ -50,8 +50,9 @@ namespace ManageTool
                     InvokeAction();
                     m_waitHandle.WaitOne(m_timeOut);
                 }
-                catch
+                catch (Exception e)
                 {
+                    Console.Write(e.Message);
                 }
             }
         }

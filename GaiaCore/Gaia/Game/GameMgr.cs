@@ -6,6 +6,7 @@ using System.Text;
 using System.Linq;
 using GaiaCore.Util;
 using System.Net.Http;
+using GaiaCore.Gaia.Data;
 using GaiaDbContext.Models.AccountViewModels;
 using GaiaProject.Data;
 
@@ -48,13 +49,31 @@ namespace GaiaCore.Gaia
         public static void RemoveOldBackupData()
         {
             var d = new DirectoryInfo(BackupDataPath);
-            var filename = (from p in d.EnumerateFiles() orderby p.Name descending select p.Name).Take(5);
-            foreach (var item in d.EnumerateFiles())
+            //var filename = (from p in d.EnumerateFiles() orderby p.Name descending select p.Name).Take(5);
+            //留下的文件数量
+            int number = 0;
+            //按名称排序
+            List<FileInfo> listFile = (from p in d.EnumerateFiles() orderby p.Name descending select p).ToList();
+            foreach (var item in listFile)
             {
-                if (!filename.Contains(item.Name))
+                //超过5个备份就删除
+                if (number > 5)
                 {
-                    System.IO.File.Delete(System.IO.Path.Combine(BackupDataPath, item.Name));
+                    item.Delete();
                 }
+                else
+                {
+                    //大于100K留下
+                    if (item.Length > GameConfig.GAME_FILE_SIZE)
+                    {
+                        number++;
+                    }
+                    else
+                    {
+                        item.Delete();
+                    }
+                }
+
             }
         }
 
@@ -405,11 +424,7 @@ namespace GaiaCore.Gaia
             if (string.IsNullOrEmpty(filename))
             {
                 var d = new DirectoryInfo(BackupDataPath);
-#if DEBUG
-                filename = (from p in d.EnumerateFiles()  orderby p.Name descending select p.Name).FirstOrDefault();
-#else
-                filename = (from p in d.EnumerateFiles() where p.Length/1024>100 orderby p.Name descending select p.Name).FirstOrDefault();
-#endif
+                filename = (from p in d.EnumerateFiles() where p.Length > GameConfig.GAME_FILE_SIZE orderby p.Name descending select p.Name).FirstOrDefault();
             }
             if (string.IsNullOrEmpty(filename))
             {

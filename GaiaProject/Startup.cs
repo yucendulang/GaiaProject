@@ -45,6 +45,10 @@ namespace GaiaProject
             {
                 // For more details on using the user secret store see https://go.microsoft.com/fwlink/?LinkID=532709
                 builder.AddUserSecrets<Startup>();
+
+                //启动备份计划
+                DaemonMgr.StartAll();
+
             }
             else
             {

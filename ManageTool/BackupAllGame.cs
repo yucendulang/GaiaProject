@@ -24,7 +24,7 @@ namespace ManageTool
 
             //备份到文件
             GameMgr.BackupDictionary();
-            //GameMgr.RemoveOldBackupData();
+            GameMgr.RemoveOldBackupData();
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using GaiaCore.Gaia.Data;
 
 namespace ManageTool
 {
@@ -24,10 +25,12 @@ namespace ManageTool
                 {
                     GameMgr.RemoveAndBackupGame(item);
                 }
-                //删除超过4天游戏
-                if (DateTime.Now.AddDays(-4) > GameMgr.GetGameByName(item).LastMoveTime)
+                //删除超过10天游戏
+                if (DateTime.Now.AddDays(-GameConfig.GAME_SAVE_DAYS) > GameMgr.GetGameByName(item).LastMoveTime)
                 {
-                    GameMgr.RemoveAndBackupGame(item);
+                    //GameMgr.RemoveAndBackupGame(item);
+                    //不需要备份直接删除
+                    GameMgr.DeleteOneGame(item);
                 }
             }
         }
