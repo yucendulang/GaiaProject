@@ -994,7 +994,7 @@
     <value>Rodada do &lt;span class="buildcolor"&gt;{0}&lt;/span&gt;, com a cor {1}</value>
   </data>
   <data name="大厅" xml:space="preserve">
-    <value>Hall</value>
+    <value>Lobby</value>
   </data>
   <data name="changelanguage" xml:space="preserve">
     <value>Change Language</value>

@@ -960,7 +960,7 @@
     <value>It is &lt;span class="buildcolor"&gt;{0}&lt;/span&gt;'s turn, color is {1}</value>
   </data>
   <data name="大厅" xml:space="preserve">
-    <value>Hall</value>
+    <value>Lobby</value>
   </data>
   <data name="changelanguage" xml:space="preserve">
     <value>Change Language</value>
