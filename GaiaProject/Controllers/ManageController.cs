@@ -439,11 +439,15 @@ namespace GaiaProject.Controllers
 
         #endregion
 
-
+        /// <summary>
+        /// 切换语言
+        /// </summary>
+        /// <param name="id">语言类型</param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> ChangeLanguage(string id)
         {
-            Response.Cookies.Append(".AspNetCore.Culture", string.Format("c={0}|uic={0}","en"));
+            Response.Cookies.Append(".AspNetCore.Culture", string.Format("c={0}|uic={0}",id));
             return Redirect("/");
         }
 

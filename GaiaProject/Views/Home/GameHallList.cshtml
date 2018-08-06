@@ -2,9 +2,10 @@
 @using GaiaDbContext.Models
 @model List<GaiaDbContext.Models.HomeViewModels.GameInfoModel>
 @inject UserManager<ApplicationUser> UserManager
+@inject IHtmlLocalizer<SharedResources> localizer
 
 @{
-    ViewBag.Title = "游戏大厅";
+    ViewBag.Title = @localizer["大厅"];
     Layout = "_Layout";
 
     string myName = string.Format("|{0}|", this.User.Identity.Name);
@@ -17,9 +18,9 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <a href="/home/NewGame" class="btn btn-primary">创建房间</a>
+        <a href="/home/NewGame" class="btn btn-primary">@localizer["创建房间"]</a>
 
-        <a href="/home/NewGameHall" class="btn btn-primary">创建大厅房间</a>
+        <a href="/home/NewGameHall" class="btn btn-primary">@localizer["创建大厅房间"]</a>
     </div>
 
 
