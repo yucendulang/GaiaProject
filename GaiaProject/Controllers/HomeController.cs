@@ -860,7 +860,16 @@ namespace GaiaProject.Controllers
                             }
                             else
                             {
-                                syntaxList.RemoveAt(i);
+                                //禁止回退到选种
+                                if (str.Contains("setup"))
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    syntaxList.RemoveAt(i);
+                                }
+                                
                             }
                         }
                     }
