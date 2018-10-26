@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using GaiaDbContext.Models;
 using GaiaDbContext.Models.AccountViewModels;
 using GaiaProject.Data;
-using GaiaProject.Models;
-using GaiaProject.Models.AccountViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

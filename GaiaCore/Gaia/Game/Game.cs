@@ -154,7 +154,7 @@ namespace GaiaCore.Gaia
                             else if (ret)
                             {
                                 //低版本直接到下一位玩家
-                                GameStatus.NextPlayer();
+                                GameStatus.NextPlayer(this.FactionList);
                             }
                         }
 
@@ -175,6 +175,7 @@ namespace GaiaCore.Gaia
                         return ret;
                     }
                     return false;
+                //盖亚阶段
                 case Stage.ROUNDGAIAPHASE:
                     ret = ProcessSyntaxGaiaPhase(syntax, ref log);
                     if (ret)
@@ -185,8 +186,9 @@ namespace GaiaCore.Gaia
                     {
                         return false;
                     }
-
+               //收入阶段
                 case Stage.ROUNDINCOME:
+
                     ret = ProcessSyntaxRoundIncomePhase(syntax, ref log);
                     if (ret)
                     {
@@ -233,6 +235,8 @@ namespace GaiaCore.Gaia
 
         private bool ProcessSyntaxGaiaPhase(string syntax, ref string log)
         {
+
+
             if (!ValidateSyntaxCommand(syntax, ref log, out string commmand, out Faction faction))
             {
                 return false;
@@ -340,6 +344,8 @@ namespace GaiaCore.Gaia
             {
                 //开始新回合
                 ChangeGameStatus(Stage.ROUNDINCOME);
+
+
                 FactionList.ForEach(x => x.CalIncome());
                 FactionList.ForEach(x =>
                 {
@@ -349,17 +355,24 @@ namespace GaiaCore.Gaia
                         GameStatus.IncomePhaseIndexQueue.Enqueue(FactionList.IndexOf(x));
                     }
                 });
-                GameStatus.NewRoundReset();
+                GameStatus.NewRoundReset(this);
                 IncomePhaseNextPlayer();
+
+                
+
                 return;
             }
 
             //保存结果到数据库
             DbGameSave.SaveGameToDb(this.dbContext,this);
         }
-
-        private void IncomePhaseNextPlayer()
+        /// <summary>
+        /// 收入阶段
+        /// </summary>
+        public void IncomePhaseNextPlayer()
         {
+
+
             if (GameStatus.IncomePhaseIndexQueue.Count==0)
             {
                 ChangeGameStatus(Stage.ROUNDGAIAPHASE);
@@ -380,11 +393,17 @@ namespace GaiaCore.Gaia
             else
             {
                 GameStatus.PlayerIndex = GameStatus.IncomePhaseIndexQueue.Dequeue();
+                //如果当前玩家已经drop，跳过其收入阶段
+                if (this.FactionList[GameStatus.PlayerIndex].UserGameModel.dropType > 0)
+                {
+                    IncomePhaseNextPlayer();
+                }
             }
         }
 
-        private void GaiaNextPlayer()
+        public void GaiaNextPlayer()
         {
+        
             if (GameStatus.GaiaPlayerIndexQueue.Count == 0)
             {
                 GaiaPhase();
@@ -392,6 +411,12 @@ namespace GaiaCore.Gaia
             else
             {
                 GameStatus.PlayerIndex = GameStatus.GaiaPlayerIndexQueue.Dequeue();
+            }
+
+            //如果当前玩家已经drop
+            if (this.FactionList[GameStatus.PlayerIndex].UserGameModel.dropType > 0)
+            {
+                GaiaNextPlayer();
             }
         }
 
@@ -418,7 +443,10 @@ namespace GaiaCore.Gaia
             }
 
             FactionList.ForEach(x => x.GaiaPhaseIncome());
-            GameStatus.PlayerIndex = 0;
+
+            //重置玩家
+            GameStatus.SetPlayerIndex(this);
+
             FactionList.ForEach(x => x.GameTileList.Where(y=>!(y is AllianceTile)).ToList().ForEach(y => y.IsUsed = false));
             MapActionMrg.Reset();
             FactionList.ForEach(x => x.ResetNewRound());
@@ -915,7 +943,7 @@ namespace GaiaCore.Gaia
                         return false;
                     }
                 }
-                //结束回合
+                //结束自己的当前回合
                 else if (GameFreeSyntax.PassRegexTurn.IsMatch(item))
                 {
                     //执行过主要行动
@@ -940,7 +968,7 @@ namespace GaiaCore.Gaia
                         else
                         {
                             //到下一位玩家
-                            GameStatus.NextPlayer();
+                            GameStatus.NextPlayer(this.FactionList);
                         }
                     }
                     else
@@ -1323,7 +1351,7 @@ namespace GaiaCore.Gaia
                     if (!FactionList.Exists(x => x.FactionName == result))
                     {
                         SetupFaction(user, result);
-                        GameStatus.NextPlayer();
+                        GameStatus.NextPlayer(this.FactionList);
                     }
                     else
                     {
@@ -1620,37 +1648,49 @@ namespace GaiaCore.Gaia
             ALTList = ALTMgr.GetList();
             AllianceTileForTransForm = ALTList.RandomRemove(random);
         }
+        /// <summary>
+        /// 修改阶段
+        /// </summary>
+        /// <param name="stage"></param>
         private void ChangeGameStatus(Stage stage)
         {
             m_TailLog += "#" + stage.ToString().AddEnter();
             GameStatus.stage = stage;
+
         }
         public void SetLeechPowerQueue(FactionName factionName,int row,int col)
         {
             foreach(var item in FactionList.Where(x => !x.FactionName.Equals(factionName)))
             {
-
-                var power=Map.CalHighestPowerBuilding(row,col,item);
-               
-                if (power != 0)
+                //drop玩家不吸收能量
+                if (item.UserGameModel.dropType > 0)
                 {
-                    //如果是第六回合并且PASS的玩家只需要吸收1魔力
-                    if (this.GameStatus.RoundCount == 6 && this.FactionNextTurnList.Contains(item))
-                    {
-                        //如果吸收1魔力
-                        if (power == 1)
-                        {
-                            item.PowerIncrease(1);
-                        }
-                        //或者最多吸收1魔力
-                        else if (item.PowerToken1==0 && item.PowerToken2==1)
-                        {
-                            item.PowerIncrease(1);
-                        }
-                        continue;
-                    }
+                    continue;
+                }
+                else
+                {
+                    var power = Map.CalHighestPowerBuilding(row, col, item);
 
-                    item.LeechPowerQueue.Add(new Tuple<int, FactionName>(power, factionName));
+                    if (power != 0)
+                    {
+                        //如果是第六回合并且PASS的玩家只需要吸收1魔力
+                        if (this.GameStatus.RoundCount == 6 && this.FactionNextTurnList.Contains(item))
+                        {
+                            //如果吸收1魔力
+                            if (power == 1)
+                            {
+                                item.PowerIncrease(1);
+                            }
+                            //或者最多吸收1魔力
+                            else if (item.PowerToken1 == 0 && item.PowerToken2 == 1)
+                            {
+                                item.PowerIncrease(1);
+                            }
+                            continue;
+                        }
+
+                        item.LeechPowerQueue.Add(new Tuple<int, FactionName>(power, factionName));
+                    }
                 }
             }
         }
@@ -1830,6 +1870,12 @@ namespace GaiaCore.Gaia
         /// 开始保存数据到数据库
         /// </summary>
         public bool IsSaveToDb { get; set; }
+
+        /// <summary>
+        /// drop 小时
+        /// </summary>
+        public int dropHour { get; set; }
+
 
         public class STTInfo
         {

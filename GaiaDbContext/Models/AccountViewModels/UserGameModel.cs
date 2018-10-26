@@ -64,5 +64,11 @@ namespace GaiaDbContext.Models.AccountViewModels
         /// </summary>
         public int scoreUserStart { get; set; }
 
+        /// <summary>
+        /// 是否退出
+        /// 0=正常，不正常
+        /// </summary>
+        public int dropType { get; set; }
+
     }
 }

@@ -64,6 +64,9 @@ namespace GaiaProject.Models.HomeViewModels
         [Display(Name = "禁止种族")]
 
         public string jinzhiFaction { get; set; }
+
+        [Display(Name = "drop Hour")]
+        public int dropHour { get; set; }
     }
 
 }

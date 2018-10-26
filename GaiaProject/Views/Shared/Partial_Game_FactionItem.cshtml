@@ -29,6 +29,10 @@
             {
                 <img src="/images/user/potato.png" />
             }
+            @if (Model.UserGameModel?.dropType > 0)
+            {
+                <span>drop</span>
+            }
 
             <span class="badge" onclick="faction_scoreShow('@Model.GaiaGame.GameName', '@Model.FactionName')">@Model.Score VP</span>
 
@@ -38,7 +42,8 @@
                 </span>
 
             </span>
-            &nbsp;&nbsp;&nbsp;&nbsp;<span onclick="faction_logShow('@Model.GaiaGame.GameName', '@Model.FactionName')">@Model.UserName</span>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span onclick="faction_logShow('@Model.GaiaGame.GameName', '@Model.FactionName')">@Model.UserName</span>
         </h3>
     </div>
     <div class="panel-body">
@@ -53,6 +58,7 @@
                     <button type="button" class="btn btn-default">@localizer["星球种类"]:@Model.GetPlanetTypeCount() </button>
                     <button type="button" class="btn btn-default">@localizer["星域"]:@Model.GetSpaceSectorCount()</button>
                     <button type="button" class="btn btn-default">@localizer["时常"]:@Model.GetClockPeriod()</button>
+                    <button type="button" class="btn btn-default" onclick="dropFaction('@Model.GaiaGame.GameName','@Model.FactionName')">@localizer["drop"]</button>
                 @if (@Model is MadAndroid)
                 {
                     <button type="button" class="btn btn-default">@localizer["能力是否使用"]:

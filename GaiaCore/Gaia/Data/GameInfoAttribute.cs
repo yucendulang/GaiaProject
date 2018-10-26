@@ -20,5 +20,14 @@ namespace GaiaCore.Gaia.Data
             new PwInfo(){code = "randomall4p",name = "四人完全随机"},
 
         };
+        /// <summary>
+        /// 连续不行动的drop时间,暂时没有1,5,10,
+        /// </summary>
+
+        public static readonly List<int> DropHour = new List<int>()
+        {
+            24,72,120,240
+        };
+
     }
 }

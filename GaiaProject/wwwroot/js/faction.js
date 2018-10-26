@@ -483,3 +483,13 @@ function faction_logShow(gameName, factionName) {
     faction_getLog(gameName, factionName, 0);
 
 }
+
+//drop种族
+function dropFaction(gameName, factionName) {
+    //alert(username);
+    $.get("/Home/DropFaction/" + gameName + "?factionName=" + factionName, function(data) {
+        if (data.info.state === 200) {
+            location.reload();
+        }
+    });
+}

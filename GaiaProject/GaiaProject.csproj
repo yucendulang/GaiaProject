@@ -68,6 +68,7 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Gaia.Model\Gaia.Model.csproj" />
     <ProjectReference Include="..\Gaia.Service\Gaia.Service.csproj" />
     <ProjectReference Include="..\GaiaCore\GaiaCore.csproj" />
     <ProjectReference Include="..\GaiaDbContext\GaiaDbContext.csproj" />
@@ -75,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="finishgame\" />
+    <Folder Include="Models\" />
     <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="wwwroot\images\新文件夹1\" />
     <Folder Include="wwwroot\images\新文件夹\" />

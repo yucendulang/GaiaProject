@@ -32,7 +32,15 @@ namespace GaiaCore.Gaia
         /// <summary>
         /// 4个玩家 0-3
         /// </summary>
-        public int PlayerIndex { get => m_PlayerIndex - 1; set => m_PlayerIndex = value + 1; }
+        public int PlayerIndex
+        {
+            get => m_PlayerIndex - 1;
+            set
+            {
+                m_PlayerIndex = value + 1;
+                //
+            }
+        }
         /// <summary>
         /// 玩家人数
         /// </summary>
@@ -50,12 +58,33 @@ namespace GaiaCore.Gaia
             m_PlayerIndex = PlayerNumber;
         }
 
-        public void NewRoundReset()
+        public void SetPlayerIndex(GaiaGame gaiaGame)
         {
-            m_PlayerIndex = 1;
+            //行动玩家需要是没有drop的玩家
+            int index = gaiaGame.FactionList.FindIndex(item => item.UserGameModel.dropType == 0);
+            m_PlayerIndex = index + 1;
+        }
+
+        /// <summary>
+        /// 新回合设置
+        /// </summary>
+        public void NewRoundReset(GaiaGame gaiaGame)
+        {
+
+            //行动玩家需要是没有drop的玩家
+            int index = gaiaGame.FactionList.FindIndex(item => item.UserGameModel.dropType == 0);
+
+            m_PlayerIndex = index+1;
             m_PassPlayerIndex = new List<int>();
             RoundCount++;
             TurnCount = 1;
+
+            //将drop玩家直接pass
+            gaiaGame.FactionList.FindAll(item => item.UserGameModel.dropType > 0).ForEach(item =>
+            {
+                gaiaGame.FactionNextTurnList.Add(item);
+                gaiaGame.GameStatus.SetPassPlayerIndex(gaiaGame.FactionList.IndexOf(item));
+            });
         }
 
         public void SetPassPlayerIndex(int v)
@@ -67,8 +96,10 @@ namespace GaiaCore.Gaia
         {
             return m_PassPlayerIndex.Count == m_PlayerNumber;
         }
-
-        public void NextPlayer()
+        /// <summary>
+        /// 跳到下一位玩家的索引
+        /// </summary>
+        public void NextPlayer(List<Faction> listFactions)
         {
             if (m_PassPlayerIndex.Count == m_PlayerNumber)
             {
@@ -81,11 +112,18 @@ namespace GaiaCore.Gaia
                 TurnCount++;
                 m_PlayerIndex = 1;
             }
-
+            //已经pass的玩家索引跳过
             if (m_PassPlayerIndex.Contains(PlayerIndex))
             {
-                NextPlayer();
+                NextPlayer(listFactions);
             }
+            //已经drop的玩家跳过.数量不相等很可能在选族阶段
+            //不需要，drop玩家强制pass
+//            else if (listFactions.Count > m_PlayerIndex && listFactions[PlayerIndex].UserGameModel.dropType > 0)
+//            {
+//                NextPlayer(listFactions);
+//            }
+            //if (this.pl)
         }
         /// <summary>
         /// 倒叙选择

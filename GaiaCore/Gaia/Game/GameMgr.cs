@@ -6,9 +6,11 @@ using System.Text;
 using System.Linq;
 using GaiaCore.Util;
 using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
 using GaiaCore.Gaia.Data;
 using GaiaDbContext.Models.AccountViewModels;
 using GaiaProject.Data;
+using GaiaProject.Models.HomeViewModels;
 
 namespace GaiaCore.Gaia
 {
@@ -20,6 +22,33 @@ namespace GaiaCore.Gaia
         {
             m_dic = new Dictionary<string, GaiaGame>();
         }
+        /// <summary>
+        /// 创建游戏
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="model"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
+
+        public static bool CreateNewGame(string[] username, NewGameViewModel model, out GaiaGame result)
+        {
+            bool create = CreateNewGame(model.Name, username, out result, model.MapSelction, isTestGame: model.IsTestGame, isSocket: model.IsSocket, IsRotatoMap: model.IsRotatoMap, version: 4);
+            result.dropHour = model.dropHour;
+            return create;
+        }
+        /// <summary>
+        /// 创建游戏
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="username"></param>
+        /// <param name="result"></param>
+        /// <param name="MapSelection"></param>
+        /// <param name="seed"></param>
+        /// <param name="isTestGame"></param>
+        /// <param name="isSocket"></param>
+        /// <param name="IsRotatoMap"></param>
+        /// <param name="version"></param>
+        /// <returns></returns>
 
         public static bool CreateNewGame(string name, string[] username, out GaiaGame result, string MapSelection, int seed = 0, bool isTestGame = false,bool isSocket = false,bool IsRotatoMap = false,int version=3)
         {
@@ -63,7 +92,7 @@ namespace GaiaCore.Gaia
                 }
                 else
                 {
-                    //大于100K留下
+                    //大于50K留下
                     if (item.Length > GameConfig.GAME_FILE_SIZE)
                     {
                         number++;
@@ -169,7 +198,7 @@ namespace GaiaCore.Gaia
             jsetting.ContractResolver = new LimitPropsContractResolver(new string[]
             {
                 "GameName",  "UserActionLog", "Username", "IsTestGame", "LastMoveTime", "version",
-                "UserGameModels","resetNumber","resetPayNumber","paygrade","username","remark","isTishi","IsSocket","IsRotatoMap"
+                "UserGameModels","resetNumber","resetPayNumber","paygrade","username","remark","isTishi","IsSocket","IsRotatoMap","dropType"
             });
             var str = JsonConvert.SerializeObject(m_dic, Formatting.Indented, jsetting);
             var logPath = System.IO.Path.Combine(BackupDataPath, DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt");

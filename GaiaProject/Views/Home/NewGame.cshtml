@@ -203,6 +203,22 @@
             </div>
         </div>
         
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">drop Hour</label>
+            <div class="col-md-10">
+                <label asp-for="dropHour">
+
+                    @foreach (var selction in GameInfoAttribute.DropHour)
+                    {
+                        <input asp-for="dropHour" type="radio" value="@selction" />
+                    }
+
+                </label>
+            </div>
+        </div>
+        
+
         <div class="form-group">
             <label class="col-md-2 control-label">@localizer["禁止种族"]</label>
             <div class="col-md-10">

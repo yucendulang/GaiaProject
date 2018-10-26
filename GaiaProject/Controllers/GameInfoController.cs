@@ -7,7 +7,6 @@ using GaiaCore.Gaia.Game;
 using GaiaDbContext.Models;
 using GaiaDbContext.Models.HomeViewModels;
 using GaiaProject.Data;
-using GaiaProject.Models.HomeViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.Expressions;

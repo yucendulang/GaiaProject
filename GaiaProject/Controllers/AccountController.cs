@@ -9,10 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using GaiaProject.Models;
-using GaiaProject.Models.AccountViewModels;
 using Gaia.Service;
 using GaiaDbContext.Models;
+using GaiaProject.Models.AccountViewModels;
 using Microsoft.AspNetCore.Authentication;
 
 namespace GaiaProject.Controllers

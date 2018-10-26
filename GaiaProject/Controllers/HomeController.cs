@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 using Gaia.Service;
 using Microsoft.AspNetCore.Mvc;
 using GaiaCore.Gaia;
-using GaiaProject.Models.HomeViewModels;
 using Microsoft.AspNetCore.Identity;
-using GaiaProject.Models;
 using GaiaCore.Gaia.User;
 using ManageTool;
 using GaiaDbContext.Models;
@@ -16,6 +14,7 @@ using GaiaDbContext.Models.AccountViewModels;
 using GaiaProject.Data;
 using GaiaDbContext.Models.HomeViewModels;
 using GaiaDbContext.Models.SystemModels;
+using GaiaProject.Models.HomeViewModels;
 using GaiaProject.Notice;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -128,8 +127,7 @@ namespace GaiaProject.Controllers
             return newList;
         }
 
-
-
+        #region 创建游戏
 
         // POST: /Home/NewGame
         [HttpPost]
@@ -147,10 +145,10 @@ namespace GaiaProject.Controllers
             model.Name = model.Name.Trim();
 
             string[] username = new string[] { model.Player1, model.Player2, model.Player3, model.Player4 };
-            if (this.dbContext.GameInfoModel.Any(item => item.name == model.Name)||GameMgr.GetGameByName(model.Name)!=null)
+            if (this.dbContext.GameInfoModel.Any(item => item.name == model.Name) || GameMgr.GetGameByName(model.Name) != null)
             {
-                ModelState.AddModelError(string.Empty,  "游戏名称已经存在");
-                return View(model);          
+                ModelState.AddModelError(string.Empty, "游戏名称已经存在");
+                return View(model);
             }
             //保存游戏信息
             Action<GaiaGame> saveGameInfo = (result) =>
@@ -261,7 +259,7 @@ namespace GaiaProject.Controllers
                 //model.jinzhiFaction = jinzhiFaction;
                 GaiaGame result = this.CreateGame(username, model);
 
-                if (model.isHall || (result!=null && !model.IsTestGame && username[0] != username[1]))//测试局以及自己对战的局暂时不保留数据
+                if (model.isHall || (result != null && !model.IsTestGame && username[0] != username[1]))//测试局以及自己对战的局暂时不保留数据
                 {
                     saveGameInfo(result);
                 }
@@ -269,7 +267,7 @@ namespace GaiaProject.Controllers
                 ViewData["ReturnUrl"] = "/Home/ViewGame/" + model.Name;
                 return Redirect("/home/viewgame/" + System.Net.WebUtility.UrlEncode(model.Name));
             }
-        
+
         }
         /// <summary>
         /// 创建游戏，从内存
@@ -307,10 +305,10 @@ namespace GaiaProject.Controllers
                     });
                 }
             }
-            //穿件游戏
-            bool create = GameMgr.CreateNewGame(model.Name, username, out GaiaGame result, model.MapSelction, isTestGame: model.IsTestGame, isSocket: model.IsSocket, IsRotatoMap: model.IsRotatoMap, version: 4);
+            //创建游戏
+            bool create = GameMgr.CreateNewGame(username,model,out GaiaGame result);
 
-
+        
             //赋值用户信息
             result.UserGameModels = listUser;
 
@@ -356,6 +354,10 @@ namespace GaiaProject.Controllers
             }
             return View();
         }
+        #endregion
+
+
+        #region 游戏大厅
         /// <summary>
         /// 游戏大厅
         /// </summary>
@@ -374,7 +376,9 @@ namespace GaiaProject.Controllers
             GaiaProject.Models.HomeViewModels.NewGameViewModel model =
                 new GaiaProject.Models.HomeViewModels.NewGameViewModel()
                 {
-                    isHall = true,IsAllowLook = true,IsRandomOrder = true
+                    isHall = true,
+                    IsAllowLook = true,
+                    IsRandomOrder = true
                 };
             return View("NewGame", model);
         }
@@ -417,19 +421,19 @@ namespace GaiaProject.Controllers
                 }
                 else
                 {
-                    gameInfoModel.userlist = gameInfoModel.userlist + this.User.Identity.Name +"|";
+                    gameInfoModel.userlist = gameInfoModel.userlist + this.User.Identity.Name + "|";
 
                     //判断是否满足人数，正式开始游戏
                     string[] username = gameInfoModel.userlist.Trim('|').Split('|');
                     if (username.Length == gameInfoModel.UserCount)
                     {
                         gameInfoModel.round = 0;
-                        NewGameViewModel newGameViewModel =  new NewGameViewModel()
+                        NewGameViewModel newGameViewModel = new NewGameViewModel()
                         {
                             IsAllowLook = gameInfoModel.IsAllowLook,
                             IsRandomOrder = gameInfoModel.IsRandomOrder,
                             IsRotatoMap = gameInfoModel.IsRotatoMap,
-                            IsTestGame = gameInfoModel.IsTestGame==1,
+                            IsTestGame = gameInfoModel.IsTestGame == 1,
                             MapSelction = gameInfoModel.MapSelction,
                             Name = gameInfoModel.name,
                             jinzhiFaction = gameInfoModel.jinzhiFaction,
@@ -528,6 +532,9 @@ namespace GaiaProject.Controllers
             return new JsonResult(jsonData);
 
         }
+
+
+        #endregion
 
 
         public IActionResult ViewGame(string id)
@@ -684,7 +691,7 @@ namespace GaiaProject.Controllers
             }
         }
 
-
+        #region 接收游戏命令
 
         [HttpPost]
         public string Syntax(string name, string syntax, string factionName)
@@ -715,8 +722,9 @@ namespace GaiaProject.Controllers
                 try
                 {
                     //GameMgr.WriteUserActionLog(syntax, task.Result.UserName);
-                }catch{}
-                gaiaGame.Syntax(syntax, out string log, task.Result.UserName,dbContext:this.dbContext);
+                }
+                catch { }
+                gaiaGame.Syntax(syntax, out string log, task.Result.UserName, dbContext: this.dbContext);
                 if (!string.IsNullOrEmpty(log))
                 {
                     return "error:" + log;
@@ -739,7 +747,7 @@ namespace GaiaProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult LeechPower(string name, FactionName factionName, int power, FactionName leechFactionName, bool isLeech,bool? isPwFirst)
+        public IActionResult LeechPower(string name, FactionName factionName, int power, FactionName leechFactionName, bool isLeech, bool? isPwFirst)
         {
             if (ServerStatus.IsStopSyntax == true)
             {
@@ -763,7 +771,7 @@ namespace GaiaProject.Controllers
                 //GameMgr.WriteUserActionLog(syntax, task.Result.UserName);
             }
             catch { }
-            gaiaGame.Syntax(syntax, out string log,dbContext:this.dbContext);
+            gaiaGame.Syntax(syntax, out string log, dbContext: this.dbContext);
             //如果是即时制游戏，进行通知
             if (gaiaGame.IsSocket)
             {
@@ -811,7 +819,7 @@ namespace GaiaProject.Controllers
                 //当前用户
                 var myUser = gg.UserGameModels.Find(user => user.username == HttpContext.User.Identity.Name.ToString());
                 //不是会员
-                if (myUser.paygrade == 0 || myUser.resetPayNumber==0)
+                if (myUser.paygrade == 0 || myUser.resetPayNumber == 0)
                 {
 
                 }
@@ -869,7 +877,7 @@ namespace GaiaProject.Controllers
                                 {
                                     syntaxList.RemoveAt(i);
                                 }
-                                
+
                             }
                         }
                     }
@@ -878,8 +886,8 @@ namespace GaiaProject.Controllers
                     GameMgr.RestoreGame(gg.GameName, gg, isToDict: true);
                 }
             }
-        
-            return Redirect("/home/ViewGame/"+id);
+
+            return Redirect("/home/ViewGame/" + id);
         }
 
 
@@ -915,7 +923,7 @@ namespace GaiaProject.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<JsonResult> SyntaxLog(string id,string factionName=null,int factionType=0)
+        public async Task<JsonResult> SyntaxLog(string id, string factionName = null, int factionType = 0)
         {
 
 
@@ -929,7 +937,7 @@ namespace GaiaProject.Controllers
                 //singleOrDefault = this.dbContext.GameInfoModel.SingleOrDefault(item => item.name == id);
                 if (singleOrDefault != null)
                 {
-                   gg = this.RestoreGame(singleOrDefault.Id, out int type);
+                    gg = this.RestoreGame(singleOrDefault.Id, out int type);
                 }
             }
             if (gg != null)
@@ -947,16 +955,53 @@ namespace GaiaProject.Controllers
                 foreach (var item in logList.OrderByDescending(x => x.Row))
                 {
                     stringBuilder.Append(string.Format("<tr><td>{0}</td><td class='text-right'>{1}</td><td>{2}vp</td><td class='text-right'>{3}</td><td>{4}c</td><td class='text-right'>{5}</td><td>{6}o</td><td class='text-right'>{7}</td><td>{8}q</td><td class='text-right'>{9}</td><td>{10}k</td><td class='text-right'>{11}</td><td>{12}/{13}/{14}</td><td>{15}</td>{16}</tr>", item.FactionName ?? null, @item.ResouceChange?.m_score, item.ResouceEnd?.m_score, item.ResouceChange?.m_credit, item.ResouceEnd?.m_credit, item.ResouceChange?.m_ore, item.ResouceEnd?.m_ore, item.ResouceChange?.m_QICs, item.ResouceEnd?.m_QICs, item.ResouceChange?.m_knowledge, item.ResouceEnd?.m_knowledge, item.ResouceChange?.m_powerToken2 + item.ResouceChange?.m_powerToken3 * 2, item.ResouceEnd?.m_powerToken1, item.ResouceEnd?.m_powerToken2, item.ResouceEnd?.m_powerToken3, item.Syntax,
-                        singleOrDefault.GameStatus==8?string.Format("<td><a href='/Home/RestoreGame/{1}/?row={0}'>转到</a></td>", item.Row, singleOrDefault?.Id):null)
-                        );
+                        singleOrDefault.GameStatus == 8 ? string.Format("<td><a href='/Home/RestoreGame/{1}/?row={0}'>转到</a></td>", item.Row, singleOrDefault?.Id) : null)
+                    );
                 }
             }
 
             return new JsonResult(new Models.Data.UserFriendController.JsonData()
             {
-                data = stringBuilder.ToString(),info=new Models.Data.UserFriendController.Info() { state = 200}
+                data = stringBuilder.ToString(),
+                info = new Models.Data.UserFriendController.Info() { state = 200 }
             });
         }
+
+        /// <summary>
+        /// drop种族
+        /// </summary>
+        [HttpGet]
+        public async Task<JsonResult> DropFaction(string id, string factionName = null)
+        {
+            var gg = GameMgr.GetGameByName(id);
+
+            UserGameModel singleOrDefault = gg.FactionList.Find(item => item.FactionName.ToString() == factionName)
+                .UserGameModel;
+            if (singleOrDefault != null)
+            {
+                singleOrDefault.dropType = 1;
+                return new JsonResult(new Models.Data.UserFriendController.JsonData()
+                {
+                    data = "",
+                    info = new Models.Data.UserFriendController.Info() { state = 200 }
+                });
+            }
+            else
+            {
+                return new JsonResult(new Models.Data.UserFriendController.JsonData()
+                {
+                    data = "",
+                    info = new Models.Data.UserFriendController.Info() { state = 100 }
+                });
+            }
+            
+        }
+
+        #endregion
+
+
+
+
         #region 管理工具
         public IActionResult BackupData()
         {
