@@ -835,6 +835,8 @@ namespace GaiaProject.Controllers
                     Faction myFaction = gg.FactionList.Find(f => f.UserName == myUser.username);
 
                     var syntaxList = gg.UserActionLog.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                    //pass数量
+                    int passNumber = 0;
                     if (myFaction != null)
                     {
                         for (int i = syntaxList.Count - 1; i > 0; i--)
@@ -847,15 +849,29 @@ namespace GaiaProject.Controllers
                                 //当前种族操作
                                 if (list[0] == myFaction.FactionName.ToString())
                                 {
+
                                     if (list[1].Contains("pass turn"))
                                     {
-                                        flag = true;
+                                        if (passNumber > 1)
+                                        {
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            flag = true;
+                                        }
+                                        
                                     }
                                     syntaxList.RemoveAt(i);
                                 }
                                 //不是当前种族
                                 else
                                 {
+                                    //如果其它玩家pass
+                                    if (list[1].Contains("pass turn"))
+                                    {
+                                        passNumber++;
+                                    }
                                     //以及经过自己的主主回合，以及不是自己的回合
                                     if (flag && list[0] != myFaction.FactionName.ToString())
                                     {
@@ -882,9 +898,13 @@ namespace GaiaProject.Controllers
                             }
                         }
                     }
-                    gg.UserActionLog = string.Join("\r\n", syntaxList);
-                    //重置游戏
-                    GameMgr.RestoreGame(gg.GameName, gg, isToDict: true);
+                    if (flag)
+                    {
+                        gg.UserActionLog = string.Join("\r\n", syntaxList);
+                        //重置游戏
+                        GameMgr.RestoreGame(gg.GameName, gg, isToDict: true);
+                    }
+                    
                 }
             }
 
