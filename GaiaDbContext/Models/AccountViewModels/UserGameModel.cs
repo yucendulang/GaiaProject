@@ -68,6 +68,7 @@ namespace GaiaDbContext.Models.AccountViewModels
         /// 是否退出
         /// 0=正常，不正常
         /// </summary>
+        [JsonProperty]
         public int dropType { get; set; }
 
     }

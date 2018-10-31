@@ -175,6 +175,7 @@ namespace GaiaProject.Controllers
                         //游戏大厅
                         isHall = model.isHall,
                         remark = model.remark,
+                        dropHour = model.dropHour,
                         //round = model.isHall?-1:0,
                     };
                 //游戏大厅

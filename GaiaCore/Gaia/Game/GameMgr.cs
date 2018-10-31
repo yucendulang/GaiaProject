@@ -198,7 +198,7 @@ namespace GaiaCore.Gaia
             jsetting.ContractResolver = new LimitPropsContractResolver(new string[]
             {
                 "GameName",  "UserActionLog", "Username", "IsTestGame", "LastMoveTime", "version",
-                "UserGameModels","resetNumber","resetPayNumber","paygrade","username","remark","isTishi","IsSocket","IsRotatoMap","dropType"
+                "UserGameModels","resetNumber","resetPayNumber","paygrade","username","remark","isTishi","IsSocket","IsRotatoMap","dropType","dropHour"
             });
             var str = JsonConvert.SerializeObject(m_dic, Formatting.Indented, jsetting);
             var logPath = System.IO.Path.Combine(BackupDataPath, DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt");

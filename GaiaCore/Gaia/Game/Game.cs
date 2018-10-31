@@ -1874,6 +1874,7 @@ namespace GaiaCore.Gaia
         /// <summary>
         /// drop 小时
         /// </summary>
+        [JsonProperty]
         public int dropHour { get; set; }
 
 

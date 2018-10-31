@@ -117,6 +117,10 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// </summary>
         public string jinzhiFaction { get; set; }
 
-
+        /// <summary>
+        /// drop 时间
+        /// </summary>
+        [Display(Name = "drop Hours")]
+        public int dropHour { get; set; }
     }
 }

@@ -205,15 +205,22 @@
         
 
         <div class="form-group">
-            <label class="col-md-2 control-label">drop Hour</label>
+            <label class="col-md-2 control-label">drop Hours</label>
             <div class="col-md-10">
                 <label asp-for="dropHour">
 
                     @foreach (var selction in GameInfoAttribute.DropHour)
                     {
-                        <input asp-for="dropHour" type="radio" value="@selction" />
+                        if (selction == 72)
+                        {
+                            <input asp-for="dropHour" type="radio" value="@selction"  checked="checked"/>@selction.ToString()
+                        }
+                        else
+                        {
+                            <input asp-for="dropHour" type="radio" value="@selction" />@selction.ToString()
+                        } 
                     }
-
+                    &nbsp;
                 </label>
             </div>
         </div>
