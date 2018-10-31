@@ -85,10 +85,14 @@ namespace GaiaProject.Controllers
             //查询当前报名人
             IQueryable<MatchJoinModel> matchJoinModels = this.dbContext.MatchJoinModel.Where(item => item.matchInfo_id == matchInfoModel.Id);
 
+            //查询当前比赛
+            IQueryable<GameInfoModel> gameInfoModels = this.dbContext.GameInfoModel.Where(item => item.matchId == matchInfoModel.Id);
+
             jsonData.data = new
             {
                 matchInfoModel = matchInfoModel,
                 matchJoinModels = matchJoinModels,
+                gameInfoModels = gameInfoModels,
             };
             jsonData.info.state = 200;
             return new JsonResult(jsonData);
@@ -148,6 +152,11 @@ namespace GaiaProject.Controllers
                         this.dbContext.SaveChanges();
 
                         jsonData.info.state = 200;
+                        //是否自动创建比赛
+                        if (matchInfoModel.IsAutoCreate && matchInfoModel.NumberNow == matchInfoModel.NumberMax)
+                        {
+
+                        }
                     }
                 }
             }
@@ -199,6 +208,100 @@ namespace GaiaProject.Controllers
                     }
                 }
             }
+
+            return new JsonResult(jsonData);
+        }
+        /// <summary>
+        /// 将游戏添加到比赛
+        /// </summary>
+        [HttpPost]
+        public async Task<JsonResult> AddGameToMatch(int id,string gameid)
+        {
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
+
+            //比赛信息
+            GameInfoModel gameInfoModel = this.dbContext.GameInfoModel.SingleOrDefault(item => item.Id == int.Parse(gameid));
+            if (gameInfoModel != null)
+            {
+                gameInfoModel.matchId = id;
+                this.dbContext.GameInfoModel.Update(gameInfoModel);
+            
+                this.dbContext.SaveChanges();
+                jsonData.info.state = 200;
+            }
+            else
+            {
+                jsonData.info.state = 0;
+                jsonData.info.message = "没有报名";
+            }
+            return new JsonResult(jsonData);
+        }
+
+        /// <summary>
+        /// 将用户添加到比赛
+        /// </summary>
+        [HttpPost]
+        public async Task<JsonResult> AddUserToMatch(int id, string username)
+        {
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
+            var matchInfoModel = this.dbContext.MatchInfoModel.SingleOrDefault(item => item.Id == id);
+            if (matchInfoModel != null)
+            {
+                ApplicationUser applicationUser = this.dbContext.Users.SingleOrDefault(item => item.UserName == username);
+                if (applicationUser != null)
+                {
+                    MatchJoinModel matchJoinModel = new MatchJoinModel();
+                    matchJoinModel.matchInfo_id = id; //id
+                    matchJoinModel.Name = matchInfoModel.Name; //name
+
+                    matchJoinModel.AddTime = DateTime.Now; //时间
+                    matchJoinModel.username = applicationUser.UserName;
+                    matchJoinModel.userid = applicationUser.Id;
+
+                    matchJoinModel.Rank = 0;
+                    matchJoinModel.Score = 0;
+
+
+                    //用户数量
+                    matchInfoModel.NumberNow++;
+                    this.dbContext.MatchInfoModel.Update(matchInfoModel);
+
+                    this.dbContext.MatchJoinModel.Add(matchJoinModel);
+                    this.dbContext.SaveChanges();
+
+                    jsonData.info.state = 200;
+                    return new JsonResult(jsonData);
+                }
+                else
+                {
+                    jsonData.info.message = "用户不存在";
+                }
+                
+            }
+            else
+            {
+                jsonData.info.message = "比赛不存在";
+            }
+            jsonData.info.state = 0;
+            return new JsonResult(jsonData);
+        }
+
+        /// <summary>
+        /// 计分
+        /// </summary>
+        [HttpPost]
+        public async Task<JsonResult> ScoreMatch(int id)
+        {
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
+
+            //主要信息
+            var matchInfoModel = this.dbContext.MatchInfoModel.SingleOrDefault(item => item.Id == id);
+            //jsonData.data = matchInfoModel;
+            //查询当前报名人
+            IQueryable<MatchJoinModel> matchJoinModels = this.dbContext.MatchJoinModel.Where(item => item.matchInfo_id == matchInfoModel.Id);
+
+            //查询当前比赛
+            IQueryable<GameInfoModel> gameInfoModels = this.dbContext.GameInfoModel.Where(item => item.matchId == matchInfoModel.Id);
 
             return new JsonResult(jsonData);
         }

@@ -22,64 +22,66 @@
 
 
 <div ng-app="myApp" ng-controller="myCtrl">
-    
-    
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h2><i class="fa fa-table red"></i><span class="break"></span><strong></strong></h2>
-  
-        <a href="/MatchInfo/AddMatch">添加比赛</a>
 
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2><i class="fa fa-table red"></i><span class="break"></span><strong></strong></h2>
+
+            <a href="/MatchInfo/AddMatch">添加比赛</a>
+
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td>标题</td>
+                        <td>报名人数</td>
+                        <td>报名截止时间</td>
+                        <td>开始时间</td>
+                        <td>结束时间</td>
+                        <td>操作</td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><a ng-click="showMatchInfo(@item.Id);">@item.Name</a></td>
+                            <td>@item.NumberNow/@item.NumberMax</td>
+                            <td>@item.RegistrationEndTime</td>
+                            <td>@item.StartTime</td>
+                            <td>@item.EndTime</td>
+                            <td>
+
+
+                                <a class="btn btn-danger" href="#" ng-click="scoreMatch(@item.Id)">
+                                    计分
+                                </a>
+
+                                <a class="btn btn-danger" href="#" ng-click="showUserToMatch(@item.Id)">
+                                    添加用户
+                                </a>
+
+                                <a class="btn btn-danger" href="#" ng-click="showGameToMatch(@item.Id)">
+                                    添加比赛
+                                </a>
+
+                                <a class="btn btn-danger" href="#" ng-click="delMatch(@item.Id)">
+                                    <i class="fa fa-trash-o "></i>
+                                </a>
+
+                            </td>
+                        </tr>
+
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
     </div>
-    <div class="panel-body">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <td>标题</td>
-                <td>报名人数</td>
-                <td>报名截止时间</td>
-                <td>开始时间</td>
-                <td>结束时间</td>
-                <td>操作</td>
-            </tr>
-            </thead>
-            <tbody>
-
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td><a ng-click="showMatchInfo(@item.Id);">@item.Name</a></td>
-                    <td>@item.NumberNow/@item.NumberMax</td>
-                    <td>@item.RegistrationEndTime</td>
-                    <td>@item.StartTime</td>
-                    <td>@item.EndTime</td>
-                    <td>
-                                        
-                        <a class="btn btn-danger" href="#" ng-click="delMatch(@item.Id)">
-                            <i class="fa fa-trash-o "></i> 
-
-                        </a>
-
-                    </td>
-                </tr>
-
-            }
-
-            </tbody>
-        </table>  
-        @*        <ul class="pagination">*@
-        @*            <li><a href="table.html#">Prev</a></li>*@
-        @*            <li class="active">*@
-        @*                <a href="table.html#">1</a>*@
-        @*            </li>*@
-        @*            <li><a href="table.html#">2</a></li>*@
-        @*            <li><a href="table.html#">3</a></li>*@
-        @*            <li><a href="table.html#">4</a></li>*@
-        @*            <li><a href="table.html#">5</a></li>*@
-        @*            <li><a href="table.html#">Next</a></li>*@
-        @*        </ul>     *@
-    </div>
-</div>
 
 
 
@@ -123,11 +125,22 @@
                             <td>报名人员</td>
                             <td>
                                 <ul class="list-group">
-                                    <li class="list-group-item" ng-repeat="x in matchData.matchJoinModels">{{x.username}}-{{x.addTime}}</li>
+                                    <li class="list-group-item" ng-repeat="x in matchData.matchJoinModels">{{x.username}}-{{x.addTime}}-{{x.Score}}</li>
                                 </ul>
 
                             </td>
                         </tr>
+                        
+                        <tr>
+                            <td>游戏信息</td>
+                            <td>
+                                <ul class="list-group">
+                                    <li class="list-group-item" ng-repeat="x in matchData.gameInfoModels">{{x.name}}-{{x.round}}</li>
+                                </ul>
+
+                            </td>
+                        </tr>
+
                         <tr>
                             <td></td>
                             <td></td>
@@ -150,14 +163,74 @@
         </div>
     </div>
 
+
+    <div class="modal fade" id="gamesInfoModal" tabindex="-1" role="dialog" aria-labelledby="mygamesInfoModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="mygamesInfoModal">
+                        添加游戏
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    
+                    游戏id:<input id="gameid" name="gameid" ng-model="gameid"/>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        取消
+                    </button>
+                    <button type="button" class="btn btn-primary" id="addgameToMatch" ng-click='addGameToMatch()';>
+                        确定
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="usersInfoModal" tabindex="-1" role="dialog" aria-labelledby="myusersInfoModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myusersInfoModal">
+                        添加用户
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    
+                    用户名称:<input id="username" name="username" ng-model="username"/>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        取消
+                    </button>
+                    <button type="button" class="btn btn-primary" id="adduserToMatch" ng-click='addUserToMatch()';>
+                        确定
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 
 <script>
     var app = angular.module('myApp', []);
 
+    var matchId = 0;
+
     app.controller('myCtrl', function ($scope, $http) {
 
+        //显示
         $scope.showMatchInfo = function (id) {
             $http.post("/MatchInfo/ShowInfo/" + id, "{}")
                 .then(function (success) {
@@ -168,6 +241,7 @@
 
                 });
         };
+        //删除
         $scope.delMatch = function (id) {
             $http.post("/MatchInfo/DelMatch/" + id, "{}")
                 .then(function (success) {
@@ -177,7 +251,7 @@
 
                 });
         };
-
+        //加入
         $scope.joinMatch = function () {
             $http.post("/MatchInfo/JoinMatch/" + $scope.matchData.matchInfoModel.id, "{}")
                 .then(function (success) {
@@ -194,7 +268,7 @@
 
                 });
         };
-
+        //退出
         $scope.exitMatch = function () {
             $http.post("/MatchInfo/ExitMatch/" + $scope.matchData.matchInfoModel.id, "{}")
                 .then(function (success) {
@@ -214,6 +288,75 @@
                 });
         };
 
+        //显示添加游戏到比赛
+        $scope.showGameToMatch = function (id) {
+            matchId = id;
+            $("#gamesInfoModal").modal();
+        };
+        //提交游戏到比赛
+        $scope.addGameToMatch = function() {
+            $http.post("/MatchInfo/AddGameToMatch/" + matchId + "?gameid=" + $scope.gameid, "{}")
+                .then(function (success) {
+                        //$scope.matchData = success.data.data;
+                        //$("#matchInfoModal").modal();
+                        if (success.data.info.state === 200) {
+                            alert("添加成功");
+                            $("#gamesInfoModal").modal("hide");
+                            window.location.reload();
+
+                        } else {
+                            alert(success.data.info.message);
+                        }
+                    },
+                    function (error) {
+
+                    });
+        };
+
+        //显示添加用户到比赛
+        $scope.showUserToMatch = function (id) {
+            matchId = id;
+            $("#usersInfoModal").modal();
+        };
+        //提交用户到比赛
+        $scope.addUserToMatch = function () {
+            $http.post("/MatchInfo/AddUserToMatch/" + matchId + "?username=" + $scope.username, "{}")
+                .then(function (success) {
+                    //$scope.matchData = success.data.data;
+                    //$("#matchInfoModal").modal();
+                    if (success.data.info.state === 200) {
+                        alert("添加成功");
+                        $("#usersInfoModal").modal("hide");
+                        window.location.reload();
+
+                    } else {
+                        alert(success.data.info.message);
+                    }
+                },
+                    function (error) {
+
+                    });
+        };
+
+        //比赛计分
+        $scope.scoreMatch = function (id) {
+            $http.post("/MatchInfo/ScoreMatch/" + id, "{}")
+                .then(function (success) {
+                        //$scope.matchData = success.data.data;
+                        //$("#matchInfoModal").modal();
+                        if (success.data.info.state === 200) {
+                            alert("添加成功");
+                            $("#usersInfoModal").modal("hide");
+                            window.location.reload();
+
+                        } else {
+                            alert(success.data.info.message);
+                        }
+                    },
+                    function (error) {
+
+                    });
+        };
     });
 
 </script>

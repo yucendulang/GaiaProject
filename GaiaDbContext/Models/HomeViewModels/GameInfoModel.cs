@@ -122,5 +122,11 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// </summary>
         [Display(Name = "drop Hours")]
         public int dropHour { get; set; }
+
+
+        /// <summary>
+        /// 如果时比赛，加入比赛id
+        /// </summary>
+        public int matchId { get; set; }
     }
 }
