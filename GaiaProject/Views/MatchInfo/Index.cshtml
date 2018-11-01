@@ -2,12 +2,13 @@
 
 @{
     string adminType = this.Context.Request.Query["isAdmin"];
+    bool isAdmin = adminType == "1";
 }
 
 @{
     ViewBag.Title = "比赛列表";
 
-    if (adminType=="1")
+    if (isAdmin)
     {
         Layout = "_LayoutAdmin";
     }
@@ -27,8 +28,11 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h2><i class="fa fa-table red"></i><span class="break"></span><strong></strong></h2>
-
+            @if (isAdmin)
+            {
             <a href="/MatchInfo/AddMatch">添加比赛</a>
+            }
+                
 
         </div>
         <div class="panel-body">
@@ -37,9 +41,9 @@
                     <tr>
                         <td>标题</td>
                         <td>报名人数</td>
-                        <td>报名截止时间</td>
-                        <td>开始时间</td>
-                        <td>结束时间</td>
+@*                        <td>报名截止时间</td>*@
+@*                        <td>开始时间</td>*@
+@*                        <td>结束时间</td>*@
                         <td>操作</td>
                     </tr>
                 </thead>
@@ -48,29 +52,53 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td><a ng-click="showMatchInfo(@item.Id);">@item.Name</a></td>
+                            <td><a href="/MatchInfo/MatchShow/@item.Id">@item.Name</a></td>
                             <td>@item.NumberNow/@item.NumberMax</td>
-                            <td>@item.RegistrationEndTime</td>
-                            <td>@item.StartTime</td>
-                            <td>@item.EndTime</td>
+@*                            <td>@item.RegistrationEndTime</td>*@
+@*                            <td>@item.StartTime</td>*@
+@*                            <td>@item.EndTime</td>*@
                             <td>
 
 
-                                <a class="btn btn-danger" href="#" ng-click="scoreMatch(@item.Id)">
-                                    计分
-                                </a>
 
-                                <a class="btn btn-danger" href="#" ng-click="showUserToMatch(@item.Id)">
-                                    添加用户
-                                </a>
 
-                                <a class="btn btn-danger" href="#" ng-click="showGameToMatch(@item.Id)">
-                                    添加比赛
-                                </a>
 
-                                <a class="btn btn-danger" href="#" ng-click="delMatch(@item.Id)">
-                                    <i class="fa fa-trash-o "></i>
+                                <a class="btn btn-danger" href="#" ng-click="showMatchInfo(@item.Id);">
+                                    查看报名
                                 </a>
+                                
+                                @if (isAdmin)
+                                {
+                                    <a class="btn btn-danger" href="#" ng-click="showUserToMatch(@item.Id)">
+                                        添加用户
+                                    </a>
+
+                                    <a class="btn btn-danger" href="#" ng-click="showGameToMatch(@item.Id)">
+                                        添加比赛
+                                    </a>
+                                
+                                    <a class="btn btn-danger" href="#" ng-click="scoreMatch(@item.Id)">
+                                        计分
+                                    </a>
+                                    @if (@item.State == 0)
+                                     {
+                                         <a class="btn btn-danger" href="#" ng-click="setJoin(@item.Id,1)">
+                                             禁止报名
+                                         </a>
+                                     }
+                                     else
+                                     {
+                                         <a class="btn btn-danger" href="#" ng-click="setJoin(@item.Id,0)">
+                                             允许报名
+                                         </a>
+                                     }
+
+                                    <a class="btn btn-danger" href="#" ng-click="delMatch(@item.Id)">
+                                        <i class="fa fa-trash-o "></i>
+                                    </a>
+
+                                }
+                                
 
                             </td>
                         </tr>
@@ -113,42 +141,27 @@
                             <td>{{matchData.matchInfoModel.numberNow}}/{{matchData.matchInfoModel.numberMax}}</td>
                         </tr>
 
-                        <tr>
-                            <td>报名截止时间</td>
-                            <td>{{matchData.matchInfoModel.registrationEndTime}}</td>
-                        </tr>
-                        <tr>
-                            <td>开始时间</td>
-                            <td>{{matchData.matchInfoModel.startTime}}</td>
-                        </tr>
+@*                        <tr>*@
+@*                            <td>报名截止时间</td>*@
+@*                            <td>{{matchData.matchInfoModel.registrationEndTime}}</td>*@
+@*                        </tr>*@
+@*                        <tr>*@
+@*                            <td>开始时间</td>*@
+@*                            <td>{{matchData.matchInfoModel.startTime}}</td>*@
+@*                        </tr>*@
                         <tr>
                             <td>报名人员</td>
                             <td>
                                 <ul class="list-group">
-                                    <li class="list-group-item" ng-repeat="x in matchData.matchJoinModels">{{x.username}}-{{x.addTime}}-{{x.Score}}</li>
+                                    <li class="list-group-item" ng-repeat="x in matchData.matchJoinModels">{{x.username}}-{{x.addTime}}-{{x.score}}</li>
                                 </ul>
 
                             </td>
-                        </tr>
-                        
-                        <tr>
-                            <td>游戏信息</td>
-                            <td>
-                                <ul class="list-group">
-                                    <li class="list-group-item" ng-repeat="x in matchData.gameInfoModels">{{x.name}}-{{x.round}}</li>
-                                </ul>
-
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td></td>
-                            <td></td>
                         </tr>
 
                     </table>
-                    <button class="btn btn-default" ng-click='joinMatch();'>报名</button>
-                    <button class="btn btn-default" ng-click='exitMatch();'>取消报名</button>
+                    <button class="btn btn-default" ng-click='joinMatch();' ng-show="matchData.matchInfoModel.state==0">报名</button>
+                    <button class="btn btn-default" ng-click='exitMatch();' ng-show="matchData.matchInfoModel.state==0">取消报名</button>
 
                 </div>
                 <div class="modal-footer">
@@ -206,7 +219,10 @@
                 <div class="modal-body">
                     
                     用户名称:<input id="username" name="username" ng-model="username"/>
-
+                    
+                    <button type="button" class="btn btn-primary" id="addUserFromGame" ng-click='addUserFromGame()';>
+                        从比赛获取
+                    </button>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">
@@ -337,10 +353,9 @@
 
                     });
         };
-
-        //比赛计分
-        $scope.scoreMatch = function (id) {
-            $http.post("/MatchInfo/ScoreMatch/" + id, "{}")
+        //提交游戏用户到比赛
+        $scope.addUserFromGame = function () {
+            $http.post("/MatchInfo/AddUserFromGame/" + matchId , "{}")
                 .then(function (success) {
                         //$scope.matchData = success.data.data;
                         //$("#matchInfoModal").modal();
@@ -357,6 +372,48 @@
 
                     });
         };
+
+        //比赛计分
+        $scope.scoreMatch = function (id) {
+            $http.post("/MatchInfo/ScoreMatch/" + id, "{}")
+                .then(function (success) {
+                        //$scope.matchData = success.data.data;
+                        //$("#matchInfoModal").modal();
+                        if (success.data.info.state === 200) {
+                            alert("成功");
+                            //$("#usersInfoModal").modal("hide");
+                            window.location.reload();
+
+                        } else {
+                            alert(success.data.info.message);
+                        }
+                    },
+                    function (error) {
+
+                    });
+        };
+
+        //setJoin
+        //设置报名权限
+        $scope.setJoin = function (id,state) {
+            $http.post("/MatchInfo/SetJoin/" + id,"?state="+state, "{}")
+                .then(function (success) {
+                        //$scope.matchData = success.data.data;
+                        //$("#matchInfoModal").modal();
+                        if (success.data.info.state === 200) {
+                            alert("成功");
+                            //$("#usersInfoModal").modal("hide");
+                            window.location.reload();
+
+                        } else {
+                            alert(success.data.info.message);
+                        }
+                    },
+                    function (error) {
+
+                    });
+        };
+
     });
 
 </script>

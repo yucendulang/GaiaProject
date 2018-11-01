@@ -2,9 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GaiaCore.Gaia;
+using GaiaCore.Gaia.Data;
+using GaiaCore.Gaia.Game;
 using GaiaDbContext.Models;
 using GaiaDbContext.Models.HomeViewModels;
 using GaiaProject.Data;
+using GaiaProject.Models.HomeViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,7 +39,11 @@ namespace GaiaProject.Controllers
         {
             return View();
         }
-
+        /// <summary>
+        /// 添加比赛
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
 
         public IActionResult AddMatch(GaiaDbContext.Models.HomeViewModels.MatchInfoModel model)
@@ -48,6 +56,34 @@ namespace GaiaProject.Controllers
             }
             return View(model);
         }
+        /// <summary>
+        /// 显示比赛详细
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public IActionResult MatchShow(int id)
+        {
+            MatchInfoModel matchInfoModel = this.dbContext.MatchInfoModel.SingleOrDefault(item => item.Id == id);
+            if (matchInfoModel != null)
+            {
+                //查询当前报名人
+                IQueryable<MatchJoinModel> matchJoinModels = this.dbContext.MatchJoinModel.Where(item => item.matchInfo_id == matchInfoModel.Id).OrderByDescending(item=>item.Score);
+
+                //查询当前比赛
+                IQueryable<GameInfoModel> gameInfoModels = this.dbContext.GameInfoModel.Where(item => item.matchId == matchInfoModel.Id);
+
+
+                MatchShowModel matchShowModel = new MatchShowModel()
+                {
+                    MatchInfoModel = matchInfoModel,
+                    MatchJoinModels = matchJoinModels,
+                    GameInfoModels = gameInfoModels,
+                };
+                return View(matchShowModel);
+            }
+            return View(null);
+        }
+
         /// <summary>
         /// 删除比赛
         /// </summary>
@@ -83,16 +119,16 @@ namespace GaiaProject.Controllers
             Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
             //jsonData.data = matchInfoModel;
             //查询当前报名人
-            IQueryable<MatchJoinModel> matchJoinModels = this.dbContext.MatchJoinModel.Where(item => item.matchInfo_id == matchInfoModel.Id);
+            List<MatchJoinModel> matchJoinModels = this.dbContext.MatchJoinModel.Where(item => item.matchInfo_id == matchInfoModel.Id).ToList();
 
             //查询当前比赛
-            IQueryable<GameInfoModel> gameInfoModels = this.dbContext.GameInfoModel.Where(item => item.matchId == matchInfoModel.Id);
+            //List<GameInfoModel> gameInfoModels = this.dbContext.GameInfoModel.Where(item => item.matchId == matchInfoModel.Id).ToList();
 
             jsonData.data = new
             {
                 matchInfoModel = matchInfoModel,
                 matchJoinModels = matchJoinModels,
-                gameInfoModels = gameInfoModels,
+                //gameInfoModels = gameInfoModels,
             };
             jsonData.info.state = 200;
             return new JsonResult(jsonData);
@@ -152,15 +188,77 @@ namespace GaiaProject.Controllers
                         this.dbContext.SaveChanges();
 
                         jsonData.info.state = 200;
-                        //是否自动创建比赛
-                        if (matchInfoModel.IsAutoCreate && matchInfoModel.NumberNow == matchInfoModel.NumberMax)
-                        {
-
-                        }
+                     
+                        this.AutoCreateMatch(matchInfoModel);
                     }
                 }
             }
             return new JsonResult(jsonData);
+        }
+        /// <summary>
+        /// 自动创建比赛
+        /// </summary>
+        private void AutoCreateMatch(MatchInfoModel matchInfoModel)
+        {
+            //是否自动创建比赛
+            //并且只能创建7人的比赛
+            if (matchInfoModel.IsAutoCreate && matchInfoModel.NumberNow == matchInfoModel.NumberMax && matchInfoModel.NumberNow == 7)
+            {
+                //取出全部的报名人员
+                List<MatchJoinModel> matchJoinModels = this.dbContext.MatchJoinModel.Where(item => item.matchInfo_id == matchInfoModel.Id).ToList();
+
+                if (matchJoinModels.Count() == 7)
+                {
+                    //int[7][4] rank = new int();
+
+                    int[,] userOrder = new int[7, 4] { { 1,5,4,3 }, { 5,2,6,1 },{2,4,0,5},{4,6,3,2},{6,0,1,4},{0,3,5,6},{3,1,2,0}};
+
+                    //创建游戏
+                    NewGameViewModel newGameViewModel = new NewGameViewModel()
+                    {
+                        dropHour = 72,
+                        IsAllowLook = true,
+                        isHall = false,
+                        IsRandomOrder = false,
+                        IsRotatoMap = true,
+                        IsSocket = false,
+                        IsTestGame = false,
+                        jinzhiFaction = null,
+                        MapSelction = GameInfoAttribute.MapSelction[GameInfoAttribute.MapSelction.Count - 1].code,
+                        //Name = matchInfoModel.GameName,
+                    };
+
+                    for (int i = 0;i<7;i++ )
+                    {
+                        string[] users= new string[]
+                        {
+                            matchJoinModels[userOrder[i, 0]].username, matchJoinModels[userOrder[i, 1]].username,matchJoinModels[userOrder[i, 2]].username,matchJoinModels[userOrder[i, 3]].username
+                        };
+                        //游戏名称
+                        if (matchInfoModel.GameName.Contains("{0}"))
+                        {
+                            newGameViewModel.Name = string.Format(matchInfoModel.GameName, i + 1);
+                        }
+                        else
+                        {
+                            newGameViewModel.Name = string.Concat(matchInfoModel.GameName, i + 1);
+                        }
+                        //创建游戏到内存
+                        GameMgr.CreateNewGame(users, newGameViewModel, out GaiaGame gaiaGame);
+                        //保存到数据库
+                        GameMgr.SaveGameToDb(newGameViewModel, "gaia", null, this.dbContext, gaiaGame);
+
+                    }
+
+
+
+                }
+                //将游戏标准为进行状态
+                matchInfoModel.State = 1;
+                this.dbContext.MatchInfoModel.Update(matchInfoModel);
+                this.dbContext.SaveChanges();           
+
+            }
         }
 
         /// <summary>
@@ -181,6 +279,11 @@ namespace GaiaProject.Controllers
                 {
                     jsonData.info.state = 0;
                     jsonData.info.message = "报名时间截止";
+                }
+                else if (matchInfoModel.State!=0)
+                {
+                    jsonData.info.state = 0;
+                    jsonData.info.message = "已经开始，无法退出";
                 }
                 else
                 {
@@ -269,6 +372,7 @@ namespace GaiaProject.Controllers
                     this.dbContext.MatchJoinModel.Add(matchJoinModel);
                     this.dbContext.SaveChanges();
 
+                    this.AutoCreateMatch(matchInfoModel);
                     jsonData.info.state = 200;
                     return new JsonResult(jsonData);
                 }
@@ -285,6 +389,38 @@ namespace GaiaProject.Controllers
             jsonData.info.state = 0;
             return new JsonResult(jsonData);
         }
+        /// <summary>
+        /// 从游戏将用户添加
+        /// </summary>
+        [HttpPost]
+        public async Task<JsonResult> AddUserFromGame(int id)
+        {
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
+
+            IQueryable<GameInfoModel> gameInfoModels = this.dbContext.GameInfoModel.Where(item => item.matchId == id);
+            List<string> userList = new List<string>();
+            foreach (GameInfoModel gameInfoModel in gameInfoModels)
+            {
+                string[] users = gameInfoModel.userlist.Split("|");
+                foreach (string user in users)
+                {
+                    if (!userList.Contains(user))
+                    {
+                        userList.Add(user);
+                    }
+                }
+            }
+            if (userList.Count == 7)
+            {
+                userList.ForEach((user) =>
+                {
+                    AddUserToMatch(id, user);
+                });
+            }
+            jsonData.info.state = 200;
+            return new JsonResult(jsonData);
+
+        }
 
         /// <summary>
         /// 计分
@@ -297,13 +433,49 @@ namespace GaiaProject.Controllers
             //主要信息
             var matchInfoModel = this.dbContext.MatchInfoModel.SingleOrDefault(item => item.Id == id);
             //jsonData.data = matchInfoModel;
+            
+
+
+            //分数清零
             //查询当前报名人
-            IQueryable<MatchJoinModel> matchJoinModels = this.dbContext.MatchJoinModel.Where(item => item.matchInfo_id == matchInfoModel.Id);
+            List<MatchJoinModel> matchJoinModels = this.dbContext.MatchJoinModel
+                .Where(item => item.matchInfo_id == matchInfoModel.Id).ToList();
+            foreach (MatchJoinModel matchJoinModel in matchJoinModels)
+            {
+                matchJoinModel.Score = 0;
+                matchJoinModel.first = 0;
+                matchJoinModel.second = 0;
+                matchJoinModel.third = 0;
+                matchJoinModel.fourth = 0;
+                this.dbContext.MatchJoinModel.Update(matchJoinModel);
+            }
+
 
             //查询当前比赛
             IQueryable<GameInfoModel> gameInfoModels = this.dbContext.GameInfoModel.Where(item => item.matchId == matchInfoModel.Id);
+            //遍历比赛
+            foreach (GameInfoModel gameInfoModel in gameInfoModels)
+            {
+                DbGameSave.SaveMatchToDb(gameInfoModel,dbContext);
+            }
+            this.dbContext.SaveChanges();
+            jsonData.info.state = 200;
 
             return new JsonResult(jsonData);
+            return null;
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> SetJoin(int id,Int16 state)
+        {
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
+            var matchInfoModel = this.dbContext.MatchInfoModel.SingleOrDefault(item => item.Id == id);
+            matchInfoModel.State = (short) (matchInfoModel.State==0?1:0);
+            this.dbContext.MatchInfoModel.Update(matchInfoModel);
+            this.dbContext.SaveChanges();
+            jsonData.info.state = 200;
+            return new JsonResult(jsonData);
+
         }
     }
 }

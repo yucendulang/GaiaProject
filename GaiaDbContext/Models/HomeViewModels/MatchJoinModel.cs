@@ -38,10 +38,21 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// <summary>
         /// 最后名词
         /// </summary>
-        public int Rank { get; set; }
+        public Int16 Rank { get; set; }
         /// <summary>
         /// 得分
         /// </summary>
-        public int Score { get; set; }
+        public Int16 Score { get; set; }
+
+        public Int16 first { get; set; }
+
+        public Int16 second { get; set; }
+
+        public Int16 third { get; set; }
+
+        public Int16 fourth { get; set; }
+
+        public Int16 avgwinscore { get; set; }
+        //avgscore
     }
 }

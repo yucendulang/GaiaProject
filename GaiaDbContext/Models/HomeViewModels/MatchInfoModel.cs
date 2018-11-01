@@ -17,14 +17,14 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// 标题
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLength(200)]
-        [Display(Name = "标题")]
+        [Display(Name = "比赛标题")]
         public string Name { get; set; }
 
         /// <summary>
         /// 内容
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLength(40000)]
-        [Display(Name = "内容")]
+        [Display(Name = "比赛说明")]
         public string Contents { get; set; }
         /// <summary>
         /// 报名截止时间
@@ -56,6 +56,16 @@ namespace GaiaDbContext.Models.HomeViewModels
         [Display(Name = "人满自动创建比赛")]
         public bool IsAutoCreate { get; set; }
 
+        /// <summary>
+        /// 创建的游戏名称,{0}用数字代替
+        /// </summary>
+        [Display(Name = "创建的游戏名称")]
+        public string GameName { get; set; }
+
+        /// <summary>
+        /// 状态
+        /// </summary>
+        public Int16 State { get; set; }
 
     }
 

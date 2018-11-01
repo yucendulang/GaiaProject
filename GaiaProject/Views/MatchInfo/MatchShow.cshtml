@@ -1,0 +1,105 @@
+﻿@model GaiaDbContext.Models.HomeViewModels.MatchShowModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>@Model.MatchInfoModel.Name</h2>
+
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Standings</div>
+
+    <!-- Table -->
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Player</th>
+            <th>1st</th>
+            <th>2nd</th>
+            <th>3rd</th>
+            <th>4th</th>
+@*            <th>Avg % of win score</th>*@
+            <th>Points</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in @Model.MatchJoinModels)
+        {
+            <tr>
+                <th scope="row"></th>
+                <td>@item.username</td>
+                <td>@item.first</td>
+                <td>@item.second</td>
+                <td>@item.third</td>
+                <td>@item.fourth</td>
+@*                <td>@item.avgwinscore</td>*@
+                <td>@item.Score</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Games</div>
+
+    <!-- Table -->
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Player</th>
+            <th>Round</th>
+            <th>Score</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in @Model.GameInfoModels)
+        {
+            <tr>
+                <th scope="row"></th>
+                <td><a href="/Home/RestoreGame/@item.Id">@item.name</a></td>
+                <td>@item.userlist</td>
+                <td>@item.round</td>
+                <td>@item.scoreFaction</td>
+            </tr>
+        }
+        </tbody>
+
+
+    </table>
+</div>
+
+
+@*        <thead>*@
+@*            <tr>*@
+@**@
+@*                <th>Player</th>*@
+@*                <th>Game 1</th>*@
+@*                <th>Game 2</th>*@
+@*                <th>Game 3</th>*@
+@*                <th>Game 4</th>*@
+@*                <th>Game 5</th>*@
+@*                <th>Game 6</th>*@
+@*                <th>Game 7</th>*@
+@*            </tr>*@
+@*        </thead>*@
+@*        <tbody>*@
+@*        @foreach (var item in @Model.MatchJoinModels)*@
+@*        {*@
+@*            <tr>*@
+@*                <td>@item.username</td>*@
+@*                <td>@item.first</td>*@
+@*                <td>@item.second</td>*@
+@*                <td>@item.third</td>*@
+@*                <td>@item.fourth</td>*@
+@*                <td>@item.avgwinscore</td>*@
+@*                <td>@item.Score</td>*@
+@*            </tr>*@
+@*        }*@
+@*        </tbody>*@

@@ -30,11 +30,84 @@ namespace GaiaCore.Gaia
         /// <param name="result"></param>
         /// <returns></returns>
 
-        public static bool CreateNewGame(string[] username, NewGameViewModel model, out GaiaGame result)
+        public static bool CreateNewGame(string[] username, NewGameViewModel model, out GaiaGame result,bool isSaveGame = false)
         {
             bool create = CreateNewGame(model.Name, username, out result, model.MapSelction, isTestGame: model.IsTestGame, isSocket: model.IsSocket, IsRotatoMap: model.IsRotatoMap, version: 4);
             result.dropHour = model.dropHour;
+            if (isSaveGame) { }
             return create;
+        }
+        /// <summary>
+        /// 保存游戏到数据库
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="username"></param>
+        /// <param name="jinzhiFaction"></param>
+        /// <param name="dbContext"></param>
+        /// <param name="result"></param>
+        public static void SaveGameToDb(NewGameViewModel model,string username,string jinzhiFaction, ApplicationDbContext dbContext,GaiaGame result)
+        {
+            //保存到数据库
+            GaiaDbContext.Models.HomeViewModels.GameInfoModel gameInfoModel =
+                new GaiaDbContext.Models.HomeViewModels.GameInfoModel()
+                {
+                    name = model.Name,
+
+                    //UserCount = model.isHall?model.UserCount: username.Length,
+                    MapSelction = model.MapSelction,
+                    IsTestGame = model.IsTestGame ? 1 : 0,
+                    GameStatus = 0,
+                    starttime = DateTime.Now,
+                    endtime = DateTime.Now,
+                    username = username,
+
+                    IsAllowLook = model.IsAllowLook,
+                    IsRandomOrder = model.IsRandomOrder,
+                    IsRotatoMap = model.IsRotatoMap,
+                    version = 4,
+
+                    //游戏大厅
+                    isHall = model.isHall,
+                    remark = model.remark,
+                    dropHour = model.dropHour,
+                    //round = model.isHall?-1:0,
+                };
+            //游戏大厅
+            if (model.isHall)
+            {
+                gameInfoModel.round = -1;
+                gameInfoModel.UserCount = model.UserCount;
+                gameInfoModel.userlist = string.Format("|{0}|", username);
+
+            }
+            else
+            {
+                gameInfoModel.round = 0;
+                gameInfoModel.UserCount = username.Length;
+                gameInfoModel.userlist = string.Join("|", username);
+
+            }
+            gameInfoModel.jinzhiFaction = jinzhiFaction;//this.HttpContext.Request.Form["jinzhi"];
+            //有游戏信息
+            if (result != null)
+            {
+                //配置信息
+                gameInfoModel.ATTList = string.Join("|", result.ATTList.Select(item => item.name));
+                gameInfoModel.FSTList = string.Join("|", result.FSTList.Select(item => item.GetType().Name));
+                gameInfoModel.RBTList = string.Join("|", result.RBTList.Select(item => item.name));
+                gameInfoModel.RSTList = string.Join("|", result.RSTList.Select(item => item.GetType().Name));
+                gameInfoModel.STT3List = string.Join("|",
+                    result.STT3List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
+                gameInfoModel.STT6List = string.Join("|",
+                    result.STT6List.GroupBy(item => item.name).Select(g => g.Max(item => item.name)));
+                gameInfoModel.scoreFaction =
+                    string.Join(":",
+                        result.FactionList.OrderBy(item => item.Score)
+                            .Select(item => string.Format("{0}{1}({2})", item.ChineseName,
+                                "", item.UserName))); //最后的得分情况
+            }
+            dbContext.GameInfoModel.Add(gameInfoModel);
+            dbContext.SaveChanges();
         }
         /// <summary>
         /// 创建游戏
@@ -50,7 +123,7 @@ namespace GaiaCore.Gaia
         /// <param name="version"></param>
         /// <returns></returns>
 
-        public static bool CreateNewGame(string name, string[] username, out GaiaGame result, string MapSelection, int seed = 0, bool isTestGame = false,bool isSocket = false,bool IsRotatoMap = false,int version=3)
+        private static bool CreateNewGame(string name, string[] username, out GaiaGame result, string MapSelection, int seed = 0, bool isTestGame = false,bool isSocket = false,bool IsRotatoMap = false,int version=3)
         {
             if (m_dic.ContainsKey(name))
             {

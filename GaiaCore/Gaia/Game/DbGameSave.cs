@@ -255,6 +255,20 @@ namespace GaiaCore.Gaia.Game
                         {
 
                         }
+
+                        //是否需要保存的联赛数据
+                        if (gameinfo.matchId > 0)
+                        {
+                            try
+                            {
+                                SaveMatchToDb(gameinfo, dbContext);
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+                        }
+
                         dbContext.SaveChanges();
 
                         //重新执行程序，计算数据
@@ -268,6 +282,51 @@ namespace GaiaCore.Gaia.Game
                 }
             }
         }
+
+        public static void SaveMatchToDb(GameInfoModel gameInfoModel,ApplicationDbContext dbContext)
+        {
+            //计分
+            Int16[] points = new Int16[] { 6, 3, 1, 0 };
+
+            //如果已经结束，则标记计分
+            if (gameInfoModel.round != 7)
+            {
+                return;
+                //continue; ;
+            }
+            //玩家情况
+            List<GameFactionModel> gameFactionModels = dbContext.GameFactionModel.Where(item => item.gameinfo_id == gameInfoModel.Id).OrderByDescending(item => item.scoreTotal).ToList();
+
+            //玩家依次加分
+            for (int i = 0; i < 4; i++)
+            {
+                MatchJoinModel matchJoinModel = dbContext.MatchJoinModel.SingleOrDefault(item => item.matchInfo_id ==
+                                                                                                 gameInfoModel.matchId && item.username == gameFactionModels[i].username);
+                if (matchJoinModel == null)
+                {
+                    continue;
+                }
+                switch (i)
+                {
+                    case 0:
+                        matchJoinModel.first++;
+                        break;
+                    case 1:
+                        matchJoinModel.second++;
+                        break;
+                    case 2:
+                        matchJoinModel.third++;
+                        break;
+                    case 3:
+                        matchJoinModel.fourth++;
+                        break;
+                }
+                matchJoinModel.Score += points[i];
+                //玩家信息保存
+                dbContext.MatchJoinModel.Update(matchJoinModel);
+            }
+        }
+
         /// <summary>
         /// 保存种族信息到数据库
         /// </summary>

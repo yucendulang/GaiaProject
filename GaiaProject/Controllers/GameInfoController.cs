@@ -7,6 +7,7 @@ using GaiaCore.Gaia.Game;
 using GaiaDbContext.Models;
 using GaiaDbContext.Models.HomeViewModels;
 using GaiaProject.Data;
+using GaiaProject.Models.HomeViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.Expressions;
@@ -845,7 +846,12 @@ namespace GaiaProject.Controllers
                 //如果日志不是空的
                 if (!string.IsNullOrEmpty(gameInfoModel.loginfo))
                 {
-                    GameMgr.CreateNewGame(gameInfoModel.name, gameInfoModel.userlist.Split('|'), out GaiaGame result, gameInfoModel.MapSelction, isTestGame: gameInfoModel.IsTestGame == 1 ? true : false,version:gameInfoModel.version);
+                    NewGameViewModel newGameViewModel = new NewGameViewModel()
+                    {
+                        dropHour = 72,IsAllowLook = gameInfoModel.IsAllowLook,isHall = gameInfoModel.isHall,IsRandomOrder = gameInfoModel.IsRandomOrder,IsRotatoMap = gameInfoModel.IsRotatoMap,IsSocket = false,IsTestGame = gameInfoModel.IsTestGame==1,jinzhiFaction = gameInfoModel.jinzhiFaction,MapSelction = gameInfoModel.MapSelction,Name = gameInfoModel.name
+                    };
+                    GameMgr.CreateNewGame(gameInfoModel.userlist.Split('|'), newGameViewModel, out GaiaGame result);
+                   // GameMgr.CreateNewGame(gameInfoModel.name, gameInfoModel.userlist.Split('|'), out GaiaGame result, gameInfoModel.MapSelction, isTestGame: gameInfoModel.IsTestGame == 1 ? true : false,version:gameInfoModel.version);
                     GaiaGame gg = GameMgr.GetGameByName(gameInfoModel.name);
                     //gg.dbContext = this.dbContext;
                     gg.GameName = gameInfoModel.name;
