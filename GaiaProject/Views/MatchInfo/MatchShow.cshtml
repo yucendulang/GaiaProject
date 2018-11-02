@@ -63,7 +63,14 @@
         {
             <tr>
                 <th scope="row"></th>
-                <td><a href="/Home/RestoreGame/@item.Id">@item.name</a></td>
+                @if (item.round == 7)
+                {
+                    <td><a href="/Home/RestoreGame/@item.Id">@item.name</a></td>
+                }
+                else
+                {
+                    <td><a href="/home/ViewGame/@item.name">@item.name</a></td>
+                }
                 <td>@item.userlist</td>
                 <td>@item.round</td>
                 <td>@item.scoreFaction</td>
