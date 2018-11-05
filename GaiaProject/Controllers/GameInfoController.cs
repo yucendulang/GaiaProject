@@ -488,6 +488,18 @@ namespace GaiaProject.Controllers
             var list = this.GetFactionStatistics(null, usercount, username, orderType);
             return View(list);
         }
+        /// <summary>
+        /// 比赛统计查询
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult FactionStatisticsMatch()
+        {
+            var matchGames = this.dbContext.GameInfoModel.Where(game => game.matchId > 0).Select(game => game.Id);
+            IQueryable <GameFactionModel> query = this.dbContext.GameFactionModel.Where(item => item.UserCount ==4 && matchGames.Contains(item.gameinfo_id) );
+
+            var list = this.GetFactionStatistics(query, 4, null, 0);
+            return View("FactionStatistics",list);
+        }
 
         public IActionResult FactionStatisticsChart(int? usercount, string username, int? orderType)
         {

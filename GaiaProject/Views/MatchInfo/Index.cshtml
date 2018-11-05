@@ -30,10 +30,11 @@
             <h2><i class="fa fa-table red"></i><span class="break"></span><strong></strong></h2>
             @if (isAdmin)
             {
-            <a href="/MatchInfo/AddMatch">添加比赛</a>
+                <a href="/MatchInfo/AddMatch">添加比赛</a>
             }
-                
+            <a href="/MatchInfo/UserScoreTotal">用户总分</a>
 
+            <a href="/GameInfo/FactionStatisticsMatch">种族统计</a>
         </div>
         <div class="panel-body">
             <table class="table table-striped">
@@ -41,9 +42,10 @@
                     <tr>
                         <td>标题</td>
                         <td>报名人数</td>
-@*                        <td>报名截止时间</td>*@
-@*                        <td>开始时间</td>*@
-@*                        <td>结束时间</td>*@
+                        <td>场次</td>
+                        @*                        <td>报名截止时间</td>*@
+                        @*                        <td>开始时间</td>*@
+                        @*                        <td>结束时间</td>*@
                         <td>操作</td>
                     </tr>
                 </thead>
@@ -51,57 +53,63 @@
 
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td><a href="/MatchInfo/MatchShow/@item.Id">@item.Name</a></td>
-                            <td>@item.NumberNow/@item.NumberMax</td>
-@*                            <td>@item.RegistrationEndTime</td>*@
-@*                            <td>@item.StartTime</td>*@
-@*                            <td>@item.EndTime</td>*@
-                            <td>
+                    <tr>
+                        <td><a href="/MatchInfo/MatchShow/@item.Id">@item.Name</a></td>
+                        <td>@item.NumberNow/@item.NumberMax</td>
+                        <td>@item.MatchFinishNumber/@item.MatchTotalNumber</td>
+                        @*                            <td>@item.RegistrationEndTime</td>*@
+                        @*                            <td>@item.StartTime</td>*@
+                        @*                            <td>@item.EndTime</td>*@
+                        <td>
 
 
 
 
 
-                                <a class="btn btn-danger" href="#" ng-click="showMatchInfo(@item.Id);">
-                                    查看报名
+                            <a class="btn btn-danger" href="#" ng-click="showMatchInfo(@item.Id);">
+                                查看报名
+                            </a>
+
+                            @if (isAdmin)
+                            {
+                                <a class="btn btn-danger" href="#" ng-click="showUserToMatch(@item.Id)">
+                                    添加用户
                                 </a>
-                                
-                                @if (isAdmin)
+
+                                <a class="btn btn-danger" href="#" ng-click="showGameToMatch(@item.Id)">
+                                    添加比赛
+                                </a>
+
+                                <a class="btn btn-danger" href="#" ng-click="scoreMatch(@item.Id)">
+                                    计分
+                                </a>
+                                @if (@item.State == 0)
                                 {
-                                    <a class="btn btn-danger" href="#" ng-click="showUserToMatch(@item.Id)">
-                                        添加用户
+                                    <a class="btn btn-danger" href="#" ng-click="setJoin(@item.Id,1)">
+                                        禁止报名
                                     </a>
-
-                                    <a class="btn btn-danger" href="#" ng-click="showGameToMatch(@item.Id)">
-                                        添加比赛
-                                    </a>
-                                
-                                    <a class="btn btn-danger" href="#" ng-click="scoreMatch(@item.Id)">
-                                        计分
-                                    </a>
-                                    @if (@item.State == 0)
-                                     {
-                                         <a class="btn btn-danger" href="#" ng-click="setJoin(@item.Id,1)">
-                                             禁止报名
-                                         </a>
-                                     }
-                                     else
-                                     {
-                                         <a class="btn btn-danger" href="#" ng-click="setJoin(@item.Id,0)">
-                                             允许报名
-                                         </a>
-                                     }
-
-                                    <a class="btn btn-danger" href="#" ng-click="delMatch(@item.Id)">
-                                        <i class="fa fa-trash-o "></i>
-                                    </a>
-
                                 }
-                                
+                                else
+                                {
+                                    <a class="btn btn-danger" href="#" ng-click="setJoin(@item.Id,0)">
+                                        允许报名
+                                    </a>
+                                }
 
-                            </td>
-                        </tr>
+
+                                <a class="btn btn-danger" href="/MatchInfo/AddMatch/@item.Id">
+                                    编辑
+                                </a>
+
+                                <a class="btn btn-danger" href="#" ng-click="delMatch(@item.Id)">
+                                    <i class="fa fa-trash-o "></i>
+                                </a>
+
+                            }
+
+
+                        </td>
+                    </tr>
 
                     }
 

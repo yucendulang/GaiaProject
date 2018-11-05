@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Gaia.Model.Match;
 using GaiaCore.Gaia;
 using GaiaCore.Gaia.Data;
 using GaiaCore.Gaia.Game;
@@ -11,6 +12,7 @@ using GaiaProject.Data;
 using GaiaProject.Models.HomeViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace GaiaProject.Controllers
 {
@@ -35,8 +37,13 @@ namespace GaiaProject.Controllers
         /// <returns></returns>
         [HttpGet]
 
-        public IActionResult AddMatch()
+        public IActionResult AddMatch(int? id)
         {
+            if (id != null)
+            {
+                MatchInfoModel matchInfoModel = this.dbContext.MatchInfoModel.SingleOrDefault(item => item.Id == id);
+                return View(matchInfoModel);
+            }
             return View();
         }
         /// <summary>
@@ -50,9 +57,24 @@ namespace GaiaProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                this.dbContext.MatchInfoModel.Add(model);
+                if (model.Id > 0)
+                {
+                    MatchInfoModel matchInfoModel =
+                        this.dbContext.MatchInfoModel.SingleOrDefault(item => item.Id == model.Id);
+                    //更新必要数据
+                    matchInfoModel.Name = model.Name;
+                    matchInfoModel.Contents = model.Contents;
+                    matchInfoModel.IsAutoCreate = model.IsAutoCreate;
+                    matchInfoModel.NumberMax = model.NumberMax;
+                    //matchInfoModel.Name = model.Name;
+                    this.dbContext.MatchInfoModel.Update(matchInfoModel);
+                }
+                else
+                {
+                    this.dbContext.MatchInfoModel.Add(model);
+                }
                 this.dbContext.SaveChanges();
-                return Redirect("Index");
+                return Redirect("/MatchInfo/Index");
             }
             return View(model);
         }
@@ -255,6 +277,9 @@ namespace GaiaProject.Controllers
                 }
                 //将游戏标准为进行状态
                 matchInfoModel.State = 1;
+                //比赛场次
+                matchInfoModel.MatchTotalNumber = 7;
+
                 this.dbContext.MatchInfoModel.Update(matchInfoModel);
                 this.dbContext.SaveChanges();           
 
@@ -432,35 +457,44 @@ namespace GaiaProject.Controllers
 
             //主要信息
             var matchInfoModel = this.dbContext.MatchInfoModel.SingleOrDefault(item => item.Id == id);
-            //jsonData.data = matchInfoModel;
-            
-
-
-            //分数清零
-            //查询当前报名人
-            List<MatchJoinModel> matchJoinModels = this.dbContext.MatchJoinModel
-                .Where(item => item.matchInfo_id == matchInfoModel.Id).ToList();
-            foreach (MatchJoinModel matchJoinModel in matchJoinModels)
+            if (matchInfoModel == null)
             {
-                matchJoinModel.Score = 0;
-                matchJoinModel.first = 0;
-                matchJoinModel.second = 0;
-                matchJoinModel.third = 0;
-                matchJoinModel.fourth = 0;
-                this.dbContext.MatchJoinModel.Update(matchJoinModel);
+                
             }
-
-
-            //查询当前比赛
-            IQueryable<GameInfoModel> gameInfoModels = this.dbContext.GameInfoModel.Where(item => item.matchId == matchInfoModel.Id);
-            //遍历比赛
-            foreach (GameInfoModel gameInfoModel in gameInfoModels)
+            else
             {
-                DbGameSave.SaveMatchToDb(gameInfoModel,dbContext);
-            }
-            this.dbContext.SaveChanges();
-            jsonData.info.state = 200;
+                //jsonData.data = matchInfoModel;
+                matchInfoModel.MatchFinishNumber = 0;
+                //分数清零
+                //查询当前报名人
+                List<MatchJoinModel> matchJoinModels = this.dbContext.MatchJoinModel
+                    .Where(item => item.matchInfo_id == matchInfoModel.Id).ToList();
+                foreach (MatchJoinModel matchJoinModel in matchJoinModels)
+                {
+                    matchJoinModel.Score = 0;
+                    matchJoinModel.first = 0;
+                    matchJoinModel.second = 0;
+                    matchJoinModel.third = 0;
+                    matchJoinModel.fourth = 0;
+                    this.dbContext.MatchJoinModel.Update(matchJoinModel);
+                }
 
+
+                //查询当前比赛
+                IQueryable<GameInfoModel> gameInfoModels = this.dbContext.GameInfoModel.Where(item => item.matchId == matchInfoModel.Id);
+                //遍历比赛
+                foreach (GameInfoModel gameInfoModel in gameInfoModels)
+                {
+                    bool isFinish = DbGameSave.SaveMatchToDb(gameInfoModel, dbContext);
+                    if (isFinish)
+                    {
+                        matchInfoModel.MatchFinishNumber++;
+                    }
+                }
+                this.dbContext.MatchInfoModel.Update(matchInfoModel);
+                this.dbContext.SaveChanges();
+                jsonData.info.state = 200;
+            }              
             return new JsonResult(jsonData);
             return null;
         }
@@ -476,6 +510,26 @@ namespace GaiaProject.Controllers
             jsonData.info.state = 200;
             return new JsonResult(jsonData);
 
+        }
+        /// <summary>
+        /// 查看用户的全部积分
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult UserScoreTotal()
+        {
+            var list = this.dbContext.MatchJoinModel.GroupBy(item => item.username).Select(g =>new MatchUserStatistics
+            {
+                UserName = g.Max(user=>user.username),
+                Count = g.Count(),
+                ScoreTotal = g.Sum(user=>user.Score),
+                ScoreAvg = g.Sum(user => user.Score)/g.Count(),
+
+            }).OrderByDescending(item=>item.ScoreTotal).ToList();
+//            if (list.Count > 20)
+//            {
+//                list = list.[20];
+//            }
+            return View(list);
         }
     }
 }

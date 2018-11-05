@@ -1,0 +1,41 @@
+﻿@model System.Collections.Generic.List<Gaia.Model.Match.MatchUserStatistics>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2><i class="fa fa-table red"></i><span class="break"></span><strong></strong></h2>
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <td>用户名</td>
+                <td>次数</td>
+                <td>总分</td>
+                <td>平均分</td>
+            </tr>
+            </thead>
+            <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.UserName</td>
+                    <td>@item.Count</td>
+                    <td>@item.ScoreTotal</td>
+                    <td>@item.ScoreAvg
+                    </td>
+                </tr>
+
+            }
+
+            </tbody>
+        </table>
+
+    </div>
+</div>

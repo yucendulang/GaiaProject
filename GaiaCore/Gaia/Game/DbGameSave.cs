@@ -283,7 +283,7 @@ namespace GaiaCore.Gaia.Game
             }
         }
 
-        public static void SaveMatchToDb(GameInfoModel gameInfoModel,ApplicationDbContext dbContext)
+        public static bool SaveMatchToDb(GameInfoModel gameInfoModel,ApplicationDbContext dbContext)
         {
             //计分
             Int16[] points = new Int16[] { 6, 3, 1, 0 };
@@ -291,7 +291,7 @@ namespace GaiaCore.Gaia.Game
             //如果已经结束，则标记计分
             if (gameInfoModel.round != 7)
             {
-                return;
+                return false;
                 //continue; ;
             }
             //玩家情况
@@ -325,6 +325,7 @@ namespace GaiaCore.Gaia.Game
                 //玩家信息保存
                 dbContext.MatchJoinModel.Update(matchJoinModel);
             }
+            return true;
         }
 
         /// <summary>

@@ -67,6 +67,14 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// </summary>
         public Int16 State { get; set; }
 
+        /// <summary>
+        /// 总场数
+        /// </summary>
+        public Int16 MatchTotalNumber { get; set; }
+        /// <summary>
+        /// 完成场次
+        /// </summary>
+        public Int16 MatchFinishNumber { get; set; }
     }
 
 
