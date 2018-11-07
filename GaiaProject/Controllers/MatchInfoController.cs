@@ -498,7 +498,12 @@ namespace GaiaProject.Controllers
             return new JsonResult(jsonData);
             return null;
         }
-
+        /// <summary>
+        /// ÐÞ¸Ä×´Ì¬
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<JsonResult> SetJoin(int id,Int16 state)
         {
