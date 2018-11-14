@@ -8,9 +8,11 @@ using GaiaCore.Util;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using GaiaCore.Gaia.Data;
+using GaiaDbContext.Models;
 using GaiaDbContext.Models.AccountViewModels;
 using GaiaProject.Data;
 using GaiaProject.Models.HomeViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace GaiaCore.Gaia
 {
@@ -30,9 +32,39 @@ namespace GaiaCore.Gaia
         /// <param name="result"></param>
         /// <returns></returns>
 
-        public static bool CreateNewGame(string[] username, NewGameViewModel model, out GaiaGame result,bool isSaveGame = false)
+        public static bool CreateNewGame(string[] username, NewGameViewModel model, out GaiaGame result,bool isSaveGame = false, UserManager<ApplicationUser> _userManager = null)
         {
             bool create = CreateNewGame(model.Name, username, out result, model.MapSelction, isTestGame: model.IsTestGame, isSocket: model.IsSocket, IsRotatoMap: model.IsRotatoMap, version: 4);
+            if (_userManager != null)
+            {
+                //用户列表
+                List<UserGameModel> listUser = new List<UserGameModel>();
+                //判断用户不存在
+                foreach (var item in username)
+                {
+                    var user = _userManager.FindByNameAsync(item);
+                    if (user.Result == null)
+                    {
+                        //ModelState.AddModelError(string.Empty, item + "用户不存在");
+                        //return View("NewGame");
+                        result = null;
+                        return false;
+                    }
+                    else
+                    {
+                        listUser.Add(new UserGameModel()
+                        {
+                            username = item,
+                            isTishi = true,
+                            paygrade = user.Result.paygrade,
+                            scoreUserStart = user.Result.scoreUser,
+                        });
+                    }
+                }
+                //赋值用户信息
+                result.UserGameModels = listUser;
+            }
+
             result.dropHour = model.dropHour;
             if (isSaveGame) { }
             return create;

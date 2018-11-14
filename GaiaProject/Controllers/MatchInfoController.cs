@@ -266,7 +266,7 @@ namespace GaiaProject.Controllers
                             newGameViewModel.Name = string.Concat(matchInfoModel.GameName, i + 1);
                         }
                         //创建游戏到内存
-                        GameMgr.CreateNewGame(users, newGameViewModel, out GaiaGame gaiaGame);
+                        GameMgr.CreateNewGame(users, newGameViewModel, out GaiaGame gaiaGame, _userManager: _userManager);
                         //保存到数据库
                         GameMgr.SaveGameToDb(newGameViewModel, "gaia", null, this.dbContext, gaiaGame);
 

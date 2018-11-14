@@ -286,34 +286,10 @@ namespace GaiaProject.Controllers
                 username = this.RandomSortList<string>(username).ToArray();
             }
 
-            //用户列表
-            List<UserGameModel> listUser = new List<UserGameModel>();
-            //判断用户不存在
-            foreach (var item in username)
-            {
-                var user = _userManager.FindByNameAsync(item);
-                if (user.Result == null)
-                {
-                    ModelState.AddModelError(string.Empty, item + "用户不存在");
-                    //return View("NewGame");
-                }
-                else
-                {
-                    listUser.Add(new UserGameModel()
-                    {
-                        username = item,
-                        isTishi = true,
-                        paygrade = user.Result.paygrade,
-                        scoreUserStart = user.Result.scoreUser,
-                    });
-                }
-            }
+           
             //创建游戏
-            bool create = GameMgr.CreateNewGame(username,model,out GaiaGame result);
+            bool create = GameMgr.CreateNewGame(username,model,out GaiaGame result,_userManager: _userManager);
 
-        
-            //赋值用户信息
-            result.UserGameModels = listUser;
 
             if (!string.IsNullOrEmpty(model.jinzhiFaction))
             {
