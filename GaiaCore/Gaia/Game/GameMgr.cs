@@ -77,7 +77,7 @@ namespace GaiaCore.Gaia
         /// <param name="jinzhiFaction"></param>
         /// <param name="dbContext"></param>
         /// <param name="result"></param>
-        public static void SaveGameToDb(NewGameViewModel model,string username,string jinzhiFaction, ApplicationDbContext dbContext,GaiaGame result)
+        public static void SaveGameToDb(NewGameViewModel model,string username,string jinzhiFaction, ApplicationDbContext dbContext,GaiaGame result,int matchId = 0,string[] userlist = null)
         {
             //保存到数据库
             GaiaDbContext.Models.HomeViewModels.GameInfoModel gameInfoModel =
@@ -102,6 +102,9 @@ namespace GaiaCore.Gaia
                     isHall = model.isHall,
                     remark = model.remark,
                     dropHour = model.dropHour,
+
+                    //比赛id
+                    matchId = matchId,
                     //round = model.isHall?-1:0,
                 };
             //游戏大厅
@@ -115,8 +118,8 @@ namespace GaiaCore.Gaia
             else
             {
                 gameInfoModel.round = 0;
-                gameInfoModel.UserCount = username.Length;
-                gameInfoModel.userlist = string.Join("|", username);
+                gameInfoModel.UserCount = userlist?.Length ?? 0;
+                gameInfoModel.userlist = string.Join("|", userlist);
 
             }
             gameInfoModel.jinzhiFaction = jinzhiFaction;//this.HttpContext.Request.Form["jinzhi"];
