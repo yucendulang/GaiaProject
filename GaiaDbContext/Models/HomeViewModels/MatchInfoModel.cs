@@ -75,6 +75,13 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// 完成场次
         /// </summary>
         public Int16 MatchFinishNumber { get; set; }
+
+        /// <summary>
+        /// 冠军
+        /// </summary>
+        public string Champion { get; set; }
+
+
     }
 
 

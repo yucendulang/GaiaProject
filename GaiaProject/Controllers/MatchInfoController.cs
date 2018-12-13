@@ -482,6 +482,7 @@ namespace GaiaProject.Controllers
 
                 //查询当前比赛
                 IQueryable<GameInfoModel> gameInfoModels = this.dbContext.GameInfoModel.Where(item => item.matchId == matchInfoModel.Id);
+
                 //遍历比赛
                 foreach (GameInfoModel gameInfoModel in gameInfoModels)
                 {
@@ -490,6 +491,15 @@ namespace GaiaProject.Controllers
                     {
                         matchInfoModel.MatchFinishNumber++;
                     }
+                }
+
+                //如果7场全部结束，更新冠军
+                if (matchInfoModel.MatchFinishNumber == 7)
+                {
+                    //查询分数最高的
+                    IQueryable<MatchJoinModel> match = this.dbContext.MatchJoinModel.Where(item => item.matchInfo_id == matchInfoModel.Id).OrderByDescending(item=>item.Score);
+                    String username = match.ToList()[0].username;
+                    matchInfoModel.Champion = username;
                 }
                 this.dbContext.MatchInfoModel.Update(matchInfoModel);
                 this.dbContext.SaveChanges();

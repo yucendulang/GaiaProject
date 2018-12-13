@@ -540,6 +540,7 @@ namespace GaiaProject.Controllers
             GameInfoModel gameInfoModel = this.dbContext.GameInfoModel.SingleOrDefault(item => item.Id == id);
             if (gameInfoModel != null)
             {
+                gameInfoModel.userlist = gameInfoModel.userlist.Trim('|');
                 string log;
                 //游戏已经结束
                 if (gameInfoModel.GameStatus == 8)
@@ -553,6 +554,7 @@ namespace GaiaProject.Controllers
                 }
                 else
                 {
+                   
                     var game = GameMgr.GetGameByName(gameInfoModel.name);
                     if (game == null)//游戏不存在
                     {
@@ -839,12 +841,13 @@ namespace GaiaProject.Controllers
                             //隔开
                             if (list.Length == 2)
                             {
-                                //当前种族操作
+                                //是自己当前玩家种族的操作
                                 if (list[0] == myFaction.FactionName.ToString())
                                 {
 
                                     if (list[1].Contains("pass turn"))
                                     {
+                                        //超过2次PASS数量，则不允许回退
                                         if (passNumber > 1)
                                         {
                                             break;
@@ -865,8 +868,9 @@ namespace GaiaProject.Controllers
                                     {
                                         passNumber++;
                                     }
-                                    //以及经过自己的主主回合，以及不是自己的回合
-                                    if (flag && list[0] != myFaction.FactionName.ToString())
+                                    //当自己的回合时，全部删除，包括吸收魔力
+                                    //并且不是吸收魔力
+                                    if (flag && (list[0] != myFaction.FactionName.ToString() && (!list[1].Contains("leech") || !list[1].Contains("decline"))))
                                     {
                                         break;
                                     }

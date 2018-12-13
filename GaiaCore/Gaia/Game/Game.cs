@@ -57,6 +57,10 @@ namespace GaiaCore.Gaia
                 this.UserGameModels = new List<UserGameModel>();
                 foreach (string item in this.Username)
                 {
+                    if (item.Equals(""))
+                    {
+                        continue;
+                    }
                     this.UserGameModels.Add(new UserGameModel()
                     {
                         username = item,

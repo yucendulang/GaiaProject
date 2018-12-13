@@ -119,7 +119,7 @@ namespace GaiaCore.Gaia
             {
                 gameInfoModel.round = 0;
                 gameInfoModel.UserCount = userlist?.Length ?? 0;
-                gameInfoModel.userlist = string.Join("|", userlist);
+                gameInfoModel.userlist = string.Join("|", userlist).Trim('|');
 
             }
             gameInfoModel.jinzhiFaction = jinzhiFaction;//this.HttpContext.Request.Form["jinzhi"];
