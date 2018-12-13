@@ -631,6 +631,31 @@ namespace GaiaProject.Controllers
             }
             //GameMgr.UndoOneStep(id);
         }
+
+        /// <summary>
+        /// 修改游戏
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="row"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public IActionResult ModifyGameSyntax(string id, int row, string code)
+        {
+            GaiaGame gaiaGame = GameMgr.GetGameByName(id);
+
+            List<LogEntity> logList = gaiaGame.LogEntityList.OrderBy(x=>x.Row).ToList();
+            //string[] syntaxList = gaiaGame.UserActionLog.Split("\r\n");
+            LogEntity  logEntity= logList[row-1];
+            logEntity.Syntax = code;
+            StringBuilder stringBuilder = new StringBuilder();
+            logList.ForEach(item=>stringBuilder.Append($"{item.Syntax}\r\n"));
+            gaiaGame.UserActionLog = stringBuilder.ToString();
+            //重置游戏
+            GameMgr.RestoreGame(gaiaGame.GameName, gaiaGame, isToDict: true);
+            return View("ViewGame", gaiaGame);
+        }
+
+
         /// <summary>
         /// 跳过回合
         /// </summary>
@@ -943,7 +968,9 @@ namespace GaiaProject.Controllers
         [HttpGet]
         public async Task<JsonResult> SyntaxLog(string id, string factionName = null, int factionType = 0)
         {
-
+            string modify = this.dbContext.Users.SingleOrDefault(item => item.UserName == HttpContext.User.Identity.Name).groupid == 1
+                ? " <a onclick='modifyLog(this)' url='/Home/ModifyGameSyntax/{1}/?row={0}'>修改指令</a>"
+                : null;
 
             var gg = GameMgr.GetGameByName(id);
             StringBuilder stringBuilder = new StringBuilder();
@@ -972,8 +999,20 @@ namespace GaiaProject.Controllers
                 }
                 foreach (var item in logList.OrderByDescending(x => x.Row))
                 {
+                    string operat = null;
+                    if (singleOrDefault.GameStatus == 8 || modify!=null)
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        sb.Append("<td>");
+                        if (singleOrDefault.GameStatus == 8)
+                            sb.Append(string.Format("<td><a href='/Home/RestoreGame/{1}/?row={0}'>转到</a>", item.Row,
+                                singleOrDefault?.Id));
+                        if (modify != null) sb.Append(string.Format(modify, item.Row, singleOrDefault?.name));
+                        sb.Append("</td>");
+                        operat = sb.ToString();
+                    }
                     stringBuilder.Append(string.Format("<tr><td>{0}</td><td class='text-right'>{1}</td><td>{2}vp</td><td class='text-right'>{3}</td><td>{4}c</td><td class='text-right'>{5}</td><td>{6}o</td><td class='text-right'>{7}</td><td>{8}q</td><td class='text-right'>{9}</td><td>{10}k</td><td class='text-right'>{11}</td><td>{12}/{13}/{14}</td><td>{15}</td>{16}</tr>", item.FactionName ?? null, @item.ResouceChange?.m_score, item.ResouceEnd?.m_score, item.ResouceChange?.m_credit, item.ResouceEnd?.m_credit, item.ResouceChange?.m_ore, item.ResouceEnd?.m_ore, item.ResouceChange?.m_QICs, item.ResouceEnd?.m_QICs, item.ResouceChange?.m_knowledge, item.ResouceEnd?.m_knowledge, item.ResouceChange?.m_powerToken2 + item.ResouceChange?.m_powerToken3 * 2, item.ResouceEnd?.m_powerToken1, item.ResouceEnd?.m_powerToken2, item.ResouceEnd?.m_powerToken3, item.Syntax,
-                        singleOrDefault.GameStatus == 8 ? string.Format("<td><a href='/Home/RestoreGame/{1}/?row={0}'>转到</a></td>", item.Row, singleOrDefault?.Id) : null)
+                        operat)
                     );
                 }
             }

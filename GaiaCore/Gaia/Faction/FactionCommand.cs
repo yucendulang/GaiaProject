@@ -1056,11 +1056,32 @@ namespace GaiaCore.Gaia
                 hex.TFTerrain = Terrain.Black;
                 hex.Building = new Mine();
                 hex.FactionBelongTo = FactionName;
+                FactionName factionName = FactionName;
                 var surroundhex = GaiaGame.Map.GetSurroundhexWithBuild(row, col, FactionName);
-                if (surroundhex.Exists(x => GaiaGame.Map.HexArray[x.Item1, x.Item2].IsAlliance))
+                //遍历相邻的点
+                foreach (var tuple in surroundhex)
                 {
-                    GaiaGame.Map.HexArray[row, col].IsAlliance = true;
+                    TerrenHex item = GaiaGame.Map.HexArray[tuple.Item1, tuple.Item2];
+                    //如果不是联邦
+                    if (!item.IsAlliance)
+                    {
+                        continue;
+                    }
+                    //亚特兰蒂斯种族需要特殊建筑
+                    if (factionName == FactionName.Lantida)
+                    {
+                        //挨到亚特兰蒂斯
+                        if (item.FactionBelongTo == FactionName.Lantida || (item.IsSpecialBuildingAlliance))
+                        {
+                            GaiaGame.Map.HexArray[row, col].IsAlliance = true;
+                        }
+                    }
+                    else
+                    {
+                        GaiaGame.Map.HexArray[row, col].IsAlliance = true;
+                    }
                 }
+                
                 QICs -= qicship;
                 GaiaGame.SetLeechPowerQueue(FactionName, row, col);
                 TriggerRST(typeof(RST1));

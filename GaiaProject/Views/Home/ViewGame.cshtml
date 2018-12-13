@@ -540,6 +540,22 @@ else
                     $("#SyntaxLogList").html(data.data);
                 });
         });
+        //修改日志
+        function modifyLog(obj) {
+            var item = $(obj);
+            //设置当前指令
+            $("#modifySyntaxModel_newcode").val(item.parent().prev().text());
+            $("#modifySyntaxModel").modal();
+            $("#modifySyntaxModelYes").click(function () {
+                var url = item.attr("url") + "&code=" + $("#modifySyntaxModel_newcode").val();
+                //alert(url);
+                $.post(url,
+                    "",
+                    function(data) {
+                        window.location.reload();
+                    });
+            });
+        }
         var IsSocket =@Model.IsSocket.ToString().ToLower() && !!window.WebSocket && window.WebSocket.prototype.send;
         //IsSocket = false;
     </script>
