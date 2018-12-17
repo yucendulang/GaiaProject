@@ -1,0 +1,56 @@
+﻿@model System.Linq.IQueryable<GaiaDbContext.Models.HomeViewModels.MatchJoinModel>
+
+@{
+    ViewBag.Title = "修改比赛积分";
+    Layout = "_Layout";
+}
+
+<h2>修改比赛积分</h2>
+
+<div ng-app="myApp" ng-controller="myCtrl">
+
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+       
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Player</th>
+                    <th>1st</th>
+                    <th>2nd</th>
+                    <th>3rd</th>
+                    <th>4th</th>
+                    <th>Points</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row"></th>
+                        <td>@item.username</td>
+                        <td>@item.first</td>
+                        <td>@item.second</td>
+                        <td>@item.third</td>
+                        <td>@item.fourth</td>
+                        <td>@item.Score</td>
+                        <td><a href="/MatchInfo/MatchJoinModify/@item.Id" target="_blank">编辑</a></td>
+                    </tr>
+
+                }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+
+
+</div>

@@ -258,13 +258,14 @@ namespace GaiaProject.Controllers
 
                 //被禁止的种族
                 model.jinzhiFaction = this.HttpContext.Request.Form["jinzhi"];
+                GaiaGame gaiaGame;
                 //model.jinzhiFaction = jinzhiFaction;
-                GaiaGame result = this.CreateGame(username, model);
+                GaiaGame result = this.CreateGame(username, model,out gaiaGame);
 
                 if (model.isHall || (result != null && !model.IsTestGame && username[0] != username[1]))//测试局以及自己对战的局暂时不保留数据
                 {
                     //saveGameInfo(result);
-                    GameMgr.SaveGameToDb(model, HttpContext.User.Identity.Name, this.HttpContext.Request.Form["jinzhi"], this.dbContext, result);
+                    GameMgr.SaveGameToDb(model, HttpContext.User.Identity.Name, this.HttpContext.Request.Form["jinzhi"], this.dbContext, result,userlist: gaiaGame.Username);
                 }
 
                 ViewData["ReturnUrl"] = "/Home/ViewGame/" + model.Name;
@@ -275,7 +276,7 @@ namespace GaiaProject.Controllers
         /// <summary>
         /// 创建游戏，从内存
         /// </summary>
-        private GaiaGame CreateGame(string[] username, NewGameViewModel model)
+        private GaiaGame CreateGame(string[] username, NewGameViewModel model,out GaiaGame result)
         {
             //删除空白玩家
             username = username.Where(x => !string.IsNullOrEmpty(x)).ToArray();
@@ -288,7 +289,7 @@ namespace GaiaProject.Controllers
 
            
             //创建游戏
-            bool create = GameMgr.CreateNewGame(username,model,out GaiaGame result,_userManager: _userManager);
+            bool create = GameMgr.CreateNewGame(username,model,out result,_userManager: _userManager);
 
 
             if (!string.IsNullOrEmpty(model.jinzhiFaction))
@@ -418,7 +419,8 @@ namespace GaiaProject.Controllers
                             jinzhiFaction = gameInfoModel.jinzhiFaction,
                         };
                         //创建游戏
-                        this.CreateGame(username, newGameViewModel);
+                        GaiaGame gaiaGame;
+                        this.CreateGame(username, newGameViewModel,out gaiaGame);
                     }
                     this.dbContext.GameInfoModel.Update(gameInfoModel);
                     this.dbContext.SaveChanges();

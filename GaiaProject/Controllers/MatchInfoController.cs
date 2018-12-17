@@ -31,6 +31,9 @@ namespace GaiaProject.Controllers
             var list = this.dbContext.MatchInfoModel.ToList();
             return View(list);
         }
+
+        #region 比赛创建和管理
+
         /// <summary>
         /// 添加比赛
         /// </summary>
@@ -89,7 +92,7 @@ namespace GaiaProject.Controllers
             if (matchInfoModel != null)
             {
                 //查询当前报名人
-                IQueryable<MatchJoinModel> matchJoinModels = this.dbContext.MatchJoinModel.Where(item => item.matchInfo_id == matchInfoModel.Id).OrderByDescending(item=>item.Score);
+                IQueryable<MatchJoinModel> matchJoinModels = this.dbContext.MatchJoinModel.Where(item => item.matchInfo_id == matchInfoModel.Id).OrderByDescending(item => item.Score);
 
                 //查询当前比赛
                 IQueryable<GameInfoModel> gameInfoModels = this.dbContext.GameInfoModel.Where(item => item.matchId == matchInfoModel.Id);
@@ -179,12 +182,12 @@ namespace GaiaProject.Controllers
                 else
                 {
                     //是否已经满足报名
-                    if (matchInfoModel.NumberMax !=0 &&matchInfoModel.NumberNow == matchInfoModel.NumberMax)
+                    if (matchInfoModel.NumberMax != 0 && matchInfoModel.NumberNow == matchInfoModel.NumberMax)
                     {
                         jsonData.info.state = 0;
                         jsonData.info.message = "报名人员已满";
                     }
-                    else if (matchInfoModel.RegistrationEndTime<DateTime.Now)
+                    else if (matchInfoModel.RegistrationEndTime < DateTime.Now)
                     {
                         jsonData.info.state = 0;
                         jsonData.info.message = "报名时间截止";
@@ -210,7 +213,7 @@ namespace GaiaProject.Controllers
                         this.dbContext.SaveChanges();
 
                         jsonData.info.state = 200;
-                     
+
                         this.AutoCreateMatch(matchInfoModel);
                     }
                 }
@@ -233,7 +236,7 @@ namespace GaiaProject.Controllers
                 {
                     //int[7][4] rank = new int();
 
-                    int[,] userOrder = new int[7, 4] { { 1,5,4,3 }, { 5,2,6,1 },{2,4,0,5},{4,6,3,2},{6,0,1,4},{0,3,5,6},{3,1,2,0}};
+                    int[,] userOrder = new int[7, 4] { { 1, 5, 4, 3 }, { 5, 2, 6, 1 }, { 2, 4, 0, 5 }, { 4, 6, 3, 2 }, { 6, 0, 1, 4 }, { 0, 3, 5, 6 }, { 3, 1, 2, 0 } };
 
                     //创建游戏
                     NewGameViewModel newGameViewModel = new NewGameViewModel()
@@ -250,9 +253,9 @@ namespace GaiaProject.Controllers
                         //Name = matchInfoModel.GameName,
                     };
 
-                    for (int i = 0;i<7;i++ )
+                    for (int i = 0; i < 7; i++)
                     {
-                        string[] users= new string[]
+                        string[] users = new string[]
                         {
                             matchJoinModels[userOrder[i, 0]].username, matchJoinModels[userOrder[i, 1]].username,matchJoinModels[userOrder[i, 2]].username,matchJoinModels[userOrder[i, 3]].username
                         };
@@ -268,7 +271,7 @@ namespace GaiaProject.Controllers
                         //创建游戏到内存
                         GameMgr.CreateNewGame(users, newGameViewModel, out GaiaGame gaiaGame, _userManager: _userManager);
                         //保存到数据库
-                        GameMgr.SaveGameToDb(newGameViewModel, "gaia", null, this.dbContext, gaiaGame,matchId: matchInfoModel.Id,userlist: users);
+                        GameMgr.SaveGameToDb(newGameViewModel, "gaia", null, this.dbContext, gaiaGame, matchId: matchInfoModel.Id, userlist: users);
 
                     }
 
@@ -281,7 +284,7 @@ namespace GaiaProject.Controllers
                 matchInfoModel.MatchTotalNumber = 7;
 
                 this.dbContext.MatchInfoModel.Update(matchInfoModel);
-                this.dbContext.SaveChanges();           
+                this.dbContext.SaveChanges();
 
             }
         }
@@ -305,7 +308,7 @@ namespace GaiaProject.Controllers
                     jsonData.info.state = 0;
                     jsonData.info.message = "报名时间截止";
                 }
-                else if (matchInfoModel.State!=0)
+                else if (matchInfoModel.State != 0)
                 {
                     jsonData.info.state = 0;
                     jsonData.info.message = "已经开始，无法退出";
@@ -339,11 +342,16 @@ namespace GaiaProject.Controllers
 
             return new JsonResult(jsonData);
         }
+
+        #endregion
+
+
+        #region 用户和游戏加入比赛以及计分
         /// <summary>
         /// 将游戏添加到比赛
         /// </summary>
         [HttpPost]
-        public async Task<JsonResult> AddGameToMatch(int id,string gameid)
+        public async Task<JsonResult> AddGameToMatch(int id, string gameid)
         {
             Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
 
@@ -353,7 +361,7 @@ namespace GaiaProject.Controllers
             {
                 gameInfoModel.matchId = id;
                 this.dbContext.GameInfoModel.Update(gameInfoModel);
-            
+
                 this.dbContext.SaveChanges();
                 jsonData.info.state = 200;
             }
@@ -405,7 +413,7 @@ namespace GaiaProject.Controllers
                 {
                     jsonData.info.message = "用户不存在";
                 }
-                
+
             }
             else
             {
@@ -459,7 +467,7 @@ namespace GaiaProject.Controllers
             var matchInfoModel = this.dbContext.MatchInfoModel.SingleOrDefault(item => item.Id == id);
             if (matchInfoModel == null)
             {
-                
+
             }
             else
             {
@@ -497,14 +505,14 @@ namespace GaiaProject.Controllers
                 if (matchInfoModel.MatchFinishNumber == 7)
                 {
                     //查询分数最高的
-                    IQueryable<MatchJoinModel> match = this.dbContext.MatchJoinModel.Where(item => item.matchInfo_id == matchInfoModel.Id).OrderByDescending(item=>item.Score);
+                    IQueryable<MatchJoinModel> match = this.dbContext.MatchJoinModel.Where(item => item.matchInfo_id == matchInfoModel.Id).OrderByDescending(item => item.Score);
                     String username = match.ToList()[0].username;
                     matchInfoModel.Champion = username;
                 }
                 this.dbContext.MatchInfoModel.Update(matchInfoModel);
                 this.dbContext.SaveChanges();
                 jsonData.info.state = 200;
-            }              
+            }
             return new JsonResult(jsonData);
             return null;
         }
@@ -515,11 +523,11 @@ namespace GaiaProject.Controllers
         /// <param name="state"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<JsonResult> SetJoin(int id,Int16 state)
+        public async Task<JsonResult> SetJoin(int id, Int16 state)
         {
             Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
             var matchInfoModel = this.dbContext.MatchInfoModel.SingleOrDefault(item => item.Id == id);
-            matchInfoModel.State = (short) (matchInfoModel.State==0?1:0);
+            matchInfoModel.State = (short)(matchInfoModel.State == 0 ? 1 : 0);
             this.dbContext.MatchInfoModel.Update(matchInfoModel);
             this.dbContext.SaveChanges();
             jsonData.info.state = 200;
@@ -532,19 +540,69 @@ namespace GaiaProject.Controllers
         /// <returns></returns>
         public IActionResult UserScoreTotal()
         {
-            var list = this.dbContext.MatchJoinModel.GroupBy(item => item.username).Select(g =>new MatchUserStatistics
+            var list = this.dbContext.MatchJoinModel.GroupBy(item => item.username).Select(g => new MatchUserStatistics
             {
-                UserName = g.Max(user=>user.username),
+                UserName = g.Max(user => user.username),
                 Count = g.Count(),
-                ScoreTotal = g.Sum(user=>user.Score),
-                ScoreAvg = g.Sum(user => user.Score)/g.Count(),
+                ScoreTotal = g.Sum(user => user.Score),
+                ScoreAvg = g.Sum(user => user.Score) / g.Count(),
 
-            }).OrderByDescending(item=>item.ScoreTotal).ToList();
-//            if (list.Count > 20)
-//            {
-//                list = list.[20];
-//            }
+            }).OrderByDescending(item => item.ScoreTotal).ToList();
+            //            if (list.Count > 20)
+            //            {
+            //                list = list.[20];
+            //            }
             return View(list);
         }
+
+
+        #endregion
+
+
+
+        #region 手动修改用户积分
+
+        public IActionResult MatchJoinList(int id)
+        {
+            IQueryable<MatchJoinModel> matchJoinModels = this.dbContext.MatchJoinModel.Where(item => item.matchInfo_id == id);
+            return View(matchJoinModels);
+        }
+
+        public IActionResult MatchJoinModify(int id)
+        {
+            MatchJoinModel matchJoinModel = this.dbContext.MatchJoinModel.SingleOrDefault(item => item.Id == id);
+            return View(matchJoinModel);
+        }
+
+        /// <summary>
+        /// 更新用户积分
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+
+        public IActionResult MatchJoinModify(MatchJoinModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.Id > 0)
+                {
+                    MatchJoinModel matchJoinModel =
+                        this.dbContext.MatchJoinModel.SingleOrDefault(item => item.Id == model.Id);
+                    matchJoinModel.first = model.first;
+                    matchJoinModel.second = model.second;
+                    matchJoinModel.third = model.third;
+                    matchJoinModel.fourth = model.fourth;
+                    matchJoinModel.Score = model.Score;
+                    matchJoinModel.Rank = model.Rank;
+                    this.dbContext.MatchJoinModel.Update(matchJoinModel);
+                }
+                this.dbContext.SaveChanges();
+                return Redirect("/MatchInfo/Index");
+            }
+            return View(model);
+        }
+
+        #endregion
     }
 }
