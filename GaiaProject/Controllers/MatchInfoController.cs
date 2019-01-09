@@ -28,7 +28,7 @@ namespace GaiaProject.Controllers
         }
         public IActionResult Index()
         {
-            var list = this.dbContext.MatchInfoModel.ToList();
+            var list = this.dbContext.MatchInfoModel.ToList().OrderByDescending(item=>item.Id).ToList();
             return View(list);
         }
 
@@ -282,6 +282,8 @@ namespace GaiaProject.Controllers
                 matchInfoModel.State = 1;
                 //比赛场次
                 matchInfoModel.MatchTotalNumber = 7;
+                //开始时间
+                matchInfoModel.StartTime = DateTime.Now;
 
                 this.dbContext.MatchInfoModel.Update(matchInfoModel);
                 this.dbContext.SaveChanges();
@@ -471,51 +473,84 @@ namespace GaiaProject.Controllers
             }
             else
             {
-                //jsonData.data = matchInfoModel;
-                matchInfoModel.MatchFinishNumber = 0;
-                //分数清零
-                //查询当前报名人
-                List<MatchJoinModel> matchJoinModels = this.dbContext.MatchJoinModel
-                    .Where(item => item.matchInfo_id == matchInfoModel.Id).ToList();
-                foreach (MatchJoinModel matchJoinModel in matchJoinModels)
-                {
-                    matchJoinModel.Score = 0;
-                    matchJoinModel.first = 0;
-                    matchJoinModel.second = 0;
-                    matchJoinModel.third = 0;
-                    matchJoinModel.fourth = 0;
-                    this.dbContext.MatchJoinModel.Update(matchJoinModel);
-                }
-
-
-                //查询当前比赛
-                IQueryable<GameInfoModel> gameInfoModels = this.dbContext.GameInfoModel.Where(item => item.matchId == matchInfoModel.Id);
-
-                //遍历比赛
-                foreach (GameInfoModel gameInfoModel in gameInfoModels)
-                {
-                    bool isFinish = DbGameSave.SaveMatchToDb(gameInfoModel, dbContext);
-                    if (isFinish)
-                    {
-                        matchInfoModel.MatchFinishNumber++;
-                    }
-                }
-
-                //如果7场全部结束，更新冠军
-                if (matchInfoModel.MatchFinishNumber == 7)
-                {
-                    //查询分数最高的
-                    IQueryable<MatchJoinModel> match = this.dbContext.MatchJoinModel.Where(item => item.matchInfo_id == matchInfoModel.Id).OrderByDescending(item => item.Score);
-                    String username = match.ToList()[0].username;
-                    matchInfoModel.Champion = username;
-                }
-                this.dbContext.MatchInfoModel.Update(matchInfoModel);
+                this.ScoreMatch(matchInfoModel);
                 this.dbContext.SaveChanges();
                 jsonData.info.state = 200;
             }
             return new JsonResult(jsonData);
             return null;
         }
+        /// <summary>
+        /// 全部没结束的计分
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult ScoreAll()
+        {
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
+            //结束的变成2
+            IQueryable<MatchInfoModel> matchInfoModels = this.dbContext.MatchInfoModel.Where(item => item.State != 2 && item.State==1);
+            foreach (MatchInfoModel matchInfoModel in matchInfoModels)
+            {
+                this.ScoreMatch(matchInfoModel);
+            }
+            this.dbContext.SaveChanges();
+            return View("Index", this.dbContext.MatchInfoModel.ToList().OrderByDescending(item => item.Id).ToList());
+        }
+        /// <summary>
+        /// 计分
+        /// </summary>
+        /// <param name="matchInfoModel"></param>
+        private void ScoreMatch(MatchInfoModel matchInfoModel)
+        {
+            //jsonData.data = matchInfoModel;
+            matchInfoModel.MatchFinishNumber = 0;
+            //分数清零
+            //查询当前报名人
+            List<MatchJoinModel> matchJoinModels = this.dbContext.MatchJoinModel
+                .Where(item => item.matchInfo_id == matchInfoModel.Id).ToList();
+            foreach (MatchJoinModel matchJoinModel in matchJoinModels)
+            {
+                matchJoinModel.Score = 0;
+                matchJoinModel.first = 0;
+                matchJoinModel.second = 0;
+                matchJoinModel.third = 0;
+                matchJoinModel.fourth = 0;
+                this.dbContext.MatchJoinModel.Update(matchJoinModel);
+            }
+            //查询当前比赛
+            IQueryable<GameInfoModel> gameInfoModels = this.dbContext.GameInfoModel.Where(item => item.matchId == matchInfoModel.Id);
+
+            //遍历比赛
+            foreach (GameInfoModel gameInfoModel in gameInfoModels)
+            {
+                bool isFinish = DbGameSave.SaveMatchToDb(gameInfoModel, dbContext);
+                if (isFinish)
+                {
+                    matchInfoModel.MatchFinishNumber++;
+                }
+            }
+
+            //如果7场全部结束，更新冠军
+            int gameCount = gameInfoModels.Count();
+            //如果结束场次是现有场次
+            if (matchInfoModel.MatchFinishNumber == gameCount)
+            {
+                //查询分数最高的
+                IQueryable<MatchJoinModel> match = this.dbContext.MatchJoinModel.Where(item => item.matchInfo_id == matchInfoModel.Id).OrderByDescending(item => item.Score);
+                String username = match.ToList()[0].username;
+                matchInfoModel.Champion = username;
+                //进行中1变结束2
+                matchInfoModel.State = 2;
+
+                //matchInfoModel.MatchFinishNumber = (short) gameCount;
+                //结束时间
+                matchInfoModel.EndTime = DateTime.Now;
+                //matchInfoModel.MatchTotalNumber = (short)gameCount;
+            }
+            this.dbContext.MatchInfoModel.Update(matchInfoModel);
+        }
+
         /// <summary>
         /// 修改状态
         /// </summary>
@@ -547,7 +582,7 @@ namespace GaiaProject.Controllers
                 ScoreTotal = g.Sum(user => user.Score),
                 ScoreAvg = g.Sum(user => user.Score) / g.Count(),
 
-            }).OrderByDescending(item => item.ScoreTotal).ToList();
+            }).OrderByDescending(item => item.ScoreAvg).ToList();
             //            if (list.Count > 20)
             //            {
             //                list = list.[20];

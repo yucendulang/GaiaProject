@@ -141,8 +141,8 @@ namespace GaiaProject.Controllers
             {
                 model.Name = Guid.NewGuid().ToString();
             }
-            //清除空格
-            model.Name = model.Name.Trim();
+            //清除全部空格
+            model.Name = model.Name.Trim().Replace(" ","");
 
             string[] username = new string[] { model.Player1, model.Player2, model.Player3, model.Player4 };
             if (this.dbContext.GameInfoModel.Any(item => item.name == model.Name) || GameMgr.GetGameByName(model.Name) != null)
@@ -394,7 +394,12 @@ namespace GaiaProject.Controllers
             if (gameInfoModel != null)
             {
                 //如果包括自己
-                if (gameInfoModel.userlist.Contains(string.Format("|{0}|", this.User.Identity.Name)))
+                if (this.User.Identity.Name == null)
+                {
+                    jsonData.info.state = 400;
+                    jsonData.info.message = "没有登陆";
+                }
+                else if (gameInfoModel.userlist.Contains(string.Format("|{0}|", this.User.Identity.Name)))
                 {
                     jsonData.info.state = 400;
                     jsonData.info.message = "已经加入";
@@ -959,6 +964,13 @@ namespace GaiaProject.Controllers
             if (!PowerUser.IsPowerUser(User.Identity.Name))
             {
                 return false;
+            }
+            //数据库一起删除
+            GameInfoModel gameInfoModel = this.dbContext.GameInfoModel.SingleOrDefault(item => item.name == id);
+            if (gameInfoModel != null)
+            {
+                this.dbContext.GameInfoModel.Remove(gameInfoModel);
+                this.dbContext.SaveChanges();
             }
             return GameMgr.DeleteOneGame(id);
         }

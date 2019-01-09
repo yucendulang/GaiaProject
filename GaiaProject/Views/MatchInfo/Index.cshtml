@@ -30,8 +30,26 @@
             <h2><i class="fa fa-table red"></i><span class="break"></span><strong></strong></h2>
             @if (isAdmin)
             {
+
                 <a href="/MatchInfo/AddMatch">添加比赛</a>
+
+                <a href="/MatchInfo/ScoreAll">全部计分</a>
+
             }
+            
+@*            <form>*@
+@*                <div class="row">*@
+@*                    <div class="col-lg-8">*@
+@*                        <div class="input-group">*@
+@*                            <input type="text" class="form-control" placeholder="用户名" id="UserName" name="UserName" style="width: 200px">*@
+@*                            <span class="input-group-btn">*@
+@*                                <button class="btn btn-default" type="submit">搜索</button>*@
+@*                            </span>*@
+@*                        </div>*@
+@*                    </div>*@
+@*                </div>*@
+@*            </form>*@
+
             <a href="/MatchInfo/UserScoreTotal">用户总分</a>
 
             <a href="/GameInfo/FactionStatisticsMatch">种族统计</a>
@@ -44,6 +62,7 @@
                         <td>报名人数</td>
                         <td>场次</td>
                         <td>冠军</td>
+                        <td>报名人员</td>
                         @*                        <td>报名截止时间</td>*@
                         @*                        <td>开始时间</td>*@
                         @*                        <td>结束时间</td>*@
@@ -59,6 +78,8 @@
                         <td>@item.NumberNow/@item.NumberMax</td>
                         <td>@item.MatchFinishNumber/@item.MatchTotalNumber</td>
                         <td>@item.Champion</td>
+                        <td>@item.UserList</td>
+
                         @*                            <td>@item.RegistrationEndTime</td>*@
                         @*                            <td>@item.StartTime</td>*@
                         @*                            <td>@item.EndTime</td>*@

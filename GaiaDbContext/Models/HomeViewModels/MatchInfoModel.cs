@@ -80,6 +80,10 @@ namespace GaiaDbContext.Models.HomeViewModels
         /// 冠军
         /// </summary>
         public string Champion { get; set; }
+        /// <summary>
+        /// 报名用户
+        /// </summary>
+        public string UserList { get; set; }
 
 
     }

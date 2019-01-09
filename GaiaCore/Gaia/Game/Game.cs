@@ -333,8 +333,10 @@ namespace GaiaCore.Gaia
             }
         }
 
-
-        private void NewRound()
+        /// <summary>
+        /// 新的回合
+        /// </summary>
+        public void NewRound()
         {
 
 
@@ -1727,6 +1729,7 @@ namespace GaiaCore.Gaia
         public string GetCurrentUserName()
         {
             //旋转地图
+
             if (GameStatus.stage == Stage.MAPROTATE)
             {
                 return this.Username[this.UserCount - 1];
@@ -1740,6 +1743,10 @@ namespace GaiaCore.Gaia
                 return string.Empty;
             }
             else if (FactionList.Count <= GameStatus.PlayerIndex)
+            {
+                return string.Empty;
+            }
+            else if (GameStatus!=null && GameStatus.PlayerIndex < 0)
             {
                 return string.Empty;
             }

@@ -14,7 +14,10 @@ namespace ManageTool
     /// </summary>
     public class DeleteGameDaemon : Daemon
     {
-        protected override int m_timeOut { get => 300 * 1000; }
+        protected override int m_timeOut
+        {
+            get => 30 * 1000;
+        }
 
         public override void InvokeAction()
         {
@@ -32,6 +35,7 @@ namespace ManageTool
                 //判断上次行动时间是否大于设置drop时间
 
                 int hours = gaiaGame.dropHour == 0 ? 240 : gaiaGame.dropHour;
+                hours = 10;
                 if (DateTime.Now.AddDays(-hours / 24) > gaiaGame.LastMoveTime)
                 {
                     //GameMgr.RemoveAndBackupGame(item);
@@ -47,50 +51,74 @@ namespace ManageTool
                     //用户数量不等
                     //第0回合
                     //一场多个用户
-                    if (String.IsNullOrEmpty(userName) || gaiaGame.UserCount == 2 || gaiaGame.UserGameModels == null || gaiaGame.UserGameModels.Count != gaiaGame.UserCount || gaiaGame.GameStatus.RoundCount == 0 || gaiaGame.UserGameModels.FindAll(user => user.username == userName).Count > 1)
+                    if (String.IsNullOrEmpty(userName) || gaiaGame.UserCount == 2 || gaiaGame.UserGameModels == null ||
+                        gaiaGame.UserGameModels.Count != gaiaGame.UserCount || gaiaGame.GameStatus.RoundCount == 0 ||
+                        gaiaGame.UserGameModels.FindAll(user => user.username == userName).Count > 1)
                     {
                         GameMgr.DeleteOneGame(item);
                         continue;
                     }
                     else
                     {
-                            try
+                        try
+                        {
+                            gaiaGame.UserGameModels.Single(user => user.username == userName).dropType = 1;
+                            //阶段性操作
+                            switch (gaiaGame.GameStatus.stage)
                             {
-                                gaiaGame.UserGameModels.Single(user => user.username == userName).dropType = 1;
-                                //阶段性操作
-                                switch (gaiaGame.GameStatus.stage)
-                                {
-                                    case Stage.ROUNDSTART:
-                                        Faction faction = gaiaGame.FactionList.SingleOrDefault(fac => fac.UserName == userName);
-                                        //强制pass
-                                        gaiaGame.FactionNextTurnList.Add(faction);
-                                        gaiaGame.GameStatus.SetPassPlayerIndex(gaiaGame.FactionList.IndexOf(faction));
-                                        gaiaGame.GameStatus.NextPlayer(gaiaGame.FactionList);
-                                        break;
-                                    case Stage.ROUNDGAIAPHASE:
-                                        gaiaGame.GaiaNextPlayer();
-                                        break;
-                                    case Stage.ROUNDINCOME:
-                                        gaiaGame.IncomePhaseNextPlayer();
-                                        break;
-                                    default:
-                                        //其它情况
-                                        break;
-                                }
+                                case Stage.ROUNDSTART:
+                                    Faction faction =
+                                        gaiaGame.FactionList.SingleOrDefault(fac => fac.UserName == userName);
+                                    //强制pass
+                                    gaiaGame.FactionNextTurnList.Add(faction);
+                                    gaiaGame.GameStatus.SetPassPlayerIndex(gaiaGame.FactionList.IndexOf(faction));
+                                    //判断是不是全部都已经跳过回合
+                                    //如果是则不跳过回合
 
-                                //更新操作时间，防止误跳过
-                                gaiaGame.LastMoveTime = DateTime.Now;
+                                    //回合结束
+                                    if (gaiaGame.GameStatus.IsAllPass())
+                                    {
+                                        if (gaiaGame.FactionList.All(x => x.LeechPowerQueue.Count == 0))
+                                        {
+                                            gaiaGame.FactionList = gaiaGame.FactionNextTurnList;
+                                            gaiaGame.FactionNextTurnList = new List<Faction>();
+                                            gaiaGame.NewRound();
+                                        }
+                                        else
+                                        {
+                                            gaiaGame.GameStatus.stage = Stage.ROUNDWAITLEECHPOWER;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //到下一位玩家
+                                        gaiaGame.GameStatus.NextPlayer(gaiaGame.FactionList);
+                                    }
+                                    break;
+                                case Stage.ROUNDGAIAPHASE:
+                                    gaiaGame.GaiaNextPlayer();
+                                    break;
+                                case Stage.ROUNDINCOME:
+                                    gaiaGame.IncomePhaseNextPlayer();
+                                    break;
+                                default:
+                                    //其它情况
+                                    break;
                             }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine(e);
-                                //throw;
-                            }
-                        
-                       
+
+                            //更新操作时间，防止误跳过
+                            gaiaGame.LastMoveTime = DateTime.Now;
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                            //throw;
+                        }
+
+
                     }
-                    
-                    
+
+
 
                 }
             }
