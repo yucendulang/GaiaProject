@@ -194,7 +194,7 @@ namespace GaiaCore.Gaia
             foreach (var item in listFile)
             {
                 //超过5个备份就删除
-                if (number > 5)
+                if (number > 50)
                 {
                     item.Delete();
                 }

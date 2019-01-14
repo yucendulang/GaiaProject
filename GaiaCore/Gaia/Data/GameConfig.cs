@@ -12,7 +12,7 @@ namespace GaiaCore.Gaia.Data
         /// 游戏备份大小
         /// </summary>
         //public const int GAME_FILE_SIZE = 1024 * 50;
-        public const int GAME_FILE_SIZE = 1024 * 0;
+        public const int GAME_FILE_SIZE = 1024 * 50;
         /// <summary>
         /// 游戏保存天数
         /// </summary>
