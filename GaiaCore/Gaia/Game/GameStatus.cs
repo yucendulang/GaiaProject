@@ -61,7 +61,7 @@ namespace GaiaCore.Gaia
         public void SetPlayerIndex(GaiaGame gaiaGame)
         {
             //行动玩家需要是没有drop的玩家
-            int index = gaiaGame.FactionList.FindIndex(item => item.UserGameModel.dropType == 0);
+            int index = gaiaGame.FactionList.FindIndex(item => item.dropType == 0);
             m_PlayerIndex = index + 1;
         }
 
@@ -72,7 +72,7 @@ namespace GaiaCore.Gaia
         {
 
             //行动玩家需要是没有drop的玩家
-            int index = gaiaGame.FactionList.FindIndex(item => item.UserGameModel.dropType == 0);
+            int index = gaiaGame.FactionList.FindIndex(item => item.dropType == 0);
 
             m_PlayerIndex = index+1;
             m_PassPlayerIndex = new List<int>();
@@ -80,7 +80,7 @@ namespace GaiaCore.Gaia
             TurnCount = 1;
 
             //将drop玩家直接pass
-            gaiaGame.FactionList.FindAll(item => item.UserGameModel.dropType > 0).ForEach(item =>
+            gaiaGame.FactionList.FindAll(item => item.dropType > 0).ForEach(item =>
             {
                 gaiaGame.FactionNextTurnList.Add(item);
                 gaiaGame.GameStatus.SetPassPlayerIndex(gaiaGame.FactionList.IndexOf(item));

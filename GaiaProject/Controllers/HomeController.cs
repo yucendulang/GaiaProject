@@ -738,6 +738,10 @@ namespace GaiaProject.Controllers
                 {
                     return "error:空语句";
                 }
+                else if (syntax.Contains("drop"))
+                {
+                    return "error:系统命令";
+                }
 
                 if (!string.IsNullOrEmpty(factionName))
                 {
@@ -1044,28 +1048,16 @@ namespace GaiaProject.Controllers
         [HttpGet]
         public async Task<JsonResult> DropFaction(string id, string factionName = null)
         {
-            var gg = GameMgr.GetGameByName(id);
-
-            UserGameModel singleOrDefault = gg.FactionList.Find(item => item.FactionName.ToString() == factionName)
-                .UserGameModel;
-            if (singleOrDefault != null)
+            GaiaGame gaiaGame = GameMgr.GetGameByName(id);
+            gaiaGame.Syntax(factionName + ":drop", out string log, "", dbContext);
+            return new JsonResult(new GaiaProject.Models.Data.UserFriendController.JsonData
             {
-                singleOrDefault.dropType = 1;
-                return new JsonResult(new Models.Data.UserFriendController.JsonData()
+                data = "",
+                info = new GaiaProject.Models.Data.UserFriendController.Info
                 {
-                    data = "",
-                    info = new Models.Data.UserFriendController.Info() { state = 200 }
-                });
-            }
-            else
-            {
-                return new JsonResult(new Models.Data.UserFriendController.JsonData()
-                {
-                    data = "",
-                    info = new Models.Data.UserFriendController.Info() { state = 100 }
-                });
-            }
-            
+                    state = 200
+                }
+            });
         }
 
         #endregion

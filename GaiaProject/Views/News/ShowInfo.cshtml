@@ -6,4 +6,14 @@
     Layout = "_Layout";
 }
 
-@Html.Raw(Model?.contents)
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2><i class="fa fa-table red"></i><span class="break"></span><strong></strong></h2>
+        
+        @Model.name
+    </div>
+    <div class="panel-body">
+        @Html.Raw(@Model.contents)
+    </div>
+</div>
+

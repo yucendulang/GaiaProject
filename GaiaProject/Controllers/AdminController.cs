@@ -10,12 +10,12 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace GaiaProject.Controllers
 {
-    public class AdminController : Controller
+    public class AdminController : BaseControlNews
     {
         private readonly ApplicationDbContext dbContext;
         private IMemoryCache cache;
 
-        public AdminController(ApplicationDbContext dbContext, IMemoryCache cache)
+        public AdminController(ApplicationDbContext dbContext, IMemoryCache cache):base(dbContext)
         {
             this.dbContext = dbContext;
             this.cache = cache;
@@ -45,11 +45,7 @@ namespace GaiaProject.Controllers
         [HttpGet]
         public IActionResult NewsUpdate(int? id)
         {
-            NewsInfoModel newModel = null;
-            if (id > 0)
-            {
-                newModel = this.dbContext.NewsInfoModel.SingleOrDefault(item => item.Id == id);
-            }
+            NewsInfoModel newModel = base.News_Update(id);
             return View(newModel);
         }
         /// <summary>
@@ -60,36 +56,7 @@ namespace GaiaProject.Controllers
         [HttpPost]
         public IActionResult NewsUpdate(NewsInfoModel model)
         {
-            NewsInfoModel newModel;
-            //±à¼­
-            if (model.Id > 0)
-            {
-                newModel = this.dbContext.NewsInfoModel.SingleOrDefault(item => item.Id == model.Id);
-            }
-            else//Ìí¼Ó
-            {
-                newModel = new NewsInfoModel();
-                newModel.AddTime = DateTime.Now;
-            }
-            //¸³Öµ
-            newModel.name = model.name;
-            newModel.contents = model.contents;
-            newModel.type = model.type;
-            newModel.state = model.state;
-            newModel.Rank = model.Rank;
-            //newModel.name = model.name;
-
-
-            //±£´æ
-            if (model.Id > 0)
-            {
-                this.dbContext.NewsInfoModel.Update(newModel);
-            }
-            else
-            {
-                this.dbContext.NewsInfoModel.Add(newModel);
-            }
-            this.dbContext.SaveChanges();
+            NewsInfoModel newModel = base.News_Update(model);
             return Redirect("/Admin/NewsIndex");
             return View(newModel);
         }

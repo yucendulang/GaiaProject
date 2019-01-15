@@ -35,7 +35,10 @@ namespace ManageTool
                 //判断上次行动时间是否大于设置drop时间
 
                 int hours = gaiaGame.dropHour == 0 ? 240 : gaiaGame.dropHour;
+#if false
                 hours = 10;
+#endif
+
                 if (DateTime.Now.AddDays(-hours / 24) > gaiaGame.LastMoveTime)
                 {
                     //GameMgr.RemoveAndBackupGame(item);
@@ -62,60 +65,13 @@ namespace ManageTool
                     {
                         try
                         {
-                            gaiaGame.UserGameModels.Single(user => user.username == userName).dropType = 1;
-                            //阶段性操作
-                            switch (gaiaGame.GameStatus.stage)
-                            {
-                                case Stage.ROUNDSTART:
-                                    Faction faction =
-                                        gaiaGame.FactionList.SingleOrDefault(fac => fac.UserName == userName);
-                                    //强制pass
-                                    gaiaGame.FactionNextTurnList.Add(faction);
-                                    gaiaGame.GameStatus.SetPassPlayerIndex(gaiaGame.FactionList.IndexOf(faction));
-                                    //判断是不是全部都已经跳过回合
-                                    //如果是则不跳过回合
-
-                                    //回合结束
-                                    if (gaiaGame.GameStatus.IsAllPass())
-                                    {
-                                        if (gaiaGame.FactionList.All(x => x.LeechPowerQueue.Count == 0))
-                                        {
-                                            gaiaGame.FactionList = gaiaGame.FactionNextTurnList;
-                                            gaiaGame.FactionNextTurnList = new List<Faction>();
-                                            gaiaGame.NewRound();
-                                        }
-                                        else
-                                        {
-                                            gaiaGame.GameStatus.stage = Stage.ROUNDWAITLEECHPOWER;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        //到下一位玩家
-                                        gaiaGame.GameStatus.NextPlayer(gaiaGame.FactionList);
-                                    }
-                                    break;
-                                case Stage.ROUNDGAIAPHASE:
-                                    gaiaGame.GaiaNextPlayer();
-                                    break;
-                                case Stage.ROUNDINCOME:
-                                    gaiaGame.IncomePhaseNextPlayer();
-                                    break;
-                                default:
-                                    //其它情况
-                                    break;
-                            }
-
-                            //更新操作时间，防止误跳过
-                            gaiaGame.LastMoveTime = DateTime.Now;
+                            Faction faction = gaiaGame.FactionList.SingleOrDefault((Faction fac) => fac.UserName == userName);
+                            gaiaGame.Syntax(faction.FactionName.ToString() + ":drop", out string _, "", null);
                         }
                         catch (Exception e)
                         {
                             Console.WriteLine(e);
-                            //throw;
                         }
-
-
                     }
 
 

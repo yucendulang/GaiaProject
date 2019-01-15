@@ -111,6 +111,8 @@ namespace GaiaCore.Gaia
             //pass turn
             ret.Add(PassRegexTurn);
             ret.Add(ResetRegexTurn);
+            //drop
+            ret.Add(DropFactionRegex);
             return ret;
         } 
         public static Regex burningRegex = new Regex("burn ([0-9])");
@@ -155,6 +157,12 @@ namespace GaiaCore.Gaia
         /// 重置当前操作
         /// </summary>
         public static Regex ResetRegexTurn = new Regex("reset turn");
+        /// <summary>
+        /// drop种族
+        /// </summary>
+        private static string DropFactionSyntax = "drop";
+        public static Regex DropFactionRegex = new Regex(DropFactionSyntax);
+
     }
 
     public static class GameSpecialSyntax

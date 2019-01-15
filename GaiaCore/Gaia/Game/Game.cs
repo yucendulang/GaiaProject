@@ -181,15 +181,31 @@ namespace GaiaCore.Gaia
                     return false;
                 //盖亚阶段
                 case Stage.ROUNDGAIAPHASE:
-                    ret = ProcessSyntaxGaiaPhase(syntax, ref log);
-                    if (ret)
+                    //一塔放置黑星的话需要吸收能量
+                    if (GameSyntax.leechPowerRegex.IsMatch(syntax))
                     {
-                        return true;
+                        ret = ProcessSyntaxLeechPower(syntax, ref log);
+                        if (ret && FactionList.All(x => x.LeechPowerQueue.Count == 0))
+                        {
+                            FactionList = FactionNextTurnList;
+                            FactionNextTurnList = new List<Faction>();
+                            NewRound();
+                        }
+                        return ret;
                     }
                     else
                     {
-                        return false;
+                        ret = ProcessSyntaxGaiaPhase(syntax, ref log);
+                        if (ret)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
+                    
                //收入阶段
                 case Stage.ROUNDINCOME:
 
@@ -400,7 +416,7 @@ namespace GaiaCore.Gaia
             {
                 GameStatus.PlayerIndex = GameStatus.IncomePhaseIndexQueue.Dequeue();
                 //如果当前玩家已经drop，跳过其收入阶段
-                if (this.FactionList[GameStatus.PlayerIndex].UserGameModel.dropType > 0)
+                if (this.FactionList[GameStatus.PlayerIndex].dropType > 0)
                 {
                     IncomePhaseNextPlayer();
                 }
@@ -420,7 +436,7 @@ namespace GaiaCore.Gaia
             }
 
             //如果当前玩家已经drop
-            if (this.FactionList[GameStatus.PlayerIndex].UserGameModel.dropType > 0)
+            if (this.FactionList[GameStatus.PlayerIndex].dropType > 0)
             {
                 GaiaNextPlayer();
             }
@@ -1058,6 +1074,10 @@ namespace GaiaCore.Gaia
 
                     }
                 }
+                else if (GameFreeSyntax.DropFactionRegex.IsMatch(item))
+                {
+                    this.DropFaction();
+                }
                 else
                 {
                     log = "语句还不支持";
@@ -1305,7 +1325,7 @@ namespace GaiaCore.Gaia
                 return false;
             }
 
-            if (faction.LeechPowerQueue.Count != 0)
+            if (faction.LeechPowerQueue.Count != 0 && !syntax.Contains("drop"))
             {
                 log = "必须先执行吸取能量行动";
                 return false;
@@ -1669,7 +1689,7 @@ namespace GaiaCore.Gaia
             foreach(var item in FactionList.Where(x => !x.FactionName.Equals(factionName)))
             {
                 //drop玩家不吸收能量
-                if (item.UserGameModel.dropType > 0)
+                if (item.dropType > 0)
                 {
                     continue;
                 }
@@ -1758,6 +1778,53 @@ namespace GaiaCore.Gaia
             {
                 return string.Empty;
             }
+        }
+        /// <summary>
+        /// drop种族
+        /// </summary>
+        private void DropFaction()
+        {
+            string userName = GetCurrentUserName();
+            switch (GameStatus.stage)
+            {
+                case Stage.ROUNDSTART:
+                {
+                    Faction faction = FactionList.SingleOrDefault((Faction fac) => fac.UserName == userName);
+                    faction.dropType = 1;
+                    //如果需要吸收魔力，清空
+                    if (faction.LeechPowerQueue != null && faction.LeechPowerQueue.Count > 0)
+                    {
+                        faction.LeechPowerQueue.Clear();
+                    }
+                    FactionNextTurnList.Add(faction);
+                    GameStatus.SetPassPlayerIndex(FactionList.IndexOf(faction));
+                    if (GameStatus.IsAllPass())
+                    {
+                        if (FactionList.All((Faction x) => x.LeechPowerQueue.Count == 0))
+                        {
+                            FactionList = FactionNextTurnList;
+                            FactionNextTurnList = new List<Faction>();
+                            NewRound();
+                        }
+                        else
+                        {
+                            GameStatus.stage = Stage.ROUNDWAITLEECHPOWER;
+                        }
+                    }
+                    else
+                    {
+                        GameStatus.NextPlayer(FactionList);
+                    }
+                    break;
+                }
+                case Stage.ROUNDGAIAPHASE:
+                    GaiaNextPlayer();
+                    break;
+                case Stage.ROUNDINCOME:
+                    IncomePhaseNextPlayer();
+                    break;
+            }
+            LastMoveTime = DateTime.Now;
         }
 
         /// <summary>
@@ -1887,6 +1954,7 @@ namespace GaiaCore.Gaia
         /// </summary>
         [JsonProperty]
         public int dropHour { get; set; }
+
 
 
         public class STTInfo

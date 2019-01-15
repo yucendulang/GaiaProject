@@ -1,0 +1,51 @@
+﻿@model System.Linq.IQueryable<GaiaDbContext.Models.SystemModels.NewsInfoModel>
+
+@{
+    ViewBag.Title = "攻略";
+    Layout = "_Layout";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2><i class="fa fa-table red"></i><span class="break"></span><strong></strong></h2>
+        <a href="/News/Modify">添加</a>
+
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>标题</th>
+                <th>发布人</th>
+                <th>发布时间</th>
+                <th>操作</th>
+
+            </tr></thead> 
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><a href="/News/ShowInfo/@item.Id">@item.name</a></td>     
+                    <td>@item.username</td>
+                    <td>@item.AddTime</td>
+                    @{
+                        if (item.username == User.Identity.Name)
+                        {
+                            <th><a href="/News/Modify/@item.Id">编辑</a></th>
+                        }
+                        else
+                        {
+
+                            <td></td>
+                        }
+                    }
+                </tr>
+            }
+
+
+
+            </tbody>
+        </table>  
+
+    </div>
+</div>

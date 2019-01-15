@@ -736,6 +736,14 @@ namespace GaiaCore.Gaia
             return ClockPerid.ToString(@"dd\.hh\:mm\:ss");
         }
 
+        /// <summary>
+        /// drop状态
+        /// </summary>
+        public int dropType
+        {
+            get;
+            set;
+        }
     }
 
 
