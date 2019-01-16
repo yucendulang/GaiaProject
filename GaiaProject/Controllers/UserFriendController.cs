@@ -24,6 +24,9 @@ namespace GaiaProject.Controllers
             this.dbContext = dbContext;
             this._userManager = userManager;
         }
+
+        #region 好友管理
+
         /// <summary>
         /// 添加好友
         /// </summary>
@@ -32,8 +35,8 @@ namespace GaiaProject.Controllers
         [HttpPost]
         public async Task<JsonResult> AddFriend(UserFriend model)
         {
-            Models.Data.UserFriendController.JsonData jsonData=new Models.Data.UserFriendController.JsonData();
-            var user = await _userManager.GetUserAsync(HttpContext.User);           
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
+            var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user != null)
             {
                 var userTo = await _userManager.FindByNameAsync(model.UserNameTo);
@@ -41,13 +44,13 @@ namespace GaiaProject.Controllers
                 if (userTo == null)
                 {
                     jsonData.info.state = 0;
-                    jsonData.info.message = "找不到用户"+model.UserNameTo;
+                    jsonData.info.message = "找不到用户" + model.UserNameTo;
                 }
                 else
                 {
                     model.UserId = user.Id;
                     model.UserName = user.UserName;
-                    var list = dbContext.UserFriend.Where(item => item.UserId == model.UserId && item.UserNameTo == model.UserNameTo && item.Type==model.Type).ToList();
+                    var list = dbContext.UserFriend.Where(item => item.UserId == model.UserId && item.UserNameTo == model.UserNameTo && item.Type == model.Type).ToList();
                     //已经存在
                     if (list.Count > 0)
                     {
@@ -89,7 +92,7 @@ namespace GaiaProject.Controllers
                 }
                 else
                 {
-                   var uf = dbContext.UserFriend.SingleOrDefault(
+                    var uf = dbContext.UserFriend.SingleOrDefault(
                         item => item.UserId == user.Id && item.UserNameTo == model.UserNameTo && item.Type == model.Type);
                     if (uf != null)
                     {
@@ -103,6 +106,10 @@ namespace GaiaProject.Controllers
             }
             return new JsonResult(jsonData);
         }
+
+        #endregion
+
+
 
         [HttpGet]
         public IActionResult Index()
@@ -123,9 +130,9 @@ namespace GaiaProject.Controllers
         /// 全部用户
         /// </summary>
         /// <returns></returns>
-        public IActionResult UserList(Models.AccountViewModels.RegisterViewModel model,int pageindex=1)
+        public IActionResult UserList(Models.AccountViewModels.RegisterViewModel model,int pageindex=1,int isallowmatch=1)
         {
-            List<ApplicationUser> list = this.dbContext.Users.Where(item=> (model.UserName == null || item.UserName==model.UserName) && (model.Email==null || item.Email == model.Email)).OrderByDescending(item=>item.groupid).Skip(50*(pageindex-1)).Take(50).ToList();
+            List<ApplicationUser> list = this.dbContext.Users.Where(item=> (model.UserName == null || item.UserName==model.UserName) && (model.Email==null || item.Email == model.Email) && item.isallowmatch == isallowmatch).OrderByDescending(item=>item.groupid).Skip(50*(pageindex-1)).Take(50).ToList();
             return View(list);
         }
         /// <summary>
@@ -149,6 +156,31 @@ namespace GaiaProject.Controllers
                 //int a = 1;
                 jsonData.info.state = 200;
                 jsonData.info.message = newuser.ToString();
+            }
+            return new JsonResult(jsonData);
+        }
+
+        ///SetMatch
+        /// <summary>
+        /// 设置是否允许参加比赛
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<JsonResult> SetMatch(string id,int state)
+        {
+            Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
+
+            ApplicationUser user = this._userManager.FindByIdAsync(id).Result;
+            if (user != null)
+            {
+                user.isallowmatch = state;
+                this.dbContext.Users.Update(user);
+                this.dbContext.SaveChanges();
+
+                //int a = 1;
+                jsonData.info.state = 200;
+                jsonData.info.message = "Succeeded";
             }
             return new JsonResult(jsonData);
         }

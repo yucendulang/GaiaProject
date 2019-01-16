@@ -24,7 +24,7 @@ namespace Gaia.Service
 
         public const string qqemail = "3031518365@qq.com";
         public const string qqemail_user = "3031518365";
-        public const string qqemail_pwd = "otvgxwazalghdcfa";
+        public const string qqemail_pwd = "zyuktngebiwedhff";
 
 
         /// <summary>

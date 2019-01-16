@@ -122,7 +122,8 @@ namespace GaiaCore.Gaia.Tiles
 
         public override int GetTurnEndScore(Faction faction)
         {
-            return GameConstNumber.MineCount-faction.Mines.Count;
+            //黑星faction.blankMine需要计1分
+            return GameConstNumber.MineCount-faction.Mines.Count + faction.blankMine;
         }
     }
     public class RBT4 : RoundBooster

@@ -30,5 +30,12 @@ namespace GaiaDbContext.Models
         /// 用户积分
         /// </summary>
         public int scoreUser { get; set; }
+
+        /// <summary>
+        /// 是否允许参加群联赛
+        /// </summary>
+        public int isallowmatch { get; set; }
+
+
     }
 }

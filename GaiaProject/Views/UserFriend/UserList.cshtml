@@ -18,6 +18,8 @@
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="用户名" id="UserName" name="UserName" style="width: 200px">
                         <input type="text" class="form-control" placeholder="邮箱" id="Email" name="Email" style="width: 200px">
+                        <input type="text" class="form-control" placeholder="禁止参加群联赛" id="isallowmatch" name="isallowmatch" style="width: 200px">
+
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="submit">搜索</button>
                         </span>
@@ -63,6 +65,19 @@
                                 重置密码
                             </a>
 
+                             if (@item.isallowmatch == 1)
+                             {
+                                 <a class="btn btn-info" href="#"  onclick="setmatch('@item.Id',0)">
+                                     禁止参加群联赛
+                                 </a>
+                             }
+                             else
+                             {
+                                 <a class="btn btn-info" href="#"  onclick="setmatch('@item.Id',1)">
+                                     允许参加群联赛
+                                 </a>
+                             }
+                           
 @*                            <a class="btn btn-info" href="#"  onclick="setPayGrade('@item.Id')">*@
 @*                                付费用户*@
 @*                            </a>*@
@@ -108,6 +123,16 @@
             }
         });
     }
+    //联赛
+    function setmatch(id,state) {
+        $.post("/UserFriend/SetMatch/"+id+"?state="+state, "", function(data) {
+            //alert(data);
+            if (data.info.state === 200 && data.info.message ==="Succeeded") {
+                location.reload();
+            }
+        });
+    }
+
     //设置成付费用户
 //    function setPayGrade(id) {
 //        $.post("/UserFriend/ResetPwd/"+id, "", function(data) {

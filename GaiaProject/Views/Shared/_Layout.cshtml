@@ -49,22 +49,26 @@
                     
                     <li><a asp-area="" asp-controller="MatchInfo" asp-action="Index">@localizer["Match"]</a></li>
 
+                    <li><a href="/GameInfo/Index?isAdmin=2">@localizer["公开游戏"]</a></li>
 
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">@localizer["帮助"]</a></li>
+
                     <li><a asp-area="" asp-controller="News" asp-action="Index">@localizer["攻略"]</a></li>
+                    
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@localizer["帮助"] <span class="caret"></span></a>
+                        <ul class="dropdown-menu"> 
+                            
+                            <li><a asp-area="" asp-controller="Home" asp-action="Contact">@localizer["使用帮助"]</a></li>
+                            <li>
+                                <a href="/Home/About">@localizer["种族介绍"]</a>
+                            </li>
+
+                        </ul>
+                    </li>
 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@localizer["统计"] <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/GameInfo/Index?isAdmin=3&GameStatus=0">@localizer["管理游戏"]</a></li>
-                            <li><a href="/GameInfo/Index?GameStatus=8">@localizer["结束游戏"]</a></li>
-
-                            <li><a asp-area="" asp-controller="GameInfo" asp-action="FactionList">@localizer["使用种族"]</a></li>
-                            <li><a asp-area="" asp-controller="GameInfo" asp-action="ApplyDeleteList">@localizer["等待删除游戏"]</a></li>
-                            
-                           
-                            <li role="separator" class="divider"></li>
-                            <li><a href="/GameInfo/Index?isAdmin=2">@localizer["公开游戏"]</a></li>
+                        <ul class="dropdown-menu"> 
                             <li>
                                 <a href="/GameInfo/UserScoreAvg?usercount=4">@localizer["玩家统计"]</a>
                             </li>
@@ -76,9 +80,7 @@
                                 <a href="/GameInfo/TTStatistics">@localizer["科技版"]</a>
                             </li>
                             
-                            <li>
-                                <a href="/Home/About">@localizer["种族"]</a>
-                            </li>
+
 
                         </ul>
                     </li>
@@ -110,8 +112,6 @@
 
                                     <a href="/GameInfo/FactionList?type=1">@localizer["全部种族"]</a>
 
-
-                                    @*                                    <a href="/MatchInfo">测试比赛</a>*@
                                     <a href="/Admin/NewsIndex">@localizer["进入管理后台"]</a>
 
                                 </li>

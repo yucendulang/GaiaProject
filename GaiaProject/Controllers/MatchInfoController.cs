@@ -169,55 +169,65 @@ namespace GaiaProject.Controllers
             Models.Data.UserFriendController.JsonData jsonData = new Models.Data.UserFriendController.JsonData();
             var user = await _userManager.GetUserAsync(HttpContext.User);
 
-            var matchInfoModel = this.dbContext.MatchInfoModel.SingleOrDefault(item => item.Id == id);
-            if (matchInfoModel != null)
+            if (user.isallowmatch != 1)
             {
-                if (this.dbContext.MatchJoinModel.Any(
-                    item => item.matchInfo_id == matchInfoModel.Id && item.username == user.UserName))
+                jsonData.info.state = 0;
+                jsonData.info.message = "你被禁止参加群联赛，请联系管理员查询原因!";
+            }
+            else
+            {
+                var matchInfoModel = this.dbContext.MatchInfoModel.SingleOrDefault(item => item.Id == id);
+                //比赛信息不为空
+                if (matchInfoModel != null)
                 {
-                    jsonData.info.state = 0;
-                    jsonData.info.message = "已经报名";
+                    if (this.dbContext.MatchJoinModel.Any(
+                        item => item.matchInfo_id == matchInfoModel.Id && item.username == user.UserName))
+                    {
+                        jsonData.info.state = 0;
+                        jsonData.info.message = "已经报名";
 
-                }
-                else
-                {
-                    //是否已经满足报名
-                    if (matchInfoModel.NumberMax != 0 && matchInfoModel.NumberNow == matchInfoModel.NumberMax)
-                    {
-                        jsonData.info.state = 0;
-                        jsonData.info.message = "报名人员已满";
-                    }
-                    else if (matchInfoModel.RegistrationEndTime < DateTime.Now)
-                    {
-                        jsonData.info.state = 0;
-                        jsonData.info.message = "报名时间截止";
                     }
                     else
                     {
-                        //报名人数+1
-                        matchInfoModel.NumberNow++;
-                        this.dbContext.MatchInfoModel.Update(matchInfoModel);
-                        //报名信息
-                        MatchJoinModel matchJoinModel = new MatchJoinModel();
-                        matchJoinModel.matchInfo_id = id;//id
-                        matchJoinModel.Name = matchInfoModel.Name;//name
+                        //是否已经满足报名
+                        if (matchInfoModel.NumberMax != 0 && matchInfoModel.NumberNow == matchInfoModel.NumberMax)
+                        {
+                            jsonData.info.state = 0;
+                            jsonData.info.message = "报名人员已满";
+                        }
+                        else if (matchInfoModel.RegistrationEndTime < DateTime.Now)
+                        {
+                            jsonData.info.state = 0;
+                            jsonData.info.message = "报名时间截止";
+                        }
+                        else
+                        {
+                            //报名人数+1
+                            matchInfoModel.NumberNow++;
+                            this.dbContext.MatchInfoModel.Update(matchInfoModel);
+                            //报名信息
+                            MatchJoinModel matchJoinModel = new MatchJoinModel();
+                            matchJoinModel.matchInfo_id = id;//id
+                            matchJoinModel.Name = matchInfoModel.Name;//name
 
-                        matchJoinModel.AddTime = DateTime.Now;//时间
-                        matchJoinModel.username = user.UserName;
-                        matchJoinModel.userid = user.Id;
+                            matchJoinModel.AddTime = DateTime.Now;//时间
+                            matchJoinModel.username = user.UserName;
+                            matchJoinModel.userid = user.Id;
 
-                        matchJoinModel.Rank = 0;
-                        matchJoinModel.Score = 0;
+                            matchJoinModel.Rank = 0;
+                            matchJoinModel.Score = 0;
 
-                        this.dbContext.MatchJoinModel.Add(matchJoinModel);
-                        this.dbContext.SaveChanges();
+                            this.dbContext.MatchJoinModel.Add(matchJoinModel);
+                            this.dbContext.SaveChanges();
 
-                        jsonData.info.state = 200;
+                            jsonData.info.state = 200;
 
-                        this.AutoCreateMatch(matchInfoModel);
+                            this.AutoCreateMatch(matchInfoModel);
+                        }
                     }
                 }
             }
+            
             return new JsonResult(jsonData);
         }
         /// <summary>
