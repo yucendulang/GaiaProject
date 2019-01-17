@@ -417,6 +417,10 @@ function createMap(data) {
                     $("#alPosList button").each(function() {
                         if ($(this).text() === clickObj.position) {
                             flag = true;
+                            //删除选择
+                            $(this).remove();
+                            //黑色标记
+                            DrawStar(context, clickObj.column, clickObj.row);
                             return true;
                         }
                     });
@@ -424,7 +428,7 @@ function createMap(data) {
                         return;
                     }
                     //画点标示出来
-                    DrawStar(context, clickObj.column, clickObj.row);
+                    DrawStar(context, clickObj.column, clickObj.row,"red");
 
                     //添加位置
                     $("#alPosList").append('<button type="button" class="btn btn-default" onclick="$(this).remove();">' + clickObj.position + '</button>');
@@ -912,12 +916,15 @@ function DrawAcademy(ctx, row, col, name) {
 }
 
 //绘制联邦星星（建筑上）
-function DrawStar(ctx, row, col) {
+function DrawStar(ctx, row, col, color) {
+    if (color === undefined) {
+        color = "black";
+    }
     var loc = hexCenter(row, col);
     var x = loc[0];
     var y = loc[1];
     ctx.beginPath();
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = color;
     //ctx为传入的上下文环境，R为外面大圆的半径，r为内部小圆的半径，x为五角星中心的横坐标，y为五角星中心的纵坐标。 
     for (var i = 0; i < 5; i++) {
         ctx.lineTo(Math.cos((18 + i * 72) / 180 * Math.PI) * 5 + x,
