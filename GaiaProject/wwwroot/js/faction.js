@@ -461,6 +461,10 @@ $(document).ready(function () {
     });
 });
 
+//根据URL展示数据
+function name12345(parameters) {
+    
+}
 
 //
 function faction_getLog(gameName, factionName, factionType) {

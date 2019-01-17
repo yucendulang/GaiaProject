@@ -315,10 +315,10 @@ else
             @if (Model.UserDic.ContainsKey(User.Identity.Name))
 
             {
-                @foreach (var fac in Model.UserDic[User.Identity.Name])
+                foreach (var fac in Model.UserDic[User.Identity.Name])
 
                 {
-                    @foreach (var leech in fac.LeechPowerQueue)
+                    foreach (var leech in fac.LeechPowerQueue)
 
                     {
                         if (fac is Taklons && fac.StrongHold == null)

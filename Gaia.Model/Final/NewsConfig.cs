@@ -16,5 +16,10 @@ namespace Gaia.Model.Final
         //< option value="4">新闻</option>
         /// </summary>
         public const int TYPE_GL = 5;
+
+        /// <summary>
+        /// 反馈和建议
+        /// </summary>
+        public const int TYPE_FEEDBACK = 6;
     }
 }

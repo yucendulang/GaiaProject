@@ -36,6 +36,13 @@ namespace GaiaDbContext.Models
         /// </summary>
         public int isallowmatch { get; set; }
 
-
+        /// <summary>
+        /// drop次数
+        /// </summary>
+        public int droptimes { get; set; }
+        /// <summary>
+        /// 游戏次数
+        /// </summary>
+        public int gametimes { get; set; }
     }
 }

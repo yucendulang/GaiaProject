@@ -523,6 +523,8 @@ namespace GaiaProject.Controllers
         #endregion
 
 
+        #region 游戏显示和还原
+
         public IActionResult ViewGame(string id)
         {
             ViewData["Title"] = "viewgame";
@@ -541,7 +543,7 @@ namespace GaiaProject.Controllers
         /// <param name="id">游戏ID</param>
         /// <param name="type"></param>
         /// <returns></returns>
-        private GaiaGame RestoreGame(int id,out int type, int? row = null)
+        private GaiaGame RestoreGame(int id, out int type, int? row = null)
         {
             //游戏结果
             GameInfoModel gameInfoModel = this.dbContext.GameInfoModel.SingleOrDefault(item => item.Id == id);
@@ -561,7 +563,7 @@ namespace GaiaProject.Controllers
                 }
                 else
                 {
-                   
+
                     var game = GameMgr.GetGameByName(gameInfoModel.name);
                     if (game == null)//游戏不存在
                     {
@@ -604,7 +606,7 @@ namespace GaiaProject.Controllers
                 //赋值会重写全部数据
                 gg.dbContext = this.dbContext;
 
-                gg = GameMgr.RestoreGame(gameInfoModel.name, gg,row:row);
+                gg = GameMgr.RestoreGame(gameInfoModel.name, gg, row: row);
                 gg.GameName = gameInfoModel.name;
                 //从内存删除
                 GameMgr.DeleteOneGame(gameInfoModel.name);
@@ -617,13 +619,13 @@ namespace GaiaProject.Controllers
         /// <summary>
         /// 还原游戏
         /// </summary>
-        public IActionResult RestoreGame(int id,int? row)
+        public IActionResult RestoreGame(int id, int? row)
         {
             GaiaGame gaiaGame = this.RestoreGame(id, out int type, row);
             if (type == 200)//从日志恢复的
             {
                 ViewData["row"] = row;
-                return View("ViewGame",gaiaGame);
+                return View("ViewGame", gaiaGame);
             }
             else if (type == 1)//内存中的游戏
             {
@@ -650,12 +652,12 @@ namespace GaiaProject.Controllers
         {
             GaiaGame gaiaGame = GameMgr.GetGameByName(id);
 
-            List<LogEntity> logList = gaiaGame.LogEntityList.OrderBy(x=>x.Row).ToList();
+            List<LogEntity> logList = gaiaGame.LogEntityList.OrderBy(x => x.Row).ToList();
             //string[] syntaxList = gaiaGame.UserActionLog.Split("\r\n");
-            LogEntity  logEntity= logList[row-1];
+            LogEntity logEntity = logList[row - 1];
             logEntity.Syntax = code;
             StringBuilder stringBuilder = new StringBuilder();
-            logList.ForEach(item=>stringBuilder.Append($"{item.Syntax}\r\n"));
+            logList.ForEach(item => stringBuilder.Append($"{item.Syntax}\r\n"));
             gaiaGame.UserActionLog = stringBuilder.ToString();
             //重置游戏
             GameMgr.RestoreGame(gaiaGame.GameName, gaiaGame, isToDict: true);
@@ -666,7 +668,7 @@ namespace GaiaProject.Controllers
         /// <summary>
         /// 跳过回合
         /// </summary>
-        public void SkipRound(string id,int round=6)
+        public void SkipRound(string id, int round = 6)
         {
             GaiaGame gaiaGame = GameMgr.GetGameByName(id);
             for (int i = gaiaGame.GameStatus.RoundCount; i < 6; i++)
@@ -675,7 +677,7 @@ namespace GaiaProject.Controllers
                 {
                     gaiaGame.Syntax(
                         string.Format("{1}:pass {0}", gaiaGame.RBTList[0].name,
-                            gaiaGame.FactionList[gaiaGame.GameStatus.PlayerIndex].FactionName), out string log,dbContext:this.dbContext);
+                            gaiaGame.FactionList[gaiaGame.GameStatus.PlayerIndex].FactionName), out string log, dbContext: this.dbContext);
 
                 }
             }
@@ -704,7 +706,7 @@ namespace GaiaProject.Controllers
                 {
                     syntax = string.Format("{0}:{1}", factionName, syntax);
                 }
-                GameMgr.GetGameByName(name).Syntax(syntax, out string log, task.Result.UserName,dbContext:this.dbContext);
+                GameMgr.GetGameByName(name).Syntax(syntax, out string log, task.Result.UserName, dbContext: this.dbContext);
 
                 if (!string.IsNullOrEmpty(log))
                 {
@@ -718,6 +720,10 @@ namespace GaiaProject.Controllers
                 return View(GameMgr.GetGameByName(name));
             }
         }
+
+        #endregion
+
+
 
         #region 接收游戏命令
 
@@ -811,7 +817,10 @@ namespace GaiaProject.Controllers
             }
             return Redirect("/home/viewgame/" + System.Net.WebUtility.UrlEncode(name));
         }
-
+        /// <summary>
+        /// 获取日志
+        /// </summary>
+        /// <returns></returns>
         public string GetLastestActionLog()
         {
             return GameMgr.GetLastestBackupData();
@@ -962,6 +971,11 @@ namespace GaiaProject.Controllers
             }
             return GameMgr.RedoOneStep(id);
         }
+        /// <summary>
+        /// 删除游戏
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
 
         public bool DeleteOneGame(string id)
         {
@@ -1050,6 +1064,57 @@ namespace GaiaProject.Controllers
         {
             GaiaGame gaiaGame = GameMgr.GetGameByName(id);
             gaiaGame.Syntax(factionName + ":drop", out string log, "", dbContext);
+            return new JsonResult(new GaiaProject.Models.Data.UserFriendController.JsonData
+            {
+                data = "",
+                info = new GaiaProject.Models.Data.UserFriendController.Info
+                {
+                    state = 200
+                }
+            });
+        }
+        /// <summary>
+        /// 添加聊天内容
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="contents"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<JsonResult> AddGameChat(string id,string contents)
+        {
+            string username = User.Identity.Name;
+            GaiaGame gaiaGame = GameMgr.GetGameByName(id);
+            //判断玩家是否存在
+            if (!gaiaGame.UserGameModels.Exists(item => item.username == username))
+            {
+                return new JsonResult(new GaiaProject.Models.Data.UserFriendController.JsonData
+                {
+                    data = "",
+                    info = new GaiaProject.Models.Data.UserFriendController.Info
+                    {
+                        state = 200,
+                        message="不能在其他玩家的游戏中发表留言."
+                    }
+                });
+            }
+
+            Faction faction = gaiaGame.FactionList.Find(item => item.UserName == username);
+            
+            GameChatModel gameChatModel = new GameChatModel();
+            gameChatModel.addtime = DateTime.Now;
+            gameChatModel.username = username;
+            gameChatModel.contents = contents;
+            gameChatModel.gameinfo_name = id;
+            gameChatModel.factionname = faction.FactionName.ToString();
+            //gameChatModel.gameinfo_name
+            //添加到游戏内容中
+            if (gaiaGame.ListChatModels == null)
+            {
+                gaiaGame.ListChatModels = new List<GameChatModel>();
+            }
+            gaiaGame.ListChatModels.Add(gameChatModel);
+
+
             return new JsonResult(new GaiaProject.Models.Data.UserFriendController.JsonData
             {
                 data = "",

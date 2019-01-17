@@ -1,15 +1,29 @@
-﻿@model System.Linq.IQueryable<GaiaDbContext.Models.SystemModels.NewsInfoModel>
+﻿@using Gaia.Model.Final
+@model System.Linq.IQueryable<GaiaDbContext.Models.SystemModels.NewsInfoModel>
 
 @{
-    ViewBag.Title = "攻略";
+    ViewBag.Title = "GaiaProject";
     Layout = "_Layout";
 }
 
 <div class="panel panel-default">
     <div class="panel-heading">
         <h2><i class="fa fa-table red"></i><span class="break"></span><strong></strong></h2>
-        <a href="/News/Modify">添加</a>
+        
+        @if (Context.Request.Query["type"] == "6")
+        {
+            <a href="/News/Modify?type=@NewsConfig.TYPE_FEEDBACK">添加反馈</a>
+            <span>
+                如果是游戏BUG,请最好附上游戏名称，方便查询问题,谢谢!
+            </span>
+        }
+        else
+        {
+            <a href="/News/Modify">添加攻略</a>
 
+        }
+
+       
     </div>
     <div class="panel-body">
         <table class="table table-striped">

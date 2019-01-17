@@ -35,16 +35,22 @@ namespace GaiaProject.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(int type = NewsConfig.TYPE_GL)
         {
-            IQueryable<NewsInfoModel> newsInfoModels = this.dbContext.NewsInfoModel.Where(item => item.type == NewsConfig.TYPE_GL).OrderBy(item=>item.Rank);
+            IQueryable<NewsInfoModel> newsInfoModels = this.dbContext.NewsInfoModel.Where(item => item.type == type).OrderBy(item=>item.Rank);
             return View(newsInfoModels);
         }
 
         [HttpGet]
-        public IActionResult Modify(int? id)
+        public IActionResult Modify(int? id, int type = NewsConfig.TYPE_GL)
         {
             NewsInfoModel newModel = base.News_Update(id);
+            //判断空
+            if (newModel == null)
+            {
+                newModel = new NewsInfoModel();
+            }
+            newModel.type = type;
             return View(newModel);
         }
         /// <summary>
@@ -56,14 +62,14 @@ namespace GaiaProject.Controllers
         public IActionResult Modify(NewsInfoModel model)
         {
             //类型
-            model.type = NewsConfig.TYPE_GL;
+            //model.type = type;
             //状态
             model.state = 1;
             //用户
             model.username = this.User.Identity.Name;
 
             NewsInfoModel newModel = base.News_Update(model);
-            return Redirect("/News/Index");
+            return Redirect("/News/Index?type="+model.type.ToString());
             return View(newModel);
         }
 

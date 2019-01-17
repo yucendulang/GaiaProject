@@ -418,8 +418,27 @@ namespace GaiaCore.Gaia.Game
                 gameFactionModel.scoreDifference = scoreMax - gameFactionModel.scoreTotal;
                 //添加到数组
                 gameFactionModels.Add(gameFactionModel);
+
                 if (isAdd)
                 {
+                    //检查玩家是否drop,存库
+                    try
+                    {
+                        if (faction.dropType > 0)
+                        {
+                            ApplicationUser singleOrDefault = dbContext.Users.SingleOrDefault(user => user.UserName == faction.UserName);
+                            if (singleOrDefault != null)
+                            {
+                                singleOrDefault.droptimes++;
+                                dbContext.Users.Update(singleOrDefault);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                    //保存种族信息
                     dbContext.GameFactionModel.Add(gameFactionModel);
                 }
                 else

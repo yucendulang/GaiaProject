@@ -400,6 +400,55 @@ namespace GaiaProject.Controllers
             //gameFactionModels = gameFactionModels.OrderByDescending(item => item.scoreTotal);
             return View(factionListInfo);
         }
+        [HttpGet]
+        /// <summary>
+        /// 每个种族擅长玩家统计
+        /// </summary>
+        public IActionResult FactionUserRateStatistics(int? usercount)
+        {
+            IQueryable<GameFactionModel> gameFactionModels = this.dbContext.GameFactionModel.AsQueryable();
+            //人数
+            usercount = usercount ?? 4;
+            if (usercount > 0)
+            {
+                gameFactionModels = gameFactionModels.Where(item => item.UserCount == usercount);
+            }
+            List<List<Models.Data.GameInfoController.StatisticsFaction>> list = new List<List<Models.Data.GameInfoController.StatisticsFaction>>();
+            //计算大使
+            void Statistics(string name)
+            {
+                IQueryable<GameFactionModel> models = gameFactionModels.Where(item => item.FactionName == name);
+
+                List<Models.Data.GameInfoController.StatisticsFaction> statisticsFactions = models.GroupBy(faction => new {faction.FactionName, faction.username})
+                    .Select(g => new Models.Data.GameInfoController.StatisticsFaction
+                    {
+                        ChineseName = g.Key.FactionName,
+                        count = g.Count(),
+                        numberwin = g.Count(faction => faction.rank == 1),
+                        winprobability = g.Count(faction => faction.rank == 1) * 100 / (g.Count()),
+                        scoremin = g.Min(faction => faction.scoreTotal),
+                        scoremax = g.Max(faction => faction.scoreTotal),
+                        scoremaxuser = g.Key.username,
+                        scoreavg = g.Sum(faction => faction.scoreTotal) / g.Count(),
+                    })
+                    .Where(item => item.count > 3)
+                    .OrderByDescending(item => item.winprobability)
+                    .Take(5)
+                    .ToList();
+                list.Add(statisticsFactions);
+            }
+
+            var facList = (new List<Faction>()
+            {
+                new Terraner(null), new Lantida(null), new Hive(null), new HadschHalla(null), new BalTak(null),
+                new Geoden(null), new Gleen(null), new Xenos(null), new Ambas(null), new Taklons(null), new Firaks(null),
+                new MadAndroid(null), new Itar(null), new Nevla(null)
+            });
+            facList.ForEach(fac=>Statistics(fac.FactionName.ToString()));
+
+            return View(list);
+        }
+
         /// <summary>
         /// 获取种族统计
         /// </summary>

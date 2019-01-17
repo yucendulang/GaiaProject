@@ -9,148 +9,196 @@
 
 
 <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7" id="myCanvasDiv">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-7" id="myCanvasDiv">
 
 
-        <canvas id="myCanvas" width="950" height="740" style="border: 1px solid #c3c3c3;">
-            Your browser does not support the canvas element.
-        </canvas>
+    <canvas id="myCanvas" width="950" height="740" style="border: 1px solid #c3c3c3;">
+        Your browser does not support the canvas element.
+    </canvas>
 
-        @if (Model.GameStatus.stage != Stage.MAPROTATE)
-        {
-            //回合计分
-            <div>
-                <ul class="list-group" style="width: 120px;position: absolute; z-index: 10; top: 0px; left: 15px;">
-                    @for (int i = 0; i < Model.RSTList.Count; i++)
+    @if (Model.GameStatus.stage != Stage.MAPROTATE)
+    {
+        //回合计分
+        <div>
+            <ul class="list-group" style="width: 120px;position: absolute; z-index: 10; top: 0px; left: 15px;">
+                @for (int i = 0; i < Model.RSTList.Count; i++)
+                {
+                    if (@Model.GameStatus.RoundCount == i + 1)
                     {
-                        if (@Model.GameStatus.RoundCount == i + 1)
+                        <li class="list-group-item" style="height: 35px;background-color: #CD950C;">@Model.RSTList[i].desc</li>
+                    }
+                    else if (@Model.GameStatus.RoundCount >= i + 2)
+                    {
+                        <li class="list-group-item" style="height: 35px;background-color: #c3c3c3;">@Model.RSTList[i].desc</li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item" style="height: 35px">@Model.RSTList[i].desc</li>
+                    }
+                }
+            </ul>
+        </div>
+        //能量行动
+        <div style="position: absolute; z-index: 999;top: 1px;left:450px" id="gameAction">
+            <div class="row" id="actBody">
+                @foreach (var item in Model.MapActionMrg.mapActList)
+                {
+                    {
+                        //string pwname = @item.GetType().Name;
+                        string pwdesc = @item.desc;
+                        string pwcssname;
+                        if (pwdesc.Contains("Q"))
                         {
-                            <li class="list-group-item" style="height: 35px;background-color: #CD950C;">@Model.RSTList[i].desc</li>
-                        }
-                        else if (@Model.GameStatus.RoundCount >= i + 2)
-                        {
-                            <li class="list-group-item" style="height: 35px;background-color: #c3c3c3;">@Model.RSTList[i].desc</li>
+                            pwcssname = "actqcss";
                         }
                         else
                         {
-                            <li class="list-group-item" style="height: 35px">@Model.RSTList[i].desc</li>
+                            pwcssname = "actpwcss";
                         }
-                    }
-                </ul>
-            </div>
-            //能量行动
-            <div style="position: absolute; z-index: 999;top: 1px;left:450px" id="gameAction">
-                <div class="row" id="actBody">
-                    @foreach (var item in Model.MapActionMrg.mapActList)
-                    {
+                        if (item.IsUsed)
                         {
-                            //string pwname = @item.GetType().Name;
-                            string pwdesc = @item.desc;
-                            string pwcssname;
-                            if (pwdesc.Contains("Q"))
-                            {
-                                pwcssname = "actqcss";
-                            }
-                            else
-                            {
-                                pwcssname = "actpwcss";
-                            }
-                            if (item.IsUsed)
-                            {
-                                pwcssname += " actusedcss";
-                            }
-                            <div class="col-xs-6 col-md-2 @pwcssname" id="@item.GetType().Name" tishi="@item.desc"> <span style="font-size: 12px">@item.GetText()</span></div>
+                            pwcssname += " actusedcss";
                         }
-
+                        <div class="col-xs-6 col-md-2 @pwcssname" id="@item.GetType().Name" tishi="@item.desc"> <span style="font-size: 12px">@item.GetText()</span></div>
                     }
 
-                </div>
-                <div class="row" id="actConst">
-
-                    @foreach (var name in new string[] { "-7pw", "-5pw", "-4pw", "-4pw", "-4pw", "-3pw", "-3pw", "-4Q", "-3Q", "-2Q" })
-                    {
-                        <div class="col-xs-6 col-md-2" style="height: 30px; width: 53px;">
-                            <span style="text-align: center; color:#000000;">@name</span>
-                        </div>
-                    }
-                </div>
-            </div>
-            //玩家
-            <div style="position: absolute; z-index: 100; left: 770px;top: 700px">
-                @localizer["当前回合玩家"]:
-                @foreach (var orderPlayer in Model.FactionList.Except(Model.FactionNextTurnList))
-                {
-                    <span style="background-color: @orderPlayer.ColorCode">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span>
                 }
 
-                <br />@localizer["跳过回合玩家"]:
-                @foreach (var orderPlayer in Model.FactionNextTurnList)
-                {
-                    <span style="background-color: @orderPlayer.ColorCode">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span>
-                }
             </div>
+            <div class="row" id="actConst">
 
-            //终局计分版，大连
-            <div style="position: absolute; z-index: 101; left: 840px; top: 80px">
-                @foreach (var item in Model.FSTList)
+                @foreach (var name in new string[] { "-7pw", "-5pw", "-4pw", "-4pw", "-4pw", "-3pw", "-3pw", "-4Q", "-3Q", "-2Q" })
                 {
-                    <div style="float: left; margin-left: 8px">
-                        <span style="display: block; margin-top: 5px">@item.GetType().Name</span>
-                        
-                        @{ Model.FactionList.ForEach(x => x.FinalEndScore = 0);
-                            item.InvokeGameTileAction(Model.FactionList); }
-                        @foreach (var fac in Model.FactionList)//.OrderByDescending(order=> item.TargetNumber(order))
-                        {
-                            <div style="">
-                                <span style="background-color: @fac.ColorCode; ">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>@(item.TargetNumber(fac))/@(fac.FinalEndScore)</span>
-                            </div>
-                        }
-                        @if (Model.FactionList.Count == 2)
-                        {
-                            <div style="">
-                                <span style="background-color:green; ">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>@(item.TargetNumber(new VirtualPlayerFaction(FactionName.Ambas, null)))@*/@(36 - Model.FactionList.Sum(x=>x.FinalEndScore))VP*@</span>                              
-                            </div>
-                        }
-
+                    <div class="col-xs-6 col-md-2" style="height: 30px; width: 53px;">
+                        <span style="text-align: center; color:#000000;">@name</span>
                     </div>
                 }
+            </div>
+        </div>
+        //玩家
+        <div style="position: absolute; z-index: 100; left: 770px;top: 700px">
+            @localizer["当前回合玩家"]:
+            @foreach (var orderPlayer in Model.FactionList.Except(Model.FactionNextTurnList))
+            {
+                <span style="background-color: @orderPlayer.ColorCode">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span>
+            }
+
+            <br />@localizer["跳过回合玩家"]:
+            @foreach (var orderPlayer in Model.FactionNextTurnList)
+            {
+                <span style="background-color: @orderPlayer.ColorCode">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span>
+            }
+        </div>
+
+        //终局计分版，大连
+        <div style="position: absolute; z-index: 101; left: 840px; top: 80px">
+            @foreach (var item in Model.FSTList)
+            {
+                <div style="float: left; margin-left: 8px">
+                    <span style="display: block; margin-top: 5px">@item.GetType().Name</span>
+                        
+                    @{ Model.FactionList.ForEach(x => x.FinalEndScore = 0);
+                        item.InvokeGameTileAction(Model.FactionList); }
+                    @foreach (var fac in Model.FactionList)//.OrderByDescending(order=> item.TargetNumber(order))
+                    {
+                        <div style="">
+                            <span style="background-color: @fac.ColorCode; ">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>@(item.TargetNumber(fac))/@(fac.FinalEndScore)</span>
+                        </div>
+                    }
+                    @if (Model.FactionList.Count == 2)
+                    {
+                        <div style="">
+                            <span style="background-color:green; ">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>@(item.TargetNumber(new VirtualPlayerFaction(FactionName.Ambas, null)))@*/@(36 - Model.FactionList.Sum(x=>x.FinalEndScore))VP*@</span>                              
+                        </div>
+                    }
+
+                </div>
+            }
                
-            </div>
+        </div>
 
-            //预计得分
-            <div style="position: absolute; z-index: 101; left: 850px; top: 200px">
+        //预计得分
+        <div style="position: absolute; z-index: 101; left: 850px; top: 200px">
 
-                @{ Model.FactionList.ForEach(x => x.FinalEndScore = 0);
-                    Model.FSTList.ForEach(x => x.InvokeGameTileAction(Model.FactionList)); }
-                @foreach (var fac in Model.FactionList.OrderByDescending(order=> order.GetFinalEndScorePreview()))
-                {
-                    <div style="">
-                        <span style="background-color: @fac.ColorCode; ">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span><span>@(fac.GetFinalEndScorePreview())VP</span>                              
-                    </div>                    
-                }
-            </div>
+            @{ Model.FactionList.ForEach(x => x.FinalEndScore = 0);
+                Model.FSTList.ForEach(x => x.InvokeGameTileAction(Model.FactionList)); }
+            @foreach (var fac in Model.FactionList.OrderByDescending(order=> order.GetFinalEndScorePreview()))
+            {
+                <div style="">
+                    <span style="background-color: @fac.ColorCode; ">&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span><span>@(fac.GetFinalEndScorePreview())VP</span>                              
+                </div>                    
+            }
+        </div>
 
 
-            @Html.Partial("Partial_Game_TT", Model)
-        }
+        @Html.Partial("Partial_Game_TT", Model)
+    }
 
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5" id="playerFaction">
-        <div class="panel panel-default">
+</div>
+    
+@*日志显示区域*@
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-5" id="playerFaction">
+    <div class="panel panel-default">
+        @if (Model.ListChatModels != null)
+        {
             <table class="table">
-                @foreach (var item in Model.LogEntityList.OrderByDescending(x => x.Row).Take(5))
+                @foreach (var item in Model.ListChatModels.OrderByDescending(chat => chat.addtime).Take(5))
                 {
                     <tr>
-                        <td>@localizer[item?.ChineseName ?? ""]</td>
-                        <td>@item.ResouceEnd?.m_score VP</td>
+                        <td>@item.factionname (@item.username)</td>
+                        <td>@item.contents</td>
 
-                        <td>@item.Syntax</td>
+                        <td>@item.addtime</td>
                     </tr>
                 }
-
             </table>
+            <div id="table_chat_all" style="display: none">
+                <table class="table">
+                    @foreach (var item in Model.ListChatModels.OrderByDescending(chat => chat.addtime))
+                    {
+                        <tr>
+                            <td>@item.factionname (@item.username)</td>
+                            <td>@item.contents</td>
 
+                            <td>@item.addtime</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+        
+        <div class="input-group">
+            <span class="input-group-btn">
+                <input type="text" class="form-control" placeholder="聊天内容..." name="txt_gamechat" id="txt_gamechat">
+                <button class="btn btn-default" type="button" id="btn_gamechat">发送</button>
+                <button class="btn btn-default" type="button" id="btn_getchatall">查看全部</button>
+            </span>
         </div>
+        <script type="text/javascript">
+            //提交聊天信息
+            $("#btn_gamechat").click(function() {
+                var contents = $("#txt_gamechat").val();
+                if (contents === null || contents==="") {
+                    alert("请输入聊天内容!");
+                    return;
+                }
+                $.post("/Home/AddGameChat/@Model.GameName",
+                    "contents=" + contents,
+                    function(data) {
+                        if (data.info.state === 200) {
+                            window.location.reload();
+                        }
+                    });
+            });
+            //查看全部聊天信息
+            $("#btn_getchatall").click(function () {
+                $("#queryInfoBody").html($("#table_chat_all").html());
+                $("#queryInfoModel").modal();
+                //openQueryWindow("", "查看全部聊天", $("#table_chat_all").html(), null);
+                //alert(1);
+            });
+        </script>
+    </div>
 
 
         @if (isRound)//行动区域显示

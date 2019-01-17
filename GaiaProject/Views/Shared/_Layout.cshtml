@@ -1,4 +1,5 @@
-﻿@using GaiaDbContext.Models
+﻿@using Gaia.Model.Final
+@using GaiaDbContext.Models
 @using Microsoft.AspNetCore.Http
 
 @inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
@@ -62,7 +63,9 @@
                             <li>
                                 <a href="/Home/About">@localizer["种族介绍"]</a>
                             </li>
-
+                            <li>
+                                <a href="/News/Index?type=@NewsConfig.TYPE_FEEDBACK">@localizer["建议和反馈"]</a>
+                            </li>
                         </ul>
                     </li>
 
@@ -76,6 +79,11 @@
                             <li>
                                 <a href="/GameInfo/FactionStatistics?usercount=4">@localizer["种族统计"]</a>
                             </li>
+
+                            <li>
+                                <a href="/GameInfo/FactionUserRateStatistics?usercount=4">@localizer["种族玩家胜率"]</a>
+                            </li>
+
                             <li>
                                 <a href="/GameInfo/TTStatistics">@localizer["科技版"]</a>
                             </li>

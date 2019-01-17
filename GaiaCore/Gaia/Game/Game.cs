@@ -1962,6 +1962,10 @@ namespace GaiaCore.Gaia
         [JsonProperty]
         public int dropHour { get; set; }
 
+        /// <summary>
+        /// 聊天记录
+        /// </summary>
+        public List<GameChatModel> ListChatModels { get; set; }
 
 
         public class STTInfo

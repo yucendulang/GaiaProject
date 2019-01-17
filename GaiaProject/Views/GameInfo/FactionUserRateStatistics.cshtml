@@ -1,0 +1,77 @@
+﻿@using GaiaProject
+@using GaiaProject.Models.Data
+@using Microsoft.AspNetCore.Mvc.Localization
+@model List<List<GaiaProject.Models.Data.GameInfoController.StatisticsFaction>>
+@inject IHtmlLocalizer<SharedResources> localizer
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+    string lastFaction = null;
+}
+
+<table class="table">
+    <thead>
+    <tr>
+        <td>种族</td>
+        <td>玩家</td>
+
+        <td>局数</td>
+        <td>胜场</td>
+        <td>胜率</td>
+        <td>最低分</td>
+        <td>最高分</td>
+
+        <td>平均分</td>
+
+
+
+    </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var faction in Model)
+        {
+            foreach (GameInfoController.StatisticsFaction item in faction)
+            {
+                if (lastFaction != item.ChineseName)
+                {
+                    <tr>
+                        <td>
+                            <span style="color: red">@item.ChineseName</span>
+                                            </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                    </tr>
+                }
+                <tr>
+                    <td>
+                        @item.ChineseName
+                    </td>
+                    <td>
+                        <a href="/GameInfo/FactionList?username=@item.scoremaxuser">@item.scoremaxuser</a>
+                    </td>
+                    <td>
+                        @item.count
+                    </td>
+                    <td>@item.numberwin</td>
+                    <td>@item.winprobability %</td>
+                    <td>@item.scoremin</td>
+                    <td>@item.scoremax</td>
+
+                    <td>@item.scoreavg</td>
+                </tr>
+                lastFaction = item.ChineseName;
+            }
+
+        }
+
+    </tbody>
+</table>
