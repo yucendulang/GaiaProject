@@ -55,55 +55,15 @@
             @Html.Raw(ViewBag.Cache)
         </div>
     }
-    @*    <blockquote>*@
-    @*        致各位gaia project的愛好者，<br/>*@
-    @*        感謝大家近來對本站測試期間的積極回饋，現伺服器試用階段已到期，為讓本站長期穩定地持續下去，開始向各位同好募集伺服器運營所需費用。<br/>*@
-    @*        考慮到伺服器的穩定以及後續調整的便利性，第一階段我們會對外募集3-6個月的費用（視募集情況而定，半年伺服器費用約在1000RMB左右）。有意向支持的朋友可以直接通過郵箱21817698@qq.com或是該郵箱的QQ號直接聯繫瞭解具體途徑。<br/>*@
-    @*        因本站為愛好者發起，非任何商業性質，故本站承諾所有募集費用僅用於本站伺服器運營，不做他用。*@
-    @*    </blockquote>*@
-    @*    <blockquote>*@
-    @*        <p>如在游戏中发现任何未知BUG，请向TOTO（21817698@qq.com）反馈，图片+文字说明，并附上游戏房间的ID名称，便于后续改进。</p>*@
-    @*    </blockquote>*@
-    @**@
-    @**@
-    @*    <h4>现已知BUG类问题，会尽快修复，游戏中请尽量规避</h4>*@
-    @**@
-    @*    <ul>*@
-    @*        <li>升级科技之后的资源暂时无法在相同turn中convert</li>*@
-    @*        <li>宣告联邦算法检测问题</li>*@
-    @*        <li>联邦宣告之后连进去的建筑不算是联邦建筑</li>*@
-    @*        <li>Build语句判断边界</li>*@
-    @*        <li>在TF计分轮，使用ACT2改造仅需1次改造的星球时，无法获得2次计分。</li>*@
-    @*    </ul>*@
-    @**@
-    @**@
-    @*    <h4>待完成功能：（按优先级排序）</h4>*@
-    @*    <ul>*@
-    @**@
-    @*        <li>暗黑星球与科技版的结算顺序问题</li>*@
-    @*        <li>行动预览</li>*@
-    @*        <li>游戏数据保存 历史数据留档</li>*@
-    @*        <li>设置棋钟，加入放弃功能</li>*@
-    @*        <li>疯狂机器种族初始能力不触发的单独语句</li>*@
-    @*        <li>利爪族使用能量行动，不用BS的语句</li>*@
-    @*        <li>公开的大厅</li>*@
-    @*        <li>玩家的排名积分</li>*@
-    @*        <li>界面色彩调整</li>*@
-    @*    </ul>*@
 
-
-    @*    <h4>12月15日之前以修BUG为主 最近更新如下 最近一次更新时间@(ViewData["ServerStartTime"])</h4>*@
-    @*    <ul>*@
-    @**@
-    @*    </ul>*@
-    @if (User.Identity.Name.Equals("yucenyucen@126.com") || User.Identity.Name.Equals("xsssssssch@hotmail.com") || User.Identity.Name.Equals("toto") || User.Identity.Name.Equals("totofans"))
+    if (User.Identity.Name.Equals("yucenyucen@126.com") || User.Identity.Name.Equals("xsssssssch@hotmail.com") || User.Identity.Name.Equals("toto") || User.Identity.Name.Equals("totofans"))
     {
         <p><a href="/home/GetAllGame">@localizer["获取所有游戏列表"]</a></p>
 
     }
 
 
-    @if (UserManager.GetUserName(User).Equals("yucenyucen@126.com") || UserManager.GetUserName(User).Equals("totofans"))
+    if (UserManager.GetUserName(User).Equals("yucenyucen@126.com") || UserManager.GetUserName(User).Equals("totofans"))
     {
         <p><a href="/home/BackupData">@localizer["备份所有游戏"]</a></p>
         <p><a href="/home/RestoreData">@localizer["恢复所有游戏"]</a></p>

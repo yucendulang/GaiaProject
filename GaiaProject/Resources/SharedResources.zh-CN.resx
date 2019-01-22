@@ -314,4 +314,9 @@
     <value>退出</value>
   </data>
 
+  <data name="Window_OpenMap_Info" xml:space="preserve">
+    <value>点击位置后出现红色的点，再次点击变成黑色代表取消</value>
+  </data>
+  
+  
 </root>

@@ -3,7 +3,7 @@
 @using GaiaDbContext.Models
 @using GaiaDbContext.Models.HomeViewModels
 @inject UserManager<ApplicationUser> UserManager
-
+@inject IHtmlLocalizer<SharedResources> localizer
 @model List<GaiaDbContext.Models.HomeViewModels.GameInfoModel>
 
 @{
@@ -14,7 +14,7 @@
 
 @{
     //ViewBag.Title = "结束游戏";
-    if (adminType=="1")
+    if (adminType == "1")
     {
         Layout = "_LayoutAdmin";
     }
@@ -29,34 +29,34 @@
     <div class="panel-heading">
         <h2><i class="fa fa-table red"></i><span class="break"></span><strong></strong></h2>
         @if (isAdmin)
-    {
-        <div>
-            <span>菜单仅管理员可见</span>
-            <a href="/GameInfo/UpdatenFinishFromDb">检测游戏结束但没有种族信息的</a>
-            <a href="/GameInfo/UpdatenNoFromDb">检测游戏应该结束但没有更新的</a>
+        {
+            <div>
+                <span>菜单仅管理员可见</span>
+                <a href="/GameInfo/UpdatenFinishFromDb">检测游戏结束但没有种族信息的</a>
+                <a href="/GameInfo/UpdatenNoFromDb">检测游戏应该结束但没有更新的</a>
 
-            <a href="/GameInfo/DeleteGameInvalid">删除未结束但内存没有的游戏</a>
-            <a href="/GameInfo/UpdateGame">将内存的游戏重新保存到数据库</a>
-        </div>
+                <a href="/GameInfo/DeleteGameInvalid">删除未结束但内存没有的游戏</a>
+                <a href="/GameInfo/UpdateGame">将内存的游戏重新保存到数据库</a>
+            </div>
 
-}
+        }
         <form>
             <div class="row">
                 <div class="col-lg-8">
                     <div class="input-group">
-                        <input type="text" class="form-control" style="width: 100px" placeholder="名称" id="name" name="name">
+                        <input type="text" class="form-control" style="width: 100px" placeholder="name" id="name" name="name">
 
-                        <input type="text" class="form-control" style="width: 100px" placeholder="回合" id="round" name="round">
-                        <input type="text" class="form-control" style="width: 150px" placeholder="创建人" id="username" name="username">
-                        <input type="text" class="form-control" style="width: 150px" placeholder="参与人" id="joinname" name="joinname">
+                        <input type="text" class="form-control" style="width: 100px" placeholder="roud" id="round" name="round">
+                        <input type="text" class="form-control" style="width: 150px" placeholder="author" id="username" name="username">
+                        <input type="text" class="form-control" style="width: 150px" placeholder="users" id="joinname" name="joinname">
                         @if (adminType == "1")
-                    {
-                        <input type="text" class="form-control" style="width: 100px" placeholder="最低分" id="scoremin" name="scoremin">
-                }
-                        <input type="hidden" class="form-control" value="@adminType" placeholder="管理员" id="isAdmin" name="isAdmin">
+                        {
+                            <input type="text" class="form-control" style="width: 100px" placeholder="low score" id="scoremin" name="scoremin">
+                        }
+                        <input type="hidden" class="form-control" value="@adminType" placeholder="admin" id="isAdmin" name="isAdmin">
 
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="submit">搜索</button>
+                            <button class="btn btn-default" type="submit">Search</button>
                         </span>
                     </div>
                 </div>
@@ -66,50 +66,49 @@
     <div class="panel-body">
         <table class="table table-striped">
             <thead>
-            <tr>
-                <td>游戏名称</td>
-                <td>人数</td>
-                @*<td>FSTList</td>*@
-                <td>得分</td>
-                <td>回合</td>
+                <tr>
+                    <td>@localizer["房间"]</td>
+                    <td>@localizer["Match_Index_PlayersNum"]</td>
+                    <td>@localizer["得分"]</td>
+                    <td>@localizer["回合"]</td>
 
-                <td>创建人/创建时间/结束时间</td>
+                    <td>@localizer["创建人/创建时间/结束时间"]</td>
 
-                <td>操作</td>
-            </tr>
+                    <td>@localizer["Forum_Article_Operate"]</td>
+                </tr>
             </thead>
             <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        <a href="/Home/RestoreGame/@item.Id">@item.name</a>
-                    </td>
-                    <td>@item.UserCount</td>
-                    @*<td>@item.FSTList</td>*@
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <a href="/Home/RestoreGame/@item.Id">@item.name</a>
+                        </td>
+                        <td>@item.UserCount</td>
+                        @*<td>@item.FSTList</td>*@
 
-                    <td>@item.scoreFaction</td>
-                    <td>@item.round</td>
+                        <td>@item.scoreFaction</td>
+                        <td>@item.round</td>
 
-                    <td>@item.username/@item.starttime.ToString("yyyy-MM-dd")/@item.endtime?.ToString("yyyy-MM-dd")</td>
+                        <td>@item.username/@item.starttime.ToString("yyyy-MM-dd")/@item.endtime?.ToString("yyyy-MM-dd")</td>
 
-                    <td>
-                        @if (@item.isDelete == 1)
-                        {
-                            <span>已申请删除</span>
-                        }
-                        else if (isAdmin)
-                        {
-                            <button class="btn btn-default delDbGame" id="@item.Id">直接删除</button>
-                        }
-                        else if ((item.username == usernmae && @item.GameStatus != 8))
-                        {
-                            <button class="btn btn-default del" id="@item.Id">申请删除</button>
-                        }
-                    </td>
-                </tr>
+                        <td>
+                            @if (@item.isDelete == 1)
+                            {
+                                <span>已申请删除</span>
+                            }
+                            else if (isAdmin)
+                            {
+                                <button class="btn btn-default delDbGame" id="@item.Id">直接删除</button>
+                            }
+                            else if ((item.username == usernmae && @item.GameStatus != 8))
+                            {
+                                <button class="btn btn-default del" id="@item.Id">申请删除</button>
+                            }
+                        </td>
+                    </tr>
 
-            }
+                }
 
             </tbody>
         </table>
@@ -129,13 +128,13 @@
 
 
 <script>
-    $(".del").click(function() {
+    $(".del").click(function () {
         var id = this.id;
         var button = $(this);
         if (confirm('确认申请删除游戏?')) {
             $.post("/GameInfo/DelGame/" + id,
                 "",
-                function(data) {
+                function (data) {
                     if (data.info.state === 200) {
                         //button.parent().parent().remove();
                         alert("已经提交申请,其他玩家全部同意后方可删除!");
@@ -145,13 +144,13 @@
         }
 
     });
-    $(".delDbGame").click(function() {
+    $(".delDbGame").click(function () {
         var id = this.id;
         var button = $(this);
         if (confirm('确认删除游戏?')) {
             $.post("/GameInfo/DeleteDbGame/" + id,
                 "",
-                function(data) {
+                function (data) {
                     if (data.info.state === 200) {
                         window.location.reload();
                     }

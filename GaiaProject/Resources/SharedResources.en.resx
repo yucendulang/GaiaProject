@@ -444,7 +444,7 @@
     <value>Basic Tech</value>
   </data>
   <data name="备份所有游戏" xml:space="preserve">
-    <value>Backup de todos os jogos</value>
+    <value>Back up all games</value>
   </data>
   <data name="备忘" xml:space="preserve">
     <value>Memo</value>
@@ -508,7 +508,7 @@
     <value>Restore a single game</value>
   </data>
   <data name="恢复所有游戏" xml:space="preserve">
-    <value>Continuar todos os jogos</value>
+    <value>Restore all games</value>
   </data>
   <data name="您确认要执行吗？" xml:space="preserve">
     <value>Restore all games?</value>
@@ -529,14 +529,12 @@
     <value>Game Note</value>
   </data>
   
-  <data name="所以取消后图标依然在地图上。" xml:space="preserve">
-    <value>So the icon is still on the map after canceling.</value>
-  </data>
+
   <data name="手动输入" xml:space="preserve">
     <value>Manual input</value>
   </data>
   <data name="执行并结束" xml:space="preserve">
-    <value>Execution and finish</value>
+    <value>Execute and finish</value>
   </data>
   <data name="找回密码?" xml:space="preserve">
     <value>Forget password?</value>
@@ -711,7 +709,7 @@
     <value>User name</value>
   </data>
   <data name="疯狂机器" xml:space="preserve">
-    <value>Mad Android(Bescods)</value>
+    <value>Mad Android</value>
   </data>
   <data name="登录" xml:space="preserve">
     <value>Login</value>
@@ -731,9 +729,12 @@
   <data name="盖亚阶段指令示例" xml:space="preserve">
     <value>Examples of Gaia Stage Instructions</value>
   </data>
-  <data name="目前没有找到很好的办法删除画的点" xml:space="preserve">
-    <value>At present, there is no good way to delete the dots of the painting.</value>
+  
+  <data name="Window_OpenMap_Info" xml:space="preserve">
+    <value>Please click one space,it will appear a red star.if you want to cancel it,please click again,it will become a black star </value>
   </data>
+
+  
   <data name="知识" xml:space="preserve">
     <value>Knowledge</value>
   </data>
@@ -774,7 +775,7 @@
   </data>
 
   <data name="立即执行" xml:space="preserve">
-    <value>Immediate execution</value>
+    <value>Immediately execute</value>
   </data>
   <data name="章鱼人" xml:space="preserve">
     <value>Firaks</value>
@@ -873,22 +874,22 @@
     <value>Please choose the location</value>
   </data>
   <data name="请选择升级科技" xml:space="preserve">
-    <value>Select </value>
+    <value>Select Research</value>
   </data>
   <data name="请选择回合助推板" xml:space="preserve">
-    <value>Please select a Round Booster</value>
+    <value>Select RBT</value>
   </data>
   <data name="请选择科技板块" xml:space="preserve">
-    <value>Please select a Standard Tech Tile</value>
+    <value>Select a Standard Tech Tile</value>
   </data>
   <data name="请选择联邦板块" xml:space="preserve">
-    <value>Please select a federation token</value>
+    <value>Select a federation token</value>
   </data>
   <data name="请选择被覆盖科技" xml:space="preserve">
-    <value>Please select a Standard Tech Tile to be covered</value>
+    <value>Select a STT to be covered</value>
   </data>
   <data name="请选择高级科技" xml:space="preserve">
-    <value>Please select an Advanced Tech Tile</value>
+    <value>Select an Advanced Tech Tile</value>
   </data>
   <data name="资源总分" xml:space="preserve">
     <value>Resources Scoring</value>
@@ -978,7 +979,7 @@
     <value>Banned factions</value>
   </data>
   <data name="{0} 是否要从 {1} 吸取 {2} 点能量" xml:space="preserve">
-    <value>Do {0} want to gain {2} power from {1}?</value>
+    <value>Does {0} want to gain {2} power from {1}?</value>
   </data>
   <data name="现在是 &lt;span class=&quot;buildcolor&quot;&gt;{0}&lt;/span&gt; 的回合, 颜色是 {1}" xml:space="preserve">
     <value>It is &lt;span class="buildcolor"&gt;{0}&lt;/span&gt;'s turn, color is {1}</value>
@@ -1078,7 +1079,9 @@
   <data name="Match_Index_Exit" xml:space="preserve">
     <value>Exit</value>
   </data>
-
+  <data name="用户总分" xml:space="preserve">
+    <value>User score</value>
+  </data>
 
   <data name="成功" xml:space="preserve">
     <value>Successed</value>
@@ -1095,9 +1098,6 @@
   </data>-->
   
   <!--大厅Hall相关-->
-  <data name="房间" xml:space="preserve">
-    <value>Room</value>
-  </data>
   <data name="时间" xml:space="preserve">
     <value>Time</value>
   </data>
@@ -1110,8 +1110,59 @@
   <data name="备注" xml:space="preserve">
     <value>Note</value>
   </data>
-  <data name="加入" xml:space="preserve">
-    <value>Join</value>
+  <data name="得分" xml:space="preserve">
+    <value>Score</value>
+  </data>
+  <data name="回合" xml:space="preserve">
+    <value>Round</value>
+  </data>
+
+  <data name="创建人/创建时间/结束时间" xml:space="preserve">
+    <value>Author/Time/Finish</value>
+  </data>
+
+
+  <!--游戏聊天-->
+  <data name="发送" xml:space="preserve">
+    <value>Send msg</value>
+  </data>
+  <data name="查看全部" xml:space="preserve">
+    <value>Show all</value>
+  </data>
+  <data name="聊天内容" xml:space="preserve">
+    <value>Chat contents</value>
+  </data>
+  
+  
+  <!--统计相关-->
+
+
+  <data name="种族名称" xml:space="preserve">
+    <value>Faction</value>
+  </data>
+  <data name="排名" xml:space="preserve">
+    <value>Rank</value>
+  </data>
+  <data name="总得分" xml:space="preserve">
+    <value>Total Score</value>
+  </data>
+  <data name="分差" xml:space="preserve">
+    <value>Score Gap</value>
+  </data>
+  <data name="裸分" xml:space="preserve">
+    <value>During Score</value>
+  </data>
+  <data name="科技得分" xml:space="preserve">
+    <value>Research Score</value>
+  </data>
+  <data name="终局计分1" xml:space="preserve">
+    <value>FST1</value>
+  </data>
+  <data name="终局计分2" xml:space="preserve">
+    <value>FST2</value>
+  </data>
+  <data name="建筑数量" xml:space="preserve">
+    <value>Buildings</value>
   </data>
   
 </root>

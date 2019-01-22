@@ -24,7 +24,7 @@
             </select>
             <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#xsnengliang">@localizer["前"]</button>
             <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#xsnengliang">@localizer["后"]</button>
-            <button type="button" class="btn btn-default ksaction" id="now" actionType="now" controlid="#xsnengliang">N</button>
+            <button type="button" class="btn btn-default ksaction" id="now" actionType="now" controlid="#xsnengliang">Now</button>
 
 
         </div>
@@ -41,11 +41,11 @@
                 <option value="5">5</option>
                 <option value="6">6</option>
             </select>
-            @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActList, "code", "name"), "--" + localizer["快速行动"].Value + "--", new { @class = "btn dropdown-toggle form-control", @id = "ksactionall", @syntax = "convert {0}", @style = "width: 200px" })
+            @Html.DropDownList("enumList", new SelectList(GaiaCore.Gaia.Data.PwInfoList.QuickActList, "code", "name"), "-" + localizer["快速行动"].Value + "-", new { @class = "btn dropdown-toggle form-control", @id = "ksactionall", @syntax = "convert {0}", @style = "width: 200px" })
 
             <button type="button" class="btn btn-default ksaction" id="before" actionType="before" controlid="#ksactionall" actionnumber="#ksactionnumber">@localizer["前"]</button>
             <button type="button" class="btn btn-default ksaction" id="after" actionType="after" controlid="#ksactionall" actionnumber="#ksactionnumber">@localizer["后"]</button>
-            <button type="button" class="btn btn-default ksaction" id="now" actionType="now" controlid="#ksactionall" actionnumber="#ksactionnumber">N</button>
+            <button type="button" class="btn btn-default ksaction" id="now" actionType="now" controlid="#ksactionall" actionnumber="#ksactionnumber">Now</button>
 
         </div>
 
@@ -66,7 +66,7 @@
             <div class="col-md-6">
                 <div class="input-group">
                     <select class="btn dropdown-toggle form-control selectchange" id="updatekjaction" name="enumList" syntax="advance ">
-                        <option value="">--@localizer["请选择升级科技"]--</option>
+                        <option value="">-@localizer["请选择升级科技"]-</option>
                         <option value="tf">@localizer["地形改造"]</option>
                         <option value="ship">@localizer["航行"]</option>
                         <option value="ai">@localizer["人工智能"]</option>
@@ -83,7 +83,7 @@
             <div class="col-md-6">
                 <div class="input-group">
 
-                    @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"), "--" + localizer["请选择回合助推板"].Value + "--", new { @class = "btn dropdown-toggle form-control selectchange", @id = "rbtPassList", @syntax = "pass " })
+                    @Html.DropDownList("enumList", new SelectList(Model.RBTList, "name", "desc"), "-" + localizer["请选择回合助推板"].Value + "-", new { @class = "btn dropdown-toggle form-control selectchange", @id = "rbtPassList", @syntax = "pass " })
 
                     <span class="input-group-btn">
                         <button class="btn btn-default actionGp" type="button" syntax="pass ">@localizer["选择助推板"]</button>

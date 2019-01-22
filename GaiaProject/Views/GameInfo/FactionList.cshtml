@@ -1,6 +1,7 @@
 ﻿
 @using GaiaCore.Gaia
 @model GaiaProject.Controllers.GameInfoController.FactionListInfo
+@inject IHtmlLocalizer<SharedResources> localizer
 
 @{
     ViewBag.Title = "种族";
@@ -14,7 +15,7 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="input-group">
-                
+
                 <input type="hidden" value="@username" name="username" />
 
 
@@ -52,22 +53,22 @@
         <tr>
             @if (type == "2")
             {
-                <td>玩家</td>
+                <td>@localizer["玩家"]</td>
             }
             else
             {
-                <td>游戏名称</td>
+                <td>@localizer["房间名称"]</td>
             }
-            <td>种族名称</td>
-            <td>排名</td>
+                <td>@localizer["种族名称"]</td>
+                <td>@localizer["排名"]</td>
 
-            <td>总得分</td>
-            <td>分差</td>
-            <td>裸分</td>
-            <td>科技得分</td>
-            <td>终局计分1</td>
-            <td>终局计分2</td>
-            <td>建筑数量</td>
+                <td>@localizer["总得分"]</td>
+                <td>@localizer["分差"]</td>
+                <td>@localizer["裸分"]</td>
+                <td>@localizer["科技得分"]</td>
+                <td>@localizer["终局计分1"]</td>
+                <td>@localizer["终局计分2"]</td>
+                <td>@localizer["建筑数量"]</td>
 
 
         </tr>

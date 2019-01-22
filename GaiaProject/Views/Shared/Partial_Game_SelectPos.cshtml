@@ -1,6 +1,8 @@
 ﻿@using GaiaCore.Gaia
 @model GaiaCore.Gaia.GaiaGame
 @inject IHtmlLocalizer<SharedResources> localizer
+
+
 <!-- 模态框（Modal）选择地图 -->
 <div class="modal fade" id="myModalCanves" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="width: 1000px;height: 800px">
@@ -21,9 +23,9 @@
                     </div>
                     <div style="display: none" id="allistdiv">
                         <div>
-                            <span>@localizer["注"]:@localizer["目前没有找到很好的办法删除画的点"]，@localizer["所以取消后图标依然在地图上。"]</span>
+                            <span>@localizer["注"]:@localizer["Window_OpenMap_Info"]</span>
                         </div>
-                        @Html.DropDownList("enumList", new SelectList(Model.ALTList.GroupBy(a => a.desc).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name) }), "name", "desc"), "--" + localizer["请选择联邦板块"] + "--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList", @syntax = "+" })
+                        @Html.DropDownList("enumList", new SelectList(Model.ALTList.GroupBy(a => a.desc).Select(g => new { count = g.Count(), desc = g.Max(item => item.desc), name = g.Max(item => item.GetType().Name) }), "name", "desc"), "--" + @localizer["请选择联邦板块"].Value + "--", new { @class = "btn dropdown-toggle form-control", @id = "alSelectList", @syntax = "+" })
                     </div>
                     <div id="">
                         <select class="btn dropdown-toggle form-control" id="mapkjlist" name="enumList" syntax="advance " style="display: none">

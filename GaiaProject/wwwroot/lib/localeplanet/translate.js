@@ -3,11 +3,11 @@
 	var translate = function(text)
     {
         //²»·­ÒëÓòÃû
-        return text;
-//        var href = location.href;
-//        if (href.indexOf("totoman") > -1) {
-//            return text;
-//        }
+        //return text;
+        var href = location.href;
+        if (href.indexOf("totoman") > -1) {
+            return text;
+        }
 
 		var xlate = translateLookup(text);
 		

@@ -14,7 +14,7 @@ namespace GaiaCore.Gaia.Data
 
     public class PwInfoList
     {
-        public static readonly List<PwInfo> QuickActList = new List<PwInfo>()
+        public static List<PwInfo> QuickActList = new List<PwInfo>()
         {
             new PwInfo(){code = "4pw to 1q",name = Messages.FourPWTo1QIC},
             new PwInfo(){code = "3pw to 1o",name = Messages.ThreePWTo1Ore},
@@ -30,7 +30,7 @@ namespace GaiaCore.Gaia.Data
         };
 
         //人类盖亚阶段
-        public static readonly List<PwInfo> QuickActListTerraner = new List<PwInfo>()
+        public static List<PwInfo> QuickActListTerraner = new List<PwInfo>()
         {
             new PwInfo(){code = "4pw to 1q",name = Messages.FourPWTo1QIC},
             new PwInfo(){code = "3pw to 1o",name = Messages.ThreePWTo1Ore},
@@ -46,7 +46,7 @@ namespace GaiaCore.Gaia.Data
         /// <summary>
         /// 超星人
         /// </summary>
-        public static readonly List<PwInfo> QuickActListNevla = new List<PwInfo>()
+        public static List<PwInfo> QuickActListNevla = new List<PwInfo>()
         {
             new PwInfo(){code = "2pw to 1q",name = Messages.TwoPWTo1QIC},
             new PwInfo(){code = "2pw to 1o,1c",name = Messages.TwoPWTo1Ore1Credit},
@@ -60,7 +60,7 @@ namespace GaiaCore.Gaia.Data
         /// <summary>
         /// 炽炎
         /// </summary>
-        public static readonly List<PwInfo> QuickActListBalTak = new List<PwInfo>()
+        public static List<PwInfo> QuickActListBalTak = new List<PwInfo>()
         {
             new PwInfo(){code = "1Gaia to 1q",name = Messages.OneGaiaTo1QIC},
             new PwInfo(){code = "1Gaia to 1o",name = Messages.OneGaiaTo1Ore},
@@ -73,7 +73,7 @@ namespace GaiaCore.Gaia.Data
         /// <summary>
         /// 利爪
         /// </summary>
-        public static readonly List<PwInfo> QuickActListTaklons = new List<PwInfo>()
+        public static List<PwInfo> QuickActListTaklons = new List<PwInfo>()
         {
             new PwInfo(){code = "burn 1.convert 1bs to 1o",name = Messages.Burn1Convert1BSTo1Ore},
             new PwInfo(){code = "burn 1.convert 1bs to 3c",name = Messages.Burn1Convert1BSTo3Credits},
@@ -87,7 +87,7 @@ namespace GaiaCore.Gaia.Data
         /// <summary>
         /// 圣禽
         /// </summary>
-        public static readonly List<PwInfo> QuickActListHadsch = new List<PwInfo>()
+        public static List<PwInfo> QuickActListHadsch = new List<PwInfo>()
         {
             new PwInfo(){code = "4c to 1q",name = Messages.FourCreditsTo1QIC},
             new PwInfo(){code = "4c to 1k",name = Messages.FourCreditsTo1Knowledge},

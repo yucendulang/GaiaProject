@@ -1731,26 +1731,26 @@ namespace GaiaCore.Gaia
         {
             if (!LastMoveTime.HasValue)
             {
-                return "未知情况";
+                return "Unknown";
             }
             var t = LastMoveTime.GetValueOrDefault();
             if ((DateTime.Now - t).Days > 0)
             {
-                return ((DateTime.Now - t).Days) + "天前";
+                return ((DateTime.Now - t).Days) + "Day";
             }
             if ((DateTime.Now - t).Hours > 0)
             {
-                return ((DateTime.Now - t).Hours) + "小时前";
+                return ((DateTime.Now - t).Hours) + "Hours";
             }
             if ((DateTime.Now - t).Minutes > 0)
             {
-                return ((DateTime.Now - t).Minutes) + "分钟前";
+                return ((DateTime.Now - t).Minutes) + "Minutes";
             }
             if ((DateTime.Now - t).Seconds > 0)
             {
-                return ((DateTime.Now - t).Seconds) + "秒前";
+                return ((DateTime.Now - t).Seconds) + "Seconds";
             }
-            return "未知情况";
+            return "Unknown";
         }
 
         public string GetCurrentUserName()
