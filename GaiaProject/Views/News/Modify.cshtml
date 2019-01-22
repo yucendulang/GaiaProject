@@ -1,4 +1,5 @@
 ﻿@model GaiaDbContext.Models.SystemModels.NewsInfoModel
+@inject IHtmlLocalizer<SharedResources> localizer
 
 @{
     ViewBag.Title = "title";
@@ -17,13 +18,13 @@
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h2><i class="fa fa-indent red"></i><strong>编辑</strong></h2>
-                    <a href="/Admin/NewsIndex">返回列表</a>
+                    <h2><i class="fa fa-indent red"></i><strong>Modify</strong></h2>
+                    <a href="/Admin/NewsIndex">@localizer["Forum_Article_List"]</a>
                 </div>
                 <div class="panel-body">
-
+                    @*不显示的类型*@
                     <div class="form-group" style="display: none">
-                        <label class="col-lg-2 col-md-2 col-sm-12 control-label">类型</label>
+                        <label class="col-lg-2 col-md-2 col-sm-12 control-label">type</label>
                         <div class="col-lg-10 col-md-10">
                             <input asp-for="type" class="form-control" />
                             <span asp-validation-for="type" class="text-danger"></span>
@@ -31,7 +32,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-2 col-sm-12 control-label">标题</label>
+                        <label class="col-lg-2 col-md-2 col-sm-12 control-label">@localizer["Forum_Article_Title"]</label>
                         <div class="col-lg-10 col-md-10">
                             <input asp-for="name" class="form-control" />
                             <span asp-validation-for="name" class="text-danger"></span>
@@ -42,7 +43,7 @@
 
 
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-2 col-sm-12 control-label">内容</label>
+                        <label class="col-lg-2 col-md-2 col-sm-12 control-label">@localizer["Forum_Article_Contents"]</label>
                         <div class="col-lg-10 col-md-10">
                             <script id="contents" name="contents" type="text/plain" style="height: 500px;">
                             </script>
@@ -51,7 +52,7 @@
 
                 </div>
                 <div class="panel-footer">
-                    <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-dot-circle-o"></i> 保存</button>
+                    <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-dot-circle-o"></i> @localizer["Forum_Article_Save"]</button>
                 </div>
             </div>
         </div><!--.col-->

@@ -245,15 +245,73 @@
     <value>大厅</value>
   </data>
   <data name="changelanguage" xml:space="preserve">
-    <value>切换语言</value>
+    <value>Chnage Language</value>
   </data>
   <data name="Chinese" xml:space="preserve">
-    <value>中文</value>
+    <value>Chinese</value>
   </data>
   <data name="English" xml:space="preserve">
-    <value>英文</value>
+    <value>English</value>
   </data>
   <data name="Portuguese" xml:space="preserve">
-    <value>葡萄牙文</value>
+    <value>Portuguese</value>
   </data>
+
+  <data name="Forum_Feedback_Notice" xml:space="preserve">
+    <value>如果是游戏BUG,请最好附上游戏名称，方便查询问题,谢谢!</value>
+  </data>
+  <data name="Forum_Article_Notice" xml:space="preserve">
+    <value>欢迎！但是目前功能不完善，后期增加回复功能。 </value>
+  </data>
+  <data name="Forum_Article_Title" xml:space="preserve">
+    <value>标题</value>
+  </data>
+  <data name="Forum_Article_Author" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="Forum_Article_Time" xml:space="preserve">
+    <value>时间</value>
+  </data>
+  <data name="Forum_Article_Operate" xml:space="preserve">
+    <value>操作</value>
+  </data>
+  <data name="Forum_Article_Contents" xml:space="preserve">
+    <value>内容</value>
+  </data>
+  <data name="Forum_Article_Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Forum_Article_List" xml:space="preserve">
+    <value>返回列表</value>
+  </data>
+
+
+  <data name="Match_Index_Info" xml:space="preserve">
+    <value>部分玩家由于drop前科被禁止报名，需要重新激活，请联系管理员说明</value>
+  </data>
+  <data name="Match_Index_Title" xml:space="preserve">
+    <value>标题</value>
+  </data>
+  <data name="Match_Index_PlayersNum" xml:space="preserve">
+    <value>报名人数</value>
+  </data>
+  <data name="Match_Index_GamesNum" xml:space="preserve">
+    <value>游戏数量</value>
+  </data>
+  <data name="Match_Index_Champion" xml:space="preserve">
+    <value>冠军</value>
+  </data>
+  <data name="Match_Index_UsersList" xml:space="preserve">
+    <value>报名人员</value>
+  </data>
+  <data name="Match_Index_Operate" xml:space="preserve">
+    <value>操作</value>
+  </data>
+  <data name="Match_Index_Join" xml:space="preserve">
+    <value>加入</value>
+  </data>
+  <data name="Match_Index_Exit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+
 </root>

@@ -1,4 +1,5 @@
 ﻿@using Gaia.Model.Final
+@inject IHtmlLocalizer<SharedResources> localizer;
 @model System.Linq.IQueryable<GaiaDbContext.Models.SystemModels.NewsInfoModel>
 
 @{
@@ -9,57 +10,59 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <h2><i class="fa fa-table red"></i><span class="break"></span><strong></strong></h2>
-        
+
         @if (Context.Request.Query["type"] == "6")
         {
-            <a href="/News/Modify?type=@NewsConfig.TYPE_FEEDBACK">添加反馈</a>
+            <a href="/News/Modify?type=@NewsConfig.TYPE_FEEDBACK">@localizer["提交反馈"]</a>
             <span>
-                如果是游戏BUG,请最好附上游戏名称，方便查询问题,谢谢!
+                @localizer["Forum_Feedback_Notice"]             
             </span>
         }
         else
         {
-            <a href="/News/Modify">添加攻略</a>
+            <a href="/News/Modify">@localizer["发布文章"]</a>
+            @localizer["Forum_Article_Notice"]             
 
         }
 
-       
+
     </div>
     <div class="panel-body">
         <table class="table table-striped">
             <thead>
-            <tr>
-                <th>标题</th>
-                <th>发布人</th>
-                <th>发布时间</th>
-                <th>操作</th>
-
-            </tr></thead> 
-            <tbody>
-            @foreach (var item in Model)
-            {
                 <tr>
-                    <td><a href="/News/ShowInfo/@item.Id">@item.name</a></td>     
-                    <td>@item.username</td>
-                    <td>@item.AddTime</td>
-                    @{
-                        if (item.username == User.Identity.Name)
-                        {
-                            <th><a href="/News/Modify/@item.Id">编辑</a></th>
-                        }
-                        else
-                        {
+                    <th>@localizer["Forum_Article_Title"]</th>
+                    <th>@localizer["Forum_Article_Author"]</th>
+                    <th>@localizer["Forum_Article_Time"]</th>
+                    <th>@localizer["Forum_Article_Operate"]</th>
 
-                            <td></td>
-                        }
-                    }
                 </tr>
-            }
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><a href="/News/ShowInfo/@item.Id">@item.name</a></td>
+                        <td>@item.username</td>
+                        <td>@item.AddTime</td>
+                        @{
+                            if (item.username == User.Identity.Name)
+                            {
+                                <th><a href="/News/Modify/@item.Id">编辑</a></th>
+                            }
+                            else
+                            {
+
+                                <td></td>
+                            }
+                        }
+                    </tr>
+                }
 
 
 
             </tbody>
-        </table>  
+        </table>
 
     </div>
 </div>

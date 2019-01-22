@@ -28,17 +28,17 @@
     <table class="table table-condensed">
         <thead>
             <tr>
-                <td>房间</td>
-                <td>时间</td>
-                <td>人数</td>
-                <td>玩家</td>
+                <td>@localizer["房间"]</td>
+                <td>@localizer["时间"]</td>
+                <td>@localizer["人数"]</td>
+                <td>@localizer["加入玩家"]</td>
 
-                <td>地图模式</td>
-                <td>禁止种族</td>
+                <td>@localizer["地图模式"]</td>
+                <td>@localizer["禁止种族"]</td>
                 <td>Hours</td>
-                <td>创建人</td>
-                <td>备注</td>
-                <td>加入</td>
+                <td>@localizer["创建人"]</td>
+                <td>@localizer["备注"]</td>
+                <td>@localizer["加入"]</td>
             </tr>
         </thead>
         <tbody>
@@ -58,16 +58,16 @@
                 <td>
                     @if (gameinfo.userlist == null || !gameinfo.userlist.Contains(myName))
                     {
-                        <button class="btn btn-default" onclick="joinGame(@gameinfo.Id)">加入</button>
+                    <button class="btn btn-default" onclick="joinGame(@gameinfo.Id)">@localizer["Match_Index_Join"]加入</button>
                     }
                     else
                     {
-                        <button class="btn btn-default" onclick="exitGame(@gameinfo.Id)">退出</button>
+                    <button class="btn btn-default" onclick="exitGame(@gameinfo.Id)">@localizer["Match_Index_Exit"]退出</button>
                     }
 
                     @if (isAdmin || gameinfo.username == Context.User.Identity.Name)
                     {
-                        <button class="btn btn-default" onclick="deleteGame(@gameinfo.Id)">删除</button>
+                    <button class="btn btn-default" onclick="deleteGame(@gameinfo.Id)">@localizer["删除"]</button>
                     }
 
                 </td>

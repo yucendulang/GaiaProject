@@ -130,7 +130,7 @@
         }
 
 
-        <div class="form-group">
+        @*<div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <div class="checkbox">
                     <label asp-for="IsTestGame">
@@ -139,7 +139,8 @@
                     </label>
                 </div>
             </div>
-        </div>
+        </div>*@
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <div class="checkbox">
@@ -175,7 +176,7 @@
             <div class="col-md-offset-2 col-md-10">
                 <div class="checkbox">
                     <label asp-for="IsRotatoMap">
-                        <input asp-for="IsRotatoMap" />
+                        <input asp-for="IsRotatoMap"  checked="checked"/>
                         @Html.DisplayNameFor(m => m.IsRotatoMap)
                     </label>
                 </div>
