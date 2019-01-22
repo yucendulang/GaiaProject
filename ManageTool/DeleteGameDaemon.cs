@@ -16,7 +16,7 @@ namespace ManageTool
     {
         protected override int m_timeOut
         {
-            get => 30 * 1000;
+            get => 300 * 1000;
         }
 
         public override void InvokeAction()
