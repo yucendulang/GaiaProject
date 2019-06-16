@@ -193,8 +193,9 @@ namespace GaiaCore.Gaia
             List<FileInfo> listFile = (from p in d.EnumerateFiles() orderby p.Name descending select p).ToList();
             foreach (var item in listFile)
             {
-                //超过5个备份就删除
-                if (number > 50)
+                //超过5个备份就删除、
+                //5天 2019.06.16
+                if (number > 1440)
                 {
                     item.Delete();
                 }
